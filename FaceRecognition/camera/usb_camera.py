@@ -1,17 +1,8 @@
 # coding: utf-8
-"""
-
-Abstract::
-    - 
-History::
-    - Ver.      Date            Author        History
-    - 
-Copyright (C) 2022 HACHIX Corporation. All Rights Reserved.
-"""
-# 標準ライブラリ
+# Standard libraries
 import sys
 
-# 関連外部ライブラリ
+# External libraries
 import cv2
 
 
