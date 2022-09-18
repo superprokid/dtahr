@@ -20,7 +20,7 @@ import numpy as np
 from imutils.video import FPS
 # Internal Libraries
 from engine.engine import FaceRecognitionLib
-from devices.camera.pi_camera import PiCam
+from camera.pi_camera import PiCam
 
 # Instance
 devices = PiCam(1600, 1216)
