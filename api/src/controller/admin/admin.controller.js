@@ -1,7 +1,8 @@
 const logger = require('../../common/logger');
 const { exeQuery, getConnection, beginTransaction, queryTransaction, commitTransaction, releaseConnection, rollback } = require("../../common/dbaccess");
 const { convertSQLResultToJSON } = require("../../common/utils");
-const { encrypt, decrypt, compare } = require("../../common/cryptcommon")
+const { encrypt, decrypt, compare } = require("../../common/cryptcommon");
+const { sendMail } = require('../../common/mailer');
 
 const LOG_CATEGORY = "AdminController";
 const GET_ADMIN_BY_USERNAME = "SELECT * FROM administrator WHERE username = ? ORDER BY update_at DESC  LIMIT 1";
@@ -70,7 +71,7 @@ async function login(req, res) {
     } catch (error) {
         await rollback(connection);
         releaseConnection(connection);
-        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.toString());
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR")
     }
 }
@@ -87,12 +88,17 @@ async function getAllUser(req, res) {
             listEmployees: await exeQuery(GET_ALL_USER)
         })
     } catch (error) {
-        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.toString());
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR")
     }
 }
 
+async function createNewEmployee(req, res) {
+    sendMail("ldthang2201@gmail.com");
+}
+
 module.exports = {
     login,
-    getAllUser
+    getAllUser,
+    createNewEmployee,
 }

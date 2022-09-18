@@ -15,10 +15,12 @@ function authen(req, res, next) {
         return
     }
     const token = authArr[1];
-    if (!verifyToken(token)) {
+    const data = verifyToken(token)
+    if (!data) {
         res.status(InvalidToken.statusCode).send(InvalidToken);
         return
     }
+    req.employee_id = data.employee_id
     next()
 }
 
