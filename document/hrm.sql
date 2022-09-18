@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 17/09/2022 18:11:09
+ Date: 18/09/2022 21:59:57
 */
 
 SET NAMES utf8mb4;
@@ -259,7 +259,7 @@ CREATE TABLE `reportreceiver`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `workhistory`;
 CREATE TABLE `workhistory`  (
-  `workhistory_id` int NOT NULL,
+  `workhistory_id` int NOT NULL AUTO_INCREMENT,
   `employee_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `workhistory_status` tinyint NULL DEFAULT NULL,
   `work_date` datetime NULL DEFAULT NULL,
@@ -267,11 +267,15 @@ CREATE TABLE `workhistory`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`workhistory_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of workhistory
 -- ----------------------------
+INSERT INTO `workhistory` VALUES (1, '0000001', 0, '2022-09-18 16:52:25', 'Check in at 2022-09-18, 04:52:25 pm', '2022-09-18 16:52:25', '2022-09-18 16:52:25');
+INSERT INTO `workhistory` VALUES (2, '0000001', 1, '2022-09-18 17:22:51', 'Check out at 2022-09-18, 05:22:51 pm', '2022-09-18 17:22:51', '2022-09-18 17:25:25');
+INSERT INTO `workhistory` VALUES (4, '0000001', 0, '2022-09-18 17:50:23', 'Check in at 2022-09-18, 05:50:23 pm', '2022-09-18 17:50:23', '2022-09-18 17:50:23');
+INSERT INTO `workhistory` VALUES (5, '0000001', 1, '2022-09-18 17:52:10', 'Check out at 2022-09-18, 05:52:10 pm', '2022-09-18 17:52:10', '2022-09-18 17:52:10');
 
 -- ----------------------------
 -- Table structure for worklog
@@ -281,16 +285,17 @@ CREATE TABLE `worklog`  (
   `worklog_id` int NOT NULL AUTO_INCREMENT,
   `employee_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `work_status` tinyint NULL DEFAULT NULL,
-  `work_date` datetime NULL DEFAULT NULL,
+  `work_date` date NULL DEFAULT NULL,
   `work_total` decimal(5, 1) NULL DEFAULT 0.0,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worklog_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of worklog
 -- ----------------------------
+INSERT INTO `worklog` VALUES (3, '0000001', 1, '2022-09-18', 35.0, '2022-09-18 16:52:25', '2022-09-18 17:52:10');
 
 -- ----------------------------
 -- Table structure for worktime
@@ -298,16 +303,22 @@ CREATE TABLE `worklog`  (
 DROP TABLE IF EXISTS `worktime`;
 CREATE TABLE `worktime`  (
   `worktime_id` int NOT NULL AUTO_INCREMENT,
-  `start_time` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'HH:MM:SS',
-  `end_time` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `hour_start` int NULL DEFAULT NULL,
+  `min_start` int NULL DEFAULT NULL,
+  `hour_end` int NULL DEFAULT NULL,
+  `min_end` int NULL DEFAULT NULL,
+  `lunch_time` decimal(2, 1) NULL DEFAULT 1.0,
   `approve_date` datetime NULL DEFAULT NULL,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worktime_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of worktime
 -- ----------------------------
+INSERT INTO `worktime` VALUES (1, 8, 0, 17, 0, 1.0, '2022-09-18 15:41:31', '2022-09-18 15:41:37', '2022-09-18 17:39:01');
+INSERT INTO `worktime` VALUES (2, 8, 30, 17, 30, 1.0, '2022-11-15 16:57:31', '2022-09-18 16:57:39', '2022-09-18 17:39:06');
+INSERT INTO `worktime` VALUES (3, 8, 15, 17, 15, 1.0, '2022-09-01 16:58:49', '2022-09-18 16:58:55', '2022-09-18 17:39:13');
 
 SET FOREIGN_KEY_CHECKS = 1;
