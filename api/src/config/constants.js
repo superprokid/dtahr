@@ -19,4 +19,5 @@ module.exports = {
         lunch_time: 1,
     },
     CHECKOUT_BATCH_CRON: "0 */5 * * * *",
+    VALID_HOUR: 7,
 }
