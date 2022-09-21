@@ -1,0 +1,17 @@
+.page-header{
+  height: 12vh;
+  background-color: #1565c0;
+  color: #fff;
+  font-size: 2.5vw
+}
+
+.page-header span {
+  line-height: 12vh;
+  margin-left: -9vw;
+}
+
+#page-header-logo{
+  height: 12vh;
+  width: auto;
+  float: left;
+}

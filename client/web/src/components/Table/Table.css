@@ -1,0 +1,41 @@
+.md-table-row {
+    text-align: left;
+}
+
+.table-input {
+    width: 11vw;
+    border: none;
+    background-color: transparent;
+    font-size: 1.1vw;
+    height: 3vh;
+}
+
+.md-table-cell {
+    font-size: large;
+}
+
+.md-table-row {
+    text-align: left;
+}
+
+.md-table-head {
+    font-size: large;
+}
+
+.editable-table .md-table-cell-container {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.editable-table .md-table-head-label {
+    padding-left: 0;
+}
+
+.editable-table td {
+    width: 10.4vw;
+}
+
+.editable-table .md-table-cell {
+    font-size: large;
+    width: 5.2vw;
+}

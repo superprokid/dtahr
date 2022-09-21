@@ -1,33 +1,19 @@
 <template>
 	<div id="app">
 		<router-view />
+		<div ><Spinner /></div>
 	</div>
 </template>
 
 <script>
+import Spinner from "./components/Spinner/Spinner.vue";
+
 export default {
-	name: 'App',
+  name: "App",
+  // eslint-disable-next-line vue/no-unused-components
+  components: { Spinner },
 };
 </script>
 
-<style>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	/* text-align: center; */
-	color: #2c3e50;
-}
+<style src="./App.css"></style>
 
-/* Apply for all screen biger than iPad Pro */
-@media screen and (min-device-width: 1025px) {
-	#app {
-		font-family: Avenir, Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		/* text-align: center; */
-		color: #2c3e50;
-		margin: 4% 15%;
-	}
-}
-</style>
