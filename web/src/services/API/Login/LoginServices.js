@@ -1,5 +1,4 @@
-import axios  from "../axios"
-const loginUrl='/api/user/login'
+import api from "../API"
 const LoginServices = {
     /*******************************
      * Check login successfuly
@@ -7,11 +6,8 @@ const LoginServices = {
      *******************************/
     checkLogin: async(arg) => {
         try { 
-            const response = await axios.post(`${loginUrl}`, arg)
-            if(response.status != 200){
-                return null
-            }
-            return response.data
+            const response = await api.login(arg);
+            return response;
         } catch (error) { 
             return error;
         }

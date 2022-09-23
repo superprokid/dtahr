@@ -9,6 +9,7 @@ import Login from "../../components/Login/Login.vue";
 import Notification from '../../components/Notification/Notification.vue'
 
 import LoginServices from '../../services/API/Login/LoginServices'
+import SessionUtls from "../../services/SessionUtls";
 
 export default {
   name: "LoginPage",
@@ -41,8 +42,8 @@ export default {
         const response = await LoginServices.checkLogin(data)
         console.log('response',response);
         if(response != null){
-          sessionStorage.setItem("hrm-login-token", response.accessToken)
-          sessionStorage.setItem("hrm-refresh-token", response.refreshToken)
+          SessionUtls.setAccessToken(response.accessToken);
+          SessionUtls.setRefreshToken(response.refreshToken);
           //navigate to
           this.$router.push('/home')
         }
