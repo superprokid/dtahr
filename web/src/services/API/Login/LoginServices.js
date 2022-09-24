@@ -1,4 +1,4 @@
-import { USER_LOGIN_URL } from "../../../config/constant";
+import { USER_LOGIN_URL, ADMIN_LOGIN_URL } from "../../../config/constant";
 import axiosClient from "../API"
 const LoginServices = {
     /*******************************
@@ -13,7 +13,14 @@ const LoginServices = {
             return error;
         }
     },
- 
+    adminLogin: async (arg) => {
+        try {
+            const response = await axiosClient.post(ADMIN_LOGIN_URL, arg);
+            return response;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default LoginServices;

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import LoginPage from '../views/LoginSite/LoginPage.vue'
+import AdminLoginPage from '../views/AdminSide/LoginSite/LoginPage.vue'
 import SessionUtls from "../services/SessionUtls";
 import HomePage from "../views/ClientSide/Home/Home.vue";
 
@@ -20,13 +21,10 @@ const router = new Router({
         // Temporary login page
         {
             path: "/admin",
+            component: AdminLoginPage,
             children: [
                 {
-                    path: "/login",
-                    component: LoginPage
-                },
-                {
-                    path: '/home',
+                    path: 'home',
                     component: HomePage
                 }
             ]
@@ -35,7 +33,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => { 
-    const publicPages = ['/','/admin/login']
+    const publicPages = ['/','/admin/']
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {
         return next()
