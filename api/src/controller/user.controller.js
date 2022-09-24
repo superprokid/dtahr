@@ -3,7 +3,7 @@ const moment = require('moment')
 const { verifyToken, signToken, signRefreshToken, verifyRefreshToken, hash, compare } = require('../common/cryptcommon');
 const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../common/dbaccess');
 const { minDiff, compareTwoTimeGreaterOrEqual } = require('../common/utils');
-const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT } = require('../config/constants');
+const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../config/constants');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -100,6 +100,22 @@ function get(req, res) {
     res.status(200).send("get success");
 }
 
+async function isAvalibleCheckinTime(connection) {
+    const workTimeList = await queryTransaction(connection, GET_WORKTIME);
+    let workTime = WORKTIME_DEFAULT
+    if (workTimeList.length) {
+        workTime = workTimeList[0];
+    }
+    const now = new Date();
+    if (now.getHours() < VALID_HOUR) {
+        return false;
+    }
+    if (compareTwoTimeGreaterOrEqual(now.getHours(), now.getMinutes(), workTime.hour_end, workTime.min_end)) {
+        return false;
+    }
+    return true;
+}
+
 async function checkin(req, res) {
     const connection = await getConnection();
     await beginTransaction(connection);
@@ -107,6 +123,13 @@ async function checkin(req, res) {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Check in failed");
+            await commitTransaction(connection);
+            releaseConnection(connection);
+            return;
+        }
+        if (!(await isAvalibleCheckinTime(connection))) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] now is not work time`);
             res.status(403).send("Check in failed");
             await commitTransaction(connection);
             releaseConnection(connection);
