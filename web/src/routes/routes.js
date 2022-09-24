@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
         }
         let accessToken = SessionUtls.getAccessToken()
         let refreshToken = SessionUtls.getRefreshToken()
-        if (!accessToken || !refreshToken) {
+        if (accessToken || refreshToken) {
             return next()
         }
         else {
