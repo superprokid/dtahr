@@ -41,8 +41,8 @@ export default {
         this.isLoginDataEmpty = false;
         const response = await LoginServices.checkLogin(data)
         if(response != null && response.status === 200){
-          SessionUtls.setAccessToken(response.data.accessToken);
-          SessionUtls.setRefreshToken(response.data.refreshToken);
+          SessionUtls.setAccessToken(response.accessToken);
+          SessionUtls.setRefreshToken(response.refreshToken);
           //navigate to
           this.$router.push('/home')
         }

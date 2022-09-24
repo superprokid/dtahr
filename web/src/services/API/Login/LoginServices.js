@@ -1,12 +1,13 @@
-import api from "../API"
+import { USER_LOGIN_URL } from "../../../config/constant";
+import axiosClient from "../API"
 const LoginServices = {
     /*******************************
      * Check login successfuly
      * @param {object} arg: {userName: string, password: string}
      *******************************/
     checkLogin: async(arg) => {
-        try { 
-            const response = await api.login(arg);
+        try {
+            const response = await axiosClient.post(USER_LOGIN_URL, arg);
             return response;
         } catch (error) { 
             return error;

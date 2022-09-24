@@ -1,7 +1,7 @@
 export default class SessionUtls {
     static accessTokenKey = "ute-hrm-accesstoken";
     static refreshTokenKey = "ute-hrm-refreshtoken";
-
+    static adminSession = "";
     /**
      * Get value from sessionStorage by key
      * @param {String} key 
@@ -60,8 +60,26 @@ export default class SessionUtls {
         this.setItem(this.refreshTokenKey, refreshToken);
     }
 
+    /**
+     * Get admin session from sessionStorage
+     * @returns
+     */
+    static getAdminSession() {
+        return this.getItem(this.adminSession);
+    }
+
+    /**
+     * Set admin session to sessionStorage
+     * @param {String} accessToken
+     */
+    static setAdminSession(adminSession) {
+        this.setItem(this.adminSession, adminSession);
+    }
+
+
     static clearLoginSession() {
         this.clearItem(this.accessTokenKey);
         this.clearItem(this.refreshTokenKey);
+        this.clearItem(this.adminSession)
     }
 }
