@@ -1,5 +1,5 @@
 <template>
-  <button @click="test">102398123</button>
+  <button @click="testGetWithParam">BUTTONNNN</button>
 </template>
 
 <script src="./Home.js">

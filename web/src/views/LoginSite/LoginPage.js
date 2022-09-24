@@ -21,11 +21,14 @@ export default {
        * @binding {boolean} Check Username or Password is empty
        */
       isLoginDataEmpty: false,
-      isUserNotInGroup: false,
       /**
        * @binding {string} Notification Title and Body text
        */
-      isUserConfirmModelShowed: false
+      isUserConfirmModelShowed: false,
+
+      notiHeaderBgColor: "",
+      notiTitle: "",
+      notiBody: "",
     };
   },
   created(){
@@ -35,7 +38,6 @@ export default {
     async login(data) {
       console.log('data', data);
       if (data.userName === "" || data.password === "") {
-        this.isUserNotInGroup = false;
         this.isLoginDataEmpty = true;
       } else {
         this.isLoginDataEmpty = false;
@@ -44,10 +46,23 @@ export default {
           SessionUtls.setAccessToken(response.data.accessToken);
           SessionUtls.setRefreshToken(response.data.refreshToken);
           //navigate to
-          this.$router.push('/home')
+            this._navigateSite();
+        }else {
+            this.notiHeaderBgColor = "danger"
+            this.notiTitle = "Error"
+            this.notiBody = "User Name or Password is incorrect. Please try again!"
+            this.isUserConfirmModelShowed = true
         }
       }
     },
+
+    async _navigateSite() {
+        this.$router.push('/home')
+    },
+
+    onClickOkButton() {
+      this.isUserConfirmModelShowed = false
+    }
 
   }
 };

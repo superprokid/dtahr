@@ -18,7 +18,11 @@
       <md-input id="password" v-model="password" type="password"></md-input>
     </md-field>
 
-  
+    <div class="error-label">
+      <span v-show="isLoginDataEmpty">
+        *User Name or Password must not be empty
+      </span>
+    </div>
     <div class="button-login d-flex justify-content-center ">
       <md-button class="md-raised md-primary" @click="login">
         Login

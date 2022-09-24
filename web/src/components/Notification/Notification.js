@@ -53,12 +53,4 @@ export default {
       default: true,
     },
   },
-  // data() {
-  //   return {
-  //     isShow: false
-  //   }
-  // },
-  // mounted() {
-  //   this.isShow = this.notiShow
-  // }
 };
