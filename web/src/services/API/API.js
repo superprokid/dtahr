@@ -36,17 +36,16 @@ const axiosClient = {
 async function refreshToken() {
 	const refreshToken = SessionUtls.getRefreshToken();
 	if (!refreshToken) {
-		return false;
+		return false
 	}
-	const response = await axiosClient.post(USER_REFRESH_TOKEN_URL, {
-		refreshToken,
-	});
-	if (response.status === 200) {
+	try {
+		const response = await axiosClient.post(USER_REFRESH_TOKEN_URL, {
+			refreshToken,
+		});
 		SessionUtls.setAccessToken(response.data.accessToken);
-		return true;
-	} else {
-		SessionUtls.clearLoginSession();
-		return false;
+	} catch {
+			SessionUtls.clearLoginSession();
+			return false
 	}
 }
 
@@ -61,7 +60,10 @@ export function asyncRecallFunction(apiFunction) {
 	}).catch(async error => {
 		
 		if (error.response.status === 401) {
-			await refreshToken();
+			let response = await refreshToken();
+			if (!response) { 
+				return response
+			}
 			return await apiFunction();
 		}
 

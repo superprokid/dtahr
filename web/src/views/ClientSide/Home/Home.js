@@ -7,9 +7,12 @@ export default {
 	name: 'HomePage',
 	methods: {
 		async test() {
-			await asyncRecallFunction(() => {
+			let test =await asyncRecallFunction(() => {
 				return axiosClient.get(BASE_API_USER_URL + '/get')
 			});
+			if (!test) {
+				this.$router.push('/');
+			}
 		},
 	},
 };
