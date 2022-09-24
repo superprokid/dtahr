@@ -1,9 +1,9 @@
-const logger = require('../common/logger');
+const logger = require('../../common/logger');
 const moment = require('moment')
-const { verifyToken, signToken, signRefreshToken, verifyRefreshToken, hash, compare } = require('../common/cryptcommon');
-const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../common/dbaccess');
-const { minDiff, compareTwoTimeGreaterOrEqual } = require('../common/utils');
-const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../config/constants');
+const { signToken, signRefreshToken, verifyRefreshToken, compare } = require('../../common/cryptcommon');
+const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
+const { minDiff, compareTwoTimeGreaterOrEqual } = require('../../common/utils');
+const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../../config/constants');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";

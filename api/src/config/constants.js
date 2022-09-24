@@ -18,6 +18,16 @@ module.exports = {
         min_end: 30,
         lunch_time: 1,
     },
+    OT_PAYMENT_DEFAULT: {
+        ot_payment_daily_day: 1,
+        ot_payment_weekend: 1.5,
+        ot_payment_daily_night: 1.5,
+        ot_payment_holiday: 2.5,
+    },
+    OT_TICKET_STATUS: {
+        approve: 1,
+        pending: 0,
+    },
     CHECKOUT_BATCH_CRON: "0 */5 * * * *",
     VALID_HOUR: 7,
 }
