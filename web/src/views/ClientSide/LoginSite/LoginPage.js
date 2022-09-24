@@ -57,7 +57,7 @@ export default {
     },
 
     async _navigateSite() {
-        this.$router.push('/user/home')
+        this.$router.push('/user/mypage')
     },
 
     onClickOkButton() {

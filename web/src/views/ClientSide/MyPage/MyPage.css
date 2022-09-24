@@ -1,0 +1,41 @@
+.employee-site-container {
+  background-color: whitesmoke;
+  padding: 1.5%;
+  height: 100vh;
+  width: 100vw;
+}
+
+.user-layout{
+  margin-top: 0.5vh;
+  font-size: 2vh;
+  font-weight: 700;
+}
+
+.user-menu-items{
+  top: 4vh;
+  display: none;
+  position: absolute;
+  min-width: 100%;
+  height: 7vh;
+  z-index: 2;
+  background-color: rgb(241, 241, 241);
+}
+
+.user-menu-container:hover .user-menu-items{
+  display: block;
+}
+
+.user-menu-container {
+  top:4.5vh;
+  right: 2.5vw;
+  position: absolute;
+  width: 10.5vw;
+  height: 4vh;
+  background-color: rgb(241, 241, 241);
+}
+
+.btn-logout{
+  width: 9.5vw;
+  margin-top: 3vh;
+  border-radius: 100px
+}

@@ -1,0 +1,97 @@
+{
+  "adminSite": {
+    "btnDelete": "Delete",
+    "btnSearch": "Search",
+    "btnApproved": "Approve",
+    "btnLogout": "Log Out",
+    "btnRegister": "Create User",
+    "btnReturn": "Return",
+    "btnRemove": "Remove",
+    "btnEdit": "Edit",
+    "btnReject": "Reject",
+    "admin": "Admin",
+    "adminPage": {
+      "header": "Administrator Page",
+      "tabs": {
+        "user": "User",
+        "newUser": "New User",
+        "userList": "User List",
+        "employee": "Employee",
+        "employeeList": "Employee List",
+        "employeeWorking": "Employee Working",
+        "leaveRequest": "Leave Request",
+        "aprove": "Aprove Leave Request"
+      },
+      "newRequest": "New Request"
+    },
+    "createNewUser": {
+      "headerAdmin": "User Register",
+      "headerEmployee": "Employee Detail Info",
+      "admin": "Administration",
+      "employee": "Employee",
+      "name": "Name",
+      "tel": "Tel",
+      "location": "Location",
+      "vietnam": "VietNam",
+      "japan": "Japan",
+      "employeeType": "Employee Type",
+      "fullTimeEmployee": "Full Time",
+      "partTimeEmployee": "Part Time",
+      "userType": "User Type",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "registerBtn": "Register",
+      "closeBtn": "Close",
+      "errorContents": " required!"
+    },
+    "userList": {
+      "header": "User List",
+      "accountType": "Account Type",
+      "tbHeader": [
+        "ID",
+        "User Name",
+        "Account Type",
+        "Created by"
+      ]
+    },
+    "employeeList": {
+      "header": "Employee List",
+      "location": "Location",
+      "type": "Type",
+      "tbHeader": [
+        "ID",
+        "User Name",
+        "Tel",
+        "Location",
+        "Type"
+      ]
+    },
+    "employeeWorklog": {
+      "header": "Employee Worklog",
+      "name": "Name",
+      "tbHeader": [
+        "Date",
+        "User Name",
+        "Start Time",
+        "End Time",
+        "Clockin",
+        "Clockout",
+        "Total Break Time",
+        "Total Working Time",
+        "Memo",
+        "Status"
+      ]
+    },
+    "leaveRequest": {
+      "header": "Request Approve Page",
+      "name": "Name",
+      "tbHeader": [
+        "Request Date",
+        "Name",
+        "Leave Date",
+        "Reason",
+        "Select"
+      ]
+    }
+  }
+}
