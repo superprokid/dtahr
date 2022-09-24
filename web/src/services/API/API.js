@@ -1,8 +1,8 @@
 import axiosBase from 'axios';
 import SessionUtls from '../SessionUtls';
-import { USER_LOGIN_URL, USER_REFRESH_TOKEN_URL } from '../../config/constant'
+import { LIMIT_RECALL_API, USER_LOGIN_URL, USER_REFRESH_TOKEN_URL } from '../../config/constant'
 
-// let asyncRecallNum = 0;
+let asyncRecallNum = 0;
 
 function getAccessTokenHeader() {
     axiosBase.defaults.headers.common['Authorization'] = `Bearer ${SessionUtls.getAccessToken()}`
@@ -54,6 +54,17 @@ export function asyncRecallFunction(apiFunction) {
             await refreshToken();
             return await apiFunction();
         }
+
+        if (result === 403) {
+            if (asyncRecallNum >= LIMIT_RECALL_API) {
+                return null;
+            }
+            asyncRecallNum++;
+            return asyncRecallFunction(apiFunction);
+        }
+
+        asyncRecallNum = 0;
+        return result;
     })
 }
 
