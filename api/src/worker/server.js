@@ -24,8 +24,7 @@ app.use(function (req, res, next) {
 app.use(morgan('[:method] url=:url status=:status :res[content-length] - :response-time ms'));
 
 // IP của client
-app.use(cors({ credentials: true, origin: ["http://192.168.1.9:4000", "http://10.0.132.51:4000"] }));
-
+app.use(cors({ credentials: true, origin: ["http://127.0.0.1:8080", "http://10.0.132.51:4000", "http://192.168.1.19:8080"] }));
 // Config router
 app.use('/api', router);
 

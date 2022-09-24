@@ -1,0 +1,26 @@
+.login-container {
+  background-color: white;
+  width: 40vw;
+  height: 20vh;
+  padding: 1%;
+  margin: auto;
+  position: relative;
+}
+
+.error-label {
+  color: #b71c1c;
+  font-size: 2vh;
+  text-align: left;
+  margin-top: 1vh;
+}
+
+.md-has-password {
+  margin-bottom: 0px;
+}
+
+.button-login {
+  /* position: absolute; */
+  /* top: 40vh; */
+  /* left: 12vw; */
+  padding: 30px;
+}
