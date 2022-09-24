@@ -1,0 +1,109 @@
+{
+  "general": {
+    "appName": "STAFF MANAGEMENT SYSTEM",
+    "userName": "User Name",
+    "userEmail": "User Email",
+    "password": "Password",
+    "btnLogin": "Log In",
+    "adminUser": "Admin",
+    "employeeUser": "Employee",
+    "userNotInGroup": "User is not in any Group. Please contact to your admin",
+    "emptyUserPassword": "*User Name or Password must not be empty",
+    "verifyUser": "Verify User Account",
+    "verifyBody": "User created successfully. Enter verification code in contact@hachi-x.com email to continue",
+    "verifyError": "Verification Code is not correct",
+    "notifications": {
+      "specificTimeRankError": {
+        "title": "Search Error",
+        "body": "Start Date and End Date required. Please try again!"
+      },
+      "login": {
+        "title": "Login Failed",
+        "body": "User Name or Password is incorrect. Please try again!"
+      },
+      "clockInConfirm": {
+        "title": "Confirm",
+        "body": "Your work will start at: "
+      },
+      "clockOutConfirm": {
+        "title": "Confirm",
+        "body": "Your work will end at: "
+      },
+      "logOutConfirm": {
+        "title": "Confirm",
+        "body": "Are you sure you want to logout"
+      },
+      "timeTracking": {
+        "timeTrackingSuccess": "Track Time Successfully",
+        "timeTrackingError": "Can not track time. Please try again!",
+        "clockStatusError": "Can not get data from server. Please try again!"
+      },
+      "registerSchedule": {
+        "timeError": {
+          "title": "Error",
+          "body": "Start time must be earlier than end time"
+        },
+        "dateError": {
+          "title": "Error",
+          "body": "Start date must start from today"
+        },
+        "registerConfirm": {
+          "title": "Confirm",
+          "bodyFirst": "Your work in ",
+          "bodySecond": "Will start at: ",
+          "bodyThird": "and end at: "
+        },
+        "registerError": {
+          "title": "Error",
+          "body": "Can't register, all contents must be filled or The date you work is not included in the start and end period"
+        },
+        "updateConfirm": {
+          "bodyFirst": "These days are allready registered:",
+          "bodySecond": "Do you want to update?"
+        }
+      },
+      "updateSchedule": {
+        "timeScheduleError": {
+          "title": "Error",
+          "body": "Start time must be earlier than end time"
+        },
+        "updateScheduleConfirm": {
+          "title": "Confirm",
+          "bodyFirst": "Your work in ",
+          "bodySecond": "Will start at: ",
+          "bodyThird": "and end at: "
+        },
+        "updateScheduleError": {
+          "title": "Error",
+          "body": "Can't register, all contents must be filled or The date you work is not included in the start and end period"
+        }
+      },
+      "deleteSchedule": {
+        "deleteScheduleConfirm": {
+          "title": "Confirm",
+          "body": "Are you sure you want to delete?"
+        },
+        "deleteScheduleError": {
+          "title": "Error",
+          "body": "Can't delete. Please try again!"
+        }
+      },
+      "employeeWorlog": {
+        "getWorklogError": "Can not get Worklog. Please try again!",
+        "getUserListError": "Can not get User List. Please try again!"
+      },
+      "getDataError": "Can not get data from server. Please try again!",
+      "storeUserInfoError": "Create user successfully, but cannot store user information",
+      "unknowError": "Unknow Error is occurred",
+      "userNameExisted": "User Name is Existed. Please try again!",
+      "errorMessage": "Error Message",
+      "title": "Pop Up",
+      "noData": "No data found",
+      "bodyConfirm": "Confirm Message",
+      "titleSuccess": "Successful Message",
+      "btnOk": "OK",
+      "btnCancel": "CANCEL",
+      "createUserSuccess": "Successful Create New User"
+    }
+  }
+}

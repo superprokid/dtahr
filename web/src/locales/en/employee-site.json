@@ -1,0 +1,62 @@
+{
+  "employeeSite": {
+    "btnLogout": "Log Out",
+    "btnClockIn": "Clock In",
+    "btnClockOut": "Clock Out",
+    "btnSearch": "Search",
+    "btnRegister": "Register",
+    "btnAdd": "Add",
+    "btnUpdate": "Update",
+    "btnDelete": "Delete",
+    "btnClose": "Close",
+    "employeeTimeTracking":{
+      "totalBreakTime": "Total Break Time"
+    },
+    "employeePage": {
+      "header": "Employee Page",
+      "navBarBtn": [
+        "Worklog",
+        "Leave Request",
+        "Request History"
+      ]
+    },
+    "employeeWorklog": {
+      "header": "Emplyee Worklog",
+      "tbHeader": [
+        "Date",
+        "User Name",
+        "Start Time",
+        "End Time",
+        "Total Working Time",
+        "Memo",
+        "Status"
+      ]
+    },
+    "employeeWorkSchedule": {
+      "tbHeader": [
+        "ID",
+        "Date",
+        "Start Time",
+        "End Time"
+      ]
+    },
+    "registerSchedule": {
+      "place":"Place",
+      "memo": "Memo",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "title": "Register Working Section"
+    },
+    "requestHistory": {
+      "header": "Request History Page",
+      "tbHeader": [
+        "Request Date",
+        "Leave Date",
+        "Reason",
+        "Status"
+      ]
+    }
+  }
+}

@@ -1,26 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-// import LoginPage from '../views/LoginSite/LoginPage.vue'
 import AdminLoginPage from '../views/AdminSide/LoginSite/LoginPage.vue'
 import SessionUtls from "../services/SessionUtls";
-import HomePage from "../views/ClientSide/Home/Home.vue";
 import AdminSide from "../views/AdminSide/AdminSide.vue";
+
+// UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
 import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
+import HistoryTracking from "@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue"
+import MyPage from "../views/ClientSide/MyPage/MyPage.vue";
 
 Vue.use(Router);
 
 const router = new Router({
     mode: "history",
     routes: [
-        // {
-        //     path: "/",
-        //     component: LoginPage
-        // },
-        // {
-        //     path: "/home",
-        //     component: HomePage
-        // },
         // Temporary login page
         {
             path: "/admin",
@@ -33,23 +27,32 @@ const router = new Router({
                 },
                 {
                     path: 'home',
-                    component: HomePage
+                    component: MyPage
                 }
             ]
+        },
+        { 
+            path: "/user/login",
+            component: ClientLoginPage
         },
         {
             path: "/user",
             component: ClientSide,
+            redirect: '/user/mypage',
             children: [
-                { 
-                    path: "login",
-                    component: ClientLoginPage
+                {
+                    path: 'mypage',
+                    component: MyPage
                 },
                 {
-                    path: 'home',
-                    component: HomePage
-                }
+                    path: 'historytracking',
+                    component: HistoryTracking
+                },
             ]
+        },
+        {
+            path: "/",
+            redirect: '/user/login'
         }
     ]
 });
@@ -59,9 +62,6 @@ router.beforeEach((to, from, next) => {
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {
         return next()
-    }
-    if(to.path === '/'){
-        return next("/user/login")
     }
     let session = SessionUtls.getAdminSession()
     if (session != null) {
