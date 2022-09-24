@@ -23,6 +23,7 @@ const router = new Router({
         {
             path: "/admin",
             component: AdminSide,
+            redirect: "/admin/login",
             children: [
                 { 
                     path: "login",

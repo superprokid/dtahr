@@ -37,9 +37,9 @@ export default {
 			console.log('data', data);
 			if (data.email === '' || data.password === '') {
 				this.isLoginDataEmpty = true;
-      } else {
-        data.username = data.email
-        delete data.email
+			} else {
+				data.username = data.email;
+				delete data.email;
 				this.isLoginDataEmpty = false;
 				const response = await LoginServices.adminLogin(data);
 				if (response != null && response.status === 200) {
