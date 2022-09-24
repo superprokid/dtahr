@@ -42,8 +42,6 @@ export default {
         delete data.email
 				this.isLoginDataEmpty = false;
 				const response = await LoginServices.adminLogin(data);
-        console.log(response);
-        console.log(response)
 				if (response != null && response.status === 200) {
 					SessionUtls.setAdminSession(response.data.loginSession);
 					//navigate to
