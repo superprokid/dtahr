@@ -1,7 +1,7 @@
 export default class SessionUtls {
     static accessTokenKey = "ute-hrm-accesstoken";
     static refreshTokenKey = "ute-hrm-refreshtoken";
-    static adminSession = "";
+    static adminSession = "ute-hrm-adminsession";
     /**
      * Get value from sessionStorage by key
      * @param {String} key 

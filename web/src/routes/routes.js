@@ -22,8 +22,12 @@ const router = new Router({
             path: "/admin",
             children: [
                 {
-                    path: '/login',
+                    path: "/login",
                     component: LoginPage
+                },
+                {
+                    path: '/home',
+                    component: HomePage
                 }
             ]
         }
@@ -31,13 +35,13 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => { 
-    const publicPages = ['/']
+    const publicPages = ['/','/admin/login']
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {
         return next()
     }
     let session = SessionUtls.getAdminSession()
-    if (session != "") {
+    if (session != null) {
         return next()
     }
     else {
