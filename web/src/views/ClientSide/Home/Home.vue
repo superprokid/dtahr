@@ -1,5 +1,9 @@
 <template>
-  <button @click="testGetWithParam">BUTTONNNN</button>
+  <div>
+    <button @click="testGetWithParam">BUTTONNNN</button>
+    this is home page of client
+  </div>
+  
 </template>
 
 <script src="./Home.js">
