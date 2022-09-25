@@ -1,24 +1,22 @@
-import TabNav from "@/components/TabNav/TabNav.vue";
+import TabNav from '@/components/TabNav/TabNav.vue';
 import Notification from '@/components/Notification/Notification.vue';
 import Button from '@/components/Button/Button.vue';
 
+import TimeTracking from '@/views/ClientSide/MyPage/TimeTracking/TimeTracking.vue';
+import HistoryTracking from '@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue';
+
+import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
+import SessionUtls from '@/services/SessionUtls';
+
 export default {
-  name: "EmployeeTab",
+  name: 'EmployeeTab',
   data() {
     return {
-      tabItems: [
-        {
-          tabName: "Time Tracking",
-          tabContent: "TimeTracking",
-        },
-        {
-          tabName: "Work Log",
-          tabContent: "EmployeeWorkLogScreen",
-        },
-      ],
+      tabData: {},
       logOutNotiTitle: '',
       logOutNotiBody: '',
       notiType: '',
+      tabItems: undefined,
       isLogOutModalShowed: false,
     };
   },
@@ -29,8 +27,19 @@ export default {
     Button,
   },
 
-  mounted() {
+  async created() {
     this._getCurrentUserName();
+    await this._getStartUser()
+    this.tabItems = [
+      {
+        tabName:  'Time Tracking',
+        tabContent: TimeTracking,
+      },
+      {
+        tabName: 'History Tracking',
+        tabContent: HistoryTracking,
+      }
+    ]
   },
 
   methods: {
@@ -55,5 +64,17 @@ export default {
       //     return res.username;
       //   });
     },
+    async _getStartUser() {
+      const response = await MyPageServices.getStartUser();
+      if(!response){
+          this.$router.push('/user/login')
+      } else {
+          console.log(response.data)
+          //Use Vuex set Data
+          this.$store.commit("setStartDataUser", response.data)
+          SessionUtls.setItem(SessionUtls.role,response.data.role)
+      }
+    },
+    
   },
 };

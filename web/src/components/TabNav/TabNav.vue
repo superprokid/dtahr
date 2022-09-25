@@ -6,7 +6,7 @@
         :key="index"
         :md-label="value.tabName"
       >
-        <component :is="value.tabContent"></component>
+        <component :is="value.tabContent" style="overflow-y: auto; height: 85vh; padding-top: 0;" :tabData="tabData"></component>
       </md-tab>
     </md-tabs>
   </div>
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  props: ["tabItems"],
+  props: ["tabItems", "tabData"],
   name: "TabNav",
 };
 </script>

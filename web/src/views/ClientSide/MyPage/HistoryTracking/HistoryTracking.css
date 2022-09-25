@@ -1,0 +1,12 @@
+p,h3,h4 {
+    margin: 0;
+}
+
+.title-timeline{
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.description-timeline{
+    font-size: 18px;
+}

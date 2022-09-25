@@ -1,7 +1,6 @@
 <template>
   <md-datepicker
     v-model="selectedDate"
-    @input="onChange"
     class="layout"
     md-immediately
   >
