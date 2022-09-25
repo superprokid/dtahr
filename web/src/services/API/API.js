@@ -2,10 +2,10 @@ import axiosBase from 'axios';
 import SessionUtls from '../SessionUtls';
 import {
 	USER_REFRESH_TOKEN_URL,
-	LIMIT_RECALL_API,
+	// LIMIT_RECALL_API,
 } from '../../config/constant';
 
-let asyncRecallNum = 0;
+// let asyncRecallNum = 0;
 
 function getAccessTokenHeader() {
 	axiosBase.defaults.headers.common[
@@ -43,6 +43,7 @@ async function refreshToken() {
 			refreshToken,
 		});
 		SessionUtls.setAccessToken(response.data.accessToken);
+		return true;
 	} catch {
 			SessionUtls.clearLoginSession();
 			return false
@@ -55,25 +56,26 @@ async function refreshToken() {
  */
 export function asyncRecallFunction(apiFunction) {
 	return apiFunction().then(async (result) => {
-		asyncRecallNum = 0;
+		// asyncRecallNum = 0;
 		return result;
 	}).catch(async error => {
 		
 		if (error.response.status === 401) {
 			let response = await refreshToken();
+			console.log(response);
 			if (!response) { 
 				return response
 			}
 			return await apiFunction();
 		}
 
-		if (error.response.status === 403) {
-			if (asyncRecallNum >= LIMIT_RECALL_API) {
-				return null;
-			}
-			asyncRecallNum++;
-			return asyncRecallFunction(apiFunction);
-		}
+		// if (error.response.status === 403) {
+		// 	if (asyncRecallNum >= LIMIT_RECALL_API) {
+		// 		return null;
+		// 	}
+		// 	asyncRecallNum++;
+		// 	return asyncRecallFunction(apiFunction);
+		// }
 	})
 }
 

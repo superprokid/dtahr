@@ -1,6 +1,6 @@
 <template>
   <div class="employee-site-container">
-    <TabNav :tabItems="tabItems" />
+    <TabNav v-if="tabItems" :tabItems="tabItems" :tabData="tabData"/>
     <!--<div class="user-menu-container">
        <label class="user-layout">{{ currentUserName }}</label>
       <div class="user-menu-items">

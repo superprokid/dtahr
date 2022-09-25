@@ -38,22 +38,6 @@
         :isModalShowed="isErrorModalShowed"
       />
     </div>
-
-    <div class="notification-modal">
-      <ClockOutNotification
-        :notiHeaderBgColor="notiType"
-        :notiTitle="notiTitle"
-        :notiBody="notiBody"
-        :okButtonOnly="false"
-        :onClickOkButton="onClickOkButton"
-        :onClickCancelButton="onClickCancelButton"
-        :isModalShowed="isClockOutModalShowed"
-        @onInputBreakTime="onInputBreakTime"
-        :isBreakTimeTotalEmpty="isBreakTimeTotalEmpty"
-        :labelInput="labelInputBreakTime"
-        :errorLabelInput="errorLabelInputBreakTime"
-      />
-    </div>
   </div>
 </template>
 

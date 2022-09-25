@@ -13,9 +13,12 @@ export default {
 };
 </script>
 
+
+
+<script src="./ClientSide.js"></script>
 <style>
-.client_side{
-    width: 100%;
-    height: 100%;
-}
+    .client_side{
+        width: 100%;
+        height: 100%;
+    }
 </style>
