@@ -32,7 +32,39 @@ function convertSQLResultToJSON(rows) {
  */
 function minDiff(dateFrom, dateTo) {
     const diff = dateTo - dateFrom;
-    return Math.round(((diff % 86400000) % 3600000) / 60000);
+    return Math.round(diff / 60000);
+}
+
+/**
+ * Get start of date
+ * @param {Date} date 
+ * @returns 
+ */
+function getStartOfDate(date) {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0);
+    return newDate;
+}
+
+/**
+ * Calculate work time total from startTime to endTime if has lunch time
+ * @param {Date} startTime 
+ * @param {Date} endTime 
+ * @param {Date} lunchTime 
+ * @param {Date} lunchStart 
+ */
+function calWorkingTime(startTime, endTime, lunchStart, lunchEnd) {
+    if (lunchEnd <= endTime && lunchStart >= startTime) {
+        return minDiff(startTime, lunchStart) + minDiff(lunchEnd, endTime);
+    } else if (startTime < lunchStart && endTime < lunchEnd && endTime > lunchStart) {
+        return minDiff(startTime, lunchStart);
+    } else if (startTime > lunchStart && startTime < lunchEnd && endTime > lunchEnd) {
+        return minDiff(lunchEnd, endTime);
+    } else if (startTime > lunchStart && endTime < lunchEnd) {
+        return 0;
+    } else {
+        return minDiff(startTime, endTime);
+    }
 }
 
 /**
@@ -47,10 +79,75 @@ function compareTwoTimeGreaterOrEqual(hours1, min1, hours2, min2) {
         return false;
     }
 }
+/**
+ * Validate request body
+ * @param {Object} validateObj 
+ * @param {Object} validateSchema 
+ * @returns false if body is valid
+ */
+function validateRequest(validateObj, validateSchema) {
+    const a = {
+        name: 'thang',
+        pass: '123'
+    }
+
+    const schema = {
+        name: {
+            type: 'string',
+            required: true,
+        }
+    }
+
+    for (const [key, value] of Object.entries(validateSchema)) {
+        if (value.required) {
+            if (!validateObj[key]) {
+                return `${key} is required`
+            }
+        }
+
+        if (!validateType(validateObj[key], value.type)) {
+            return `${key} is not a ${value.type}`
+        }
+    }
+    return false;
+}
+
+function validateType(value, type) {
+    switch (type) {
+        case 'string':
+            return isValidString(value);
+        case 'datetime':
+            return isValidDate(value);
+        case 'number':
+            return isValidNumber(value);
+        default:
+            return false;
+    }
+}
+
+function isValidString(s) {
+    if (typeof s === 'string' || s instanceof String) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isValidDate(d) {
+    const date = new Date(d);
+    return date instanceof Date && !isNaN(date);
+}
+
+function isValidNumber(n) {
+    return !isNaN(n)
+}
 
 module.exports = {
     randomString,
     convertSQLResultToJSON,
     minDiff,
-    compareTwoTimeGreaterOrEqual
+    compareTwoTimeGreaterOrEqual,
+    validateRequest,
+    getStartOfDate,
+    calWorkingTime
 }

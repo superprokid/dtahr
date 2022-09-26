@@ -1,9 +1,9 @@
-const logger = require('../common/logger');
+const logger = require('../../common/logger');
 const moment = require('moment')
-const { verifyToken, signToken, signRefreshToken, verifyRefreshToken, hash, compare } = require('../common/cryptcommon');
-const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../common/dbaccess');
-const { minDiff, compareTwoTimeGreaterOrEqual } = require('../common/utils');
-const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../config/constants');
+const { signToken, signRefreshToken, verifyRefreshToken, compare } = require('../../common/cryptcommon');
+const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
+const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime } = require('../../common/utils');
+const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../../config/constants');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -13,6 +13,11 @@ const INSERT_NEW_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_
 const UPDATE_WORKLOG_STATUS = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, now())";
 const GET_WORKTIME = "SELECT * FROM worktime WHERE approve_date <= now() ORDER BY approve_date DESC LIMIT 1";
+const GET_EMPLOYEE_INFO = "SELECT e1.employee_id, e1.first_name, e1.last_name, e1.group_id, g.group_name,  e1.holiday_time, e1.avt, "
+    + "                         e1.phone, e1.main_skill, e1.sub_skill, e1.role, e2.first_name as employer_firstname, e2.last_name as employer_lastname "
+    + "                     FROM employee e1 INNER JOIN `group` g on e1.group_id = g.group_id "
+    + "                     LEFT JOIN employee e2 on e1.employer_id = e2.employee_id "
+    + "                     WHERE e1.employee_id = ? LIMIT 1 "
 
 async function verifyUser(data) {
     try {
@@ -198,7 +203,7 @@ async function checkout(req, res) {
         const nowDate = new Date();
         // check if checkout when out of working time
         if (compareTwoTimeGreaterOrEqual(nowDate.getHours(), nowDate.getMinutes(), workTime.hour_end, workTime.min_end)) {
-            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Working time is finished - can not check out`);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] Working time is finished - can not check out`);
             await commitTransaction(connection);
             releaseConnection(connection);
             res.status(403).send("You are out of working time");
@@ -213,7 +218,15 @@ async function checkout(req, res) {
                 workLogUpdateDate.setHours(workTime.hour_start);
                 workLogUpdateDate.setMinutes(workTime.min_start);
             }
-            const workTotal = currentWorkLog.work_total + minDiff(workLogUpdateDate, new Date());
+            // Set time for calculate working time
+            const startTime = workLogUpdateDate;
+            const endTime = new Date();
+            const lunchStart = new Date();
+            lunchStart.setHours(workTime.lunch_hour_start, workTime.lunch_min_start, 0);
+            const lunchEnd = new Date();
+            lunchEnd.setHours(workTime.lunch_hour_end, workTime.lunch_min_end, 0);
+            // Calculate work total
+            const workTotal = currentWorkLog.work_total + calWorkingTime(startTime, endTime, lunchStart, lunchEnd);
             logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update today worklog - check out, work total: ${workTotal} minutes`);
             await queryTransaction(connection, UPDATE_WORKLOG_STATUS, [WORKLOG_STATUS.checkout, workTotal, currentWorkLog.worklog_id]);
 
@@ -233,10 +246,47 @@ async function checkout(req, res) {
     }
 }
 
+async function getStart(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist`);
+            res.status(403).send("Get Failed");
+            return;
+        }
+        const employeeInfo = await exeQuery(GET_EMPLOYEE_INFO, [empId]);
+        if (!employeeInfo.length) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist in database`);
+            res.status(403).send("Get Failed");
+            return;
+        }
+
+        const response = { ...employeeInfo[0], workLog: null, workTime: WORKTIME_DEFAULT };
+
+        const today = moment().format('YYYY-MM-DD');
+        const curWorkLogList = await exeQuery(GET_WORKLOG_OF_USER, [empId, today]);
+        if (curWorkLogList.length) {
+            response.workLog = curWorkLogList[0];
+        }
+
+        const currentWorktime = await exeQuery(GET_WORKTIME);
+        if (currentWorktime.length) {
+            response.workTime = currentWorktime[0];
+        }
+
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(response);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     login,
     get,
     refreshToken,
     checkin,
-    checkout
+    checkout,
+    getStart,
 }
