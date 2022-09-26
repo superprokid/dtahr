@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 24/09/2022 19:43:10
+ Date: 26/09/2022 22:39:43
 */
 
 SET NAMES utf8mb4;
@@ -92,7 +92,7 @@ CREATE TABLE `employee`  (
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `password` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `group_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `holiday_time` decimal(4, 4) NULL DEFAULT 0.0000,
+  `holiday_time` double NULL DEFAULT 0,
   `join_date` date NOT NULL,
   `phone` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `main_skill` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -118,9 +118,10 @@ CREATE TABLE `employee`  (
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le', '2022-09-14', '123', 0, 'ldthang2201@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 0.0000, '2022-09-17', '123456', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-17 15:26:37', '2022-09-24 16:52:10');
-INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2022-09-24', '123', 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 0.0000, '0000-00-00', '123456', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:36', '2022-09-24 16:52:11');
-INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2022-09-24', '123', 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 0.0000, '0000-00-00', '123456', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:59', '2022-09-24 18:32:40');
+INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le', '2022-09-14', '123', 0, 'ldthang2201@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 1, '2022-09-17', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-17 15:26:37', '2022-09-26 22:09:39');
+INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2022-09-24', '123', 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 47, '0000-00-00', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:36', '2022-09-26 22:09:39');
+INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2022-09-24', '123', 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -4.133333333333334, '0000-00-00', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:59', '2022-09-26 22:19:47');
+INSERT INTO `employee` VALUES ('0000004', 'Thang', 'Le Duc', '2022-09-13', '111', 0, 'thangld@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -4.629166666666666, '0000-00-00', '252', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, '', '', NULL, NULL, 0, '2022-09-25 18:20:43', '2022-09-26 22:18:13');
 
 -- ----------------------------
 -- Table structure for group
@@ -296,12 +297,12 @@ CREATE TABLE `workhistory`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`workhistory_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of workhistory
 -- ----------------------------
-INSERT INTO `workhistory` VALUES (1, '0000001', 0, '2022-09-18 16:52:25', 'Check in at 2022-09-18, 04:52:25 pm', '2022-09-18 16:52:25', '2022-09-18 16:52:25');
+INSERT INTO `workhistory` VALUES (1, '0000001', 0, '2022-09-18 16:52:25', 'Check in at 2022-09-18, 04:52:25 pm', '2022-09-18 16:52:25', '2022-09-25 18:26:01');
 INSERT INTO `workhistory` VALUES (2, '0000001', 1, '2022-09-18 17:22:51', 'Check out at 2022-09-18, 05:22:51 pm', '2022-09-18 17:22:51', '2022-09-18 17:25:25');
 INSERT INTO `workhistory` VALUES (4, '0000001', 0, '2022-09-18 17:50:23', 'Check in at 2022-09-18, 05:50:23 pm', '2022-09-18 17:50:23', '2022-09-18 17:50:23');
 INSERT INTO `workhistory` VALUES (5, '0000001', 1, '2022-09-18 17:52:10', 'Check out at 2022-09-18, 05:52:10 pm', '2022-09-18 17:52:10', '2022-09-18 17:52:10');
@@ -309,7 +310,53 @@ INSERT INTO `workhistory` VALUES (6, '0000001', 0, '2022-09-24 09:09:22', 'Check
 INSERT INTO `workhistory` VALUES (7, '0000001', 1, '2022-09-24 09:11:27', 'Check out at 2022-09-24, 09:11:27 am', '2022-09-24 09:11:27', '2022-09-24 09:11:27');
 INSERT INTO `workhistory` VALUES (8, '0000001', 0, '2022-09-24 09:12:14', 'Check in at 2022-09-24, 09:12:14 am', '2022-09-24 09:12:14', '2022-09-24 09:12:14');
 INSERT INTO `workhistory` VALUES (9, '0000001', 1, '2022-09-24 09:12:19', 'Check out at 2022-09-24, 09:12:19 am', '2022-09-24 09:12:19', '2022-09-24 09:12:19');
-INSERT INTO `workhistory` VALUES (10, '0000001', 0, '2022-09-24 09:14:56', 'Check in at 2022-09-24, 09:14:56 am', '2022-09-24 09:14:56', '2022-09-24 09:14:56');
+INSERT INTO `workhistory` VALUES (10, '0000001', 0, '2022-09-24 09:14:56', 'Check in at 2022-09-24, 09:14:56 am', '2022-09-24 09:14:56', '2022-09-25 18:26:06');
+INSERT INTO `workhistory` VALUES (11, '0000001', 0, '2022-09-25 09:06:41', 'Check in at 2022-09-25, 09:06:41 am', '2022-09-25 09:06:41', '2022-09-25 18:26:08');
+INSERT INTO `workhistory` VALUES (12, '0000001', 1, '2022-09-25 18:03:04', 'Check out at 2022-09-25, 06:03:04 pm', '2022-09-25 18:03:04', '2022-09-25 18:03:04');
+INSERT INTO `workhistory` VALUES (13, '1000101', 3, '2022-09-25 18:21:27', 'Test Work history', '2022-09-25 18:21:52', '2022-09-25 18:21:52');
+INSERT INTO `workhistory` VALUES (148, '0000002', 2, '2022-09-25 19:31:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (149, '0000002', 3, '2022-09-25 19:31:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (150, '0000003', 2, '2022-09-25 19:31:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (151, '0000003', 3, '2022-09-25 19:31:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (152, '0000004', 2, '2022-09-25 19:31:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (153, '0000004', 3, '2022-09-25 19:31:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:31:45', '2022-09-25 19:31:45');
+INSERT INTO `workhistory` VALUES (154, '0000002', 2, '2022-09-25 19:39:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (155, '0000002', 3, '2022-09-25 19:39:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (156, '0000003', 2, '2022-09-25 19:39:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (157, '0000003', 3, '2022-09-25 19:39:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (158, '0000004', 2, '2022-09-25 19:39:45', 'CHECK OUT - Auto check out by bot', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (159, '0000004', 3, '2022-09-25 19:39:45', 'AUTO DETECTED - You worked not enough time: 8 hours', '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `workhistory` VALUES (160, '0000001', 3, '2022-09-26 22:09:39', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 2 to 1', '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `workhistory` VALUES (161, '0000002', 3, '2022-09-26 22:09:39', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 48 to 47', '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `workhistory` VALUES (162, '0000003', 3, '2022-09-26 22:09:39', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -2 to -3', '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `workhistory` VALUES (163, '0000004', 3, '2022-09-26 22:09:39', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -2 to -3', '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `workhistory` VALUES (164, '0000001', 3, '2022-09-26 22:12:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:12:28', '2022-09-26 22:12:28');
+INSERT INTO `workhistory` VALUES (165, '0000002', 3, '2022-09-26 22:12:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:12:28', '2022-09-26 22:12:28');
+INSERT INTO `workhistory` VALUES (166, '0000003', 3, '2022-09-26 22:12:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:12:28', '2022-09-26 22:12:28');
+INSERT INTO `workhistory` VALUES (167, '0000004', 3, '2022-09-26 22:12:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:12:28', '2022-09-26 22:12:28');
+INSERT INTO `workhistory` VALUES (168, '0000001', 3, '2022-09-26 22:13:49', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:13:49', '2022-09-26 22:13:49');
+INSERT INTO `workhistory` VALUES (169, '0000002', 3, '2022-09-26 22:13:49', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:13:49', '2022-09-26 22:13:49');
+INSERT INTO `workhistory` VALUES (170, '0000003', 3, '2022-09-26 22:13:49', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:13:49', '2022-09-26 22:13:49');
+INSERT INTO `workhistory` VALUES (171, '0000004', 3, '2022-09-26 22:13:49', 'AUTO DETECTED - Worked not enough 8 hours - duration: ', '2022-09-26 22:13:49', '2022-09-26 22:13:49');
+INSERT INTO `workhistory` VALUES (172, '0000001', 3, '2022-09-26 22:15:56', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480', '2022-09-26 22:15:56', '2022-09-26 22:15:56');
+INSERT INTO `workhistory` VALUES (173, '0000002', 3, '2022-09-26 22:15:56', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480', '2022-09-26 22:15:56', '2022-09-26 22:15:56');
+INSERT INTO `workhistory` VALUES (174, '0000003', 3, '2022-09-26 22:15:56', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480', '2022-09-26 22:15:56', '2022-09-26 22:15:56');
+INSERT INTO `workhistory` VALUES (175, '0000004', 3, '2022-09-26 22:15:56', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480', '2022-09-26 22:15:56', '2022-09-26 22:15:56');
+INSERT INTO `workhistory` VALUES (185, '0000001', 3, '2022-09-26 22:18:13', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:18:13', '2022-09-26 22:18:13');
+INSERT INTO `workhistory` VALUES (186, '0000002', 3, '2022-09-26 22:18:13', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:18:13', '2022-09-26 22:18:13');
+INSERT INTO `workhistory` VALUES (187, '0000003', 3, '2022-09-26 22:18:13', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:18:13', '2022-09-26 22:18:13');
+INSERT INTO `workhistory` VALUES (188, '0000004', 2, '2022-09-26 22:18:13', 'CHECK OUT - Auto check out by bot', '2022-09-26 22:18:13', '2022-09-26 22:18:13');
+INSERT INTO `workhistory` VALUES (189, '0000004', 3, '2022-09-26 22:18:13', 'AUTO DETECTED - Worked not enough 8 hours - duration: 782 mins', '2022-09-26 22:18:13', '2022-09-26 22:18:13');
+INSERT INTO `workhistory` VALUES (190, '0000001', 3, '2022-09-26 22:19:18', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:19:18', '2022-09-26 22:19:18');
+INSERT INTO `workhistory` VALUES (191, '0000002', 3, '2022-09-26 22:19:18', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:19:18', '2022-09-26 22:19:18');
+INSERT INTO `workhistory` VALUES (192, '0000003', 2, '2022-09-26 22:19:18', 'CHECK OUT - Auto check out by bot', '2022-09-26 22:19:18', '2022-09-26 22:19:18');
+INSERT INTO `workhistory` VALUES (193, '0000003', 3, '2022-09-26 22:19:18', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:19:18', '2022-09-26 22:19:18');
+INSERT INTO `workhistory` VALUES (194, '0000004', 3, '2022-09-26 22:19:18', 'AUTO DETECTED - Worked not enough 8 hours - duration: 782 mins', '2022-09-26 22:19:18', '2022-09-26 22:19:18');
+INSERT INTO `workhistory` VALUES (195, '0000001', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
+INSERT INTO `workhistory` VALUES (196, '0000002', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
+INSERT INTO `workhistory` VALUES (197, '0000003', 2, '2022-09-26 22:19:47', 'CHECK OUT - Auto check out by bot', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
+INSERT INTO `workhistory` VALUES (198, '0000003', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 64 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
+INSERT INTO `workhistory` VALUES (199, '0000004', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 782 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
 
 -- ----------------------------
 -- Table structure for worklog
@@ -324,13 +371,22 @@ CREATE TABLE `worklog`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worklog_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of worklog
 -- ----------------------------
 INSERT INTO `worklog` VALUES (3, '0000001', 1, '2022-09-18', 35.0, '2022-09-18 16:52:25', '2022-09-18 17:52:10');
 INSERT INTO `worklog` VALUES (4, '0000001', 0, '2022-09-24', 2.0, '2022-09-24 09:09:22', '2022-09-24 09:14:56');
+INSERT INTO `worklog` VALUES (5, '0000001', 1, '2022-09-25', 536.0, '2022-09-25 09:06:41', '2022-09-25 18:03:04');
+INSERT INTO `worklog` VALUES (6, '1000101', 0, '2022-09-25', 80.0, '2022-09-25 18:22:38', '2022-09-25 18:22:38');
+INSERT INTO `worklog` VALUES (121, '0000002', 1, '2022-09-25', 0.0, '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `worklog` VALUES (122, '0000003', 1, '2022-09-25', 0.0, '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `worklog` VALUES (123, '0000004', 1, '2022-09-25', 0.0, '2022-09-25 19:39:45', '2022-09-25 19:39:45');
+INSERT INTO `worklog` VALUES (124, '0000001', 1, '2022-09-26', 0.0, '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `worklog` VALUES (125, '0000002', 1, '2022-09-26', 0.0, '2022-09-26 22:09:39', '2022-09-26 22:09:39');
+INSERT INTO `worklog` VALUES (126, '0000003', 1, '2022-09-26', 416.0, '2022-09-26 09:09:39', '2022-09-26 22:19:47');
+INSERT INTO `worklog` VALUES (127, '0000004', 1, '2022-09-26', -302.0, '2022-09-26 22:09:39', '2022-09-26 22:18:13');
 
 -- ----------------------------
 -- Table structure for worktime
@@ -342,7 +398,10 @@ CREATE TABLE `worktime`  (
   `min_start` int NULL DEFAULT NULL,
   `hour_end` int NULL DEFAULT NULL,
   `min_end` int NULL DEFAULT NULL,
-  `lunch_time` decimal(2, 1) NULL DEFAULT 1.0,
+  `lunch_hour_start` int NULL DEFAULT NULL,
+  `lunch_min_start` int NULL DEFAULT NULL,
+  `lunch_hour_end` int NULL DEFAULT 1,
+  `lunch_min_end` int NULL DEFAULT NULL,
   `approve_date` date NULL DEFAULT NULL,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
@@ -352,8 +411,8 @@ CREATE TABLE `worktime`  (
 -- ----------------------------
 -- Records of worktime
 -- ----------------------------
-INSERT INTO `worktime` VALUES (1, 8, 0, 17, 0, 1.0, '2022-09-18', '2022-09-18 15:41:37', '2022-09-18 17:39:01');
-INSERT INTO `worktime` VALUES (2, 8, 30, 17, 30, 1.0, '2022-11-15', '2022-09-18 16:57:39', '2022-09-18 17:39:06');
-INSERT INTO `worktime` VALUES (3, 8, 15, 17, 15, 1.0, '2022-09-24', '2022-09-18 16:58:55', '2022-09-24 09:15:45');
+INSERT INTO `worktime` VALUES (1, 8, 0, 17, 0, 12, 0, 13, 0, '2022-09-18', '2022-09-18 15:41:37', '2022-09-26 22:10:09');
+INSERT INTO `worktime` VALUES (2, 8, 30, 17, 30, 12, 0, 13, 0, '2022-11-15', '2022-09-18 16:57:39', '2022-09-26 22:10:10');
+INSERT INTO `worktime` VALUES (3, 8, 15, 17, 15, 12, 0, 13, 0, '2022-09-24', '2022-09-18 16:58:55', '2022-09-26 22:10:12');
 
 SET FOREIGN_KEY_CHECKS = 1;
