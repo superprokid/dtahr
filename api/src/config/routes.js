@@ -14,9 +14,11 @@ Router.get('/user/get', authen, userController.get);
 Router.post('/user/checkin', authen, userController.checkin);
 Router.post('/user/checkout', authen, userController.checkout);
 Router.get('/user/workhistory', authen, worklogController.getWorkHistory);
+Router.get('/user/worklog', authen, worklogController.getWorkLogByUser);
 Router.post('/user/create/overtime', authen, overtimeController.registerOverTime);
 Router.get('/user/overtime/get', authen, overtimeController.getListOverTimeTicketOfUser);
 Router.get('/user/overtime/getAll', authen, overtimeController.getListOverTimeTicketOfGroup);
+Router.get('/user/getstart', authen, userController.getStart);
 
 // admin
 Router.post('/admin/login', adminController.login);

@@ -46,6 +46,32 @@ async function getWorkHistory(req, res) {
     }
 }
 
+async function getWorkLogByUser(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist`);
+            res.status(403).send("Get Failed");
+            return;
+        }
+
+        const today = moment().format('YYYY-MM-DD');
+        const curWorkLogList = await exeQuery(GET_WORKLOG_OF_USER, [empId, today]);
+        let response = {};
+        if (curWorkLogList.length) {
+            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] exist worklog in database`);
+            response = curWorkLogList[0];
+        }
+
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(response);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     getWorkHistory,
+    getWorkLogByUser
 }

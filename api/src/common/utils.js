@@ -47,6 +47,27 @@ function getStartOfDate(date) {
 }
 
 /**
+ * Calculate work time total from startTime to endTime if has lunch time
+ * @param {Date} startTime 
+ * @param {Date} endTime 
+ * @param {Date} lunchTime 
+ * @param {Date} lunchStart 
+ */
+function calWorkingTime(startTime, endTime, lunchStart, lunchEnd) {
+    if (lunchEnd <= endTime && lunchStart >= startTime) {
+        return minDiff(startTime, lunchStart) + minDiff(lunchEnd, endTime);
+    } else if (startTime < lunchStart && endTime < lunchEnd && endTime > lunchStart) {
+        return minDiff(startTime, lunchStart);
+    } else if (startTime > lunchStart && startTime < lunchEnd && endTime > lunchEnd) {
+        return minDiff(lunchEnd, endTime);
+    } else if (startTime > lunchStart && endTime < lunchEnd) {
+        return 0;
+    } else {
+        return minDiff(startTime, endTime);
+    }
+}
+
+/**
  * Compare two time
  * @param {Number} date1 
  * @param {Number} date2 
@@ -128,4 +149,5 @@ module.exports = {
     compareTwoTimeGreaterOrEqual,
     validateRequest,
     getStartOfDate,
+    calWorkingTime
 }

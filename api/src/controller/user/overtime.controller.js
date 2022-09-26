@@ -2,7 +2,7 @@ const logger = require('../../common/logger');
 const moment = require('moment');
 const { validateRequest, getStartOfDate, minDiff } = require('../../common/utils');
 const { exeQuery, queryTransaction, getConnection, beginTransaction, commitTransaction, releaseConnection, rollback } = require('../../common/dbaccess');
-const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS } = require('../../config/constants');
+const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR } = require('../../config/constants');
 
 const LOG_CATEGORY = "OverTimeController"
 const GET_OT_PAYMENT = "SELECT * FROM overtimepayment ORDER BY update_at DESC";
@@ -108,7 +108,7 @@ async function getPaymentCoefficient(connection, startDate, endDate) {
     let paymentType = OT_PAYMENT_DAILY_DATE_KEY;
     if (listHoliday.length) { // in holiday OT
         paymentType = OT_PAYMENT_HOLYDAY_KEY;
-    } else if (startDate.getHours() >= 0 && startDate.getHours() <= 6) { // in night OT
+    } else if (startDate.getHours() >= 0 && startDate.getHours() < VALID_HOUR) { // in night OT
         paymentType = OT_PAYMENT_DAILY_NIGHT_KEY;
     } else if (startDate.getDay() === 0 || startDate.getDay() === 6) {// in saturday or sunday
         paymentType = OT_PAYMENT_WEEKEND_KEY;
