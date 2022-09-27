@@ -1,3 +1,5 @@
+const { MAX_EMPLOYEE_ID_LENGTH } = require("../config/constants");
+
 /**
  * Generate random string
  * @param {Number} length 
@@ -86,26 +88,14 @@ function compareTwoTimeGreaterOrEqual(hours1, min1, hours2, min2) {
  * @returns false if body is valid
  */
 function validateRequest(validateObj, validateSchema) {
-    const a = {
-        name: 'thang',
-        pass: '123'
-    }
-
-    const schema = {
-        name: {
-            type: 'string',
-            required: true,
-        }
-    }
-
     for (const [key, value] of Object.entries(validateSchema)) {
         if (value.required) {
-            if (!validateObj[key]) {
+            if (isNullOrUndefinded(validateObj[key])) {
                 return `${key} is required`
             }
         }
 
-        if (!validateType(validateObj[key], value.type)) {
+        if (!isNullOrUndefinded(validateObj[key]) && !validateType(validateObj[key], value.type)) {
             return `${key} is not a ${value.type}`
         }
     }
@@ -142,6 +132,20 @@ function isValidNumber(n) {
     return !isNaN(n)
 }
 
+function generateEmployeeId(employeeId) {
+    let empId = Number(employeeId);
+    empId = String(empId + 1);
+    const length = MAX_EMPLOYEE_ID_LENGTH - empId.length;
+    for (let i = 0; i < length; i++) {
+        empId = '0' + empId;
+    }
+    return empId;
+}
+
+function isNullOrUndefinded(value) {
+    return value === null || value === undefined;
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -149,5 +153,7 @@ module.exports = {
     compareTwoTimeGreaterOrEqual,
     validateRequest,
     getStartOfDate,
-    calWorkingTime
+    calWorkingTime,
+    generateEmployeeId,
+    isNullOrUndefinded,
 }

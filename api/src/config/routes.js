@@ -3,9 +3,12 @@ const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
 const Router = express.Router();
 const userController = require('../controller/user/user.controller');
-const adminController = require('../controller/admin/admin.controller');
 const worklogController = require('../controller/user/worklog.controller');
 const overtimeController = require('../controller/user/overtime.controller');
+
+// Import for admin controller
+const adminController = require('../controller/admin/admin.controller');
+const adminEmpController = require('../controller/admin/employee.controller');
 
 // user
 Router.post('/user/login', userController.login);
@@ -23,6 +26,6 @@ Router.get('/user/getstart', authen, userController.getStart);
 // admin
 Router.post('/admin/login', adminController.login);
 Router.get('/admin/getalluser', adminAuthen, adminController.getAllUser);
-Router.get('/admin/create/employee', adminController.createNewEmployee);
+Router.post('/admin/create/employee', adminEmpController.createNewEmployee);
 
 module.exports = Router;

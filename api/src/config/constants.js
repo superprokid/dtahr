@@ -36,4 +36,10 @@ module.exports = {
     CHECKOUT_BATCH_CRON: "0 30 18 * * 1-5", // At 19:00 on every day-of-week from Monday through Friday 
     VALID_HOUR: 7,
     WORK_TIME_FULL: 8,
+    MAX_EMPLOYEE_ID_LENGTH: 7,
+    ROLE: {
+        employee: 0,
+        employer: 1,
+    },
+    EMPLOYEE_WEB_LOGIN: 'http://127.0.0.1:8080/user/login',
 }

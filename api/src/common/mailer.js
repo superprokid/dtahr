@@ -1,4 +1,6 @@
 const mailer = require('nodemailer');
+const logger = require('./logger');
+const { EMPLOYEE_WEB_LOGIN } = require('../config/constants');
 const { MAIL_SENDER, MAIL_PASS } = require('../config/env');
 
 const transporter = mailer.createTransport({
@@ -6,35 +8,31 @@ const transporter = mailer.createTransport({
     auth: {
         user: MAIL_SENDER,
         pass: MAIL_PASS
-    } 
+    }
 })
 
-function sendMail(receiver, subject = "", text = "", html = "", apm = "") {
-    if (!receiver) {
-        return;
-    }
-    const message = {
-        from: "UTE-HRM",
-        to: receiver,
-        subject: 'AMP4EMAIL message',
-        text: 'For clients with plaintext support only',
-        html: '<p>For clients that do not support AMP4EMAIL or amp content is not valid</p>',
-        amp: `<!doctype html>
-        <html ⚡4email>
-          <head>
-            <meta charset="utf-8">
-            <style amp4email-boilerplate>body{visibility:hidden}</style>
-            <script async src="https://cdn.ampproject.org/v0.js"></script>
-            <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
-          </head>
-          <body>
-            <p>Image: <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
-            <p>GIF (requires "amp-anim" script in header):<br/>
-              <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
-          </body>
-        </html>`
-    }
-    transporter.sendMail(message);
+function sendMail(receiver, password) {
+    return new Promise((resolve, reject) => {
+        if (!receiver) {
+            return;
+        }
+        const message = {
+            from: "UTE-HRM",
+            to: receiver,
+            subject: 'UTE-HRM Login information - your password',
+            text: 'For employee with password',
+            html: `    <h3>Welcome to UTE-HRM</h3>
+            <p>Your password is: ${password}</p>
+            <p>Go to <a href="http://127.0.0.1:8080/user/login">Login</a> to login with your email and working with us</p>`,
+        }
+        transporter.sendMail(message).then(result => {
+            logger.info(`[Send mail service]: Send mail success ` + result);
+            resolve(true);
+        }).catch(error => {
+            logger.error(`[Send mail service]: Send mail error` + error.stack);
+            reject(false);
+        });
+    })
 }
 
 module.exports = {
