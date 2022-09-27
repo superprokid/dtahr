@@ -93,7 +93,7 @@ CREATE TABLE `employee`  (
   `password` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `group_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `holiday_time` double NULL DEFAULT 0,
-  `join_date` date NOT NULL,
+  `join_date` date NOT NULL DEFAULT current_timestamp,
   `phone` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `main_skill` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `sub_skill` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -107,6 +107,8 @@ CREATE TABLE `employee`  (
   `relationship` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `avt` blob NOT NULL,
   `salary` decimal(10, 2) NULL DEFAULT NULL COMMENT 'tính theo giờ',
+  `bank_account` varchar(20) NULL DEFAULT NULL,
+  `bank_name` varchar(50) NULL DEFAULT NULL,
   `face_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `is_deleted` tinyint NOT NULL DEFAULT 0,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
@@ -217,7 +219,7 @@ CREATE TABLE `overtime`  (
   `status` tinyint NOT NULL COMMENT '0: pending, 1: confirm',
   `payment` decimal(10, 2) NULL DEFAULT NULL,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
-  `update_at` datetime NOT NULL,
+  `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP ,
   PRIMARY KEY (`overtime_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
