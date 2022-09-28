@@ -86,7 +86,9 @@ async function processForWorking(connection, employee, worklog) {
     // if employee already check out
     if (worklog.work_status === WORKLOG_STATUS.checkout) {
         if (worklog.work_total < WORK_TIME_MIN) {
-            await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_WORK_NOT_ENOUGH + `${WORK_TIME_MIN - worklog.work_total} mins`]);
+            const notWorkingTime = Math.round(WORK_TIME_MIN - worklog.work_total);
+            await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_WORK_NOT_ENOUGH + `${notWorkingTime} mins`]);
+            await dbaccess.queryTransaction(connection, UPDATE_HOLIDAY_TIME, [notWorkingTime / (8 * 60), employee.employee_id]);
         }
     } else {
         const workTimeList = await dbaccess.queryTransaction(connection, GET_WORKTIME);
@@ -117,9 +119,9 @@ async function processForWorking(connection, employee, worklog) {
         await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoCheckout, DESCRIPTION_AUTO_CHECKOUT]);
         if (workTotal < WORK_TIME_MIN) {
             logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee: ${employee.employee_id} not working for ${WORK_TIME_MIN - workTotal} mins`);
-            const notWorkingTIme = Math.round(WORK_TIME_MIN - workTotal);
-            await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_WORK_NOT_ENOUGH + `${notWorkingTIme} mins`]);
-            await dbaccess.queryTransaction(connection, UPDATE_HOLIDAY_TIME, [notWorkingTIme / (8 * 60), employee.employee_id]);
+            const notWorkingTime = Math.round(WORK_TIME_MIN - workTotal);
+            await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_WORK_NOT_ENOUGH + `${notWorkingTime} mins`]);
+            await dbaccess.queryTransaction(connection, UPDATE_HOLIDAY_TIME, [notWorkingTime / (8 * 60), employee.employee_id]);
         }
     }
     logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee: ${employee.employee_id} working today - end`);

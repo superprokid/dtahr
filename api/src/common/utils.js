@@ -73,10 +73,16 @@ function calWorkingTime(startTime, endTime, lunchStart, lunchEnd) {
  * @param {Number} date2 
  */
 function compareTwoTimeGreaterOrEqual(hours1, min1, hours2, min2) {
-    if (hours1 >= hours2 && min1 >= min2) {
+    if (hours1 > hours2) {
         return true;
-    } else {
+    } else if (hours1 < hours2) {
         return false;
+    } else {
+        if (min1 >= min2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 /**

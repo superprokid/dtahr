@@ -7,8 +7,9 @@ import AdminSide from "../views/AdminSide/AdminSide.vue";
 // UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
 import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
-import HistoryTracking from "@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue"
+// import HistoryTracking from "@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue"
 import MyPage from "../views/ClientSide/MyPage/MyPage.vue";
+import Home from "../views/ClientSide/Home/Home.vue";
 
 Vue.use(Router);
 
@@ -45,8 +46,8 @@ const router = new Router({
                     component: MyPage
                 },
                 {
-                    path: 'historytracking',
-                    component: HistoryTracking
+                    path: 'home',
+                    component: Home
                 },
             ]
         },

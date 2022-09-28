@@ -1,19 +1,10 @@
 <template>
     <div class="d-flex client_side">
-        <div style="width: 10%;height:100%;background-color: aqua;">
-        123012983120938213
-        </div>
-        <router-view></router-view>
+        <Drawer></Drawer>
+        <Header>sadxzcsssssssssssssssssssssssssssssssssssss</Header>
+        <router-view  style="padding-top: 60px"></router-view>
     </div>
 </template>
-  
-<script>
-export default {
-    name: 'ClientSide',
-};
-</script>
-
-
 
 <script src="./ClientSide.js"></script>
 <style>
