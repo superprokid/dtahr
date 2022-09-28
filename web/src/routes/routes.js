@@ -10,6 +10,7 @@ import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
 // import HistoryTracking from "@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue"
 import MyPage from "../views/ClientSide/MyPage/MyPage.vue";
 import Home from "../views/ClientSide/Home/Home.vue";
+import Holiday from "../views/ClientSide/Holiday/Holiday.vue";
 
 Vue.use(Router);
 
@@ -49,6 +50,10 @@ const router = new Router({
                     path: 'home',
                     component: Home
                 },
+                {
+                    path: 'holiday',
+                    component: Holiday,
+                }
             ]
         },
         {

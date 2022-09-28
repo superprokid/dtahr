@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex client_side">
         <Drawer></Drawer>
-        <Header>sadxzcsssssssssssssssssssssssssssssssssssss</Header>
+        <Header></Header>
         <router-view  style="padding-top: 60px"></router-view>
     </div>
 </template>

@@ -10,3 +10,8 @@
 .md-theme-default {
     overflow: hidden;
 }
+
+/* overite this css to set min-heith is 0 */
+.v-application--wrap {
+    min-height: 0vh !important;
+  }

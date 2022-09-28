@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 26/09/2022 22:39:43
+ Date: 28/09/2022 21:15:30
 */
 
 SET NAMES utf8mb4;
@@ -32,12 +32,12 @@ CREATE TABLE `administrator`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`username`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of administrator
 -- ----------------------------
-INSERT INTO `administrator` VALUES ('thangld', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-09-24 19:00:05', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX18BntsvTnAje3y1Xv2/bJYbLYHEQ/G55lw9/hqyUEt67Uzu/25m5Lf0h0DhmM4t5iIVttPAXWxvE4pBj783Sepc/RYExI6fJh/quiRXXFye7ygFUNwnjLAV4jsuIksA7afmBalKWc3k6ZdBB/yuixkcElgR369D0kF5A7J/Po9pGTxCK1bEdNvBim3DQPM0G5qhQduA0M3KKwUqVsM9iTendkamhoJ3/9B8589E6wEQMy2VkAyRR8rBVvO4amQ223hHnssZlH4ImlMET3VRlujbnX4TuEGAdhHCQ7mcBMthBHi3eVeUee84yS+RDRKlCYotY8RgQKtsRNDUfyNNKhpRXCHF8gRA3Ju7HmZHLC/mc55zoNq18T9P1DC9F+/AMNLzZzQmSawT8g==', '2022-09-24 20:00:05', '2022-09-17 15:54:06', '2022-09-24 19:00:05');
+INSERT INTO `administrator` VALUES ('thangld', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-09-28 14:36:35', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX190J+mq2e8rlDihcGmudgChhiouoeEURutxO5I4SPa57FIE7dxEzoDCjq49ityyXUuQ+DUep7vSSorGPAc0Bj3JZbLq7FoojDA4Uxl21KBqV94G1gyebTSWD+uYol8w8Ifjhniwb0k44OfRLUanoQ3cqEAAcpJVr7cOZkgx4IK43rVpNdgE1lURLX/YtxaWukhtWtRZWARb0KpAiAd9axogMVIvY8JkTAXGDttsi/fMcvU+r+U8Vr3gyOIG+Rf+LgTFqA547TVpVE5xe7jid+JyritHSPl1L+GmI6xLEwfDJAii1MVsFhaO7XrQBaNa13BoEMBATfOReBkprH+IWZplTwCKYCKXaJkzupj5NiEd5OHwyPt6yzHcRYrrZOwmPkEfrzWy7TdKYQ==', '2022-09-28 15:36:35', '2022-09-17 15:54:06', '2022-09-28 14:36:35');
 
 -- ----------------------------
 -- Table structure for assignment
@@ -50,7 +50,7 @@ CREATE TABLE `assignment`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`project_id`, `employee_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of assignment
@@ -72,7 +72,7 @@ CREATE TABLE `dailyreport`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`dailyreport_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dailyreport
@@ -99,31 +99,31 @@ CREATE TABLE `employee`  (
   `sub_skill` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `job_role` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `role` tinyint NOT NULL,
-  `employer_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `employer_id` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `relative_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `relative_gender` tinyint NULL DEFAULT NULL,
   `relative_phone` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `relative_dob` date NULL DEFAULT NULL,
-  `relationship` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `avt` blob NOT NULL,
+  `relationship` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `avt` blob NULL,
   `salary` decimal(10, 2) NULL DEFAULT NULL COMMENT 'tính theo giờ',
-  `bank_account` varchar(20) NULL DEFAULT NULL,
-  `bank_name` varchar(50) NULL DEFAULT NULL,
+  `bank_account` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `bank_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `face_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `is_deleted` tinyint NOT NULL DEFAULT 0,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`employee_id`) USING BTREE,
   FULLTEXT INDEX `manhanvien`(`employee_id`)
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le', '2022-09-14', '123', 0, 'ldthang2201@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 1, '2022-09-17', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-17 15:26:37', '2022-09-26 22:09:39');
-INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2022-09-24', '123', 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 47, '0000-00-00', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:36', '2022-09-26 22:09:39');
-INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2022-09-24', '123', 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -4.133333333333334, '0000-00-00', '123456', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, '', '', 600000.00, NULL, 0, '2022-09-24 14:41:59', '2022-09-26 22:19:47');
-INSERT INTO `employee` VALUES ('0000004', 'Thang', 'Le Duc', '2022-09-13', '111', 0, 'thangld@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -4.629166666666666, '0000-00-00', '252', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, '', '', NULL, NULL, 0, '2022-09-25 18:20:43', '2022-09-26 22:18:13');
+INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'thangld@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 11, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-09-28 14:41:19', '2022-09-28 18:30:00');
+INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2000-10-10', NULL, 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -1, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-09-28 14:43:07', '2022-09-28 18:30:00');
+INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2000-10-10', NULL, 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -1, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-09-28 14:43:26', '2022-09-28 18:30:00');
+INSERT INTO `employee` VALUES ('0000004', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'ldthang2201@gmail.com', '$2b$12$G3DVMLIjLTfc7ep3t7BnmutTbheR9.K8y9LgqquXdzi7T3T5GcaRa', '000001', -1, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-09-28 17:50:26', '2022-09-28 18:30:00');
 
 -- ----------------------------
 -- Table structure for group
@@ -156,12 +156,17 @@ CREATE TABLE `holiday`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`holiday_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of holiday
 -- ----------------------------
 INSERT INTO `holiday` VALUES (1, '2022-09-29', 'Nghi le hang nam', '2022-09-24 16:43:09', '2022-09-24 16:43:09');
+INSERT INTO `holiday` VALUES (2, '2022-09-28', 'Nghir dai thoi', '2022-09-28 20:54:50', '2022-09-28 20:54:50');
+INSERT INTO `holiday` VALUES (3, '2022-09-07', 'ascsa', '2022-09-28 20:59:17', '2022-09-28 20:59:17');
+INSERT INTO `holiday` VALUES (4, '2022-07-07', 's', '2022-09-28 20:59:24', '2022-09-28 20:59:24');
+INSERT INTO `holiday` VALUES (5, '2022-09-04', 'sdsd', '2022-09-28 20:59:29', '2022-09-28 20:59:31');
+INSERT INTO `holiday` VALUES (6, '2023-01-01', 'TEt nguyen dan', '2022-09-28 20:59:43', '2022-09-28 20:59:43');
 
 -- ----------------------------
 -- Table structure for keyvalue
@@ -219,7 +224,7 @@ CREATE TABLE `overtime`  (
   `status` tinyint NOT NULL COMMENT '0: pending, 1: confirm',
   `payment` decimal(10, 2) NULL DEFAULT NULL,
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
-  `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP ,
+  `update_at` datetime NOT NULL,
   PRIMARY KEY (`overtime_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -299,7 +304,7 @@ CREATE TABLE `workhistory`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`workhistory_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 270 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of workhistory
@@ -359,6 +364,76 @@ INSERT INTO `workhistory` VALUES (196, '0000002', 3, '2022-09-26 22:19:47', 'AUT
 INSERT INTO `workhistory` VALUES (197, '0000003', 2, '2022-09-26 22:19:47', 'CHECK OUT - Auto check out by bot', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
 INSERT INTO `workhistory` VALUES (198, '0000003', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 64 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
 INSERT INTO `workhistory` VALUES (199, '0000004', 3, '2022-09-26 22:19:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 782 mins', '2022-09-26 22:19:47', '2022-09-26 22:19:47');
+INSERT INTO `workhistory` VALUES (200, '0000001', 0, '2022-09-27 21:12:31', 'Check in at 2022-09-27, 09:12:31 pm', '2022-09-27 21:12:31', '2022-09-27 21:12:31');
+INSERT INTO `workhistory` VALUES (201, '0000001', 1, '2022-09-27 22:08:27', 'Check out at 2022-09-27, 10:08:27 pm', '2022-09-27 22:08:27', '2022-09-27 22:08:27');
+INSERT INTO `workhistory` VALUES (202, '0000001', 0, '2022-09-27 22:10:55', 'Check in at 2022-09-27, 10:10:55 pm', '2022-09-27 22:10:55', '2022-09-27 22:10:55');
+INSERT INTO `workhistory` VALUES (203, '0000001', 1, '2022-09-27 22:13:11', 'Check out at 2022-09-27, 10:13:11 pm', '2022-09-27 22:13:11', '2022-09-27 22:13:11');
+INSERT INTO `workhistory` VALUES (204, '0000001', 0, '2022-09-27 22:22:16', 'Check in at 2022-09-27, 10:22:16 pm', '2022-09-27 22:22:16', '2022-09-27 22:22:16');
+INSERT INTO `workhistory` VALUES (205, '0000001', 1, '2022-09-27 22:22:34', 'Check out at 2022-09-27, 10:22:34 pm', '2022-09-27 22:22:34', '2022-09-27 22:22:34');
+INSERT INTO `workhistory` VALUES (206, '0000001', 0, '2022-09-27 22:24:34', 'Check in at 2022-09-27, 10:24:34 pm', '2022-09-27 22:24:34', '2022-09-27 22:24:34');
+INSERT INTO `workhistory` VALUES (207, '0000001', 1, '2022-09-27 22:24:35', 'Check out at 2022-09-27, 10:24:35 pm', '2022-09-27 22:24:35', '2022-09-27 22:24:35');
+INSERT INTO `workhistory` VALUES (208, '0000001', 3, '2022-09-27 22:27:10', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `workhistory` VALUES (209, '0000002', 3, '2022-09-27 22:27:10', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 47 to 46', '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `workhistory` VALUES (210, '0000003', 3, '2022-09-27 22:27:10', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -4.133333333333334 to -5.133333333333334', '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `workhistory` VALUES (211, '0000004', 3, '2022-09-27 22:27:10', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -4.629166666666666 to -5.629166666666666', '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `workhistory` VALUES (212, '0000001', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (213, '0000002', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (214, '0000003', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (215, '0000004', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (216, '0000001', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (217, '0000002', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (218, '0000003', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (219, '0000004', 3, '2022-09-27 22:27:11', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:11', '2022-09-27 22:27:11');
+INSERT INTO `workhistory` VALUES (220, '0000001', 3, '2022-09-27 22:27:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:28', '2022-09-27 22:27:28');
+INSERT INTO `workhistory` VALUES (221, '0000002', 3, '2022-09-27 22:27:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:28', '2022-09-27 22:27:28');
+INSERT INTO `workhistory` VALUES (222, '0000003', 3, '2022-09-27 22:27:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:28', '2022-09-27 22:27:28');
+INSERT INTO `workhistory` VALUES (223, '0000004', 3, '2022-09-27 22:27:28', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:28', '2022-09-27 22:27:28');
+INSERT INTO `workhistory` VALUES (224, '0000001', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (225, '0000002', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (226, '0000003', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (227, '0000004', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (228, '0000001', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (229, '0000002', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (230, '0000003', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (231, '0000004', 3, '2022-09-27 22:27:29', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:27:29', '2022-09-27 22:27:29');
+INSERT INTO `workhistory` VALUES (232, '0000001', 3, '2022-09-27 22:28:53', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:28:53', '2022-09-27 22:28:53');
+INSERT INTO `workhistory` VALUES (233, '0000002', 3, '2022-09-27 22:28:53', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:53', '2022-09-27 22:28:53');
+INSERT INTO `workhistory` VALUES (234, '0000003', 3, '2022-09-27 22:28:53', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:53', '2022-09-27 22:28:53');
+INSERT INTO `workhistory` VALUES (235, '0000004', 3, '2022-09-27 22:28:54', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:54', '2022-09-27 22:28:54');
+INSERT INTO `workhistory` VALUES (236, '0000001', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (237, '0000002', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (238, '0000003', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (239, '0000004', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (240, '0000001', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (241, '0000002', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (242, '0000003', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (243, '0000004', 3, '2022-09-27 22:28:55', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:28:55', '2022-09-27 22:28:55');
+INSERT INTO `workhistory` VALUES (244, '0000001', 3, '2022-09-27 22:33:43', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:33:43', '2022-09-27 22:33:43');
+INSERT INTO `workhistory` VALUES (245, '0000002', 3, '2022-09-27 22:33:44', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:44', '2022-09-27 22:33:44');
+INSERT INTO `workhistory` VALUES (246, '0000003', 3, '2022-09-27 22:33:44', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:44', '2022-09-27 22:33:44');
+INSERT INTO `workhistory` VALUES (247, '0000004', 3, '2022-09-27 22:33:44', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:44', '2022-09-27 22:33:44');
+INSERT INTO `workhistory` VALUES (248, '0000001', 3, '2022-09-27 22:33:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:33:47', '2022-09-27 22:33:47');
+INSERT INTO `workhistory` VALUES (249, '0000002', 3, '2022-09-27 22:33:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:47', '2022-09-27 22:33:47');
+INSERT INTO `workhistory` VALUES (250, '0000003', 3, '2022-09-27 22:33:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:47', '2022-09-27 22:33:47');
+INSERT INTO `workhistory` VALUES (251, '0000004', 3, '2022-09-27 22:33:47', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:47', '2022-09-27 22:33:47');
+INSERT INTO `workhistory` VALUES (252, '0000001', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (253, '0000002', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (254, '0000003', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (255, '0000004', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (256, '0000001', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 422 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (257, '0000002', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (258, '0000003', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (259, '0000004', 3, '2022-09-27 22:33:48', 'AUTO DETECTED - Worked not enough 8 hours - duration: 480 mins', '2022-09-27 22:33:48', '2022-09-27 22:33:48');
+INSERT INTO `workhistory` VALUES (260, '0000001', 0, '2022-09-27 22:34:44', 'Check in at 2022-09-27, 10:34:44 pm', '2022-09-27 22:34:44', '2022-09-27 22:34:44');
+INSERT INTO `workhistory` VALUES (261, '0000001', 1, '2022-09-27 22:34:49', 'Check out at 2022-09-27, 10:34:49 pm', '2022-09-27 22:34:49', '2022-09-27 22:34:49');
+INSERT INTO `workhistory` VALUES (262, '0000001', 0, '2022-09-27 22:35:11', 'Check in at 2022-09-27, 10:35:11 pm', '2022-09-27 22:35:11', '2022-09-27 22:35:11');
+INSERT INTO `workhistory` VALUES (263, '0000001', 1, '2022-09-27 22:35:16', 'Check out at 2022-09-27, 10:35:16 pm', '2022-09-27 22:35:16', '2022-09-27 22:35:16');
+INSERT INTO `workhistory` VALUES (264, '0000001', 0, '2022-09-27 23:08:32', 'Check in at 2022-09-27, 11:08:32 pm', '2022-09-27 23:08:32', '2022-09-27 23:08:32');
+INSERT INTO `workhistory` VALUES (265, '0000001', 1, '2022-09-27 23:08:39', 'Check out at 2022-09-27, 11:08:39 pm', '2022-09-27 23:08:39', '2022-09-27 23:08:39');
+INSERT INTO `workhistory` VALUES (266, '0000001', 3, '2022-09-28 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 12 to 11', '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `workhistory` VALUES (267, '0000002', 3, '2022-09-28 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 0 to -1', '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `workhistory` VALUES (268, '0000003', 3, '2022-09-28 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 0 to -1', '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `workhistory` VALUES (269, '0000004', 3, '2022-09-28 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 0 to -1', '2022-09-28 18:30:00', '2022-09-28 18:30:00');
 
 -- ----------------------------
 -- Table structure for worklog
@@ -373,7 +448,7 @@ CREATE TABLE `worklog`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worklog_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 136 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of worklog
@@ -389,6 +464,14 @@ INSERT INTO `worklog` VALUES (124, '0000001', 1, '2022-09-26', 0.0, '2022-09-26 
 INSERT INTO `worklog` VALUES (125, '0000002', 1, '2022-09-26', 0.0, '2022-09-26 22:09:39', '2022-09-26 22:09:39');
 INSERT INTO `worklog` VALUES (126, '0000003', 1, '2022-09-26', 416.0, '2022-09-26 09:09:39', '2022-09-26 22:19:47');
 INSERT INTO `worklog` VALUES (127, '0000004', 1, '2022-09-26', -302.0, '2022-09-26 22:09:39', '2022-09-26 22:18:13');
+INSERT INTO `worklog` VALUES (128, '0000001', 1, '2022-09-27', 58.0, '2022-09-27 21:12:31', '2022-09-27 23:08:39');
+INSERT INTO `worklog` VALUES (129, '0000002', 1, '2022-09-27', 0.0, '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `worklog` VALUES (130, '0000003', 1, '2022-09-27', 0.0, '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `worklog` VALUES (131, '0000004', 1, '2022-09-27', 0.0, '2022-09-27 22:27:10', '2022-09-27 22:27:10');
+INSERT INTO `worklog` VALUES (132, '0000001', 1, '2022-09-28', 0.0, '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `worklog` VALUES (133, '0000002', 1, '2022-09-28', 0.0, '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `worklog` VALUES (134, '0000003', 1, '2022-09-28', 0.0, '2022-09-28 18:30:00', '2022-09-28 18:30:00');
+INSERT INTO `worklog` VALUES (135, '0000004', 1, '2022-09-28', 0.0, '2022-09-28 18:30:00', '2022-09-28 18:30:00');
 
 -- ----------------------------
 -- Table structure for worktime
