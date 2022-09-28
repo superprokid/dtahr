@@ -1,0 +1,18 @@
+#header {
+    position: fixed;
+    width: 100vw;
+    height: 50px;
+    z-index: 1;
+    background-color: #154c79;
+    color: white;
+    padding: 8px 25px;
+}
+
+#header .user-name {
+    color: white;
+}
+
+#header .dropdown-item :hover {
+    background-color: grey;
+    cursor: pointer;
+}

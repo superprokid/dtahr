@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <button @click="testGetWithParam">BUTTONNNN</button>
-    this is home page of client
   </div>
   
 </template>

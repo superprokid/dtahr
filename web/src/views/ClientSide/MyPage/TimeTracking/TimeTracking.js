@@ -104,6 +104,7 @@ export default {
         this.isClockOutDisable = true;
       }
       this.isTimeConfirmModalShowed = false;
+      this.$root.$emit('TimeTracking');
     },
     onClickCancelButton() {
       this.isTimeConfirmModalShowed = false;
@@ -192,7 +193,7 @@ export default {
   },
   mounted() {
     this._getCurrentWorklog();
-    if (this.startDataUser.workLog.work_status == 0) {
+    if (this.startDataUser?.workLog?.work_status == 0) {
       this.isClockInDisable = true;
       this.isClockOutDisable = false;
     }
