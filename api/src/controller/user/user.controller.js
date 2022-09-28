@@ -2,13 +2,14 @@ const logger = require('../../common/logger');
 const moment = require('moment')
 const { signToken, signRefreshToken, verifyRefreshToken, compare } = require('../../common/cryptcommon');
 const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
-const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime } = require('../../common/utils');
+const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString } = require('../../common/utils');
 const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../../config/constants');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
 const GET_USER_BY_EMAIL = "SELECT * FROM employee WHERE email = ? and is_deleted <> 1 ORDER BY update_at DESC  LIMIT 1";
 const GET_WORKLOG_OF_USER = "SELECT * FROM worklog WHERE employee_id = ? and work_date = ? LIMIT 1";
+const GET_HOLYDAY = "SELECT * FROM holiday WHERE date = ?";
 const INSERT_NEW_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total) VALUES (?, 0, ?, 0)";
 const UPDATE_WORKLOG_STATUS = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, now())";
@@ -270,8 +271,15 @@ async function getStart(req, res) {
         }
 
         const currentWorktime = await exeQuery(GET_WORKTIME);
+        const currentHoliday = await exeQuery(GET_HOLYDAY, [getDateString()]);
         if (currentWorktime.length) {
             response.workTime = currentWorktime[0];
+            // if today is holiday
+            if (currentHoliday.length) {
+                response.workTime.isHoliday = true;
+            } else {
+                response.workTime.isHoliday = false;
+            }
         }
 
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);

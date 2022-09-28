@@ -5,6 +5,7 @@ const Router = express.Router();
 const userController = require('../controller/user/user.controller');
 const worklogController = require('../controller/user/worklog.controller');
 const overtimeController = require('../controller/user/overtime.controller');
+const holidayController = require('../controller/user/holiday.controller');
 
 // Import for admin controller
 const adminController = require('../controller/admin/admin.controller');
@@ -22,6 +23,7 @@ Router.post('/user/create/overtime', authen, overtimeController.registerOverTime
 Router.get('/user/overtime/get', authen, overtimeController.getListOverTimeTicketOfUser);
 Router.get('/user/overtime/getAll', authen, overtimeController.getListOverTimeTicketOfGroup);
 Router.get('/user/getstart', authen, userController.getStart);
+Router.get('/user/getholidays', authen, holidayController.getAllHoliday);
 
 // admin
 Router.post('/admin/login', adminController.login);

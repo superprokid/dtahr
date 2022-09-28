@@ -23,9 +23,15 @@ export default {
                     to: "home", // name of router path
                     id: tabName.leaveUser, // id of page
                 },
+                {
+                    title: 'Holiday list',
+                    icon: 'mdi-calendar-star-outline',
+                    to: "holiday",
+                    id: tabName.holidayUser,
+                }
             ],
             right: null,
-            currentTab: tabName.myPageUser,
+            currentTab: SessionUtls.getItem(SessionUtls.tabNameKey),
         }
     },
     methods: {

@@ -1,4 +1,6 @@
+const moment = require('moment')
 const { MAX_EMPLOYEE_ID_LENGTH } = require("../config/constants");
+const YYYY_MM_DD = 'YYYY-MM-DD'
 
 /**
  * Generate random string
@@ -46,6 +48,19 @@ function getStartOfDate(date) {
     const newDate = new Date(date);
     newDate.setHours(0, 0, 0);
     return newDate;
+}
+
+/**
+ * Get date with YYYY-MM-DD format
+ * @param {*} date 
+ * @returns 
+ */
+function getDateString(date) {
+    if (date) {
+        return moment(date).format(YYYY_MM_DD)
+    } else {
+        return moment().format(YYYY_MM_DD);
+    }
 }
 
 /**
@@ -162,4 +177,5 @@ module.exports = {
     calWorkingTime,
     generateEmployeeId,
     isNullOrUndefinded,
+    getDateString
 }
