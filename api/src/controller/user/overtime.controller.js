@@ -8,6 +8,7 @@ const LOG_CATEGORY = "OverTimeController"
 const GET_OT_PAYMENT = "SELECT * FROM overtimepayment ORDER BY update_at DESC";
 const GET_HOLYDAY = "SELECT * FROM holiday WHERE date between ? and ?";
 const GET_CURRENT_SALARY = "SELECT salary FROM employee WHERE employee_id = ?"
+const GET_CURRENT_PROJECT = "SELECT project_id FROM project WHERE project_id = ? LIMIT 1";
 const INSERT_OVERTIME = "INSERT INTO overtime (employee_id, project_id, start_date, end_date, reason, `status`, payment) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
 const GET_LIST_OVERTIME_TICKET_OF_USER = "  SELECT ot.*, p.project_name "
@@ -66,6 +67,15 @@ async function registerOverTime(req, res) {
         let { projectId, startDate, endDate, reason } = req.body;
         startDate = new Date(startDate);
         endDate = new Date(endDate);
+
+        const currentProject = await queryTransaction(connection, GET_CURRENT_PROJECT, [projectId]);
+        if (!currentProject.length) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] project not exist`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
 
         // check startDate and endDate
         if (startDate >= endDate) {
