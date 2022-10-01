@@ -93,17 +93,45 @@ export default {
      * @todo Update Working time
      ********************************/
     async onClickOkButton() {
+      this.isTimeConfirmModalShowed = false;
       if(this.mode == CLOCKIN){
+        this.$eventBus.$emit("show-spinner", true);
+        let curr = new Date()
+        if (`${this.startDataUser.workTime.hour_end}:${this.startDataUser.workTime.min_end}:00` <
+          `${curr.getHours()}:${curr.getMinutes()}:${curr.getSeconds()}` || this.startDataUser.workTime.isHoliday == true) {
+          this.$eventBus.$emit("show-spinner", false);
+          this.notiTitle = `Cannot Clock In `;
+          this.notiBody = `Not in working time!`;
+          this.notiType = 'danger';
+          this.isErrorModalShowed = true;
+          this.$eventBus.$emit("show-spinner", false);
+          return;
+        }
         await TimeTrackingServices.checkIn()
+        this.$eventBus.$emit("show-spinner", false);
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
       }
       else{
-        await TimeTrackingServices.checkOut()
+        this.$eventBus.$emit("show-spinner", true);
+        try {
+          let response = await TimeTrackingServices.checkOut()
+          if (!response) {
+            this.notiTitle = `Cannot Clock Out`;
+            this.notiBody = `It's not working time!`;
+            this.notiType = 'danger';
+            this.isErrorModalShowed = true;
+            this.$eventBus.$emit("show-spinner", false);
+            return;
+          }
+        } 
+        catch (e) {
+          console.log(e)
+        }
+        this.$eventBus.$emit("show-spinner", false);
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
-      this.isTimeConfirmModalShowed = false;
       this.$root.$emit('TimeTracking');
     },
     onClickCancelButton() {

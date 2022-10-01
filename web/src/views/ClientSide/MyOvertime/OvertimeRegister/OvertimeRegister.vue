@@ -1,0 +1,67 @@
+<!-- eslint-disable -->
+<template>
+    <v-app>
+        <v-container class="border p-3">
+            <div class="">
+                <md-toolbar class="mb-3" md-elevation="0">
+                    <h3 class="md-title">Overtime Form</h3>
+                </md-toolbar>
+                <v-select item-text="project_name" item-value="project_id" v-model="projectSelected" dense
+                    :items="listProjects" filled label="Project Name *" persistent-hint return-object single-line
+                    @change="onSelectProject" :rules="rules">
+                </v-select>
+
+                <v-row>
+                    <v-col cols="12" lg="6">
+                        <DateTimePicker :selectDate="startDate" :dateTimePickerTitle="'Start Date *'"
+                            @select-date="onInputStartDate" />
+                    </v-col>
+                    <v-col cols="12" lg="6">
+                        <Input :startTimeSetup="startTime" @on-input="onInputStartTime" :inputType="'time'" />
+                    </v-col>
+
+                </v-row>
+
+
+                <v-row>
+
+                    <v-col cols="12" lg="6">
+                        <DateTimePicker :selectDate="endDate" :dateTimePickerTitle="'End Date *'"
+                            @select-date="onInputEndDate" />
+                    </v-col>
+                    <v-col cols="12" lg="6">
+                        <Input :startTimeSetup="endTime" @on-input="onInputEndTime" :inputType="'time'" />
+                    </v-col>
+                </v-row>
+                <div class="mt-10">
+                    <v-textarea filled name="input-7-4" label="Reason *" v-model="reasonInputValue" :rules="rules">
+                    </v-textarea>
+                </div>
+
+                <v-row class="justify-end">
+                    <v-col cols="2">
+                        <Button :buttonClass="'md-raised md-primary button-layout'" :buttonTitle="'Register'"
+                            @on-click="onClickRegisterButton" style="width:100%" />
+                    </v-col>
+                    <v-col cols="2">
+                        <Button :buttonClass="'md-raised md-primary button-layout'" :buttonTitle="'Reset'" @on-click=""
+                            style="width:100%;" />
+                    </v-col>
+                </v-row>
+
+                <span class="error-label" v-if="isStartDateEmpty">
+                    {{ $t('employeeSite.registerSchedule.startTime') }}
+                    {{ $t('adminSite.createNewUser.errorContents') }}
+                </span>
+            </div>
+        </v-container>
+    </v-app>
+
+
+</template>
+
+
+<script src="./OvertimeRegister.js">
+<style scoped src="./OvertimeRegister.css">
+
+</style>

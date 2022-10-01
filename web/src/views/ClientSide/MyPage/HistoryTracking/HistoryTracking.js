@@ -36,12 +36,14 @@ export default {
     },
 
     mounted() {
+        this.$eventBus.$emit("show-spinner", true);
         this._getUserHistoryTracking();
 
         // Re call api when checkin/checkout
         this.$root.$on('TimeTracking', () => {
             this._getUserHistoryTracking();
         })
+        this.$eventBus.$emit("show-spinner", false);
     },
     computed: {
         ...mapState(["startDataUser"])
@@ -71,6 +73,7 @@ export default {
                 startDate: moment(this.startDate).format('YYYY-MM-DD'),
                 endDate: moment(this.endDate).format('YYYY-MM-DD')
             }
+            this.$eventBus.$emit("show-spinner", true);
             let response = await HistoryTrackingServices.getHistoryTrackingWithFilter(param)
             if (!response) {
                 this.$router.push('/user/login')
@@ -78,6 +81,7 @@ export default {
                 console.log(response)
                 this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
             }
+            this.$eventBus.$emit("show-spinner", false);
         },
 
         async onInputEndDate(params) {
@@ -86,6 +90,7 @@ export default {
                 startDate: moment(this.startDate).format('YYYY-MM-DD'),
                 endDate: moment(this.endDate).format('YYYY-MM-DD')
             }
+            this.$eventBus.$emit("show-spinner", true);
             let response = await HistoryTrackingServices.getHistoryTrackingWithFilter(param)
             if (!response) {
                 this.$router.push('/user/login')
@@ -93,6 +98,7 @@ export default {
                 console.log(response)
                 this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
             }
+            this.$eventBus.$emit("show-spinner", false);
         },
 
         /**

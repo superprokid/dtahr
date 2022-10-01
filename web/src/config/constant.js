@@ -11,6 +11,7 @@ export const USER_GET_START_URL = BASE_API_USER_URL + "/getstart";
 export const USER_CHECK_IN_URL = BASE_API_USER_URL + "/checkin";
 export const USER_CHECK_OUT_URL = BASE_API_USER_URL + "/checkout";
 export const USER_GET_HOLIDAYS = BASE_API_USER_URL + "/getholidays";
+export const USER_GET_PROJECTS = BASE_API_USER_URL + "/getprojects";
 
 // admin url api
 export const BASE_API_ADMIN_URL = BASE_URL + "/api/admin";
