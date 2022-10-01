@@ -41,7 +41,9 @@ export default {
         this.isLoginDataEmpty = true;
       } else {
         this.isLoginDataEmpty = false;
+        this.$eventBus.$emit("show-spinner", true);
         const response = await LoginServices.checkLogin(data)
+        this.$eventBus.$emit("show-spinner", false);
         if(response != null && response.status === 200){
           SessionUtls.setAccessToken(response.data.accessToken);
           SessionUtls.setRefreshToken(response.data.refreshToken);

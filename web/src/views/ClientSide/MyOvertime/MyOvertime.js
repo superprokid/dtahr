@@ -2,8 +2,8 @@ import TabNav from '@/components/TabNav/TabNav.vue';
 import Notification from '@/components/Notification/Notification.vue';
 import Button from '@/components/Button/Button.vue';
 
-import TimeTracking from '@/views/ClientSide/MyPage/TimeTracking/TimeTracking.vue';
-import HistoryTracking from '@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue';
+import OvertimeRegister from '@/views/ClientSide/MyOvertime/OvertimeRegister/OvertimeRegister.vue';
+import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
 
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import SessionUtls from '@/services/SessionUtls';
@@ -34,12 +34,12 @@ export default {
     this.$eventBus.$emit("show-spinner", false);
     this.tabItems = [
       {
-        tabName:  'Time Tracking',
-        tabContent: TimeTracking,
+        tabName:  'Overtime Register',
+        tabContent: OvertimeRegister,
       },
       {
-        tabName: 'History Tracking',
-        tabContent: HistoryTracking,
+        tabName: 'OvertimeHistory',
+        tabContent: OvertimeHistory,
       }
     ]
   },

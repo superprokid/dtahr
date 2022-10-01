@@ -14,13 +14,13 @@ export default {
                 {
                     title: 'Overtime ticket',
                     icon: 'mdi-clock',
-                    to: "mypage", // name of router path
+                    to: "myovertime", // name of router path
                     id: tabName.overtimeUser, // id of page
                 },
                 {
                     title: 'Leave ticket',
                     icon: 'mdi-alien-outline',
-                    to: "home", // name of router path
+                    to: "absentticket", // name of router path
                     id: tabName.leaveUser, // id of page
                 },
                 {

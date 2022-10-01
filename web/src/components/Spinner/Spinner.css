@@ -1,6 +1,7 @@
 .md-progress-spinner {
   position: relative;
   top: 48vh;
+  left: 50vw;
 }
 
 .spinner {
