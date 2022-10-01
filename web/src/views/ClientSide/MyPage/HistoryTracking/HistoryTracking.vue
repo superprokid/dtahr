@@ -7,7 +7,7 @@
             class="d-flex align-end"
         >
         <h4 class="d-inline-block ">Current Annual Holiday: </h4>
-		<h4 class="d-inline-block red--text ml-1"> {{startDataUser.holiday_time}}</h4>
+		<h4 class="d-inline-block red--text ml-1"> {{startDataUser.holiday_time.toFixed(3)}}</h4>
 
         </v-col>
         <v-col cols="3" class="d-flex align-items-center">

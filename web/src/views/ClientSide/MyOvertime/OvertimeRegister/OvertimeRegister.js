@@ -6,6 +6,10 @@ import Button from '@/components/Button/Button.vue';
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import moment from 'moment';
 
+const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss'
+const DATE_FORMAT = 'YYYY-MM-DD'
+const TIME_FORMAT = 'hh:mm:ss'
+
 export default {
   name: 'OvertimeRegister',
   components: {
@@ -26,10 +30,12 @@ export default {
 
         reasonInputValue: '',
 
+        isProjectNameEmpty: true,
         isStartDateEmpty: true,
         isEndDateEmpty: true,
         isStartTimeEmpty: true,
         isEndTimeEmpty: true,
+        isReasonEmpty: true,
 
         rules: [
             value => value.length > 0  || 'Required.',
@@ -41,6 +47,14 @@ export default {
     startTime(newstartTime, oldstartTime){
         console.log('newstartTime ',newstartTime);
         console.log('oldstartTime ',oldstartTime);
+    },
+    startDate: {
+        immediate: true,
+        deep: true,
+        handler(newValue) {
+          this.startDate = newValue
+          console.log(newValue);
+        }
     }
   },
   mounted() {
@@ -51,8 +65,11 @@ export default {
   methods: {
     onSelectProject(params){
         console.log('params',params);
-        if(params != ''){
-            this.projectSelected = params.project_id
+        if(params === '' || params === null || params === undefined){
+            this.isProjectNameEmpty = true;
+        }else{
+            this.isProjectNameEmpty = false
+            this.projectSelected = params.project_id        
         }
     },
     onInputStartDate(params) {
@@ -60,7 +77,7 @@ export default {
             this.isStartDateEmpty = true;
         }else{
             this.isStartDateEmpty = false
-            this.startDate = new Date(params)
+            this.startDate = moment(params).format(DATE_FORMAT)
         }
     },
     onInputEndDate(params){
@@ -68,7 +85,7 @@ export default {
             this.isEndDateEmpty = true;
         }else{
             this.isEndDateEmpty = false
-            this.endDate = new Date(params)
+            this.endDate = moment(params).format(DATE_FORMAT)
         }
     },
     onInputStartTime(params){
@@ -76,7 +93,7 @@ export default {
             this.isStartTimeEmpty = true;
         }else{
             this.isStartTimeEmpty = false
-            this.startTime = new Date(params)
+            this.startTime = params
         }
     },
     onInputEndTime(params){
@@ -84,22 +101,46 @@ export default {
             this.isEndTimeEmpty = true;
         }else{
             this.isEndTimeEmpty = false
-            this.endTime = new Date(params)
+            this.endTime = params
         }
     },
     onInputReason(params){
         this.reasonInputValue = params
-        console.log(' this.reasonInputValue', this.reasonInputValue);
+        console.log(this.reasonInputValue);
+        if(this.reasonInputValue === '' || this.reasonInputValue === null || this.reasonInputValue === undefined){
+            this.isReasonEmpty = true;
+        }else{
+            this.isReasonEmpty = false
+        }
     },
-    onClickRegisterButton(){
+    async onClickRegisterButton(){
         const params = {
             projectId: this.projectSelected,
-            startDate: this.startDate,
-            endDate: this.endDate,
+            startDate:  this.startDate + ' ' + this.startTime,
+            endDate: this.endDate + ' ' + this.endTime,
             reason: this.reasonInputValue
         }
         if(!params.projectId || this.isStartDateEmpty || this.isEndDateEmpty || this.isStartTimeEmpty || this.isEndTimeEmpty || !params.reason){
             console.log('1 trong cac field bi thieu');
+        }else{
+            console.log('params',params);
+            this.$eventBus.$emit("show-spinner", true);
+            const response = await OvertimeRegisterServices.registerOvertime(params)
+            if (!response) {
+                this.$router.push('/user/login')
+            } else {
+                console.log(response)
+                alert('Success')
+            }
+            this.$eventBus.$emit("show-spinner", false);
+        }
+    },
+    onClickResetButton(){
+        this.projectSelected = '';
+        this.reasonInputValue=''
+        const listItem = document.getElementsByClassName('md-button md-icon-button md-dense md-input-action md-clear md-theme-default');
+        for (let index = 0; index < listItem.length; index++) {
+            listItem[index].click();
         }
     },
 
@@ -112,6 +153,7 @@ export default {
             this.listProjects.push(...response.data)
       }
     },
+
     formatDate(date) {
       if (!date) return null;
 
