@@ -2,7 +2,7 @@ const logger = require('../../common/logger');
 const moment = require('moment');
 const { validateRequest, getStartOfDate, minDiff } = require('../../common/utils');
 const { exeQuery, queryTransaction, getConnection, beginTransaction, commitTransaction, releaseConnection, rollback } = require('../../common/dbaccess');
-const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR } = require('../../config/constants');
+const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE } = require('../../config/constants');
 
 const LOG_CATEGORY = "OverTimeController"
 const GET_OT_PAYMENT = "SELECT * FROM overtimepayment ORDER BY update_at DESC";
@@ -18,6 +18,7 @@ const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
     + "                                     WHERE group_id = ?";
+const UPDATE_OVERTIME_STATUS = " UPDATE overtime SET status = ? where overtime_id = ?";
 
 const OT_PAYMENT_DAILY_DATE_KEY = 'ot_payment_daily_day';
 const OT_PAYMENT_DAILY_NIGHT_KEY = 'ot_payment_daily_night';
@@ -31,7 +32,7 @@ async function registerOverTime(req, res) {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send("Get work history failed");
+            res.status(403).send("Register overtime ticket failed");
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -168,8 +169,60 @@ async function getListOverTimeTicketOfGroup(req, res) {
     }
 }
 
+async function updateStatusOvertimeTicket(req, res) {
+    const connection = await getConnection();
+    await beginTransaction(connection);
+    try {
+        const empId = req.employee_id;
+        const role = req.role;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Update overtime ticket failed");
+            await rollback(connection);
+            releaseConnection(connection)
+            return;
+        }
+
+        if (role != ROLE.employer) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not a manager`);
+            res.status(403).send("Update overtime ticket failed");
+            await rollback(connection);
+            releaseConnection(connection)
+            return;
+        }
+
+        const validateSchema = {
+            overtimeId: {
+                type: 'number',
+                required: true
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { overtimeId } = req.body;
+        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [OT_TICKET_STATUS.approve, overtimeId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update overtime ticket status success`);
+        await commitTransaction(connection);
+        releaseConnection(connection);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
+        return res.status(200).send('Update overtime ticket success');
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+        await rollback(connection);
+        releaseConnection(connection);
+    }
+}
+
 module.exports = {
     registerOverTime,
     getListOverTimeTicketOfUser,
     getListOverTimeTicketOfGroup,
+    updateStatusOvertimeTicket,
 }
