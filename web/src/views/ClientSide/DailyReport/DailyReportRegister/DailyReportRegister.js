@@ -4,6 +4,7 @@ import Input from '@/components/Input/Input.vue';
 import Button from '@/components/Button/Button.vue';
 
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
+import ReportServices from '../../../../services/API/ReportAPI/ReportServices';
 import moment from 'moment';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss'
@@ -38,48 +39,28 @@ export default {
             processStatusSelected: "",
             isProcessStatusEmpty: true,
 
-            selected: [],
-
-            items: [
-                {
-                    image: 'https://cdn-images-1.medium.com/max/1024/1*9C9hLji68wV373tk8okLYA.jpeg',
-                    title: 'TBI’s 5 Best: SF Mocktails to Finish Dry January Strong',
-                    category: 'Travel',
-                    keyword: 'Drinks',
-
-                },
-                {
-                    image: 'https://cdn-images-1.medium.com/max/1024/1*BBNtYUieAqHoXKjiJ2mMjQ.png',
-                    title: 'PWAs on iOS 12.2 beta: the good, the bad, and the “not sure yet if good”',
-                    category: 'Technology',
-                    keyword: 'Phones',
-                },
-                {
-                    image: 'https://cdn-images-1.medium.com/max/1024/1*rTEtei1UEmNqbq6evRsExw.jpeg',
-                    title: 'How to Get Media Mentions for Your Business',
-                    category: 'Media',
-                    keyword: 'Social',
-                },
-                {
-                    image: 'https://cdn-images-1.medium.com/max/1024/1*FD2nkJewVeQnGf0ommQfrw.jpeg',
-                    title: 'The Pitfalls Of Outsourcing Self-Awareness To Artificial Intelligence',
-                    category: 'Technology',
-                    keyword: 'Military',
-                },
-                {
-                    image: 'https://cdn-images-1.medium.com/max/1024/1*eogFpsVgNzXQLCVgFzT_-A.jpeg',
-                    title: 'Degrees of Freedom and Sudoko',
-                    category: 'Travel',
-                    keyword: 'Social',
-                },
-            ],
             search: '',
+            listUsers: [],
+            isShowListUser: false,
+            isListSelectedUserEmpty: true,
         };
     },
-    mounted() {
+    async mounted() {
         this.$eventBus.$emit('show-spinner', true);
-        this._getProjects();
+        await Promise.allSettled([
+            this._getProjects(),
+            this._getAllUser()
+        ]);
         this.$eventBus.$emit('show-spinner', false);
+
+        // listener for hide list user card when click outside
+        document.addEventListener('click', (event) => {
+            const listUserCard = document.getElementById('listUserCard');
+            const buttonOpenListUserCard = document.getElementById('buttonOpenListUserCard');
+            if (listUserCard && !listUserCard.contains(event.target) && this.isShowListUser && !buttonOpenListUserCard.contains(event.target)) {
+                this.isShowListUser = false
+            }
+        })
     },
 
     computed: {
@@ -95,12 +76,12 @@ export default {
             return keywords
         },
         searching() {
-            if (!this.search) return this.items
+            if (!this.search) return this.listUsers
 
             const search = this.search.toLowerCase()
 
-            return this.items.filter(item => {
-                const text = item.title.toLowerCase()
+            return this.listUsers.filter(item => {
+                const text = item.name.toLowerCase()
 
                 return text.indexOf(search) > -1
             })
@@ -115,6 +96,17 @@ export default {
             } else {
                 this.listProjects.push(...response.data)
             }
+        },
+        async _getAllUser() {
+            const response = await ReportServices.getAllUser();
+            if (!response) {
+                this.$router.push('/user/login');
+            } else {
+                this.listUsers.push(...response.data)
+            }
+        },
+        onToggleListUser() {
+            this.isShowListUser = !this.isShowListUser;
         },
         onSelectProject(params) {
             if (params === '' || params === null || params === undefined) {
@@ -158,12 +150,40 @@ export default {
         },
         async onClickRegisterButton() {
             this.isShowError = true;
-            console.log('projectSelected', this.processStatusSelected);
-            console.log('task', this.tasksValue);
-            console.log('problem', this.problemsValue);
-            console.log('plan', this.nextDayPlan);
-            console.log('status', this.processStatusSelected);
+            const listUserReceiver = [];
+            for (let index = 0; index < this.listUsers.length; index++) {
+                const item = this.listUsers[index];
+                if (item.ischecked) {
+                    listUserReceiver.push(item.employee_id);
+                }
+            }
+            this.isListSelectedUserEmpty = listUserReceiver.length ? false : true;
 
+            // check required
+            if (this.isListSelectedUserEmpty || this.isNextDayPlanEmpty || this.isProblemsEmpty || this.isProcessStatusEmpty || this.isProjectNameEmpty || this.isTaskEmpty) {
+                return;
+            }
+
+            const data = {
+                projectId: this.projectSelected,
+                tasks: this.tasksValue,
+                problems: this.problemsValue,
+                nextDayPlan: this.nextDayPlan,
+                processStatus: this.processStatusSelected,
+                dailyReportDate: moment().format('YYYY-MM-DD'),
+                receivers: listUserReceiver,
+            }
+            const response = await ReportServices.registerDailyReport(data);
+            if (!response) {
+                this.$router.push('/user/login');
+            } else {
+                if (response == -1) {
+                    alert("register failed");
+                } else {
+                    alert("register success");
+                    this.onClickResetButton();
+                }
+            }
         },
         onClickResetButton() {
             this.isShowError = false;
@@ -174,6 +194,9 @@ export default {
             this.problemsValue = "";
             this.nextDayPlan = "";
             this.processStatusSelected = "";
+            this.listUsers = this.listUsers.map(item => {
+                return {...item, ischecked: false}
+            })
 
             // reset handle error
             this.isTaskEmpty = true;

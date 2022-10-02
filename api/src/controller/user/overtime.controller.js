@@ -262,8 +262,8 @@ async function deleteOvertimeTicket(req, res) {
             return;
         }
 
-        if (overtimeTicket[0].status === OT_TICKET_STATUS.approve) {
-            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] overtime ticket is approved, can't delete`);
+        if (overtimeTicket[0].status !== OT_TICKET_STATUS.pending) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] overtime ticket is approved or reject, can't delete`);
             await rollback(connection);
             releaseConnection(connection);
             res.status(403).send("Delete overtime ticket failed");

@@ -19,6 +19,7 @@ const adminEmpController = require('../controller/admin/employee.controller');
 Router.post('/user/login', userController.login);
 Router.post('/user/refreshtoken', userController.refreshToken);
 Router.get('/user/get', authen, userController.get);
+Router.get('/user/getalluser', authen, userController.getAllUser);
 Router.post('/user/checkin', authen, userController.checkin);
 Router.post('/user/checkout', authen, userController.checkout);
 Router.get('/user/workhistory', authen, worklogController.getWorkHistory);

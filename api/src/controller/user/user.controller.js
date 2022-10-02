@@ -18,7 +18,8 @@ const GET_EMPLOYEE_INFO = "SELECT e1.employee_id, e1.first_name, e1.last_name, e
     + "                         e1.phone, e1.main_skill, e1.sub_skill, e1.role, e2.first_name as employer_firstname, e2.last_name as employer_lastname "
     + "                     FROM employee e1 INNER JOIN `group` g on e1.group_id = g.group_id "
     + "                     LEFT JOIN employee e2 on e1.employer_id = e2.employee_id "
-    + "                     WHERE e1.employee_id = ? LIMIT 1 "
+    + "                     WHERE e1.employee_id = ? LIMIT 1 ";
+const GET_ALL_USER = "SELECT employee_id, CONCAT(first_name, ' ', last_name) as name, avt FROM employee WHERE is_deleted <> 1"
 
 async function verifyUser(data) {
     try {
@@ -290,6 +291,23 @@ async function getStart(req, res) {
     }
 }
 
+async function getAllUser(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist`);
+            res.status(403).send("Get Failed");
+            return;
+        }
+        const result = await exeQuery(GET_ALL_USER);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result)
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     login,
     get,
@@ -297,4 +315,5 @@ module.exports = {
     checkin,
     checkout,
     getStart,
+    getAllUser,
 }

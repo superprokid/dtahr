@@ -205,8 +205,8 @@ async function deleteLeaveTicket(req, res) {
             return;
         }
 
-        if (leaveTicket[0].status === LEAVE_TICKET_STATUS.approve) {
-            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] leave ticket is approved, can't delete`);
+        if (leaveTicket[0].status !== LEAVE_TICKET_STATUS.pending) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] leave ticket is approved or reject, can't delete`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
             res.status(403).send("Delete leave ticket failed");

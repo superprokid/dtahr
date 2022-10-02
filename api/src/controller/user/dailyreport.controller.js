@@ -69,7 +69,7 @@ async function createDailyReport(req, res) {
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert into dailyreport success`);
 
         const reportId = insertResult.insertId;
-        const insertParams = receivers.map(item => `(${reportId}, ${item})`);
+        const insertParams = receivers.map(item => `(${reportId}, '${item}')`);
         const insertQuery = INSERT_REPORT_RECEIVER + insertParams.join(", ");
         await dbaccess.queryTransaction(connection, insertQuery);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert into reportreceiver success`);

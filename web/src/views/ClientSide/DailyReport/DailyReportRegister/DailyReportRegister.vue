@@ -5,7 +5,47 @@
                 <md-toolbar class="mb-3" md-elevation="0">
                     <h3 class="md-title">Daily Report Form</h3>
                 </md-toolbar>
-                <v-select item-text="project_name" item-value="project_id" v-model="projectSelected"
+                <v-row class="mb-3">
+                    <div>
+                        TO:
+                        <v-btn small @click="onToggleListUser" id="buttonOpenListUserCard" >
+                            <v-icon medium color="green darken-2">
+                                mdi-account-multiple-plus
+                            </v-icon>
+                        </v-btn>
+                        <v-card v-if="isShowListUser" max-width="300px" id="listUserCard">
+                            <v-toolbar flat color="transparent">
+                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search News"
+                                    single-line>
+                                </v-text-field>
+                            </v-toolbar>
+                            <v-list three-line class="list-search-user-container">
+                                <v-list-item v-for="(user, i) in searching" :key="i" ripple @click="() => {}">
+                                    <v-checkbox v-model="user.ischecked">
+                                    </v-checkbox>
+                                    <!-- <img :src="user.avt ? user.avt : '../../../../assets/user-default.png'" alt=""
+                                        class="user-image-circle"> -->
+                                    <img src="../../../../assets/user-default.png" alt="" class="user-image-circle">
+                                    <div class="ml-3">{{user.name}}</div>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </div>
+                    <div>
+                        <template v-for="(item, i) in listUsers">
+                            <v-chip v-if="item.ischecked" :key="i" class="ma-2" close color="primary" label @click:close="item.ischecked = false" >
+                                <v-icon left>
+                                    mdi-account-circle-outline
+                                </v-icon>
+                                {{item.name}}
+                            </v-chip>
+                        </template>
+                    </div>
+                </v-row>
+                <span class="daily-report-error-label mt-3" v-if="isListSelectedUserEmpty && isShowError">
+                    You must select receiver!
+                </span>
+                <v-select class="mt-3" item-text="project_name" item-value="project_id" v-model="projectSelected"
                     :items="listProjects" filled label="Project Name *" persistent-hint return-object
                     @change="onSelectProject">
                 </v-select>
@@ -40,32 +80,13 @@
                     Next day plan is required!
                 </span>
 
-                <v-select v-model="processStatusSelected" :items="processStatusList" filled label="Project Name *"
+                <v-select v-model="processStatusSelected" :items="processStatusList" filled label="Process status *"
                     persistent-hint return-object @change="onSelectProcessStatus">
                 </v-select>
 
                 <span class="daily-report-error-label" v-if="isProcessStatusEmpty && isShowError">
                     Process status is required!
                 </span>
-                <v-row>
-                    <v-card class="mx-auto">
-                        <v-toolbar flat color="transparent">
-                            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search News" single-line>
-                            </v-text-field>
-                        </v-toolbar>
-                        <v-list three-line class="list-search-user-container">
-                            <v-list-item v-for="(item, i) in searching" :key="i" ripple @click="() => {}">
-                                <v-checkbox v-model="selected" value="John">
-                                </v-checkbox>
-                                <img src="../../../../assets/user-default.png" alt="" class="user-image-circle">
-                                <p>Thang Le Duc</p>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-row>
-                <v-row>
-                    abc
-                </v-row>
                 <v-row class="justify-end">
                     <v-col cols="2">
                         <Button :buttonClass="'md-raised md-primary button-layout'" :buttonTitle="'Register'"
