@@ -1,5 +1,5 @@
 /* eslint-disable */
-import OvertimeHistoryServices from '@/services/API/MyOvertimeAPI/OvertimeHistoryServices';
+import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import Button from '@/components/Button/Button.vue';
 
@@ -14,16 +14,16 @@ export default {
 			listOvertimeTicket: [],
 			headers: [
 				{
-					text: 'Payment',
-					value: 'payment',
+					text: 'Absent Time',
+					value: 'absentTime',
 				},
 				{
-					text: 'Project',
-					value: 'project_name',
+					text: 'Leave Type',
+					value: 'type',
 				},
 				{
-					text: 'OT Time',
-					value: 'ottime',
+					text: 'Reason',
+					value: 'reason',
 				},
 				{
 					text: 'Created At',
@@ -43,9 +43,9 @@ export default {
 	},
 	computed: {},
 	mounted() {
-		this._getListOvertimeHistory();
-		this.$root.$on('OTRegister', () => {
-			this._getListOvertimeHistory();
+		this._getListAbsentHistory();
+		this.$root.$on('AbsentRegister', () => {
+			this._getListAbsentHistory();
 		});
 	},
 	methods: {
@@ -62,10 +62,9 @@ export default {
 			);
 		},
 
-		async _getListOvertimeHistory() {
+		async _getListAbsentHistory() {
 			this.$eventBus.$emit('show-spinner', true);
-			const response =
-				await OvertimeHistoryServices.getOvertimeTickets();
+			const response = await AbsentServices.getUserAbsent();
 			this.$eventBus.$emit('show-spinner', false);
 			if (!response) {
 				this.$router.push('/user/login');
@@ -74,7 +73,7 @@ export default {
 			this.listOvertimeTicket = response.data.reverse().map((item) => {
 				return {
 					...item,
-					ottime:
+					absentTime:
 						this._formatDateTime(item.start_date) +
 						' --> ' +
 						this._formatDateTime(item.end_date),
@@ -96,19 +95,18 @@ export default {
 			);
 		},
 
-		async deleteOTTicket(overtime_id) {
+		async deleteAbsentTicket(absent_id) {
 			const params = {
-				overtimeId: overtime_id,
+				leaveId: absent_id,
 			};
 			this.$eventBus.$emit('show-spinner', true);
-			const response =
-				await OvertimeHistoryServices.deleteOverTimeTicket(params);
+			const response = await AbsentServices.deleteAbsent(params);
 			this.$eventBus.$emit('show-spinner', false);
 			if (!response) {
 				this.$router.push('/user/login');
 				return;
 			}
-			await this._getListOvertimeHistory();
+			await this._getListOvertimeTicket();
 		},
 	},
 };
