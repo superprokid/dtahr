@@ -1,12 +1,15 @@
 const express = require('express');
-const app = express();
+const http = require('http');
 const cors = require('cors');
 const router = require('../config/routes');
-const morgan = require('morgan')
-// let cookieParser = require('cookie-parser')
+const morgan = require('morgan');
+const logger = require('../common/logger')
+const { PORT } = require('../config/constants');
+const { Server } = require("socket.io");
 
 global.__basedir = __dirname;
-// morgan.token('id', (req) => req.id.split('-')[0])
+
+const app = express();
 app.use(express.json());
 // app.use(cookieParser())
 app.use(express.urlencoded({
@@ -28,4 +31,38 @@ app.use(cors({ credentials: true, origin: ["http://127.0.0.1:8080", "http://10.0
 // Config router
 app.use('/api', router);
 
-module.exports = app;
+
+function run() {
+    const server = http.createServer(app);
+    const io = new Server(server, {
+        cors: {
+          origin: "http://127.0.0.1:8080"
+        }
+    });
+
+    app.get('/index', (req, res) => {
+        res.sendFile(__dirname + '/index.html');
+    });
+
+    io.on('connection', (socket) => {
+        logger.info(`[Server] socker io is ready - user is connected`);
+
+        console.log(`user ${socket.id} is connected.`)
+
+        socket.on('message', data => {
+            socket.broadcast.emit('message:received', data)
+        })
+
+        socket.on('disconnect', () => {
+            console.log(`user ${socket.id} left.`)
+        })
+    });
+
+    server.listen(PORT, () => {
+        logger.info(`[Server] HTTP server running success, listening on port: ${PORT}`)
+    })
+}
+
+module.exports = {
+    run
+};

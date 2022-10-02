@@ -28,6 +28,12 @@ export default {
                     icon: 'mdi-calendar-star-outline',
                     to: "holiday",
                     id: tabName.holidayUser,
+                },
+                {
+                    title: 'Daily report',
+                    icon: 'mdi-file-chart-outline',
+                    to: "dailyreport",
+                    id: tabName.dailyreportUser,
                 }
             ],
             right: null,
