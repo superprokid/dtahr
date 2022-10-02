@@ -1,11 +1,11 @@
-import { USER_OVERTIME_TICKET, MANAGER_UPDATE_STATUS_OT_TICKET  } from "@/config/constant";
+import { USER_GROUP_OVERTIME_TICKET, MANAGER_UPDATE_STATUS_OT_TICKET  } from "@/config/constant";
 import axiosClient, {asyncRecallFunction} from "../API"
 const OvertimeTicketServices = {
 
     getOvertimeTickets: async() => {
         try {
             const response = await asyncRecallFunction(() => {
-                return axiosClient.get(USER_OVERTIME_TICKET)
+                return axiosClient.get(USER_GROUP_OVERTIME_TICKET)
             });
             return response;
         } catch (error) {

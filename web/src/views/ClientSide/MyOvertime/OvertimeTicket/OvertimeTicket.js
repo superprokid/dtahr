@@ -44,14 +44,14 @@ export default {
                  ]
         }
     },
-    computed: {
-        
-    },
     mounted() {
         this._getListOvertimeTicket();
         if(SessionUtls.getItem(SessionUtls.role) == 1){
             this.headers.push({ text: 'Actions', value: 'actions', sortable: false })
         }
+        this.$root.$on('OTRegister', () => {
+			this._getListOvertimeTicket();
+		});
     },
     methods: {
         filterOnlyCapsText(value, search, item) {
@@ -70,7 +70,7 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            this.listOvertimeTicket = response.data.map(item => {
+            this.listOvertimeTicket = response.data.reverse().map(item => {
                 return {...item, ottime: this._formatDateTime(item.start_date) + ' --> ' + this._formatDateTime(item.end_date), createdat: this._formatDateTime(item.create_at), 
                                 status:  item.status === 0 ? 'PENDING' : item.status === 1 ?  'APPROVED' : 'REJECTED' }
             })

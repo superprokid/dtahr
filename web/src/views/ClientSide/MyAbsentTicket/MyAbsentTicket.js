@@ -3,7 +3,8 @@ import Notification from '@/components/Notification/Notification.vue';
 import Button from '@/components/Button/Button.vue';
 
 import AbsentRegister from '@/views/ClientSide/MyAbsentTicket/AbsentRegister/AbsentRegister.vue';
-import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
+import AbsentHistory from '@/views/ClientSide/MyAbsentTicket/AbsentHistory/AbsentHistory.vue';
+import AbsentTicket from '@/views/ClientSide/MyAbsentTicket/AbsentTicket/AbsentTicket.vue';
 
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import SessionUtls from '@/services/SessionUtls';
@@ -38,8 +39,12 @@ export default {
         tabContent: AbsentRegister,
       },
       {
-        tabName: 'OvertimeHistory',
-        tabContent: OvertimeHistory,
+        tabName: 'Leave History',
+        tabContent: AbsentHistory,
+      },
+      {
+        tabName: 'Leave Ticket',
+        tabContent: AbsentTicket,
       }
     ]
   },
