@@ -1,0 +1,26 @@
+#absenthistory {
+    background-color: whitesmoke;
+    padding: 1.5%;
+    height: 100vh;
+    width: 100vw;
+}
+
+#absenthistory .main-page {
+    background-color: white;
+    height: 100%;
+    overflow: auto;
+}
+
+#absenthistory .main-page .page-title {
+    font-size: large;
+    padding: 0 24px;
+    color: #448aff;
+    font-weight: bold;
+    padding-bottom: 24px;
+    /* border-bottom: 1px solid gray; */
+}
+
+#absenthistory-table-container .absenthistory-table {
+    width: 100%;
+
+}

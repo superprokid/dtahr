@@ -10,6 +10,7 @@ import Notification from '@/components/Notification/Notification.vue'
 
 import LoginServices from '@/services/API/Login/LoginServices'
 import SessionUtls from "@/services/SessionUtls";
+import tabName from "@/config/tabname";
 
 export default {
   name: "LoginPage",
@@ -60,6 +61,7 @@ export default {
 
     async _navigateSite() {
         this.$router.push('/user/mypage')
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.myPageUser);
     },
 
     onClickOkButton() {

@@ -30,7 +30,7 @@
             <v-icon
               v-if="item.status == 'PENDING'"
               small
-              @click="deleteOTTicket(item.overtime_id)"
+              @click="deleteAbsentTicket(item.leave_id)"
               style="color: red"
             >
               mdi-delete
@@ -42,6 +42,5 @@
   </div>
 </template>
 
-
-<script src="./OvertimeHistory.js"></script>
-<style scoped src="./OvertimeHistory.css"></style>
+<script src="./AbsentHistory.js">
+<style scoped src="./AbsentHistory.css"></style>;

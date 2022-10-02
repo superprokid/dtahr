@@ -1,17 +1,15 @@
 <!-- eslint-disable -->
 <template>
-  <div id="absenthistory">
+  <div id="otticket">
     <v-container class="main-page">
-      <md-toolbar class="mb-3" md-elevation="0">
-        <h3 class="md-title">Leave History</h3>
-      </md-toolbar>
+      <div class="page-title">OVERTIME TICKET</div>
 
       <div>
         <v-data-table
           :headers="headers"
           :items="listOvertimeTicket"
           item-key="createdat"
-          class="elevation-1 absenthistory-table"
+          class="elevation-1 otticket-table"
           :search="search"
           :custom-filter="filterOnlyCapsText"
         >
@@ -22,16 +20,20 @@
               class="mx-4"
             ></v-text-field>
           </template>
-          <template v-slot:item.type="{ item }">
-            <div v-if="item.type == 0">OFF</div>
-            <div v-else>LATE</div>
-          </template>
+
           <template v-slot:item.actions="{ item }">
             <v-icon
               v-if="item.status == 'PENDING'"
               small
-              @click="deleteOTTicket(item.overtime_id)"
-              style="color: red"
+              class="mr-2"
+              @click="updateStatusOTTicket(item.overtime_id, 1)"
+            >
+              mdi-check
+            </v-icon>
+            <v-icon
+              v-if="item.status == 'PENDING'"
+              small
+              @click="updateStatusOTTicket(item.overtime_id, 2)"
             >
               mdi-delete
             </v-icon>
@@ -42,6 +44,5 @@
   </div>
 </template>
 
-
-<script src="./OvertimeHistory.js"></script>
-<style scoped src="./OvertimeHistory.css"></style>
+<script src="./OvertimeTicket.js">
+<style scoped src="./OvertimeTicket.css"></style>;

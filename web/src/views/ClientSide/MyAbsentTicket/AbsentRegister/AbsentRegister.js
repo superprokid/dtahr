@@ -3,7 +3,7 @@ import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue';
 import Input from '@/components/Input/Input.vue';
 import Button from '@/components/Button/Button.vue';
 
-import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
+import AbsentService from '@/services/API/MyAbsentAPI/AbsentServices';
 import moment from 'moment';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss';
@@ -11,7 +11,7 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 const TIME_FORMAT = 'hh:mm:ss';
 
 export default {
-	name: 'OvertimeRegister',
+	name: 'AbsentRegister',
 	components: {
 		DateTimePicker,
 		Input,
@@ -19,9 +19,17 @@ export default {
 	},
 	data() {
 		return {
-			projectSelected: '',
-			listProjects: [],
-
+			statusSelected: undefined,
+			listStatus: [
+				{
+					status: 'OFF',
+					value: 0,
+				},
+				{
+					status: 'LATE',
+					value: 1,
+				},
+			],
 			startDate: undefined,
 			endDate: undefined,
 
@@ -57,19 +65,9 @@ export default {
 	},
 	mounted() {
 		this.$eventBus.$emit('show-spinner', true);
-		this._getProjects();
 		this.$eventBus.$emit('show-spinner', false);
 	},
 	methods: {
-		onSelectProject(params) {
-			console.log('params', params);
-			if (params === '' || params === null || params === undefined) {
-				this.isProjectNameEmpty = true;
-			} else {
-				this.isProjectNameEmpty = false;
-				this.projectSelected = params.project_id;
-			}
-		},
 		onInputStartDate(params) {
 			if (params === '' || params === null || params === undefined) {
 				this.isStartDateEmpty = true;
@@ -117,13 +115,13 @@ export default {
 		},
 		async onClickRegisterButton() {
 			const params = {
-				projectId: this.projectSelected,
+				type: this.statusSelected,
 				startDate: this.startDate + ' ' + this.startTime,
 				endDate: this.endDate + ' ' + this.endTime,
 				reason: this.reasonInputValue,
 			};
 			if (
-				!params.projectId ||
+				(!this.statusSelected && this.statusSelected != 0) ||
 				this.isStartDateEmpty ||
 				this.isEndDateEmpty ||
 				this.isStartTimeEmpty ||
@@ -134,36 +132,25 @@ export default {
 			} else {
 				console.log('params', params);
 				this.$eventBus.$emit('show-spinner', true);
-				const response =
-					await OvertimeRegisterServices.registerOvertime(params);
+				const response = await AbsentService.registerAbsent(params);
 				if (!response) {
 					this.$router.push('/user/login');
 				} else {
 					console.log(response);
 					alert('Success');
 				}
-				this.$root.$emit('OTRegister');
+				this.$root.$emit('AbsentRegister');
 				this.$eventBus.$emit('show-spinner', false);
 			}
 		},
 		onClickResetButton() {
-			this.projectSelected = null;
+			this.statusSelected = undefined;
 			this.reasonInputValue = '';
 			const listItem = document.getElementsByClassName(
 				'md-button md-icon-button md-dense md-input-action md-clear md-theme-default'
 			);
 			for (let index = 0; index < listItem.length; index++) {
 				listItem[index].click();
-			}
-		},
-
-		async _getProjects() {
-			const response = await OvertimeRegisterServices.getProjects();
-			if (!response) {
-				this.$router.push('/user/login');
-			} else {
-				// console.log('response',response.data);
-				this.listProjects.push(...response.data);
 			}
 		},
 

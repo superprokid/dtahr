@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button.vue';
 
 import OvertimeRegister from '@/views/ClientSide/MyOvertime/OvertimeRegister/OvertimeRegister.vue';
 import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
+import OvertimeTicket from '@/views/ClientSide/MyOvertime/OvertimeTicket/OvertimeTicket.vue';
 
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import SessionUtls from '@/services/SessionUtls';
@@ -38,8 +39,12 @@ export default {
         tabContent: OvertimeRegister,
       },
       {
-        tabName: 'OvertimeHistory',
+        tabName: 'Overtime History',
         tabContent: OvertimeHistory,
+      },
+      {
+        tabName: 'Overtime Ticket',
+        tabContent: OvertimeTicket,
       }
     ]
   },

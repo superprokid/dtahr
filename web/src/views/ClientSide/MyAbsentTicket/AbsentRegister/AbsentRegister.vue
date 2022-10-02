@@ -4,18 +4,16 @@
     <v-container class="border p-3">
       <div class="">
         <md-toolbar class="mb-3" md-elevation="0">
-          <h3 class="md-title">Overtime Form</h3>
+          <h3 class="md-title">Leave Form</h3>
         </md-toolbar>
         <v-select
-          item-text="project_name"
-          item-value="project_id"
-          v-model="projectSelected"
-          :items="listProjects"
+          item-text="status"
+          item-value="value"
+          v-model="statusSelected"
+          :items="listStatus"
           filled
-          label="Project Name *"
+          label="Leave type *"
           persistent-hint
-          return-object
-          @change="onSelectProject"
         >
         </v-select>
         <span
@@ -25,9 +23,9 @@
             color: #b71c1c;
             font-size: 15px;
           "
-          v-if="isProjectNameEmpty"
+          v-if="!statusSelected && statusSelected != 0"
         >
-          Project name required!
+          Please choose leave type!
         </span>
         <v-row>
           <v-col cols="12" lg="6">
@@ -149,5 +147,5 @@
 </template>
 
 
-<script src="./OvertimeRegister.js">
-<style scoped src="./OvertimeRegister.css"></style>;
+<script src="./AbsentRegister.js">
+<style scoped src="./AbsentRegister.css"></style>;
