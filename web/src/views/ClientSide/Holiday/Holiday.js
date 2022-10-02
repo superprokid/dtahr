@@ -25,8 +25,10 @@ export default {
             ]
         },
     },
-    mounted() {
-        this._getListHoliday();
+    async mounted() {
+        this.$eventBus.$emit('show-spinner', true);
+        await this._getListHoliday();
+        this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
         filterOnlyCapsText(value, search, item) {

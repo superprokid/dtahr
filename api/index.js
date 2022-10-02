@@ -4,9 +4,6 @@ const logger = require('./src/common/logger');
 const batch = require('./src/worker/batch');
 const { WORKER_MAX, PORT } = require('./src/config/constants');
 
-// app.listen(3000, () => {
-//   console.log(`Example app listening on port ${3000}`)
-// })
 const HTTP_WORKER_INDEX = 0;
 const BATCH_WORKER_INDEX = 1;
 
@@ -38,9 +35,8 @@ if (cluster.isMaster) {
 } else {
     const workerIndex = process.env.WORKER_INDEX
     if (workerIndex == HTTP_WORKER_INDEX) {
-        app.listen(PORT, () => {
-            logger.info(`[Server] HTTP server running success, listening on port: ${PORT}`)
-        })
+        logger.info(`[Server] Start http server`);
+        app.run();
     } else if (workerIndex == BATCH_WORKER_INDEX) {
         logger.info(`[Server] Cron batch is running`);
         batch.run();

@@ -131,6 +131,8 @@ function validateType(value, type) {
             return isValidDate(value);
         case 'number':
             return isValidNumber(value);
+        case 'array':
+            return isValidArray(value);
         default:
             return false;
     }
@@ -153,6 +155,10 @@ function isValidNumber(n) {
     return !isNaN(n)
 }
 
+function isValidArray(arr) {
+    return Array.isArray(arr) && arr.length;
+}
+
 function generateEmployeeId(employeeId) {
     let empId = Number(employeeId);
     empId = String(empId + 1);
@@ -167,6 +173,14 @@ function isNullOrUndefinded(value) {
     return value === null || value === undefined;
 }
 
+function groupArrayByKey(arr, key) {
+    return arr.reduce(function (newArr, item) {
+        newArr[item[key]] = newArr[item[key]] || [];
+        newArr[item[key]].push(item);
+        return newArr;
+    }, {});
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -177,5 +191,6 @@ module.exports = {
     calWorkingTime,
     generateEmployeeId,
     isNullOrUndefinded,
-    getDateString
+    getDateString,
+    groupArrayByKey
 }

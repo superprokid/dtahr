@@ -10,15 +10,16 @@ const GET_HOLYDAY = "SELECT * FROM holiday WHERE date between ? and ?";
 const GET_CURRENT_SALARY = "SELECT salary FROM employee WHERE employee_id = ?"
 const GET_CURRENT_PROJECT = "SELECT project_id FROM project WHERE project_id = ? LIMIT 1";
 const INSERT_OVERTIME = "INSERT INTO overtime (employee_id, project_id, start_date, end_date, reason, `status`, payment) VALUES (?, ?, ?, ?, ?, ?, ?)"
-
+const GET_OT_BY_ID_AND_USER = "SELECT * FROM `overtime` WHERE overtime_id = ? and employee_id = ?";
 const GET_LIST_OVERTIME_TICKET_OF_USER = "  SELECT ot.*, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                     where employee_id = ?";
-const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, p.project_name "
+const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, CONCAT(e.first_name, ' ', e.last_name) as name, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
     + "                                     WHERE group_id = ?";
 const UPDATE_OVERTIME_STATUS = " UPDATE overtime SET status = ? where overtime_id = ?";
+const DELETE_OT_TICKET = "DELETE FROM overtime WHERE overtime_id = ? "
 
 const OT_PAYMENT_DAILY_DATE_KEY = 'ot_payment_daily_day';
 const OT_PAYMENT_DAILY_NIGHT_KEY = 'ot_payment_daily_night';
@@ -196,6 +197,10 @@ async function updateStatusOvertimeTicket(req, res) {
                 type: 'number',
                 required: true
             },
+            status: {
+                type: 'number',
+                required: true
+            },
         }
         const validResult = validateRequest(req.body, validateSchema);
         if (validResult) {
@@ -205,8 +210,8 @@ async function updateStatusOvertimeTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { overtimeId } = req.body;
-        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [OT_TICKET_STATUS.approve, overtimeId]);
+        const { overtimeId, status } = req.body;
+        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [status, overtimeId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update overtime ticket status success`);
         await commitTransaction(connection);
         releaseConnection(connection);
@@ -220,9 +225,69 @@ async function updateStatusOvertimeTicket(req, res) {
     }
 }
 
+async function deleteOvertimeTicket(req, res) {
+    const connection = await getConnection();
+    await beginTransaction(connection);
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Delete overtime ticket failed");
+            await rollback(connection);
+            releaseConnection(connection)
+            return;
+        }
+
+        const validateSchema = {
+            overtimeId: {
+                type: 'number',
+                required: true
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { overtimeId } = req.body;
+        const overtimeTicket = await queryTransaction(connection, GET_OT_BY_ID_AND_USER, [overtimeId, empId]);
+        if (!overtimeTicket.length) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] overtime ticket not exist`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send("Delete overtime ticket failed");
+            return;
+        }
+
+        if (overtimeTicket[0].status !== OT_TICKET_STATUS.pending) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] overtime ticket is approved or reject, can't delete`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send("Delete overtime ticket failed");
+            return;
+        }
+
+        await queryTransaction(connection, DELETE_OT_TICKET, [overtimeId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete overtime ticket success`);
+        await commitTransaction(connection);
+        releaseConnection(connection);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
+        return res.status(200).send('Delete overtime ticket success');
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+        await rollback(connection);
+        releaseConnection(connection);
+    }
+}
+
 module.exports = {
     registerOverTime,
     getListOverTimeTicketOfUser,
     getListOverTimeTicketOfGroup,
     updateStatusOvertimeTicket,
+    deleteOvertimeTicket,
 }

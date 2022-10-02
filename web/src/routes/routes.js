@@ -7,12 +7,11 @@ import AdminSide from "../views/AdminSide/AdminSide.vue";
 // UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
 import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
-// import HistoryTracking from "@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue"
 import MyPage from "../views/ClientSide/MyPage/MyPage.vue";
 import Holiday from "../views/ClientSide/Holiday/Holiday.vue";
 import MyOvertime from "@/views/ClientSide/MyOvertime/MyOvertime.vue"
 import MyAbsentTicket from "@/views/ClientSide/MyAbsentTicket/MyAbsentTicket.vue"
-
+import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
 
 Vue.use(Router);
 
@@ -60,7 +59,10 @@ const router = new Router({
                     path: 'myovertime',
                     component: MyOvertime
                 },
-                
+                {
+                    path: 'dailyreport',
+                    component: DailyReport,
+                }
             ]
         },
         {
