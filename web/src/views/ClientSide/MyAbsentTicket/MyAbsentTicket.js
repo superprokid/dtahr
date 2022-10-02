@@ -2,7 +2,7 @@ import TabNav from '@/components/TabNav/TabNav.vue';
 import Notification from '@/components/Notification/Notification.vue';
 import Button from '@/components/Button/Button.vue';
 
-import OvertimeRegister from '@/views/ClientSide/MyOvertime/OvertimeRegister/OvertimeRegister.vue';
+import AbsentRegister from '@/views/ClientSide/MyAbsentTicket/AbsentRegister/AbsentRegister.vue';
 import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
 
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
@@ -34,8 +34,8 @@ export default {
     this.$eventBus.$emit("show-spinner", false);
     this.tabItems = [
       {
-        tabName:  'Overtime Register',
-        tabContent: OvertimeRegister,
+        tabName:  'Leave Register',
+        tabContent: AbsentRegister,
       },
       {
         tabName: 'OvertimeHistory',

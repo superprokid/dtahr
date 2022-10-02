@@ -11,7 +11,7 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 const TIME_FORMAT = 'hh:mm:ss'
 
 export default {
-  name: 'OvertimeRegister',
+  name: 'AbsentRegister',
   components: {
     DateTimePicker,
     Input,
@@ -19,9 +19,15 @@ export default {
   },
   data() {
     return {
-        statusSelected: '',
+        statusSelected: undefined,
         listProjects: [],
-        
+        listStatus: [{
+            status: 'OFF',
+            value: 0
+        }, {
+            status: 'LATE',
+            value: 1
+        }],
         startDate: undefined,
         endDate: undefined,
 
@@ -52,8 +58,8 @@ export default {
         immediate: true,
         deep: true,
         handler(newValue) {
-          this.startDate = newValue
-          console.log(newValue);
+        this.startDate = newValue
+        console.log(newValue);
         }
     }
   },
@@ -63,15 +69,6 @@ export default {
     this.$eventBus.$emit('show-spinner', false);
   },
   methods: {
-    onSelectProject(params){
-        console.log('params',params);
-        if(params === '' || params === null || params === undefined){
-            this.isProjectNameEmpty = true;
-        }else{
-            this.isProjectNameEmpty = false
-            this.statusSelected = params.project_id        
-        }
-    },
     onInputStartDate(params) {
         if(params === '' || params === null || params === undefined){
             this.isStartDateEmpty = true;
@@ -120,7 +117,7 @@ export default {
             endDate: this.endDate + ' ' + this.endTime,
             reason: this.reasonInputValue
         }
-        if(!params.projectId || this.isStartDateEmpty || this.isEndDateEmpty || this.isStartTimeEmpty || this.isEndTimeEmpty || !params.reason){
+        if((!this.statusSelected && this.statusSelected != 0) || this.isStartDateEmpty || this.isEndDateEmpty || this.isStartTimeEmpty || this.isEndTimeEmpty || !params.reason){
             console.log('1 trong cac field bi thieu');
         }else{
             console.log('params',params);
@@ -136,7 +133,7 @@ export default {
         }
     },
     onClickResetButton(){
-        this.statusSelected = null;
+        this.statusSelected = undefined;
         this.reasonInputValue=''
         const listItem = document.getElementsByClassName('md-button md-icon-button md-dense md-input-action md-clear md-theme-default');
         for (let index = 0; index < listItem.length; index++) {

@@ -1,7 +1,10 @@
 <template>
     
     <div class="employee-site-container">
-    <TabNav v-if="tabItems" :tabItems="tabItems" :tabData="tabData"/>
+    <v-app>
+        <TabNav v-if="tabItems" :tabItems="tabItems" :tabData="tabData"/>
+    </v-app>
+    
     <Notification
       :notiHeaderBgColor="notiType"
       :notiTitle="logOutNotiTitle"

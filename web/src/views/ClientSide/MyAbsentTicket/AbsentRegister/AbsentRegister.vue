@@ -4,13 +4,12 @@
         <v-container class="border p-3">
             <div class="">
                 <md-toolbar class="mb-3" md-elevation="0">
-                    <h3 class="md-title">Overtime Form</h3>
+                    <h3 class="md-title">Leave Form</h3>
                 </md-toolbar>
-                <v-select item-text="project_name" item-value="project_id" v-model="projectSelected"
-                    :items="listProjects" filled label="Project Name *" persistent-hint return-object 
-                    @change="onSelectProject">
+                <v-select item-text="status" item-value="value" v-model="statusSelected"
+                    :items="listStatus" filled label="Project Name *" persistent-hint>
                 </v-select>
-                <span style="display: block; margin-top: -20px; color: #b71c1c; font-size: 15px;" v-if="isProjectNameEmpty">
+                <span style="display: block; margin-top: -20px; color: #b71c1c; font-size: 15px;" v-if="!statusSelected && statusSelected != 0">
                     Project name required!
                 </span>
                 <v-row>
@@ -93,7 +92,7 @@
 </template>
 
 
-<script src="./OvertimeRegister.js">
-<style scoped src="./OvertimeRegister.css">
+<script src="./AbsentRegister.js">
+<style scoped src="./AbsentRegister.css">
 
 </style>
