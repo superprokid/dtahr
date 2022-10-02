@@ -32,6 +32,7 @@ module.exports = {
     OT_TICKET_STATUS: {
         approve: 1,
         pending: 0,
+        reject: 2,
     },
     LEAVE_TYPE: {
         off: 0,
@@ -40,6 +41,7 @@ module.exports = {
     LEAVE_TICKET_STATUS: {
         approve: 1,
         pending: 0,
+        reject: 2,
     },
     CHECKOUT_BATCH_CRON: "0 30 18 * * 1-5", // At 19:00 on every day-of-week from Monday through Friday 
     VALID_HOUR: 7,

@@ -1,0 +1,16 @@
+.daily-report-error-label {
+    display: block;
+    margin-top: -20px;
+    color: #b71c1c;
+    font-size: 15px;
+}
+
+.user-image-circle {
+    width: 25px;
+    height: 25px;
+}
+
+.list-search-user-container {
+    max-height: 300px;
+    overflow: auto;
+}

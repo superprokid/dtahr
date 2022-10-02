@@ -7,7 +7,7 @@ const LOG_CATEGORY = "LeaveController";
 const INSERT_LEAVE = "INSERT INTO `leave` (employee_id, type, start_date, end_date, reason, status) VALUES (?, ?, ?, ?, ?, ?)";
 const GET_LEAVE_BY_ID_AND_USER = "SELECT * FROM `leave` WHERE leave_id = ? and employee_id = ?";
 const GET_LEAVE_BY_USER = "SELECT * FROM `leave` WHERE employee_id = ?";
-const GET_ALL_LEAVE_OF_GROUP = "SELECT l.* "
+const GET_ALL_LEAVE_OF_GROUP = "SELECT l.*, CONCAT(e.first_name, ' ', e.last_name) as name "
     + "                         FROM `leave` l INNER JOIN employee e ON l.employee_id = e.employee_id "
     + "                         WHERE e.group_id = ?";
 const UPDATE_LEAVE_STATUS = "UPDATE `leave` SET status = ? WHERE leave_id = ?";
@@ -140,6 +140,10 @@ async function updateStatusLeaveTicket(req, res) {
                 type: 'number',
                 required: true
             },
+            status: {
+                type: 'number',
+                required: true
+            }
         }
         const validResult = validateRequest(req.body, validateSchema);
         if (validResult) {
@@ -149,8 +153,8 @@ async function updateStatusLeaveTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { leaveId } = req.body;
-        await dbaccess.queryTransaction(connection, UPDATE_LEAVE_STATUS, [LEAVE_TICKET_STATUS.approve, leaveId]);
+        const { leaveId, status } = req.body;
+        await dbaccess.queryTransaction(connection, UPDATE_LEAVE_STATUS, [status, leaveId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update leave ticket status success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);

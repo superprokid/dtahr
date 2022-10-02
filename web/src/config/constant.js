@@ -13,6 +13,7 @@ export const USER_CHECK_OUT_URL = BASE_API_USER_URL + "/checkout";
 export const USER_GET_HOLIDAYS = BASE_API_USER_URL + "/getholidays";
 export const USER_GET_PROJECTS = BASE_API_USER_URL + "/getprojects";
 export const USER_REGISTER_OVERTIME = BASE_API_USER_URL + "/create/overtime";
+export const USER_GET_REPORT_SEND_TO_USER = BASE_API_USER_URL + "/dailyreport/getreceive";
 
 // admin url api
 export const BASE_API_ADMIN_URL = BASE_URL + "/api/admin";

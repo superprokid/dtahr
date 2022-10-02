@@ -34,6 +34,7 @@ Router.get('/user/getprojects', authen, projectController.getAllProjects);
 Router.get('/user/leave/get', authen, leaveController.getLeaveTicketByUser);
 Router.get('/user/leave/getall', authen, leaveController.getAllLeaveTicket);
 Router.get('/user/dailyreport/get', authen, dailyreportController.getDailyrepotByUser);
+Router.get('/user/dailyreport/getreceive', authen, dailyreportController.getDailyreportToUser);
 Router.post('/user/delete/leave', authen, leaveController.deleteLeaveTicket);
 Router.post('/user/delete/overtime', authen, overtimeController.deleteOvertimeTicket);
 // user - manager

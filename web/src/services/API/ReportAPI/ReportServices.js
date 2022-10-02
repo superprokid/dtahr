@@ -1,11 +1,11 @@
-import { USER_GET_TRACKING_HISTORY_URL  } from "@/config/constant";
+import { USER_GET_REPORT_SEND_TO_USER  } from "@/config/constant";
 import axiosClient, {asyncRecallFunction} from "../API"
-const HistoryTrackingServices = {
+const ReportService = {
 
-    getHistoryTrackingOfUser: async () => {
+    getReportReceive: async () => {
         try {
             const response = await asyncRecallFunction(() => {
-                return axiosClient.get(USER_GET_TRACKING_HISTORY_URL)
+                return axiosClient.get(USER_GET_REPORT_SEND_TO_USER)
             });
             return response;
         } catch (error) {
@@ -13,10 +13,10 @@ const HistoryTrackingServices = {
         }
     },
 
-    getHistoryTrackingWithFilter: async (data) => {
+    registerDailyReport: async () => {
         try {
             const response = await asyncRecallFunction(() => {
-                return axiosClient.get(USER_GET_TRACKING_HISTORY_URL, {params: {startDate: data.startDate, endDate: data.endDate}})
+                return axiosClient.get(USER_GET_REPORT_SEND_TO_USER)
             });
             return response;
         } catch (error) {
@@ -25,4 +25,4 @@ const HistoryTrackingServices = {
     }
 }
 
-export default HistoryTrackingServices;
+export default ReportService;

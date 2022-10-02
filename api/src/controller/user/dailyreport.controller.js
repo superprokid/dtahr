@@ -4,6 +4,11 @@ const { validateRequest } = require('../../common/utils');
 
 const LOG_CATEGORY = "DailyReportController";
 const GET_DAILYREPORT_BY_USER = "SELECT * FROM dailyreport WHERE employee_id = ?"
+const GET_DAILYREPORT_SEND_TO_USER = "  SELECT DISTINCT dr.*, CONCAT(e.first_name, ' ', e.last_name) as sender, p.project_name "
+    + "                                 FROM dailyreport dr INNER JOIN reportreceiver rr ON dr.dailyreport_id = rr.dailyreport_id "
+    + "                                                     INNER JOIN employee e ON dr.employee_id = e.employee_id "
+    + "                                                     INNER JOIN project p ON p.project_id = dr.project_id "
+    + "                                 WHERE rr.employee_id = ? "
 const INSERT_NEW_DAILYREPORT = "INSERT INTO dailyreport (employee_id, project_id, tasks, problems, next_day_plan, process_status, dailyreport_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 const INSERT_REPORT_RECEIVER = "INSERT INTO reportreceiver (dailyreport_id, employee_id) VALUES ";
 
@@ -97,7 +102,24 @@ async function getDailyrepotByUser(req, res) {
     }
 }
 
+async function getDailyreportToUser(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Get daily report of user failed");
+            return;
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`)
+        res.status(200).send(await dbaccess.exeQuery(GET_DAILYREPORT_SEND_TO_USER, [empId]));
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     createDailyReport,
     getDailyrepotByUser,
+    getDailyreportToUser,
 }

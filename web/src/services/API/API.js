@@ -45,8 +45,8 @@ async function refreshToken() {
 		SessionUtls.setAccessToken(response.data.accessToken);
 		return true;
 	} catch {
-			SessionUtls.clearLoginSession();
-			return false
+		SessionUtls.clearLoginSession();
+		return false
 	}
 }
 
@@ -59,14 +59,15 @@ export function asyncRecallFunction(apiFunction) {
 		// asyncRecallNum = 0;
 		return result;
 	}).catch(async error => {
-		
 		if (error.response.status === 401) {
 			let response = await refreshToken();
 			console.log(response);
-			if (!response) { 
+			if (!response) {
 				return response
 			}
 			return await apiFunction();
+		} else {
+			return -1;
 		}
 
 		// if (error.response.status === 403) {

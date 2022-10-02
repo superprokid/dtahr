@@ -14,7 +14,7 @@ const GET_OT_BY_ID_AND_USER = "SELECT * FROM `overtime` WHERE overtime_id = ? an
 const GET_LIST_OVERTIME_TICKET_OF_USER = "  SELECT ot.*, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                     where employee_id = ?";
-const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, p.project_name "
+const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, CONCAT(e.first_name, ' ', e.last_name) as name, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
     + "                                     WHERE group_id = ?";
@@ -197,6 +197,10 @@ async function updateStatusOvertimeTicket(req, res) {
                 type: 'number',
                 required: true
             },
+            status: {
+                type: 'number',
+                required: true
+            },
         }
         const validResult = validateRequest(req.body, validateSchema);
         if (validResult) {
@@ -206,8 +210,8 @@ async function updateStatusOvertimeTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { overtimeId } = req.body;
-        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [OT_TICKET_STATUS.approve, overtimeId]);
+        const { overtimeId, status } = req.body;
+        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [status, overtimeId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update overtime ticket status success`);
         await commitTransaction(connection);
         releaseConnection(connection);
