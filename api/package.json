@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "start:dev": "nodemon index.js",
+    "build:docker": "docker build -t hrm-ute .",
+    "build:run:docker": "docker run --publish 8989:8989 --env PORT=8989 --name hrm-ute-run hrm-ute",
+    "build:macos": "sh deploy.sh",
+    "build:window": "npm run build:docker && npm run build:run:docker",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
