@@ -58,8 +58,10 @@ function run() {
         })
     });
 
-    server.listen(PORT, () => {
-        logger.info(`[Server] HTTP server running success, listening on port: ${PORT}`)
+    const usePort = process.env.PORT || PORT
+
+    server.listen(usePort, () => {
+        logger.info(`[Server] HTTP server running success, listening on port: ${usePort}`)
     })
 }
 
