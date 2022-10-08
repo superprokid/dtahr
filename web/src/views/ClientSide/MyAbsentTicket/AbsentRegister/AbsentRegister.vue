@@ -23,7 +23,7 @@
             color: #b71c1c;
             font-size: 15px;
           "
-          v-if="!statusSelected && statusSelected != 0"
+          v-if="!statusSelected && statusSelected != 0 && isRegistering"
         >
           Please choose leave type!
         </span>
@@ -49,7 +49,7 @@
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isStartDateEmpty"
+              v-if="isStartDateEmpty && isRegistering"
             >
               Start Date required!
             </span>
@@ -58,7 +58,7 @@
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isStartTimeEmpty"
+              v-if="isStartTimeEmpty && isRegistering"
             >
               Start time required!
             </span>
@@ -85,7 +85,7 @@
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isEndDateEmpty"
+              v-if="isEndDateEmpty && isRegistering"
             >
               End Date required!
             </span>
@@ -94,9 +94,15 @@
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isEndTimeEmpty"
+              v-if="isEndTimeEmpty && isRegistering"
             >
               End time required!
+            </span>
+            <span
+              style="display: block; color: #b71c1c; font-size: 15px"
+              v-if="isStartDateBeforeEndDate && isRegistering"
+            >
+              End date need to be after start date!
             </span>
           </v-col>
         </v-row>
@@ -118,7 +124,7 @@
             color: #b71c1c;
             font-size: 15px;
           "
-          v-if="isReasonEmpty"
+          v-if="isReasonEmpty && isRegistering"
         >
           Reason required!
         </span>

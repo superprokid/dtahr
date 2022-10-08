@@ -36,6 +36,8 @@ export default {
 			isStartTimeEmpty: true,
 			isEndTimeEmpty: true,
 			isReasonEmpty: true,
+			isRegistering: false,
+			isStartDateBeforeEndDate: false,
 
 			rules: [(value) => value.length > 0 || 'Required.'],
 		};
@@ -116,19 +118,26 @@ export default {
 			}
 		},
 		async onClickRegisterButton() {
+			this.isRegistering = true;
+			this.isStartDateBeforeEndDate = false;
 			const params = {
 				projectId: this.projectSelected,
 				startDate: this.startDate + ' ' + this.startTime,
 				endDate: this.endDate + ' ' + this.endTime,
 				reason: this.reasonInputValue,
 			};
+			let startTime = moment(params.startDate, DATE_TIME_FORMAT);
+			let endTime = moment(params.endDate, DATE_TIME_FORMAT);
+			if (startTime.isAfter(endTime)) {
+				this.isStartDateBeforeEndDate = true
+			}
 			if (
 				!params.projectId ||
 				this.isStartDateEmpty ||
 				this.isEndDateEmpty ||
 				this.isStartTimeEmpty ||
 				this.isEndTimeEmpty ||
-				!params.reason
+				!params.reason || this.isStartDateBeforeEndDate
 			) {
 				console.log('1 trong cac field bi thieu');
 			} else {
@@ -147,6 +156,8 @@ export default {
 			}
 		},
 		onClickResetButton() {
+			this.isRegistering = false
+			this.isStartDateBeforeEndDate = false
 			this.projectSelected = null;
 			this.reasonInputValue = '';
 			const listItem = document.getElementsByClassName(
