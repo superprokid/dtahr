@@ -1,9 +1,9 @@
 <!-- eslint-disable -->
 <template>
-  <div id="absenthistory">
+  <div style="margin-left: -4vw" id="absenthistory">
     <v-container class="main-page">
       <md-toolbar class="mb-3" md-elevation="0">
-        <h3 class="md-title">Leave History</h3>
+        <h3 class="md-title">OVERTIME HISTORY</h3>
       </md-toolbar>
 
       <div>
