@@ -3,7 +3,7 @@ const logger = require('../../common/logger');
 const { validateRequest } = require('../../common/utils');
 
 const LOG_CATEGORY = "DailyReportController";
-const GET_DAILYREPORT_BY_USER = "SELECT * FROM dailyreport WHERE employee_id = ?"
+const GET_DAILYREPORT_BY_USER = "SELECT *, p.project_name FROM dailyreport dr INNER JOIN project p ON dr.project_id = p.project_id WHERE employee_id = ?"
 const GET_DAILYREPORT_SEND_TO_USER = "  SELECT DISTINCT dr.*, CONCAT(e.first_name, ' ', e.last_name) as sender, p.project_name "
     + "                                 FROM dailyreport dr INNER JOIN reportreceiver rr ON dr.dailyreport_id = rr.dailyreport_id "
     + "                                                     INNER JOIN employee e ON dr.employee_id = e.employee_id "
