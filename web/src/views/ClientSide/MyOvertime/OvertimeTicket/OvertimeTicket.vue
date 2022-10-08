@@ -1,9 +1,11 @@
 <!-- eslint-disable -->
 <template>
-  <div id="otticket">
+  <div style="margin-left: -1vw" id="otticket">
     <v-container class="main-page">
-      <div class="page-title">OVERTIME TICKET</div>
-
+      <!-- <div class="page-title">OVERTIME TICKET</div> -->
+      <md-toolbar class="mb-3" md-elevation="0">
+        <h3 class="md-title">OVERTIME TICKET</h3>
+      </md-toolbar>
       <div>
         <v-data-table
           :headers="headers"
