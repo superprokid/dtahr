@@ -11,6 +11,7 @@ import Notification from '@/components/Notification/Notification.vue'
 import LoginServices from '@/services/API/Login/LoginServices'
 import SessionUtls from "@/services/SessionUtls";
 import tabName from "@/config/tabname";
+import CookieUtls from "../../../services/CookieUtls";
 
 export default {
   name: "LoginPage",
@@ -48,6 +49,8 @@ export default {
         if(response != null && response.status === 200){
           SessionUtls.setAccessToken(response.data.accessToken);
           SessionUtls.setRefreshToken(response.data.refreshToken);
+          CookieUtls.setAccessToken(response.data.accessToken);
+          CookieUtls.setRefreshToken(response.data.refreshToken);
           //navigate to
             this._navigateSite();
         }else {
