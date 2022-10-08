@@ -1,4 +1,5 @@
 import { mapState } from 'vuex'
+import CookieUtls from '../../services/CookieUtls';
 
 export default {
     name: 'Header',
@@ -8,6 +9,11 @@ export default {
     methods: {
         redirect(component) {
             this.$router.push(component);
+        },
+
+        logout() {
+            CookieUtls.removeAllCookie();
+            this.redirect('login');
         }
     },
 }

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import AdminLoginPage from '../views/AdminSide/LoginSite/LoginPage.vue'
 import SessionUtls from "../services/SessionUtls";
+import CookieUtls from "../services/CookieUtls";
 import AdminSide from "../views/AdminSide/AdminSide.vue";
 
 // UserSide
@@ -88,8 +89,8 @@ router.beforeEach((to, from, next) => {
                 path: from.path
             })
         }
-        let accessToken = SessionUtls.getAccessToken()
-        let refreshToken = SessionUtls.getRefreshToken()
+        let accessToken = CookieUtls.getAccessToken()
+        let refreshToken = CookieUtls.getRefreshToken()
         if (accessToken || refreshToken) {
             return next()
         }

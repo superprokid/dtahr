@@ -12,7 +12,7 @@
                 <md-menu-content>
                     <md-menu-item @click="redirect('mypage')">Setting profile</md-menu-item>
                     <md-menu-item @click="redirect('mypage')">Change password</md-menu-item>
-                    <md-menu-item @click="redirect('mypage')">Log out</md-menu-item>
+                    <md-menu-item @click="logout">Log out</md-menu-item>
                 </md-menu-content>
             </md-menu>
         </div>
