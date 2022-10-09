@@ -36,11 +36,17 @@ Router.get('/user/leave/get', authen, leaveController.getLeaveTicketByUser);
 Router.get('/user/leave/getall', authen, leaveController.getAllLeaveTicket);
 Router.get('/user/dailyreport/get', authen, dailyreportController.getDailyrepotByUser);
 Router.get('/user/dailyreport/getreceive', authen, dailyreportController.getDailyreportToUser);
+Router.get('/user/dailyreport/getdetails', authen, dailyreportController.getDetailsDailyReportById);
 Router.post('/user/delete/leave', authen, leaveController.deleteLeaveTicket);
 Router.post('/user/delete/overtime', authen, overtimeController.deleteOvertimeTicket);
+Router.post('/user/delete/dailyreport', authen, dailyreportController.deleteMyReport);
+Router.post('/user/edit/dailyreport', authen, dailyreportController.editMyDailyReport);
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
 Router.post('/user/manager/update/overtime', authen, overtimeController.updateStatusOvertimeTicket);
+Router.get('/user/manager/getalluser', authen, userController.getAllUserByManager);
+Router.get('/user/manager/getrealtime', authen, userController.getRealTimeStatusByManager);
+Router.get('/user/manager/worklog/get', authen, worklogController.getWorkLogOfUserByManager);
 
 // admin
 Router.post('/admin/login', adminController.login);

@@ -192,5 +192,6 @@ module.exports = {
     generateEmployeeId,
     isNullOrUndefinded,
     getDateString,
-    groupArrayByKey
+    groupArrayByKey,
+    isValidDate,
 }

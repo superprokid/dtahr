@@ -2,8 +2,8 @@ const logger = require('../../common/logger');
 const moment = require('moment')
 const { signToken, signRefreshToken, verifyRefreshToken, compare } = require('../../common/cryptcommon');
 const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
-const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString } = require('../../common/utils');
-const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR } = require('../../config/constants');
+const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString, isValidDate } = require('../../common/utils');
+const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR, ROLE } = require('../../config/constants');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -20,6 +20,19 @@ const GET_EMPLOYEE_INFO = "SELECT e1.employee_id, e1.first_name, e1.last_name, e
     + "                     LEFT JOIN employee e2 on e1.employer_id = e2.employee_id "
     + "                     WHERE e1.employee_id = ? LIMIT 1 ";
 const GET_ALL_USER = "SELECT employee_id, CONCAT(first_name, ' ', last_name) as name, avt FROM employee WHERE is_deleted <> 1"
+const GET_ALL_USER_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(e.first_name, ' ' ,e.last_name) as full_name, e.dob, gender, join_date, phone, main_skill, e.email, e.job_role, salary, p.project_name"
+    + "                         FROM employee e "
+    + "                             LEFT JOIN (SELECT a.project_id, a.employee_id, a.assigned_date "
+    + "                                         FROM assignment a, "
+    + "                                             (SELECT DISTINCT employee_id, MAX(assigned_date) as assigned_date FROM assignment GROUP BY employee_id) aa"
+    + "                                         WHERE a.employee_id = aa.employee_id and a.assigned_date = aa.assigned_date) asign ON e.employee_id = asign.employee_id"
+    + "                             LEFT JOIN project p ON p.project_id = asign.project_id"
+    + "                         WHERE e.employer_id = ? "
+const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(first_name,' ',last_name) as full_name, work_status, IF(leave_id is not null, 1, 0) as isOff "
+    + "                                 FROM employee e "
+    + "		                                LEFT JOIN (SELECT * FROM worklog WHERE work_date = ?) w ON e.employee_id = w.employee_id"
+    + "		                                LEFT JOIN ( SELECT * FROM `leave` WHERE CAST(start_date AS DATE) = ? and `status` = 1) l ON e.employee_id = l.employee_id"
+    + "                                 WHERE e.employer_id = ? ORDER BY e.employee_id ASC"
 
 async function verifyUser(data) {
     try {
@@ -308,6 +321,80 @@ async function getAllUser(req, res) {
     }
 }
 
+async function getAllUserByManager(req, res) {
+    try {
+        const empId = req.employee_id;
+        const role = req.role;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Get failed");
+            return;
+        }
+
+        if (role != ROLE.employer) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not a manager`);
+            res.status(403).send("Get failed");
+            return;
+        }
+        const result = await exeQuery(GET_ALL_USER_BY_MANAGER, [empId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result)
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
+async function getRealTimeStatusByManager(req, res) {
+    try {
+        const empId = req.employee_id;
+        const role = req.role;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Get failed");
+            return;
+        }
+
+        if (role != ROLE.employer) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not a manager`);
+            res.status(403).send("Get failed");
+            return;
+        }
+
+        const respone = [];
+
+        let { startDate, endDate } = req.query;
+        if (!isValidDate(startDate) || !isValidDate(endDate)) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate and endDate is required or not valid`);
+            res.status(403).send("Get failed");
+            return;
+        }
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+        if (startDate > endDate) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate can't greater endDate`);
+            res.status(403).send("Get failed");
+            return;
+        }
+        let currDate = new Date(startDate);
+        for (let i = 0; getStartOfDate(currDate) < getStartOfDate(endDate); i++) {
+            currDate = new Date(moment(startDate).add(i, 'days').format('YYYY-MM-DD'));
+            // if currentDate is sunday or saturday
+            if (currDate.getDay() === 0 || currDate.getDay() === 6) {
+                continue;
+            }
+            const currDateString = getDateString(currDate);
+            const result = await exeQuery(GET_REALTIME_STATUS_BY_MANAGER, [currDateString, currDateString, empId]);
+            respone.push({ date: currDateString, employee: result });
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(respone)
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     login,
     get,
@@ -316,4 +403,6 @@ module.exports = {
     checkout,
     getStart,
     getAllUser,
+    getAllUserByManager,
+    getRealTimeStatusByManager,
 }

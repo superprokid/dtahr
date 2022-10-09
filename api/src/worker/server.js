@@ -23,20 +23,31 @@ app.use(function (req, res, next) {
     next();
 });
 
+const listClient = [
+    "http://127.0.0.1:8080",
+    "http://10.0.132.51:4000",
+    "http://26.74.195.215:8080",
+    "http://26.236.42.236:8080"
+]
+
 // Config logger
 app.use(morgan('[:method] url=:url status=:status :res[content-length] - :response-time ms'));
 
 // IP của client
-app.use(cors({ credentials: true, origin: ["http://127.0.0.1:8080", "http://10.0.132.51:4000", "http://26.74.195.215:8080", "http://26.236.42.236:8080"] }));
+app.use(cors({ credentials: true, origin: listClient }));
 // Config router
 app.use('/api', router);
 
+
+const OVERTIME_CHANNEL = 'overttime';
+const LEAVE_CHANNEL = 'leave';
+const REPORT_CHANNEL = 'report';
 
 function run() {
     const server = http.createServer(app);
     const io = new Server(server, {
         cors: {
-          origin: "http://127.0.0.1:8080"
+            origin: listClient
         }
     });
 
@@ -47,11 +58,19 @@ function run() {
     io.on('connection', (socket) => {
         logger.info(`[Server] socker io is ready - user is connected`);
 
-        console.log(`user ${socket.id} is connected.`)
+        // console.log(`user ${socket.id} is connected.`)
 
-        socket.on('message', data => {
-            socket.broadcast.emit('message:received', data)
+        socket.on(OVERTIME_CHANNEL, message => {
+            socket.broadcast.emit(OVERTIME_CHANNEL, message)
         })
+
+        socket.on(LEAVE_CHANNEL, msg => {
+            io.emit(LEAVE_CHANNEL, msg);
+        });
+
+        socket.on(REPORT_CHANNEL, msg => {
+            io.emit(REPORT_CHANNEL, msg);
+        });
 
         socket.on('disconnect', () => {
             console.log(`user ${socket.id} left.`)
