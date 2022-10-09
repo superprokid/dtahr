@@ -33,7 +33,7 @@ const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(fi
     + "		                                LEFT JOIN (SELECT * FROM worklog WHERE work_date = ?) w ON e.employee_id = w.employee_id"
     + "		                                LEFT JOIN ( SELECT * FROM `leave` WHERE CAST(start_date AS DATE) = ? and `status` = 1) l ON e.employee_id = l.employee_id"
     + "                                 WHERE e.employer_id = ? ORDER BY e.employee_id ASC"
-const GET_USER_INFO_BY_ID = "SELECT * FROM employee WHERE employee_id = ?";
+const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ?";
 
 async function verifyUser(data) {
     try {

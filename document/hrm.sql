@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 06/10/2022 16:20:30
+ Date: 09/10/2022 18:23:19
 */
 
 SET NAMES utf8mb4;
@@ -55,6 +55,8 @@ CREATE TABLE `assignment`  (
 -- ----------------------------
 -- Records of assignment
 -- ----------------------------
+INSERT INTO `assignment` VALUES ('0001', '0000002', '2022-10-09 10:50:14', '2022-10-09 10:40:14', '2022-10-09 10:58:35');
+INSERT INTO `assignment` VALUES ('0002', '0000002', '2022-10-09 10:40:49', '2022-10-09 10:40:49', '2022-10-09 10:40:49');
 
 -- ----------------------------
 -- Table structure for dailyreport
@@ -72,18 +74,16 @@ CREATE TABLE `dailyreport`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`dailyreport_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dailyreport
 -- ----------------------------
-INSERT INTO `dailyreport` VALUES (1, '0000001', '0001', '- Create login screen\n- API login for user and admin\n- Fixbug abc', '2020 - ahaha', '2020 - ahaha', 'delay', '2022-10-31', '2022-10-01 15:36:02', '2022-10-02 15:15:18');
-INSERT INTO `dailyreport` VALUES (2, '0000001', '0002', '- Create login screen\n- API login for user and admin\n- Fixbug abc', '2020 - ahaha', '2020 - ahaha', 'delay', '2022-10-31', '2022-10-01 15:37:32', '2022-10-02 15:15:16');
-INSERT INTO `dailyreport` VALUES (3, '0000001', '0002', '- Create page\n- Create api', 'No', 'off', 'On schedule', '2022-10-02', '2022-10-02 23:00:34', '2022-10-02 23:00:34');
-INSERT INTO `dailyreport` VALUES (4, '0000001', '0002', 's', 's', 's', 'On schedule', '2022-10-02', '2022-10-02 23:04:51', '2022-10-02 23:04:51');
-INSERT INTO `dailyreport` VALUES (5, '0000001', '0002', 'sdsd', 'sdsd', 'sdsd', 'Ahead of schedule', '2022-10-02', '2022-10-02 23:06:07', '2022-10-02 23:06:07');
-INSERT INTO `dailyreport` VALUES (6, '0000001', '0001', 'Chơi game', 'Thắng nó feed', 'Tập luyện để gánh', 'On schedule', '2022-10-06', '2022-10-06 15:45:43', '2022-10-06 15:45:43');
-INSERT INTO `dailyreport` VALUES (7, '0000001', '0001', 'Gửi code', '1', 'chơi', 'Behind schedule', '2022-10-06', '2022-10-06 15:51:28', '2022-10-06 15:51:28');
+INSERT INTO `dailyreport` VALUES (7, '0000001', '0001', '2020 - ahaha - edit success', '2020 - ahaha -edit', 'edit', 'Ahead of schedule', '2022-10-06', '2022-10-06 15:51:28', '2022-10-09 15:10:04');
+INSERT INTO `dailyreport` VALUES (8, '0000001', '0002', '- Create screen\n- no no\n-- tes\nersdf', '- No-sdsd', '- Offfff', 'Ahead of schedule', '2022-10-08', '2022-10-08 18:30:19', '2022-10-09 15:09:07');
+INSERT INTO `dailyreport` VALUES (9, '0000001', '0002', 'sda', 'dasd', 'asd', 'Ahead of schedule', '2022-10-08', '2022-10-08 18:33:27', '2022-10-09 15:08:44');
+INSERT INTO `dailyreport` VALUES (10, '0000001', '0001', '123', '123', '123', 'On schedule', '2022-10-08', '2022-10-08 18:34:15', '2022-10-08 18:34:15');
+INSERT INTO `dailyreport` VALUES (11, '0000001', '0002', 'sdasd', 'sadasd', 'asdasd', 'On schedule', '2022-10-09', '2022-10-09 11:27:45', '2022-10-09 11:27:45');
 
 -- ----------------------------
 -- Table structure for employee
@@ -127,10 +127,10 @@ CREATE TABLE `employee`  (
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'thangld@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 10.252083333333333, '2022-09-28', NULL, NULL, NULL, NULL, 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:41:19', '2022-10-02 17:28:58');
-INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2000-10-10', NULL, 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -2, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:43:07', '2022-10-02 17:16:24');
-INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2000-10-10', NULL, 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -2.012, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:43:26', '2022-10-02 17:47:06');
-INSERT INTO `employee` VALUES ('0000004', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'ldthang2201@gmail.com', '$2b$12$G3DVMLIjLTfc7ep3t7BnmutTbheR9.K8y9LgqquXdzi7T3T5GcaRa', '000001', -2, '2022-09-28', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 17:50:26', '2022-10-02 17:16:25');
+INSERT INTO `employee` VALUES ('0000001', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'thangld@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', 10.252083333333333, '2022-09-28', '01252153156', 'Javascript', 'php', 'Developer', 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:41:19', '2022-10-09 11:11:21');
+INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2000-10-10', NULL, 0, 'andt@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -2, '2022-09-28', '0896563253', 'Laravel', 'Nodejs', 'BPM', 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:43:07', '2022-10-09 11:12:15');
+INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Bui Viet', '2000-10-10', NULL, 0, 'duybv@gmail.com', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '000001', -2.012, '2022-09-28', '0253263120', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 14:43:26', '2022-10-09 11:10:23');
+INSERT INTO `employee` VALUES ('0000004', 'Thang', 'Le Duc', '2000-10-10', NULL, 0, 'ldthang2201@gmail.com', '$2b$12$G3DVMLIjLTfc7ep3t7BnmutTbheR9.K8y9LgqquXdzi7T3T5GcaRa', '000001', -2, '2022-09-28', '2121212121', NULL, NULL, 'Tester', 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, 600000.00, NULL, NULL, NULL, 0, '2022-09-28 17:50:26', '2022-10-09 11:12:20');
 
 -- ----------------------------
 -- Table structure for group
@@ -212,7 +212,7 @@ CREATE TABLE `leave`  (
   `create_at` datetime NULL DEFAULT current_timestamp,
   `update_at` datetime NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`leave_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of leave
@@ -224,7 +224,7 @@ INSERT INTO `leave` VALUES (7, '0000003', 0, '2022-10-03 21:46:00', '2022-10-03 
 INSERT INTO `leave` VALUES (8, '0000003', 1, '2022-10-03 21:48:00', '2022-10-12 22:48:00', '123', 1, '2022-10-02 20:48:45', '2022-10-02 22:54:23');
 INSERT INTO `leave` VALUES (9, '0000003', 0, '2022-10-03 10:07:00', '2022-10-06 22:06:00', '123', 0, '2022-10-02 21:06:41', '2022-10-02 21:06:41');
 INSERT INTO `leave` VALUES (10, '0000003', 0, '2022-10-03 22:08:00', '2022-10-10 21:08:00', '123', 0, '2022-10-02 21:08:46', '2022-10-02 21:08:46');
-INSERT INTO `leave` VALUES (11, '0000001', 1, '2022-10-06 15:34:00', '2022-10-06 18:34:00', 'Thích', 0, '2022-10-06 14:34:54', '2022-10-06 14:34:54');
+INSERT INTO `leave` VALUES (12, '0000001', 0, '2022-10-08 16:50:00', '2022-10-08 17:50:00', '123', 1, '2022-10-08 15:51:10', '2022-10-08 15:51:29');
 
 -- ----------------------------
 -- Table structure for overtime
@@ -242,7 +242,7 @@ CREATE TABLE `overtime`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL,
   PRIMARY KEY (`overtime_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of overtime
@@ -253,6 +253,8 @@ INSERT INTO `overtime` VALUES (5, '0000001', '0001', '2022-10-02 05:19:00', '202
 INSERT INTO `overtime` VALUES (6, '0000001', '0002', '2022-10-02 05:19:00', '2022-10-02 17:19:00', '42425454', 0, 10800000.00, '2022-10-02 17:19:27', '0000-00-00 00:00:00');
 INSERT INTO `overtime` VALUES (7, '0000001', '0002', '2022-10-02 05:19:00', '2022-10-02 17:19:00', '42425454', 0, 10800000.00, '2022-10-02 17:19:45', '0000-00-00 00:00:00');
 INSERT INTO `overtime` VALUES (9, '0000001', '0001', '2022-10-02 12:02:00', '2022-10-04 12:02:00', '123123', 0, 43200000.00, '2022-10-02 23:02:18', '0000-00-00 00:00:00');
+INSERT INTO `overtime` VALUES (10, '0000003', '0001', '2022-10-03 10:28:00', '2022-10-05 10:28:00', '123', 0, 28800000.00, '2022-10-08 09:28:59', '0000-00-00 00:00:00');
+INSERT INTO `overtime` VALUES (13, '0000001', '0001', '2022-10-09 01:36:00', '2022-10-09 13:36:00', '123', 2, 10800000.00, '2022-10-09 12:37:07', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for overtimepayment
@@ -306,30 +308,29 @@ CREATE TABLE `reportreceiver`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`reportreceiver_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of reportreceiver
 -- ----------------------------
-INSERT INTO `reportreceiver` VALUES (1, 1, '0000001', '2022-10-01 15:22:13', '2022-10-02 15:37:20');
-INSERT INTO `reportreceiver` VALUES (2, 1, '0000003', '2022-10-01 15:22:13', '2022-10-01 16:39:23');
 INSERT INTO `reportreceiver` VALUES (3, 0, '0000002', '2022-10-01 15:36:02', '2022-10-02 15:27:25');
 INSERT INTO `reportreceiver` VALUES (4, 0, '0000003', '2022-10-01 15:36:02', '2022-10-01 16:39:32');
 INSERT INTO `reportreceiver` VALUES (5, 0, '0000004', '2022-10-01 15:36:02', '2022-10-01 16:39:36');
-INSERT INTO `reportreceiver` VALUES (6, 2, '0000001', '2022-10-01 15:37:32', '2022-10-02 15:37:23');
-INSERT INTO `reportreceiver` VALUES (7, 2, '0000003', '2022-10-01 15:37:32', '2022-10-01 16:39:43');
-INSERT INTO `reportreceiver` VALUES (8, 2, '0000004', '2022-10-01 15:37:32', '2022-10-01 16:39:48');
-INSERT INTO `reportreceiver` VALUES (9, 3, '1', '2022-10-02 23:00:34', '2022-10-02 23:00:34');
-INSERT INTO `reportreceiver` VALUES (10, 3, '2', '2022-10-02 23:00:34', '2022-10-02 23:00:34');
-INSERT INTO `reportreceiver` VALUES (11, 3, '3', '2022-10-02 23:00:34', '2022-10-02 23:00:34');
-INSERT INTO `reportreceiver` VALUES (12, 4, '1', '2022-10-02 23:04:51', '2022-10-02 23:04:51');
-INSERT INTO `reportreceiver` VALUES (13, 4, '2', '2022-10-02 23:04:51', '2022-10-02 23:04:51');
-INSERT INTO `reportreceiver` VALUES (14, 5, '0000001', '2022-10-02 23:06:07', '2022-10-02 23:06:07');
-INSERT INTO `reportreceiver` VALUES (15, 5, '0000002', '2022-10-02 23:06:07', '2022-10-02 23:06:07');
-INSERT INTO `reportreceiver` VALUES (16, 6, '0000001', '2022-10-06 15:45:43', '2022-10-06 15:45:43');
-INSERT INTO `reportreceiver` VALUES (17, 6, '0000002', '2022-10-06 15:45:43', '2022-10-06 15:45:43');
-INSERT INTO `reportreceiver` VALUES (18, 6, '0000003', '2022-10-06 15:45:43', '2022-10-06 15:45:43');
-INSERT INTO `reportreceiver` VALUES (19, 7, '0000001', '2022-10-06 15:51:28', '2022-10-06 15:51:28');
+INSERT INTO `reportreceiver` VALUES (38, 10, '0000001', '2022-10-09 15:05:32', '2022-10-09 15:05:32');
+INSERT INTO `reportreceiver` VALUES (39, 10, '0000002', '2022-10-09 15:05:32', '2022-10-09 15:05:32');
+INSERT INTO `reportreceiver` VALUES (40, 10, '0000003', '2022-10-09 15:05:32', '2022-10-09 15:05:32');
+INSERT INTO `reportreceiver` VALUES (41, 10, '0000004', '2022-10-09 15:05:32', '2022-10-09 15:05:32');
+INSERT INTO `reportreceiver` VALUES (42, 11, '0000001', '2022-10-09 15:06:33', '2022-10-09 15:06:33');
+INSERT INTO `reportreceiver` VALUES (43, 11, '0000002', '2022-10-09 15:06:33', '2022-10-09 15:06:33');
+INSERT INTO `reportreceiver` VALUES (48, 9, '0000001', '2022-10-09 15:08:44', '2022-10-09 15:08:44');
+INSERT INTO `reportreceiver` VALUES (49, 9, '0000002', '2022-10-09 15:08:44', '2022-10-09 15:08:44');
+INSERT INTO `reportreceiver` VALUES (50, 9, '0000003', '2022-10-09 15:08:44', '2022-10-09 15:08:44');
+INSERT INTO `reportreceiver` VALUES (51, 9, '0000004', '2022-10-09 15:08:44', '2022-10-09 15:08:44');
+INSERT INTO `reportreceiver` VALUES (52, 8, '0000001', '2022-10-09 15:09:07', '2022-10-09 15:09:07');
+INSERT INTO `reportreceiver` VALUES (53, 8, '0000002', '2022-10-09 15:09:07', '2022-10-09 15:09:07');
+INSERT INTO `reportreceiver` VALUES (54, 8, '0000003', '2022-10-09 15:09:07', '2022-10-09 15:09:07');
+INSERT INTO `reportreceiver` VALUES (55, 7, '0000001', '2022-10-09 15:10:04', '2022-10-09 15:10:04');
+INSERT INTO `reportreceiver` VALUES (56, 7, '0000004', '2022-10-09 15:10:04', '2022-10-09 15:10:04');
 
 -- ----------------------------
 -- Table structure for workhistory
@@ -344,7 +345,7 @@ CREATE TABLE `workhistory`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`workhistory_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 283 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 287 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of workhistory
@@ -487,6 +488,10 @@ INSERT INTO `workhistory` VALUES (279, '0000001', 3, '2022-10-01 19:20:00', 'AUT
 INSERT INTO `workhistory` VALUES (280, '0000002', 3, '2022-10-01 19:20:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -1 to -2', '2022-10-01 19:20:00', '2022-10-01 19:20:00');
 INSERT INTO `workhistory` VALUES (281, '0000003', 3, '2022-10-01 19:20:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -1 to -2', '2022-10-01 19:20:00', '2022-10-01 19:20:00');
 INSERT INTO `workhistory` VALUES (282, '0000004', 3, '2022-10-01 19:20:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -1 to -2', '2022-10-01 19:20:00', '2022-10-01 19:20:00');
+INSERT INTO `workhistory` VALUES (283, '0000001', 0, '2022-10-08 10:21:41', 'Check in at 2022-10-08, 10:21:41 am', '2022-10-08 10:21:41', '2022-10-08 10:21:41');
+INSERT INTO `workhistory` VALUES (284, '0000001', 1, '2022-10-08 10:39:30', 'Check out at 2022-10-08, 10:39:30 am', '2022-10-08 10:39:30', '2022-10-08 10:39:30');
+INSERT INTO `workhistory` VALUES (285, '0000001', 4, '2022-10-05 00:00:00', 'Increase by manager:  132, duration: 0 mins ', '2022-10-09 18:15:46', '2022-10-09 18:15:46');
+INSERT INTO `workhistory` VALUES (286, '0000002', 4, '2022-10-07 00:00:00', 'Increase by manager:  Thich, duration: 0 mins ', '2022-10-09 18:17:29', '2022-10-09 18:17:29');
 
 -- ----------------------------
 -- Table structure for worklog
@@ -501,7 +506,7 @@ CREATE TABLE `worklog`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worklog_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 140 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 143 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of worklog
@@ -529,6 +534,9 @@ INSERT INTO `worklog` VALUES (136, '0000001', 1, '2022-10-01', 121.0, '2022-10-0
 INSERT INTO `worklog` VALUES (137, '0000002', 1, '2022-10-01', 0.0, '2022-10-01 19:20:00', '2022-10-01 19:20:00');
 INSERT INTO `worklog` VALUES (138, '0000003', 1, '2022-10-01', 0.0, '2022-10-01 19:20:00', '2022-10-01 19:20:00');
 INSERT INTO `worklog` VALUES (139, '0000004', 1, '2022-10-01', 0.0, '2022-10-01 19:20:00', '2022-10-01 19:20:00');
+INSERT INTO `worklog` VALUES (140, '0000001', 1, '2022-10-08', 18.0, '2022-10-08 10:21:41', '2022-10-08 10:39:30');
+INSERT INTO `worklog` VALUES (141, '0000001', 1, '2022-10-05', 0.0, '2022-10-09 18:15:46', '2022-10-09 18:15:46');
+INSERT INTO `worklog` VALUES (142, '0000002', 1, '2022-10-07', 0.0, '2022-10-09 18:17:29', '2022-10-09 18:17:29');
 
 -- ----------------------------
 -- Table structure for worktime
