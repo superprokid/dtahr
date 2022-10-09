@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { mapState } from 'vuex'
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
+import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 const TIME_FORMAT = 'HH:mm:ss';
@@ -132,7 +133,7 @@ export default {
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
-      this.$root.$emit('TimeTracking');
+      this.$root.$emit(TIME_TRACKING_SCREEN);
     },
     onClickCancelButton() {
       this.isTimeConfirmModalShowed = false;

@@ -60,8 +60,8 @@ function run() {
 
         // console.log(`user ${socket.id} is connected.`)
 
-        socket.on(OVERTIME_CHANNEL, message => {
-            socket.broadcast.emit(OVERTIME_CHANNEL, message)
+        socket.on(OVERTIME_CHANNEL, msg => {
+            io.emit(OVERTIME_CHANNEL, msg);
         })
 
         socket.on(LEAVE_CHANNEL, msg => {

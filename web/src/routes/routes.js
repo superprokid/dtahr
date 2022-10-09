@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
         }
         let accessToken = CookieUtls.getAccessToken()
         let refreshToken = CookieUtls.getRefreshToken()
-        let role = SessionUtls.getItem(SessionUtls.role)
+        let role = CookieUtls.getCookie(CookieUtls.role);
         if (accessToken || refreshToken) {
             let path = to.path.split("/")[2]
             if (['usermanagement', 'realtimecheck'].includes(path) && role != 1) {

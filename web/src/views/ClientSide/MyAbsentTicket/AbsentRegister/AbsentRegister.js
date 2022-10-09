@@ -5,6 +5,7 @@ import Button from '@/components/Button/Button.vue';
 
 import AbsentService from '@/services/API/MyAbsentAPI/AbsentServices';
 import moment from 'moment';
+import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -129,7 +130,7 @@ export default {
 					console.log(response);
 					alert('Success');
 				}
-				this.$root.$emit('AbsentRegister');
+				this.$root.$emit(ABSENT_REGISTER_SCREEN);
 				this.$eventBus.$emit('show-spinner', false);
 			}
 		},

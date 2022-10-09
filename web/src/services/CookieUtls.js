@@ -3,6 +3,8 @@ import { EXPRIED_COOKIE_DAYS } from "../config/constant";
 export default class CookieUtls {
     static accessTokenKey = "ute-hrm-accesstoken";
     static refreshTokenKey = "ute-hrm-refreshtoken";
+    static role = "_ute-hrm-role";
+    static employeeId = "_ute-hrm-employeeid";
 
     static setCookie(cname, cvalue, exdays) {
         const d = new Date();
@@ -29,6 +31,10 @@ export default class CookieUtls {
             acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
             return acc;
         }, {});
+    }
+
+    static getCookie(key) {
+        return this.parseCookie()[key];
     }
 
     static getAccessToken() {

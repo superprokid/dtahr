@@ -4,6 +4,7 @@ import Header from '../../components/Header/Header.vue';
 
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import SessionUtls from '@/services/SessionUtls';
+import CookieUtls from '../../services/CookieUtls';
 
 export default {
   name: 'ClientSide',
@@ -20,7 +21,8 @@ export default {
           console.log(response.data)
           //Use Vuex set Data
           this.$store.commit("setStartDataUser", response.data)
-          SessionUtls.setItem(SessionUtls.role,response.data.role)
+          CookieUtls.setCookie(CookieUtls.role, response.data.role);
+          CookieUtls.setCookie(CookieUtls.employeeId, response.data.employee_id);
       }
     },
   }

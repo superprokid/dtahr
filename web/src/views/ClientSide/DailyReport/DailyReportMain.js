@@ -2,13 +2,13 @@ import TabNav from '@/components/TabNav/TabNav.vue';
 import DailyReportRegister from '@/views/ClientSide/DailyReport/DailyReportRegister/DailyReportRegister.vue';
 import MyReport from '@/views/ClientSide/DailyReport/MyReport/MyReport.vue';
 import ReportReceive from '@/views/ClientSide/DailyReport/ReportReceive/ReportReceive.vue';
-import io from "socket.io-client";
 
 export default {
     name: 'DalyReport',
     data() {
       return {
         tabData: {},
+        socket: null,
       };
     },
   
@@ -17,9 +17,11 @@ export default {
     },
 
     mounted() {
-      io('http://localhost:3000');
+
     },
-  
+    beforeDestroy() {
+      
+    },
     async created() {
       this.tabItems = [
         {
@@ -38,8 +40,8 @@ export default {
     },
   
     methods: {
-      join() {
-        console.log("hahahihis");
+      sendMessage() {
+        this.socket.emit('report','test message');
       }
     },
   };
