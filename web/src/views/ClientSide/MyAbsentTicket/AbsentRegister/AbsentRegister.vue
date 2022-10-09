@@ -28,49 +28,32 @@
           Please choose leave type!
         </span>
         <v-row>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="12">
             <DateTimePicker
-              :selectDate="startDate"
-              :dateTimePickerTitle="'Start Date *'"
-              @select-date="onInputStartDate"
+              :selectDate="date"
+              :dateTimePickerTitle="'End Date *'"
+              @select-date="onInputDate"
             />
           </v-col>
+        </v-row>
 
+        <v-row>
+          <v-col cols="12" lg="12">
+            <span
+              style="display: block; color: #b71c1c; font-size: 15px"
+              v-if="isDateEmpty && isRegistering"
+            >
+              End Date required!
+            </span>
+          </v-col>
+        </v-row>
+
+        <v-row>
           <v-col cols="12" lg="6">
             <Input
               :startTimeSetup="startTime"
               @on-input="onInputStartTime"
               :inputType="'time'"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="12" lg="6">
-            <span
-              style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isStartDateEmpty && isRegistering"
-            >
-              Start Date required!
-            </span>
-          </v-col>
-
-          <v-col cols="12" lg="6">
-            <span
-              style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isStartTimeEmpty && isRegistering"
-            >
-              Start time required!
-            </span>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="12" lg="6">
-            <DateTimePicker
-              :selectDate="endDate"
-              :dateTimePickerTitle="'End Date *'"
-              @select-date="onInputEndDate"
             />
           </v-col>
           <v-col cols="12" lg="6">
@@ -85,12 +68,11 @@
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"
-              v-if="isEndDateEmpty && isRegistering"
+              v-if="isStartTimeEmpty && isRegistering"
             >
-              End Date required!
+              Start time required!
             </span>
           </v-col>
-
           <v-col cols="12" lg="6">
             <span
               style="display: block; color: #b71c1c; font-size: 15px"

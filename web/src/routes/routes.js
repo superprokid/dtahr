@@ -13,6 +13,8 @@ import Holiday from "../views/ClientSide/Holiday/Holiday.vue";
 import MyOvertime from "@/views/ClientSide/MyOvertime/MyOvertime.vue"
 import MyAbsentTicket from "@/views/ClientSide/MyAbsentTicket/MyAbsentTicket.vue"
 import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
+import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue"
+import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 
 Vue.use(Router);
 
@@ -63,6 +65,14 @@ const router = new Router({
                 {
                     path: 'dailyreport',
                     component: DailyReport,
+                },
+                {
+                    path: 'usermanagement',
+                    component: UserManagement,
+                },
+                {
+                    path: 'realtimecheck',
+                    component: RealTimeCheck,
                 }
             ]
         },
@@ -91,7 +101,15 @@ router.beforeEach((to, from, next) => {
         }
         let accessToken = CookieUtls.getAccessToken()
         let refreshToken = CookieUtls.getRefreshToken()
+        let role = SessionUtls.getItem(SessionUtls.role)
         if (accessToken || refreshToken) {
+            let path = to.path.split("/")[2]
+            if (['usermanagement', 'realtimecheck'].includes(path) && role != 1) {
+                console.log("uk")
+                return next({
+                    path: from.path
+                })
+            }
             return next()
         }
         else {

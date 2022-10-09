@@ -106,7 +106,7 @@ export default {
 				this.$router.push('/user/login');
 				return;
 			}
-			await this._getListOvertimeTicket();
+			await this._getListAbsentHistory();
 		},
 	},
 };
