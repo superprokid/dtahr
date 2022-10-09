@@ -5,6 +5,7 @@ import Button from '@/components/Button/Button.vue';
 
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import moment from 'moment';
+import { OT_REGISTER_SCREEN } from '../../../../config/screenName';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -132,7 +133,7 @@ export default {
 					console.log(response);
 					alert('Success');
 				}
-				this.$root.$emit('OTRegister');
+				this.$root.$emit(OT_REGISTER_SCREEN);
 				this.$eventBus.$emit('show-spinner', false);
 			}
 		},

@@ -2,6 +2,7 @@
 import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import Button from '@/components/Button/Button.vue';
+import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
 
 export default {
 	name: 'AbsentHistory',
@@ -44,7 +45,7 @@ export default {
 	computed: {},
 	mounted() {
 		this._getListAbsentHistory();
-		this.$root.$on('AbsentRegister', () => {
+		this.$root.$on(ABSENT_REGISTER_SCREEN, () => {
 			this._getListAbsentHistory();
 		});
 	},

@@ -3,6 +3,8 @@ import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import SessionUtls from '@/services/SessionUtls';
 import Button from '@/components/Button/Button.vue';
+import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import CookieUtls from '../../../../services/CookieUtls';
 
 export default {
 	name: 'AbsentHistory',
@@ -31,14 +33,14 @@ export default {
 	},
 	mounted() {
 		this._getListAbsentTicket();
-		if (SessionUtls.getItem(SessionUtls.role) == 1) {
+		if (CookieUtls.getCookie(CookieUtls.role) == 1) {
 			this.headers.push({
 				text: 'Actions',
 				value: 'actions',
 				sortable: false,
 			});
 		}
-		this.$root.$on('AbsentRegister', () => {
+		this.$root.$on(ABSENT_REGISTER_SCREEN, () => {
 			this._getListAbsentTicket();
 		});
 	},

@@ -1,3 +1,4 @@
+import { REPORT_RECEIVER_SCREEN } from "../../../../config/screenName";
 import ReportService from "../../../../services/API/ReportAPI/ReportServices"
 import { getDateString } from "../../../../services/utilities";
 
@@ -24,10 +25,16 @@ export default {
         this.$eventBus.$emit('show-spinner', true);
         await this._getReportReceive();
         this.$eventBus.$emit('show-spinner', false);
+        this.$root.$on(REPORT_RECEIVER_SCREEN, () => {
+            this._getReportReceive();
+            console.log('ReportREceiver get message success');
+        })
     },
     methods: {
         async _getReportReceive() {
+            this.$eventBus.$emit('show-spinner', true);
             const response = await ReportService.getReportReceive();
+            this.$eventBus.$emit('show-spinner', false);
             if (!response) {
                 this.$router.push('/user/login');
             } else {

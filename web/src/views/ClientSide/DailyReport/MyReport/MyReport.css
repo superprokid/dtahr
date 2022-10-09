@@ -1,0 +1,29 @@
+#report-receiver-page .page-edit-report-title{
+    font-size: large;
+    color: #448aff;
+    font-weight: bold;
+    display: inline;
+}
+
+#report-receiver-page .user-image-circle {
+    width: 25px;
+    height: 25px;
+}
+
+#report-receiver-page .list-search-user-container {
+    max-height: 300px;
+    overflow: auto;
+}
+
+#report-receiver-page .daily-report-error-label {
+    display: block;
+    margin-top: -20px;
+    color: #b71c1c;
+    font-size: 15px;
+}
+
+#report-receiver-page .page-edit-report-title:hover{
+    color: #0a47b1;
+    display: inline;
+    cursor: pointer;
+}

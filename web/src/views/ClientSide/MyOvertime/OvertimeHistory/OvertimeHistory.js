@@ -2,6 +2,7 @@
 import OvertimeHistoryServices from '@/services/API/MyOvertimeAPI/OvertimeHistoryServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import Button from '@/components/Button/Button.vue';
+import { OT_REGISTER_SCREEN } from '../../../../config/screenName';
 
 export default {
 	name: 'AbsentHistory',
@@ -44,7 +45,7 @@ export default {
 	computed: {},
 	mounted() {
 		this._getListOvertimeHistory();
-		this.$root.$on('OTRegister', () => {
+		this.$root.$on(OT_REGISTER_SCREEN, () => {
 			this._getListOvertimeHistory();
 		});
 	},

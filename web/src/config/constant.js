@@ -26,6 +26,10 @@ export const USER_DELETE_ABSENT = BASE_API_USER_URL + '/delete/leave';
 export const USER_GET_REPORT_SEND_TO_USER = BASE_API_USER_URL + "/dailyreport/getreceive";
 export const USER_GET_ALL_USER = BASE_API_USER_URL + "/getalluser";
 export const USER_REGISTER_DAILY_REPORT = BASE_API_USER_URL + "/create/dailyreport";
+export const USER_GET_MYDAILYREPORT = BASE_API_USER_URL + "/dailyreport/get";
+export const USER_DELETE_MYDAILYREPORT = BASE_API_USER_URL + "/delete/dailyreport";
+export const USER_GET_DAILY_REPORT_DETAILS = BASE_API_USER_URL + "/dailyreport/getdetails";
+export const USER_EDIT_DAILY_REPORT = BASE_API_USER_URL + "/edit/dailyreport";
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';

@@ -47,6 +47,7 @@ Router.post('/user/manager/update/overtime', authen, overtimeController.updateSt
 Router.get('/user/manager/getalluser', authen, userController.getAllUserByManager);
 Router.get('/user/manager/getrealtime', authen, userController.getRealTimeStatusByManager);
 Router.get('/user/manager/worklog/get', authen, worklogController.getWorkLogOfUserByManager);
+Router.get('/user/manager/employee/getinfo', authen, userController.getEmployeeInfoById);
 
 // admin
 Router.post('/admin/login', adminController.login);

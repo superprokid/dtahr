@@ -4,6 +4,7 @@ import moment from 'moment';
 import { mapState } from 'vuex'
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import Button from '@/components/Button/Button.vue'
+import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 
 const DATE_FORMAT = 'YYYY/MM/DD';
 
@@ -40,7 +41,7 @@ export default {
         this._getUserHistoryTracking();
 
         // Re call api when checkin/checkout
-        this.$root.$on('TimeTracking', () => {
+        this.$root.$on(TIME_TRACKING_SCREEN, () => {
             this._getUserHistoryTracking();
         })
         this.$eventBus.$emit("show-spinner", false);

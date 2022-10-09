@@ -23,6 +23,13 @@ Vue.use(VueMaterial);
 
 import router from './routes/routes';
 
+// SOCKET CONFIGURATION
+import io from "socket.io-client";
+import { BASE_URL } from '@/config/constant';
+
+const socket = io(BASE_URL);
+
+Vue.prototype.$mySocket = socket;
 
 Vue.config.productionTip = false;
 
