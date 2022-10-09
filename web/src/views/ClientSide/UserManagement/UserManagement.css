@@ -1,0 +1,36 @@
+#usermanagement {
+    background-color: whitesmoke;
+    padding: 1.5%;
+    height: 100vh;
+    width: 100vw;
+}
+
+#usermanagement .main-page {
+    /* background-color: white; */
+    height: 100%;
+    overflow: auto;
+}
+
+#usermanagement .main-page .page-title {
+    font-size: large;
+    /* padding: 0 24px; */
+    color: #448aff;
+    font-weight: bold;
+    padding-bottom: 24px;
+    /* border-bottom: 1px solid gray; */
+}
+
+#usermanagement-table-container .usermanagement-table {
+    width: 100%;
+
+}
+
+.text_style{
+    font-size: 1rem !important;
+    font-family: Roboto,sans-serif!important;
+    font-weight: 500;
+}
+
+.textred{
+    color: red;
+}

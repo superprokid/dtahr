@@ -4,6 +4,8 @@ const tabName = {
     leaveUser: 'user-leave-001',
     holidayUser: 'user-holiday-001',
     dailyreportUser: 'user-report-001',
+    userManagement: 'user-management-001',
+    realtimeCheck: 'user-realtimecheck-001',
 }
 
 export default tabName;

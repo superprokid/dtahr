@@ -6,8 +6,6 @@ import OvertimeRegister from '@/views/ClientSide/MyOvertime/OvertimeRegister/Ove
 import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
 import OvertimeTicket from '@/views/ClientSide/MyOvertime/OvertimeTicket/OvertimeTicket.vue';
 
-import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
-import SessionUtls from '@/services/SessionUtls';
 
 export default {
   name: 'EmployeeTab',
@@ -29,10 +27,6 @@ export default {
   },
 
   async created() {
-    this.$eventBus.$emit("show-spinner", true);
-    this._getCurrentUserName();
-    await this._getStartUser()
-    this.$eventBus.$emit("show-spinner", false);
     this.tabItems = [
       {
         tabName:  'Overtime Register',
@@ -70,18 +64,6 @@ export default {
       //   await GetCurrentUserNameService.getCurrentUserName().then((res) => {
       //     return res.username;
       //   });
-    },
-    async _getStartUser() {
-      const response = await MyPageServices.getStartUser();
-      if(!response){
-          this.$router.push('/user/login')
-      } else {
-          console.log(response.data)
-          //Use Vuex set Data
-          this.$store.commit("setStartDataUser", response.data)
-          SessionUtls.setItem(SessionUtls.role,response.data.role)
-      }
-    },
-    
+    }
   },
 };

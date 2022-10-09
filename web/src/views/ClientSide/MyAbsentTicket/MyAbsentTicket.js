@@ -6,8 +6,6 @@ import AbsentRegister from '@/views/ClientSide/MyAbsentTicket/AbsentRegister/Abs
 import AbsentHistory from '@/views/ClientSide/MyAbsentTicket/AbsentHistory/AbsentHistory.vue';
 import AbsentTicket from '@/views/ClientSide/MyAbsentTicket/AbsentTicket/AbsentTicket.vue';
 
-import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
-import SessionUtls from '@/services/SessionUtls';
 
 export default {
   name: 'AbsentTicketTab',
@@ -29,10 +27,6 @@ export default {
   },
 
   async created() {
-    this.$eventBus.$emit("show-spinner", true);
-    this._getCurrentUserName();
-    await this._getStartUser()
-    this.$eventBus.$emit("show-spinner", false);
     this.tabItems = [
       {
         tabName:  'Leave Register',
@@ -65,23 +59,5 @@ export default {
     onClickCancelButton() {
       this.isLogOutModalShowed = false;
     },
-    async _getCurrentUserName() {
-      // this.currentUserName =
-      //   await GetCurrentUserNameService.getCurrentUserName().then((res) => {
-      //     return res.username;
-      //   });
-    },
-    async _getStartUser() {
-      const response = await MyPageServices.getStartUser();
-      if(!response){
-          this.$router.push('/user/login')
-      } else {
-          console.log(response.data)
-          //Use Vuex set Data
-          this.$store.commit("setStartDataUser", response.data)
-          SessionUtls.setItem(SessionUtls.role,response.data.role)
-      }
-    },
-    
   },
 };

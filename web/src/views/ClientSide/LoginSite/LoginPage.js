@@ -18,7 +18,7 @@ export default {
   components: { Login, Notification },
   data() {
     return {
-      logoPath: require(`@/assets/logo.png`),
+      logoPath: require(`@/assets/login.png`),
       /**
        * @binding {boolean} Check Username or Password is empty
        */

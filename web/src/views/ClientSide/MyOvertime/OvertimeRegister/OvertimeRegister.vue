@@ -22,45 +22,33 @@
             Project name required!
           </span>
           <v-row>
-            <v-col cols="12" lg="6">
-              <DateTimePicker :selectDate="startDate" :dateTimePickerTitle="'Start Date *'"
-                @select-date="onInputStartDate" />
+            <v-col cols="12" lg="12">
+              <DateTimePicker :selectDate="date" :dateTimePickerTitle="'Date *'" @select-date="onInputDate" />
             </v-col>
+          </v-row>
 
-            <v-col cols="12" lg="6">
-              <Input :startTimeSetup="startTime" @on-input="onInputStartTime" :inputType="'time'" />
+          <v-row>
+            <v-col cols="12" lg="12">
+              <span style="display: block; color: #b71c1c; font-size: 15px" v-if="isDateEmpty && isRegistering">
+                End Date required!
+              </span>
             </v-col>
           </v-row>
 
           <v-row>
             <v-col cols="12" lg="6">
-              <span style="display: block; color: #b71c1c; font-size: 15px" v-if="isStartDateEmpty && isRegistering">
-                Start Date required!
-              </span>
+              <Input :startTimeSetup="startTime" @on-input="onInputStartTime" :inputType="'time'"/>
             </v-col>
-
+            <v-col cols="12" lg="6">
+              <Input :startTimeSetup="endTime" @on-input="onInputEndTime" :inputType="'time'"/>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="12" lg="6">
               <span style="display: block; color: #b71c1c; font-size: 15px" v-if="isStartTimeEmpty && isRegistering">
                 Start time required!
               </span>
             </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" lg="6">
-              <DateTimePicker :selectDate="endDate" :dateTimePickerTitle="'End Date *'" @select-date="onInputEndDate" />
-            </v-col>
-            <v-col cols="12" lg="6">
-              <Input :startTimeSetup="endTime" @on-input="onInputEndTime" :inputType="'time'" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" lg="6">
-              <span style="display: block; color: #b71c1c; font-size: 15px" v-if="isEndDateEmpty && isRegistering">
-                End Date required!
-              </span>
-            </v-col>
-
             <v-col cols="12" lg="6">
               <span style="display: block; color: #b71c1c; font-size: 15px" v-if="isEndTimeEmpty && isRegistering">
                 End time required!

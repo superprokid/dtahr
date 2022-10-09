@@ -1,6 +1,7 @@
 import tabName from "../../config/tabname";
 import SessionUtls from "../../services/SessionUtls";
 
+import { mapState } from "vuex";
 export default {
     data() {
         return {
@@ -37,7 +38,32 @@ export default {
                 }
             ],
             right: null,
+            role: '',
             currentTab: SessionUtls.getItem(SessionUtls.tabNameKey),
+        }
+    },
+    computed: {
+        ...mapState(["startDataUser"])
+    },
+
+    watch: {
+        startDataUser: {
+            handler(newVal){
+                if (newVal.role == 1) {
+                    this.items.push({
+                        title: 'Employee Management',
+                        icon: 'mdi-account-cog',
+                        to: "usermanagement",
+                        id: tabName.userManagement,
+                    },
+                    {
+                        title: 'Realtime Check',
+                        icon: 'mdi-calendar-clock-outline',
+                        to: "realtimecheck",
+                        id: tabName.realtimeCheck,
+                    })
+                }
+            }
         }
     },
     methods: {

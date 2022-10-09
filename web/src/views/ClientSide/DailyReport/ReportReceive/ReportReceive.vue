@@ -2,7 +2,7 @@
     <div id="report-receiver-page">
         <v-container>
             <v-data-table :headers="reportHeader" :items="listReports" :single-expand="true" :expanded.sync="expanded"
-                item-key="project_id" show-expand class="elevation-1">
+                item-key="dailyreport_id" show-expand class="elevation-1">
                 <template v-slot:top>
                     <v-toolbar flat>
                         <v-toolbar-title>My Report</v-toolbar-title>

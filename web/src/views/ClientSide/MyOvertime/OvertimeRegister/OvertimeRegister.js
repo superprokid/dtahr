@@ -22,8 +22,7 @@ export default {
 			projectSelected: '',
 			listProjects: [],
 
-			startDate: undefined,
-			endDate: undefined,
+			date: undefined,
 
 			startTime: '',
 			endTime: '',
@@ -31,8 +30,7 @@ export default {
 			reasonInputValue: '',
 
 			isProjectNameEmpty: true,
-			isStartDateEmpty: true,
-			isEndDateEmpty: true,
+			isDateEmpty: true,
 			isStartTimeEmpty: true,
 			isEndTimeEmpty: true,
 			isReasonEmpty: true,
@@ -47,14 +45,6 @@ export default {
 		startTime(newstartTime, oldstartTime) {
 			console.log('newstartTime ', newstartTime);
 			console.log('oldstartTime ', oldstartTime);
-		},
-		startDate: {
-			immediate: true,
-			deep: true,
-			handler(newValue) {
-				this.startDate = newValue;
-				console.log(newValue);
-			},
 		},
 	},
 	mounted() {
@@ -72,20 +62,12 @@ export default {
 				this.projectSelected = params.project_id;
 			}
 		},
-		onInputStartDate(params) {
+		onInputDate(params) {
 			if (params === '' || params === null || params === undefined) {
-				this.isStartDateEmpty = true;
+				this.isDateEmpty = true;
 			} else {
-				this.isStartDateEmpty = false;
-				this.startDate = moment(params).format(DATE_FORMAT);
-			}
-		},
-		onInputEndDate(params) {
-			if (params === '' || params === null || params === undefined) {
-				this.isEndDateEmpty = true;
-			} else {
-				this.isEndDateEmpty = false;
-				this.endDate = moment(params).format(DATE_FORMAT);
+				this.isDateEmpty = false;
+				this.date = moment(params).format(DATE_FORMAT);
 			}
 		},
 		onInputStartTime(params) {
@@ -122,8 +104,8 @@ export default {
 			this.isStartDateBeforeEndDate = false;
 			const params = {
 				projectId: this.projectSelected,
-				startDate: this.startDate + ' ' + this.startTime,
-				endDate: this.endDate + ' ' + this.endTime,
+				startDate: this.date + ' ' + this.startTime,
+				endDate: this.date + ' ' + this.endTime,
 				reason: this.reasonInputValue,
 			};
 			let startTime = moment(params.startDate, DATE_TIME_FORMAT);
@@ -133,8 +115,7 @@ export default {
 			}
 			if (
 				!params.projectId ||
-				this.isStartDateEmpty ||
-				this.isEndDateEmpty ||
+				this.isDateEmpty ||
 				this.isStartTimeEmpty ||
 				this.isEndTimeEmpty ||
 				!params.reason || this.isStartDateBeforeEndDate
