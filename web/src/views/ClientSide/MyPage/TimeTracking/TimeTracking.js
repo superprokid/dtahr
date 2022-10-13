@@ -47,6 +47,14 @@ export default {
   computed:{
     ...mapState(["startDataUser"])
   },
+  watch: {
+    startDataUser(newVal) {
+      if (newVal.workLog.work_status == 0) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = false;
+      }
+    }
+  },
   methods: {
     onInputBreakTime(params) {
       if (params === '' || params === undefined || params === null) {
@@ -222,9 +230,5 @@ export default {
   },
   mounted() {
     this._getCurrentWorklog();
-    if (this.startDataUser?.workLog?.work_status == 0) {
-      this.isClockInDisable = true;
-      this.isClockOutDisable = false;
-    }
   },
 };
