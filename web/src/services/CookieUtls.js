@@ -46,7 +46,7 @@ export default class CookieUtls {
     }
 
     static removeAllCookie() {
-        this.setAccessToken(null);
-        this.setRefreshToken(null);
+        this.setAccessToken('');
+        this.setRefreshToken('');
     }
 }
