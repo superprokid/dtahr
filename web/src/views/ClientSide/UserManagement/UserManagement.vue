@@ -27,7 +27,14 @@
                                     <div class="text_style">Personal Information </div>
                                 </v-col>
                                 <v-col cols="6">
-                                    <div style="text-align: end"><a href="">See More</a></div>
+                                    <v-app>
+                                        <div style="text-align: end">
+                                            <v-btn @click="onClickUserSeeMore" style="height: 100%; text-align: end"
+                                                text color="primary">
+                                                See More
+                                            </v-btn>
+                                        </div>
+                                    </v-app>
                                 </v-col>
                             </v-row>
                             <hr>
@@ -217,7 +224,7 @@
 
 
                                     </v-row>
-                                    <VuetifyDialog/>
+                                    <VuetifyDialog :username="userSelected.full_name" :id="userSelected.employee_id"/>
                                     <div>
                                     </div>
                                     <hr>
@@ -319,6 +326,14 @@
 
 
             </div>
+            <v-app>
+                <EmployeeModal v-model="openDialog" :propPackage="propPackage" />
+                <!-- <v-row>
+                    <v-col class="d-flex justify-center">
+                        <v-btn @click="bookDialog('Standard')" color="primary">Show dialog</v-btn>
+                    </v-col>
+                </v-row> -->
+            </v-app>
 
         </v-container>
 

@@ -13,6 +13,7 @@ import HistoryTrackingServices from '@/services/API/MyPageAPI/HistoryTrackingSer
 import { mapState } from 'vuex'
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import VuetifyDialog from '@/components/VuetifyDialog/VuetifyDialog.vue'
+import EmployeeModal from "@/components/EmployeeModal/EmployeeModal.vue";
 
 const WORKLOG_DEFAULT = {
     work_status: null,
@@ -25,7 +26,8 @@ export default {
     components: {
         DateTimePicker,
         Button,
-        VuetifyDialog
+        VuetifyDialog,
+        EmployeeModal
     },
     data() {
         return {
@@ -36,6 +38,8 @@ export default {
             isTableUserShowed: true,
             isUserManagementLayoutShowed: false,
             isUserWorklogSeeMoreShowed: false,
+            isEmployeeInformationShowed: false,
+
             listUserWorklogs: [],
 
             startDate: undefined,
@@ -48,6 +52,9 @@ export default {
             events: [],
             userTrackingHistory: {},
 
+            //Employee Modal
+            openDialog: false,
+            propPackage: {},
             
         }
     },
@@ -336,6 +343,37 @@ export default {
             this.$eventBus.$emit("show-spinner", false);
         },
 
+        async onClickUserSeeMore(){
+            // Show personal information dialog
+            const params = {
+                employeeId: this.userSelected.employee_id
+            }
+            const response = await UserManagementServices.getEmployeeInfo(params)
+            if (!response) {
+                this.$router.push('/user/login');
+                return;
+            }
+            if(response == -1){
+                alert("Something wrong, please try again!")
+                return;
+            }
+            // this.propPackage = response.data;
+            
+            // this.propPackage = response.data.map((item) =>{
+            //     return {...item,  dob: getDateString(item.dob), join_date: getDateString(item.join_date), holiday_time: item.holiday_time.toFixed(3), 
+            //                     relative_dob: getDateString(item.relative_dob)}
+            // });
+            const employeeInfo = response.data
+            this.propPackage = {
+                ...employeeInfo,
+                dob: getDateString(employeeInfo.dob), 
+                join_date: getDateString(employeeInfo.join_date), 
+                holiday_time: employeeInfo.holiday_time.toFixed(3), 
+                relative_dob: getDateString(employeeInfo.relative_dob)
+            }
+            console.log('this.propPackage',this.propPackage);
+            this.openDialog = true;
+        },
 
 
         /**

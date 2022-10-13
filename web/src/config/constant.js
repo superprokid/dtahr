@@ -36,6 +36,9 @@ export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers'
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";
 export const MANAGER_GET_REALTIME = BASE_API_USER_URL + "/manager/getrealtime";
 export const MANAGER_GET_USER_WORKLOGS = BASE_API_USER_URL + "/manager/worklog/get";
+export const MANAGER_GET_EMPLOYEE_INFO = BASE_API_USER_URL + "/manager/employee/getinfo";
+export const MANAGER_ADD_WORKLOG = BASE_API_USER_URL + "/manager/worklog/add";
+export const MANAGER_UPDATE_WORKLOG = BASE_API_USER_URL + "/manager/worklog/update";
 
 // admin url api
 export const BASE_API_ADMIN_URL = BASE_URL + '/api/admin';
