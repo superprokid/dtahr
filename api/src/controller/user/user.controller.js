@@ -28,12 +28,12 @@ const GET_ALL_USER_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(e.first_n
     + "                                         WHERE a.employee_id = aa.employee_id and a.assigned_date = aa.assigned_date) asign ON e.employee_id = asign.employee_id"
     + "                             LEFT JOIN project p ON p.project_id = asign.project_id"
     + "                         WHERE e.employer_id = ? "
-const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(first_name,' ',last_name) as full_name, work_status, IF(leave_id is not null, 1, 0) as isOff "
+const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(first_name,' ',last_name) as full_name, IF(work_status is null or is_not_working = 1, null, work_status) as work_status, IF(leave_id is not null, 1, 0) as isOff "
     + "                                 FROM employee e "
     + "		                                LEFT JOIN (SELECT * FROM worklog WHERE work_date = ?) w ON e.employee_id = w.employee_id"
     + "		                                LEFT JOIN ( SELECT * FROM `leave` WHERE CAST(start_date AS DATE) = ? and `status` = 1) l ON e.employee_id = l.employee_id"
     + "                                 WHERE e.employer_id = ? ORDER BY e.employee_id ASC"
-const GET_USER_INFO_BY_ID = "SELECT * FROM employee WHERE employee_id = ?";
+const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ?";
 
 async function verifyUser(data) {
     try {
