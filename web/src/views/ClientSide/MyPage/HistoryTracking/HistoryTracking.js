@@ -28,6 +28,11 @@ export default {
             return this.events.slice().reverse()
         },
     },
+    filters: {
+        holidayDisplay(value) {
+            return value ? value.toFixed(3) : 0 
+        }
+    },
     created() {
         let date = new Date();
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
