@@ -57,24 +57,23 @@ export default {
   },
   methods: {
     onInputStartDate(date) {
+      if(this.startDate == moment(date).format('YYYY-MM-DD')) return
       if (!date) {
         this.startDate = moment().startOf('month').format('YYYY-MM-DD')
       } else {
         this.startDate = moment(date).format('YYYY-MM-DD')
       }
-      console.log(date,"1")
       this.getGroupStatus()
     },
 
     onInputEndDate(date) {
+      if(this.endDate == moment(date).format('YYYY-MM-DD')) return
       if (!date) {
         this.endDate = moment().format('YYYY-MM-DD')  
       } else {
         this.endDate = moment(date).format('YYYY-MM-DD')
       }
-      console.log(date,"2")
-      if(this.endDate != moment(date).format('YYYY-MM-DD'))
-        this.getGroupStatus()
+      this.getGroupStatus()
     },
 
     async getGroupStatus() {

@@ -23,6 +23,7 @@ const axiosClient = {
 	// Overwrite method POST
 	post: async (url, data, config) => {
 		getAccessTokenHeader();
+		console.log(data)
 		return axiosBase.post(url, data, config);
 	},
 
