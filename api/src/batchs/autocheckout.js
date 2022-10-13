@@ -11,7 +11,7 @@ const GET_VALID_WORKLOG_TODAY = "SELECT * FROM worklog WHERE work_date = CAST(no
 const GET_VALID_EMPLOYEES = "SELECT employee_id, holiday_time FROM employee WHERE is_deleted <> 1";
 const GET_WORKTIME = "SELECT * FROM worktime WHERE approve_date <= now() ORDER BY approve_date DESC LIMIT 1";
 
-const INSERT_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total) VALUES (?, ?, ?, ?)";
+const INSERT_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total, is_not_working) VALUES (?, ?, ?, ?, 1)";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, now())";
 const UPDATE_WORKLOG = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
 const UPDATE_HOLIDAY_TIME = "UPDATE employee SET holiday_time = holiday_time - ? WHERE employee_id = ?";
@@ -77,7 +77,7 @@ async function processForNotWorking(connection, employee) {
     const today = moment().format('YYYY-MM-DD');
     await dbaccess.queryTransaction(connection, INSERT_WORKLOG, [employee.employee_id, WORKLOG_STATUS.checkout, today, 0]);
     await dbaccess.queryTransaction(connection, UPDATE_HOLIDAY_TIME, [1, employee.employee_id])
-    await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_AUTO_DESC_HOLIDAY + `${employee.holiday_time} to ${employee.holiday_time - 1}`]);
+    await dbaccess.queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employee.employee_id, WORKHISTORY_STATUS.autoDetectedSystem, DESCIPRTION_AUTO_DESC_HOLIDAY + `${employee.holiday_time?.toFixed(3)} to ${(employee.holiday_time - 1)?.toFixed(3)}`]);
     logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee: ${employee.employee_id} process for not working done`);
 }
 
