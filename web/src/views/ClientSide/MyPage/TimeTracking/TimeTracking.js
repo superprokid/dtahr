@@ -52,10 +52,20 @@ export default {
       if (newVal.workLog.work_status == 0) {
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
+      } else {
+        this.isClockInDisable = false;
+        this.isClockOutDisable = true;
       }
     }
   },
   methods: {
+    checkClockIn() {
+      if (!this.startDataUser.workLog) return
+      if (this.startDataUser.workLog.work_status == 0) {
+          this.isClockInDisable = true;
+          this.isClockOutDisable = false;
+      }
+    },
     onInputBreakTime(params) {
       if (params === '' || params === undefined || params === null) {
         this.isBreakTimeTotalEmpty = true;
@@ -228,7 +238,8 @@ export default {
 
     },
   },
-  mounted() {
+  created() {
     this._getCurrentWorklog();
+    this.checkClockIn()
   },
 };
