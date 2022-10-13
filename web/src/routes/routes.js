@@ -84,9 +84,18 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => { 
+    let accessToken = CookieUtls.getAccessToken()
+    let refreshToken = CookieUtls.getRefreshToken()
+    let role = CookieUtls.getCookie(CookieUtls.role);
     const publicPages = ['/user/login','/admin/login']
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {
+        if (to.path == '/user/login') {
+            if(accessToken || refreshToken) return next({path: '/user/mypage'})
+        }
+        // else {
+        //     return next({path: '/admin/home'})
+        // }
         return next()
     }
     let session = SessionUtls.getAdminSession()
@@ -99,13 +108,9 @@ router.beforeEach((to, from, next) => {
                 path: from.path
             })
         }
-        let accessToken = CookieUtls.getAccessToken()
-        let refreshToken = CookieUtls.getRefreshToken()
-        let role = CookieUtls.getCookie(CookieUtls.role);
         if (accessToken || refreshToken) {
             let path = to.path.split("/")[2]
             if (['usermanagement', 'realtimecheck'].includes(path) && role != 1) {
-                console.log("uk")
                 return next({
                     path: from.path
                 })
