@@ -1,11 +1,11 @@
-import AddWorklog from '@/components/AddWorklog/AddWorklog.vue';
 import EditWorklog from '@/components/EditWorklog/EditWorklog.vue';
+import AddHoliday from '@/components/AddHoliday/AddHoliday.vue';
 
 export default {
     name: 'VuetifyDialog',
     components: {
-        AddWorklog,
         EditWorklog,
+        AddHoliday,
     },
     props: {
         username: {
@@ -19,7 +19,7 @@ export default {
     },
     data() {
         return {
-            AddWorklogDialog: false,
+            AddHolidayDialog: false,
             EditWorklogDialog: false,
         };
     },
@@ -27,15 +27,17 @@ export default {
     methods: {
         onClose(screen) {
             if(screen == 1)
-                this.AddWorklogDialog = false;
-            else if (screen == 2)
                 this.EditWorklogDialog = false;
+            else if (screen == 2)
+                this.AddHolidayDialog = false;
         },
-        onSaveAddWorklog() {
-            this.AddWorklogDialog = false;
+        onSaveAddHoliday() {
+            this.AddHolidayDialog = false;
+            this.$emit('on-update-worklog');
         },
         onSaveEditWorklog() {
-            this.AddWorklogDialog = false;
+            this.EditWorklogDialog = false;
+            this.$emit('on-update-worklog');
         }
     },
 }
