@@ -42,6 +42,7 @@ export default {
     },
 
     mounted() {
+        console.log("mounted history treacking");
         this.$eventBus.$emit("show-spinner", true);
         this._getUserHistoryTracking();
 

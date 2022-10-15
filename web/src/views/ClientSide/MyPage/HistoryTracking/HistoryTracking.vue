@@ -76,8 +76,8 @@
             small
           >
             <v-row justify="space-between">
-              <v-col class="description-timeline" cols="7">{{ item.workhistory_description }} </v-col>
-              <v-col class="text-right" cols="5">
+              <v-col class="description-timeline">{{ item.workhistory_description }} </v-col>
+              <v-col class="text-right" cols="3">
                 {{ new Date(item.work_date).toLocaleDateString() }}
               </v-col>
             </v-row>

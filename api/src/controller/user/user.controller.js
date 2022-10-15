@@ -20,7 +20,7 @@ const GET_EMPLOYEE_INFO = "SELECT e1.employee_id, e1.first_name, e1.last_name, e
     + "                     LEFT JOIN employee e2 on e1.employer_id = e2.employee_id "
     + "                     WHERE e1.employee_id = ? LIMIT 1 ";
 const GET_ALL_USER = "SELECT employee_id, CONCAT(first_name, ' ', last_name) as name, avt FROM employee WHERE is_deleted <> 1"
-const GET_ALL_USER_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(e.first_name, ' ' ,e.last_name) as full_name, e.dob, gender, join_date, phone, main_skill, e.email, e.job_role, salary, p.project_name"
+const GET_ALL_USER_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(e.first_name, ' ' ,e.last_name) as full_name, e.dob, e.holiday_time, gender, join_date, phone, main_skill, e.email, e.job_role, salary, p.project_name, p.project_id"
     + "                         FROM employee e "
     + "                             LEFT JOIN (SELECT a.project_id, a.employee_id, a.assigned_date "
     + "                                         FROM assignment a, "
