@@ -6,7 +6,7 @@
             <!-- show table users to select -->
             <div v-if="isTableUserShowed">
                 <v-app id="usermanagement-table-container">
-                    <v-data-table :headers="headers" :items="listUsers" item-key="name"
+                    <v-data-table :headers="headers" :items="listUsers" item-key="name" :item-class="setItemRowCLass"
                         class="elevation-1 usermanagement-table" :search="search" :custom-filter="filterOnlyCapsText"
                         @click:row="clickOnUser">
                         <template v-slot:top>
@@ -401,4 +401,10 @@
 <script src="./UserManagement.js"></script>
 <style scoped src="./UserManagement.css">
 
+</style>
+
+<style>
+.item-row {
+    cursor: pointer;
+}
 </style>

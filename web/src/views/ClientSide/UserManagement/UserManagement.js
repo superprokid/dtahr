@@ -189,6 +189,10 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        setItemRowCLass(item) {
+            console.log('item', item);
+            return 'item-row';
+        },
         onUpdateWorklog() {
             const params = {
                 startDate: moment(this.startDate).format('YYYY-MM-DD'),
