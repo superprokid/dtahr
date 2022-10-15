@@ -6,6 +6,9 @@ import AbsentRegister from '@/views/ClientSide/MyAbsentTicket/AbsentRegister/Abs
 import AbsentHistory from '@/views/ClientSide/MyAbsentTicket/AbsentHistory/AbsentHistory.vue';
 import AbsentTicket from '@/views/ClientSide/MyAbsentTicket/AbsentTicket/AbsentTicket.vue';
 
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
+
 
 export default {
   name: 'AbsentTicketTab',
@@ -59,5 +62,9 @@ export default {
     onClickCancelButton() {
       this.isLogOutModalShowed = false;
     },
+  },
+
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.leaveUser);
   },
 };

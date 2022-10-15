@@ -6,6 +6,9 @@ import OvertimeRegister from '@/views/ClientSide/MyOvertime/OvertimeRegister/Ove
 import OvertimeHistory from '@/views/ClientSide/MyOvertime/OvertimeHistory/OvertimeHistory.vue';
 import OvertimeTicket from '@/views/ClientSide/MyOvertime/OvertimeTicket/OvertimeTicket.vue';
 
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
+
 
 export default {
   name: 'EmployeeTab',
@@ -65,5 +68,9 @@ export default {
       //     return res.username;
       //   });
     }
+  },
+
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.overtimeUser);
   },
 };

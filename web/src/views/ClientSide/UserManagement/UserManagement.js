@@ -15,6 +15,9 @@ import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import VuetifyDialog from '@/components/VuetifyDialog/VuetifyDialog.vue'
 import EmployeeModal from "@/components/EmployeeModal/EmployeeModal.vue";
 
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
+
 const WORKLOG_DEFAULT = {
     work_status: null,
     work_total: 0,
@@ -399,5 +402,9 @@ export default {
 				getDateString(new Date(date))
 			);
 		},
+    },
+
+    beforeCreate() {
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.userManagement);
     },
 }

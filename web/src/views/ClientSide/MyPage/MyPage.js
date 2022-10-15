@@ -5,6 +5,9 @@ import Button from '@/components/Button/Button.vue';
 import TimeTracking from '@/views/ClientSide/MyPage/TimeTracking/TimeTracking.vue';
 import HistoryTracking from '@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue';
 
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
+
 export default {
   name: 'EmployeeTab',
   data() {
@@ -53,5 +56,9 @@ export default {
     onClickCancelButton() {
       this.isLogOutModalShowed = false;
     },
+  },
+
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.myPageUser);
   },
 };

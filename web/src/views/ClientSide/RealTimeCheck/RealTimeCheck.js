@@ -2,6 +2,9 @@ import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 
 import RealtimeCheckService from "@/services/API/RealtimeCheck/RealtimeCheck"
 
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
+
 import moment from "moment"
 export default {
   name: 'RealTimeCheck',
@@ -129,5 +132,9 @@ export default {
         return 'Not Working'
       }
     }
-  }
+  },
+
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.realtimeCheck);
+  },
 }
