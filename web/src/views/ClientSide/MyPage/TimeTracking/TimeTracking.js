@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     startDataUser(newVal) {
-      if (newVal.workLog.work_status == 0) {
+      if (newVal.workLog?.work_status == 0) {
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
       } else {
@@ -61,7 +61,7 @@ export default {
   methods: {
     checkClockIn() {
       if (!this.startDataUser.workLog) return
-      if (this.startDataUser.workLog.work_status == 0) {
+      if (this.startDataUser.workLog?.work_status == 0) {
           this.isClockInDisable = true;
           this.isClockOutDisable = false;
       }
