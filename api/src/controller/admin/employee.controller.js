@@ -147,7 +147,7 @@ async function createNewEmployee(req, res) {
         dbaccess.releaseConnection(connection);
         const sendMailResult = await sendMail(email, password);
         if (!sendMailResult) {
-            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] group_id not exist`);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] end mail failed`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
             res.status(400).send('Can not send your password to email, please check your email');

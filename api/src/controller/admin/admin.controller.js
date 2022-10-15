@@ -61,7 +61,6 @@ async function login(req, res) {
         today.setHours(today.getHours() + 1);
         // update login session
         queryTransaction(connection, UPDATE_LOGIN_STATUS, [session, today, username])
-        console.log("session", session);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] - response`);
         res.status(200).send({
             loginSession: session

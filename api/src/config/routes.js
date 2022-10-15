@@ -14,6 +14,7 @@ const dailyreportController = require('../controller/user/dailyreport.controller
 // Import for admin controller
 const adminController = require('../controller/admin/admin.controller');
 const adminEmpController = require('../controller/admin/employee.controller');
+const adminGroupController = require('../controller/admin/group.controller');
 
 // user
 Router.post('/user/login', userController.login);
@@ -47,12 +48,17 @@ Router.post('/user/manager/update/overtime', authen, overtimeController.updateSt
 Router.get('/user/manager/getalluser', authen, userController.getAllUserByManager);
 Router.get('/user/manager/getrealtime', authen, userController.getRealTimeStatusByManager);
 Router.get('/user/manager/worklog/get', authen, worklogController.getWorkLogOfUserByManager);
+Router.get('/user/manager/workhistory/get', authen, worklogController.getWorkHistoryByManager);
 Router.get('/user/manager/employee/getinfo', authen, userController.getEmployeeInfoById);
-Router.post('/user/manager/worklog/add', authen, worklogController.addNewWorklogByManager);
+Router.get('/user/manager/project/get', authen, projectController.getDetailsPojectByManager);
+Router.post('/user/manager/worklog/update', authen, worklogController.updateWorklogByManager);
+Router.post('/user/manager/holiday/update', authen, worklogController.updateHolidayTimeByManager);
 
 // admin
 Router.post('/admin/login', adminController.login);
 Router.get('/admin/getalluser', adminAuthen, adminController.getAllUser);
 Router.post('/admin/create/employee', adminEmpController.createNewEmployee);
+Router.get('/admin/group/get', adminAuthen, adminGroupController.getAllGroup);
+Router.get('/admin/group/getalluser', adminAuthen, adminGroupController.getAllEmployeeInGroup);
 
 module.exports = Router;
