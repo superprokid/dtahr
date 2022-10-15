@@ -1,5 +1,7 @@
 import HolidayService from "../../../services/API/HolidayAPI/HolidayServices";
 import { getDateString } from "../../../services/utilities";
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
 
 export default {
     data() {
@@ -50,4 +52,8 @@ export default {
             })
         }
     },
+
+    beforeCreate() {
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.holidayUser);
+      },
 }

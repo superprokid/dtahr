@@ -69,8 +69,11 @@ export default {
     methods: {
         redirect(item) {
             this.$router.push(item.to);
-            SessionUtls.setItem(SessionUtls.tabNameKey, item.id);
             this.currentTab = item.id;
         }
-    }
+    },
+
+    mounted() {
+        this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+    },
 }
