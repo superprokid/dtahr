@@ -48,6 +48,9 @@ export default {
             startDate: undefined,
             endDate: undefined,
 
+            startActivityDate: undefined,
+            endActivityDate: undefined,
+
             singleUserWorklog: WORKLOG_DEFAULT,
 
 
@@ -58,7 +61,13 @@ export default {
             //Employee Modal
             openDialog: false,
             propPackage: {},
-            
+
+            isGoBackUserManagement: false,
+
+            specificHistoryOfUser: {},
+            informationOfUserClicked: {},
+            projectUserJoined: {},
+
         }
     },
     created() {
@@ -67,6 +76,9 @@ export default {
         this.startDate = firstDay;
         let lastDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         this.endDate = lastDate;
+
+        this.startActivityDate = firstDay;
+        this.endActivityDate = lastDate;
     },
     computed: {
         ...mapState(["startDataUser"]),
@@ -157,17 +169,44 @@ export default {
                     value: 'work_total'
                 },
             ]
-        }
-
+        },
     },
+
+    filters: {
+        holidayDisplay(value) {
+            return value ? value.toFixed(3) : 0 
+        },
+        dateFormatDisplay(value){
+            return moment(value).format("YYYY-MM-DD")
+        }
+    },
+
     async mounted() {
         this.$eventBus.$emit('show-spinner', true);
         // await this._getListHoliday();
         await this._getListUser();
-        this._getUserHistoryTracking();
+        // this._getUserHistoryTracking();
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        onUpdateWorklog() {
+            const params = {
+                startDate: moment(this.startDate).format('YYYY-MM-DD'),
+                endDate: moment(this.endDate).format('YYYY-MM-DD'),
+                employeeId: this.userSelected.employee_id,
+            }
+            this._getHistoryActivityOfSpecificUser(params)
+        },
+        toggleIsManagementFeature(){
+            this.isUserWorklogSeeMoreShowed = !this.isUserWorklogSeeMoreShowed
+            this.isUserManagementLayoutShowed = !this.isUserManagementLayoutShowed
+        },
+
+        toggleIsUserManagement(){
+            this.isTableUserShowed = !this.isTableUserShowed
+            this.isUserManagementLayoutShowed = !this.isUserManagementLayoutShowed
+        },
+
         filterOnlyCapsText(value, search, item) {
             item - 1;
             return value != null &&
@@ -197,13 +236,13 @@ export default {
                 alert("Something wrong, please try again!")
                 return;
             }
-
+            console.log('listUserWorklogs before', response.data);
             this.listUserWorklogs = response.data.map(item => {
                 return {...item, full_name: this.userSelected.full_name, work_date: moment(item.work_date).format('YYYY-MM-DD'), create_at: this._formatDateTime(item.create_at)
                                 , update_at: this._formatDateTime(item.update_at), work_status: item.work_status == 0 ? 'Đã Checkin' : 'Đã Checkout'
                                 , }
             })
-            // console.log('listUserWorklogs', this.listUserWorklogs);
+            console.log('listUserWorklogs after', this.listUserWorklogs);
 
         },
         async _getOneWorklog(params){
@@ -228,6 +267,58 @@ export default {
             };
         },
 
+        async _getHistoryActivityOfSpecificUser(params){
+            const response = await UserManagementServices.getHistoryWorklogsOfUser(params)
+            if (!response) {
+                this.$router.push('/user/login');
+                return;
+            }
+            if(response == -1){
+                alert("Something wrong, please try again!")
+                return;
+            }
+            this.specificHistoryOfUser = this._groupArrayByDateKey(response.data.reverse(), "work_date")
+            console.log('this.specificHistoryOfUser',this.specificHistoryOfUser);
+        },
+
+        _groupArrayByDateKey(arr, dateKey) {
+            return arr.reduce(function (previousResult, item) {
+                const key = moment(item[dateKey]).format('YYYY-MM-DD');
+                previousResult[key] = previousResult[key] || [];
+                previousResult[key].push(item);
+                return previousResult;
+            }, {});
+        },
+
+        async _getSpecificEmployeeInfo(params){
+
+            const response = await UserManagementServices.getEmployeeInfo(params)
+            if (!response) {
+                this.$router.push('/user/login');
+                return;
+            }
+            if(response == -1){
+                alert("Something wrong, please try again!")
+                return;
+            }
+            this.informationOfUserClicked = response.data;
+        },
+
+        async _getSpecificProjectUserJoined(params){
+            const response = await UserManagementServices.getProjectSpecificUserJoined(params)
+            if (!response) {
+                this.$router.push('/user/login');
+                return;
+            }
+            if(response == -1){
+                alert("Something wrong, please try again!")
+                return;
+            }
+            this.projectUserJoined = response.data;
+            console.log('this.projectUserJoined',this.projectUserJoined);
+
+        },
+
         async clickOnUser(userSelected){
             console.log('item',userSelected);
             //Hide table list users
@@ -235,16 +326,33 @@ export default {
             //Show user selected management
             this.isUserManagementLayoutShowed = true;
             this.userSelected = userSelected;
-
-
-            this.$eventBus.$emit('show-spinner', true);
+            const userActivityParams = {
+                employeeId:  userSelected.employee_id
+            }
             const params = {
                 startDate: moment(new Date()).format('YYYY-MM-DD'),
                 endDate: moment(new Date()).format('YYYY-MM-DD'),
                 employeeId: this.userSelected.employee_id,
             }
-            await this._getOneWorklog(params);
+
+            const specificUserInfoParams = {
+                employeeId:  userSelected.employee_id
+            }
+
+            const specificProjectUserJoinedParams = {
+                employeeId:  userSelected.employee_id,
+                projectId: userSelected.project_id
+            }
+
+            this.$eventBus.$emit('show-spinner', true);
             
+            await this._getOneWorklog(params);
+
+            await this._getHistoryActivityOfSpecificUser(userActivityParams)
+
+            await this._getSpecificEmployeeInfo(specificUserInfoParams)
+
+            await this._getSpecificProjectUserJoined(specificProjectUserJoinedParams)
             this.$eventBus.$emit('show-spinner', false);
         },
         async onClickWorklogSeeMore(){
@@ -257,7 +365,7 @@ export default {
                 endDate: moment(this.endDate).format('YYYY-MM-DD'),
                 employeeId: this.userSelected.employee_id,
             }
-            console.log('params', params);
+            // console.log('params', params);
             this.$eventBus.$emit('show-spinner', true);
             await this._getListWorklogsOfUser(params);
             this.$eventBus.$emit('show-spinner', false);
@@ -274,6 +382,7 @@ export default {
                 endDate: moment(this.endDate).format('YYYY-MM-DD'),
                 employeeId: this.userSelected.employee_id,
             }
+            console.log('param',param);
             this.$eventBus.$emit("show-spinner", true);
             await this._getListWorklogsOfUser(param);
             this.$eventBus.$emit("show-spinner", false);
@@ -286,23 +395,46 @@ export default {
                 endDate: moment(this.endDate).format('YYYY-MM-DD'),
                 employeeId: this.userSelected.employee_id,
             }
+            console.log('param',param);
             this.$eventBus.$emit("show-spinner", true);
             await this._getListWorklogsOfUser(param);
             this.$eventBus.$emit("show-spinner", false);
         },
 
+        async onInputStartActivityDate(params) {
+            this.startActivityDate = new Date(params)
+            let param = {
+                startDate: moment(this.startActivityDate).format('YYYY-MM-DD'),
+                endDate: moment(this.endActivityDate).format('YYYY-MM-DD'),
+                employeeId: this.userSelected.employee_id,
+            }
+            this.$eventBus.$emit("show-spinner", true);
+            await this._getHistoryActivityOfSpecificUser(param);
+            this.$eventBus.$emit("show-spinner", false);
+        },
 
+        async onInputEndActivityDate(params) {
+            this.endActivityDate = new Date(params)
+            let param = {
+                startDate: moment(this.startActivityDate).format('YYYY-MM-DD'),
+                endDate: moment(this.endActivityDate).format('YYYY-MM-DD'),
+                employeeId: this.userSelected.employee_id,
+            }
+            this.$eventBus.$emit("show-spinner", true);
+            await this._getHistoryActivityOfSpecificUser(param);
+            this.$eventBus.$emit("show-spinner", false);
+        },
 
 
         // History tracking of user
-        async _getUserHistoryTracking() {
-            const response = await HistoryTrackingServices.getHistoryTrackingOfUser();
-            if (!response) {
-                this.$router.push('/user/login')
-            } else {
-                this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
-            }
-        },
+        // async _getUserHistoryTracking() {
+        //     const response = await HistoryTrackingServices.getHistoryTrackingOfUser();
+        //     if (!response) {
+        //         this.$router.push('/user/login')
+        //     } else {
+        //         this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
+        //     }
+        // },
         _groupArrayByDateKey(arr, dateKey) {
             return arr.reduce(function (previousResult, item) {
                 const key = moment(item[dateKey]).format('YYYY-MM-DD');
@@ -310,40 +442,6 @@ export default {
                 previousResult[key].push(item);
                 return previousResult;
             }, {});
-        },
-
-        async onInputStartDate(params) {
-            this.startDate = new Date(params)
-            let param = {
-                startDate: moment(this.startDate).format('YYYY-MM-DD'),
-                endDate: moment(this.endDate).format('YYYY-MM-DD')
-            }
-            this.$eventBus.$emit("show-spinner", true);
-            let response = await HistoryTrackingServices.getHistoryTrackingWithFilter(param)
-            if (!response) {
-                this.$router.push('/user/login')
-            } else {
-                console.log(response)
-                this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
-            }
-            this.$eventBus.$emit("show-spinner", false);
-        },
-
-        async onInputEndDate(params) {
-            this.endDate = new Date(params)
-            let param = {
-                startDate: moment(this.startDate).format('YYYY-MM-DD'),
-                endDate: moment(this.endDate).format('YYYY-MM-DD')
-            }
-            this.$eventBus.$emit("show-spinner", true);
-            let response = await HistoryTrackingServices.getHistoryTrackingWithFilter(param)
-            if (!response) {
-                this.$router.push('/user/login')
-            } else {
-                console.log(response)
-                this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
-            }
-            this.$eventBus.$emit("show-spinner", false);
         },
 
         async onClickUserSeeMore(){

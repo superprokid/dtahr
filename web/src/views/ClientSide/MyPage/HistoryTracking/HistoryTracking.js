@@ -63,6 +63,7 @@ export default {
                 this.$router.push('/user/login')
             } else {
                 this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
+                console.log("this.userTrackingHistory",this.userTrackingHistory);
             }
         },
         _groupArrayByDateKey(arr, dateKey) {

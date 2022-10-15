@@ -16,6 +16,9 @@ import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
 import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue"
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 
+// Admin Side
+import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
+
 Vue.use(Router);
 
 const router = new Router({
@@ -33,7 +36,7 @@ const router = new Router({
                 },
                 {
                     path: 'home',
-                    component: MyPage
+                    component: AdminDashboard
                 }
             ]
         },

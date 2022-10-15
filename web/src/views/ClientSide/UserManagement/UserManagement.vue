@@ -1,7 +1,7 @@
 <template>
     <div id="usermanagement">
         <v-container class="main-page">
-            <div class="page-title"> USER MANAGEMENT </div>
+            <div class="page-title" v-if="!isUserManagementLayoutShowed && !isUserWorklogSeeMoreShowed"> USER MANAGEMENT </div>
 
             <!-- show table users to select -->
             <div v-if="isTableUserShowed">
@@ -18,6 +18,10 @@
 
             <!-- show usermanagement feature -->
             <div v-if="isUserManagementLayoutShowed">
+                <div class="page-edit-report-title" @click="toggleIsUserManagement">
+                    <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon>
+                    EMPLOYEE MANAGEMENT
+                </div>
                 <v-row>
                     <!-- user information -->
                     <v-col cols="4">
@@ -42,16 +46,17 @@
                             <v-app>
                                 <v-list-item three-line>
                                     <v-list-item-content>
-                                        <div class="text-overline ">
-                                            Employee ID: {{userSelected.employee_id}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Full Name: {{userSelected.full_name}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Email: {{userSelected.email}}
-                                        </div>
                                         <!-- <div class="text-overline ">
+                                            Employee ID:
+                                             
+                                        </div>
+                                        <div class="text-overline ">
+                                            Full Name: 
+                                        </div>
+                                        <div class="text-overline ">
+                                            Email: 
+                                        </div>
+                                        <div class="text-overline ">
                                             DOB: {{userSelected.dob}}
                                         </div>
                                         <div class="text-overline ">
@@ -59,9 +64,9 @@
                                         </div>
                                         <div class="text-overline ">
                                             Phone: {{userSelected.phone}}
-                                        </div> -->
+                                        </div>
                                         <div class="text-overline ">
-                                            Main Skill: {{userSelected.main_skill}}
+                                            Main Skill: 
                                         </div>
                                         <div class="text-overline ">
                                             Salary: {{userSelected.salary}}
@@ -71,12 +76,35 @@
                                         </div>
                                         <div class="text-overline ">
                                             Working in Project: {{userSelected.project_name}}
+                                        </div> -->
+
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Employee ID:</span>
+                                            <span class="subtitle-2">{{userSelected.employee_id}}</span> 
                                         </div>
-                                        <!-- <v-list-item-title class="text-h5 mb-1">
-                                            Headline 5
-                                        </v-list-item-title>
-                                        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully
-                                        </v-list-item-subtitle> -->
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Full Name:</span>
+                                            <span class="subtitle-2">{{userSelected.full_name}}</span> 
+                                        </div>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Email:</span>
+                                            <span class="subtitle-2">{{userSelected.email}}</span> 
+                                        </div>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Main Skill:</span>
+                                            <span class="subtitle-2">{{userSelected.main_skill}}</span> 
+                                        </div>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Salary:</span>
+                                            <span class="subtitle-2">{{userSelected.salary}}</span> 
+                                        </div>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Join Date:</span>
+                                            <span class="subtitle-2">{{userSelected.join_date}}</span> 
+                                        </div>
+                                        
+
+                                        
                                     </v-list-item-content>
 
                                     <v-list-item-avatar class="rounded-circle" tile size="80" color="grey">
@@ -93,7 +121,7 @@
                         <v-card style="padding: 10px; height: 100%;" class="pa-2" outlined>
                             <v-row class="d-flex flex-row justify-space-between">
                                 <v-col cols="6">
-                                    <div class="text_style">Working projects</div>
+                                    <div class="text_style">Working Project</div>
                                 </v-col>
                                 <!-- <v-col cols="6">
                                     <v-app>
@@ -111,23 +139,40 @@
                             <v-app>
                                 <v-list-item three-line>
                                     <v-list-item-content>
-                                        <div class="text-overline ">
-                                            Project ID: 18110072
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Project ID:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.project_id}}</span>
+                                             
                                         </div>
-                                        <div class="text-overline ">
-                                            Project Name: {{userSelected.project_name}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Project Name:</span>
+                                            <span class="subtitle-2" style="font-size: 0.75rem">{{projectUserJoined.project_name}}</span>
                                         </div>
-                                        <div class="text-overline ">
-                                            Client Name: Dinh Tuan An
+                                        <!-- <div class=" ">
+                                            Project Manager ID: {{projectUserJoined.project_manager_id}}
+                                        </div> -->
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Project Manager Name:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.project_manager_name}}</span>
                                         </div>
-                                        <div class="text-overline ">
-                                            Manager Name: ThangLD
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Client Name:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.client_id}}</span>
                                         </div>
-                                        <div class="text-overline ">
-                                            Number of people in the project: 5
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Number People:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.number}}</span>
+                                             
                                         </div>
-                                        <div class="text-overline ">
-                                            Join Project Date: 2022-01-01
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Employee Join Date:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.assigned_date | dateFormatDisplay}}</span>
+                                             
+                                        </div>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1"> Manager Join Date:</span>
+                                            <span class="subtitle-2">{{projectUserJoined.project_manager_assigned_date | dateFormatDisplay}}</span>
+                                            
                                         </div>
 
                                     </v-list-item-content>
@@ -161,26 +206,33 @@
                             <v-app>
                                 <v-list-item three-line>
                                     <v-list-item-content>
-                                        <div class="text-overline ">
-                                            Employee ID: {{userSelected.employee_id}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1" >Employee ID:</span>
+                                            <span class="subtitle-2">{{userSelected.employee_id}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Full Name: {{userSelected.full_name}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Full Name:</span>
+                                            <span class="subtitle-2">{{userSelected.full_name}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Work Date: <span>{{singleUserWorklog.work_date}}</span>
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1"> Work Date:</span>
+                                            <span class="subtitle-2">{{singleUserWorklog.work_date}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Checkin At: {{singleUserWorklog.create_at}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Checkin At:</span>
+                                            <span class="subtitle-2">{{singleUserWorklog.create_at}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Recent Activity: {{singleUserWorklog.update_at}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Recent Activity:</span>
+                                            <span class="subtitle-2">{{singleUserWorklog.update_at}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Status: {{singleUserWorklog.work_status}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Status:</span>
+                                            <span class="subtitle-2">{{singleUserWorklog.work_status}}</span> 
                                         </div>
-                                        <div class="text-overline ">
-                                            Work Total: {{singleUserWorklog.work_total}}
+                                        <div class=" ">
+                                            <span class="text-overline blue--text text--lighten-1">Work Total:</span>
+                                            <span class="subtitle-2"> {{singleUserWorklog.work_total}}</span> 
                                         </div>
 
                                         <!-- <v-list-item-title class="text-h5 mb-1">
@@ -208,29 +260,30 @@
                                         <v-col class="d-flex align-end">
                                             <h4 class="d-inline-block ">Current Annual Holiday: </h4>
                                             <h4 class="d-inline-block red--text ml-1">
-                                                {{startDataUser.holiday_time.toFixed(3)}}</h4>
+                                                {{informationOfUserClicked.holiday_time | holidayDisplay}}</h4>
 
                                         </v-col>
                                         <v-col cols="3" class="d-flex align-items-center">
-                                            <DateTimePicker v-if="startDate" :selectDate="startDate"
-                                                @select-date="onInputStartDate" :dateTimePickerTitle="'From'">
+                                            <DateTimePicker v-if="startActivityDate" :selectDate="startActivityDate"
+                                                @select-date="onInputStartActivityDate" :dateTimePickerTitle="'From'">
                                             </DateTimePicker>
                                         </v-col>
                                         <v-col cols="3" class="d-flex align-items-center">
-                                            <DateTimePicker v-if="endDate" :selectDate="endDate"
-                                                @select-date="onInputEndDate" :dateTimePickerTitle="'To'">
+                                            <DateTimePicker v-if="endActivityDate" :selectDate="endActivityDate"
+                                                @select-date="onInputEndActivityDate" :dateTimePickerTitle="'To'">
                                             </DateTimePicker>
                                         </v-col>
 
 
                                     </v-row>
-                                    <VuetifyDialog :username="userSelected.full_name" :id="userSelected.employee_id"/>
+                                    <VuetifyDialog :username="userSelected.full_name" :id="userSelected.employee_id"
+                                    @on-update-worklog="onUpdateWorklog"/>
                                     <div>
                                     </div>
                                     <hr>
                                     <div style="height: 600px; overflow-y: auto; padding: 0 20px;">
                                         <v-timeline dense clipped style="padding-top: 0; margin-top: 10px;">
-                                            <div v-for="(value, index) in Object.keys(userTrackingHistory)"
+                                            <div v-for="(value, index) in Object.keys(specificHistoryOfUser)"
                                                 :key="index">
                                                 <v-timeline-item fill-dot
                                                     class="black--text mb-6 d-flex align-items-center"
@@ -239,7 +292,7 @@
                                                     <p class="title-timeline">End activities {{ value }}</p>
                                                 </v-timeline-item>
 
-                                                <v-timeline-item v-for="(item, index) in userTrackingHistory[value]"
+                                                <v-timeline-item v-for="(item, index) in specificHistoryOfUser[value]"
                                                     :key="index" class="mb-4" v-bind:color="
                                                     item.workhistory_status == 0
                                                         ? 'green'
@@ -269,6 +322,7 @@
                                                         </v-col>
                                                     </v-row>
                                                 </v-timeline-item>
+                                                
 
                                                 <v-timeline-item fill-dot
                                                     class="black--text mb-12 d-flex align-items-center" color="teal"
@@ -276,7 +330,7 @@
                                                     <p class="title-timeline">Start activities {{ value }}</p>
                                                 </v-timeline-item>
                                                 <v-timeline-item class="mb-4" hide-dot
-                                                    v-if="index < Object.keys(userTrackingHistory).length - 1 ">
+                                                    v-if="index < Object.keys(specificHistoryOfUser).length - 1 ">
                                                 </v-timeline-item>
                                             </div>
                                         </v-timeline>
@@ -298,7 +352,10 @@
 
             <!-- Show worklogs of specific user -->
             <div v-if="isUserWorklogSeeMoreShowed">
-
+                <div class="page-edit-report-title" @click="toggleIsManagementFeature">
+                    <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon>
+                    MANAGEMENT FEATURE
+                </div>
                 <div class="white-background">
                     <v-row>
                         <v-col cols="3" class="d-flex align-items-center">

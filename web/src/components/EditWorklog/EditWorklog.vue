@@ -15,22 +15,17 @@
                             </v-text-field>
                         </v-col>
                         <v-col cols="12">
-                            <v-text-field label="Time"
-                            :v-model="total"
-                              type = "number"
+                            <v-text-field label="Time (m)"
+                            v-model="time"
+                            type="number"
                             @click:append-outer="increment" @click:prepend="decrement"
                             hint="Time add/decrease">
                             </v-text-field>
                         </v-col>
-                        <v-col>
-                            <v-btn-toggle v-model="type">
-                                <v-btn>
-                                    <v-icon>mdi-plus-circle</v-icon>
-                                </v-btn>
-                                <v-btn>
-                                    <v-icon>mdi-minus-circle</v-icon>
-                                </v-btn>
-                            </v-btn-toggle>
+                        <v-col cols="12">
+                            <span style="display: block; color: #b71c1c; font-size: 15px" v-if="!time && isSave">
+                                Time required!
+                            </span>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -44,6 +39,11 @@
                 </v-col>
                 <v-col cols="12">
                     <v-textarea filled name="input-7-4" label="Reason *" v-model="reason"></v-textarea>
+                </v-col>
+                <v-col cols="12">
+                    <span style="display: block; color: #b71c1c; font-size: 15px" v-if="!reason && isSave">
+                        Description required!
+                    </span>
                 </v-col>
             </v-row>
         </v-container>
