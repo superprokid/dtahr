@@ -16,3 +16,12 @@
     background-color: grey;
     cursor: pointer;
 }
+
+.item-account {
+    min-height: 100% !important;
+}
+
+#header .item-container {
+    background-color: #154c79;
+    min-height: 100% !important;
+}

@@ -16,7 +16,7 @@ const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistor
 const UPDATE_WORKLOG = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
 const UPDATE_HOLIDAY_TIME = "UPDATE employee SET holiday_time = holiday_time - ? WHERE employee_id = ?";
 
-const DESCRIPTION_AUTO_CHECKOUT = "CHECK OUT - Auto check out by bot"
+const DESCRIPTION_AUTO_CHECKOUT = "CHECK OUT - Auto check out by BOT"
 const DESCIPRTION_AUTO_DESC_HOLIDAY = "AUTO DETECTED - You didn't come to work, your annual holiday is from ";
 const DESCIPRTION_WORK_NOT_ENOUGH = "AUTO DETECTED - Worked not enough 8 hours - duration: ";
 

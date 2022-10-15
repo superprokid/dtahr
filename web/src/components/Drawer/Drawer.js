@@ -20,7 +20,7 @@ export default {
                 },
                 {
                     title: 'Leave ticket',
-                    icon: 'mdi-alien-outline',
+                    icon: 'mdi-exit-run',
                     to: "absentticket", // name of router path
                     id: tabName.leaveUser, // id of page
                 },
