@@ -56,6 +56,12 @@ export default {
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
+      
+      const today = new Date();
+      if (newVal.workTime?.isHoliday || today.getDay() === 1 || today.getDay() === 6) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = true;
+      }
     }
   },
   methods: {
@@ -64,6 +70,12 @@ export default {
       if (this.startDataUser.workLog?.work_status == 0) {
           this.isClockInDisable = true;
           this.isClockOutDisable = false;
+      }
+
+      const today = new Date();
+      if (this.startDataUser.workTime?.isHoliday || today.getDay() === 1 || today.getDay() === 6) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = true;
       }
     },
     onInputBreakTime(params) {

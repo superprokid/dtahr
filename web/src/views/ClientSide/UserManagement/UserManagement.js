@@ -190,7 +190,6 @@ export default {
     },
     methods: {
         setItemRowCLass(item) {
-            console.log('item', item);
             return 'item-row';
         },
         onUpdateWorklog() {

@@ -5,10 +5,14 @@ Vue.use(Vuex)
 export const storeVuex = new Vuex.Store({
     state: {
         startDataUser: {},
+        drawerMini: false,
     },
     mutations: {
-        setStartDataUser (state, startDataUser){ 
+        setStartDataUser(state, startDataUser) {
             state.startDataUser = startDataUser
         },
+        setDrawerMini(state) {
+            state.drawerMini = !state.drawerMini;
+        }
     },
 })
