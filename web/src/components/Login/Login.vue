@@ -3,11 +3,7 @@
 
 <template>
   <div class="login-container">
-    <div class="d-flex justify-content-center">
-      <img  id="logo" :src="logoPath" />
-    </div>
-    <h2 class="d-flex justify-content-center">UTE HUMAN RESOURCE MANAGEMENT</h2>
-
+    <DTALogo />
     <md-field md-clearable>
       <label>Username</label>
       <md-input id="username" v-model="userName"></md-input>
