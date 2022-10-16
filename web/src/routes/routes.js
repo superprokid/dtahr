@@ -25,15 +25,15 @@ const router = new Router({
     mode: "history",
     routes: [
         // Temporary login page
+        { 
+            path: "/admin/login",
+            component: AdminLoginPage
+        },
         {
             path: "/admin",
             component: AdminSide,
             redirect: "/admin/login",
             children: [
-                { 
-                    path: "login",
-                    component: AdminLoginPage
-                },
                 {
                     path: 'home',
                     component: AdminDashboard

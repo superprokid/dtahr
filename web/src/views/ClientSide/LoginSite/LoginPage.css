@@ -4,6 +4,7 @@
     display: grid;
     grid-template-rows: 15% 50% 25%;
     position: relative;
+    background-color: #1A2B34;
   }
   
   .login-page-contents {

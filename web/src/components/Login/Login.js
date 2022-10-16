@@ -1,7 +1,10 @@
-//import { Auth } from "aws-amplify";
+import DTALogo from '@/components/DTALogo/DTALogo.vue'
 
 export default {
   name: "Login",
+  components: {
+    DTALogo
+  },
   props: {
     logoPath: {
       type: String,

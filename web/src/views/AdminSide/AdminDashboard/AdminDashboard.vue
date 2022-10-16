@@ -1,8 +1,10 @@
 <!-- eslint-disable -->
 <template>
-    <div>
+    <div >
         fjdsiofjewiojioj
     </div>
+    
+    
 </template>
 
 <script src="./AdminDashboard.js"></script>
