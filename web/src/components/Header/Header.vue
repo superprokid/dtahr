@@ -1,7 +1,16 @@
 <template>
     <div id="header" class="d-flex flex-row justify-content-between">
-        <div>
-            <h3>HRM</h3>
+        <div class="d-flex flex-row align-center ">
+            <v-app class="item-container" >
+                <v-list-item class="item-account">
+                    <v-icon medium color="white" @click="toggleDrawerMini">
+                        mdi-menu
+                    </v-icon>
+                    <v-list-item-content>
+                        <v-list-item-title class="site-title">HRM</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-app>
         </div>
         <div class="d-flex flex-row align-center ">
             <v-app class="item-container">

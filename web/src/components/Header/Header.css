@@ -5,7 +5,14 @@
     z-index: 1;
     background-color: #154c79;
     color: white;
-    padding: 8px 25px;
+    padding: 8px 5px;
+}
+
+#header .site-title {
+    color: white;
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 #header .user-name {

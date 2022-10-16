@@ -1,10 +1,10 @@
 <template>
     <v-app>
-        <v-navigation-drawer id="my-drawer" permanent :src="''">
+        <v-navigation-drawer id="my-drawer" permanent :class="drawerMini ? 'drawer-close' : 'drawer-open' " >
             <v-list dense nav>
                 <v-list-item v-for="item in items" :key="item.id" link @click="redirect(item)"
                     :class="item.id === currentTab ? 'drawer-item-active' : 'drawer-item'">
-                    <v-list-item-icon>
+                    <v-list-item-icon class="drawer-item-icon">
                         <v-icon :color="item.id === currentTab ? 'white' : null">{{ item.icon }}</v-icon>
                     </v-list-item-icon>
 

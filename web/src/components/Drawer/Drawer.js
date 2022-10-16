@@ -43,7 +43,8 @@ export default {
         }
     },
     computed: {
-        ...mapState(["startDataUser"])
+        ...mapState(["startDataUser", "drawerMini"])
+        
     },
 
     watch: {
@@ -64,7 +65,7 @@ export default {
                     })
                 }
             }
-        }
+        },
     },
     methods: {
         redirect(item) {

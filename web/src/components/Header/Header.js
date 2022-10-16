@@ -40,6 +40,10 @@ export default {
         logout() {
             CookieUtls.removeAllCookie();
             this.redirect('login');
+        },
+
+        toggleDrawerMini() {
+            this.$store.commit("setDrawerMini");
         }
     },
 }
