@@ -35,7 +35,7 @@ const axiosClient = {
 };
 
 async function refreshToken() {
-	const refreshToken = CookieUtls.getAccessToken();
+	const refreshToken = CookieUtls.getRefreshToken();
 	if (!refreshToken) {
 		return false
 	}
