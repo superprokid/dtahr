@@ -85,6 +85,9 @@ import tabName from "../config/tabname";
 
 export default {
     name: 'Navbar',
+    components: {
+        //  Popup
+    },
     data: () => ({
         drawer: true,
         // links: [
@@ -99,13 +102,18 @@ export default {
                 to: "home", // name of router path
                 id: tabName.homeAdmin, // id of page
             },
-
+            {
+                title: 'Group',
+                icon: 'mdi-view-dashboard',
+                to: "group", // name of router path
+                id: tabName.groupAdmin, // id of page
+            },
         ],
-        currentTab: SessionUtls.getItem(SessionUtls.tabNameKey),
+        currentTab: '',
 
     }),
-    components: {
-        //  Popup
+    mounted(){
+        this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey)
     },
     computed: {
         ...mapState(["startDataAdmin"])
@@ -115,11 +123,15 @@ export default {
             // CookieUtls.removeAllCookie();
             // this.redirect('login');
             SessionUtls.clearItem(SessionUtls.adminSession)
-            this.redirect('login');
+            this.redirectToSite('login');
         },
-        redirect(component) {
+        redirectToSite(component) {
             this.$router.push(component);
         },
+        redirect(item) {
+            this.$router.push(item.to);
+            this.currentTab = item.id;
+        }
     }
 
 }

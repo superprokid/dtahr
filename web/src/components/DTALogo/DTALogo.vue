@@ -171,5 +171,5 @@
 <script src= "./DTALogo.js">
 </script>
 
-<style src= "./DTALogo.css">
+<style scoped src= "./DTALogo.css">
 </style>

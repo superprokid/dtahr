@@ -8,6 +8,8 @@ const tabName = {
     realtimeCheck: 'user-realtimecheck-001',
 
     homeAdmin: 'admin-home-001',
+    groupAdmin: 'admin-group-001',
+    
 }
 
 export default tabName;

@@ -21,7 +21,7 @@
                             </v-row>
                             <v-row class="daily-report-header">Next day plans</v-row>
                             <v-row>
-                                <p class="daily-report-desc">{{item.next_date_plan}}</p>
+                                <p class="daily-report-desc">{{item.next_day_plan}}</p>
                             </v-row>
                             <v-row class="daily-report-header">Process status</v-row>
                             <v-row>
