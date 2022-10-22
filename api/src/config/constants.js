@@ -47,6 +47,7 @@ module.exports = {
     VALID_HOUR: 7,
     WORK_TIME_FULL: 8,
     MAX_EMPLOYEE_ID_LENGTH: 7,
+    MAX_GROUP_ID_LENGTH: 6,
     ROLE: {
         employee: 0,
         employer: 1,

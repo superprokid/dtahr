@@ -14,6 +14,7 @@ const UPDATE_LOGIN_FAILED_STATUS = "   UPDATE administrator "
     + "                         WHERE username = ? "
 const GET_ALL_USER = "  SELECT employee_id, first_name, last_name, dob, address, gender, email, avt, group_name "
     + "                 FROM employee e INNER JOIN `group` g WHERE e.group_id = g.group_id ";
+const GET_START_ADMIN = " SELECT username, login_date, login_failed_date, password_expired, create_at, update_at FROM administrator WHERE username = ? "
 
 /**
  * login for admin
@@ -92,6 +93,18 @@ async function getAllUser(req, res) {
     }
 }
 
+async function getStartAdmin(req, res) {
+    try {
+        const username = req.username;
+        const result = await exeQuery(GET_START_ADMIN, [username]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] - response`);
+        res.status(200).send(result.length ? result[0] : {});
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR")
+    }
+}
+
 async function createNewEmployee(req, res) {
     sendMail("ldthang2201@gmail.com");
 }
@@ -100,4 +113,5 @@ module.exports = {
     login,
     getAllUser,
     createNewEmployee,
+    getStartAdmin,
 }
