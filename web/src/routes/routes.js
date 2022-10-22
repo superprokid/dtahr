@@ -18,6 +18,7 @@ import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
+import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
 
 Vue.use(Router);
 
@@ -37,7 +38,11 @@ const router = new Router({
                 {
                     path: 'home',
                     component: AdminDashboard
-                }
+                },
+                {
+                    path: 'group',
+                    component: AdminGroup
+                },
             ]
         },
         { 

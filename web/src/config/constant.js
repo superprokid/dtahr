@@ -48,3 +48,4 @@ export const MANAGER_UPDATE_HOLIDAY = BASE_API_USER_URL + "/manager/holiday/upda
 export const BASE_API_ADMIN_URL = BASE_URL + '/api/admin';
 export const ADMIN_LOGIN_URL = BASE_API_ADMIN_URL + '/login';
 export const ADMIN_GET_START_URL = BASE_API_ADMIN_URL + '/getstart';
+export const ADMIN_GET_GROUP_URL = BASE_API_ADMIN_URL + '/group/get';
