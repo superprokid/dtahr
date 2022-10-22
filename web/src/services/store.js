@@ -6,6 +6,7 @@ export const storeVuex = new Vuex.Store({
     state: {
         startDataUser: {},
         drawerMini: false,
+        startDataAdmin: {},
     },
     mutations: {
         setStartDataUser(state, startDataUser) {
@@ -13,6 +14,9 @@ export const storeVuex = new Vuex.Store({
         },
         setDrawerMini(state) {
             state.drawerMini = !state.drawerMini;
-        }
+        },
+        setStartDataAdmin(state, startDataAdmin) {
+            state.startDataAdmin = startDataAdmin
+        },
     },
 })

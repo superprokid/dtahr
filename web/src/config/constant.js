@@ -2,6 +2,7 @@ export const LIMIT_RECALL_API = 3;
 export const EXPRIED_COOKIE_DAYS = 10 * 365; // 10 years
 
 export const BASE_URL = "http://26.197.75.244:3000";
+// export const BASE_URL = "http://127.0.0.1:3000";
 
 // user url api
 export const BASE_API_USER_URL = BASE_URL + '/api/user';
@@ -46,3 +47,4 @@ export const MANAGER_UPDATE_HOLIDAY = BASE_API_USER_URL + "/manager/holiday/upda
 // admin url api
 export const BASE_API_ADMIN_URL = BASE_URL + '/api/admin';
 export const ADMIN_LOGIN_URL = BASE_API_ADMIN_URL + '/login';
+export const ADMIN_GET_START_URL = BASE_API_ADMIN_URL + '/getstart';
