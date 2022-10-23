@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <v-toolbar class="text-h5" color="primary" dark>Add Group</v-toolbar>
+        <v-toolbar class="text-h5" color="primary" dark>Edit Group</v-toolbar>
         <!-- <v-card-text>
             <v-container>
                 <v-row>
@@ -62,6 +62,7 @@
                                         label="Choose Manager" multiple prepend-icon="mdi-account-plus-outline" solo>
                                         <template v-slot:selection="{ attrs, item, select, selected }">
                                             <v-chip v-bind="attrs" :input-value="selected" close @click="select"
+                                            
                                                 @click:close="remove(item)">
                                                 <strong>{{ item.full_name }}</strong>&nbsp;
                                                 <!-- <span>(interest)</span> -->
@@ -82,8 +83,8 @@
                         required>
                     </v-select> -->
                     <div class="mt-4">
-                        <v-btn :disabled="!valid" color="success" class="mr-4" @click="onClickCreateGroup">
-                        Create Group
+                        <v-btn :disabled="!valid" color="success" class="mr-4" @click="onClickEditGroup">
+                        Edit Group
                     </v-btn>
 
                     <v-btn color="error" class="mr-4" @click="reset">
@@ -112,8 +113,8 @@
     </div>
 </template>
 
-<script src="./AddGroupModal.js"></script>
+<script src="./EditGroupModal.js"></script>
 
-<style src="./AddGroupModal.css">
+<style src="./EditGroupModal.css">
 
 </style>

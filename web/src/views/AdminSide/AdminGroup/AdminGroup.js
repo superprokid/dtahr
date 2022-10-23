@@ -7,11 +7,16 @@ import tabName from '../../../config/tabname';
 import Table from "../../../components/Table/Table.vue"
 import AddHoliday from '@/components/AddHoliday/AddHoliday.vue';
 
+import AddGroupModal from "../../../components/AddGroupModal/AddGroupModal.vue"
+import EditGroupModal from "../../../components/EditGroupModal/EditGroupModal.vue"
+
 export default {
     name: "AdminGroup",
     components: {
         Table,
-        AddHoliday
+        AddHoliday,
+        AddGroupModal,
+        EditGroupModal
     },
     props: {
 
@@ -29,6 +34,13 @@ export default {
             isAddGroupShowed: false,
             AddHolidayDialog: false,
             EditWorklogDialog: false,
+
+            AddGroupDialogShowed: false,
+            EditGroupDialogShowed: false,
+            showDialog:false,
+
+            editDialogProp: {},
+
         }
     },
     computed: {
@@ -85,15 +97,18 @@ export default {
     },
 
     methods: {
-        onSelectGroup(items){
-            this.selected = items
-        },  
-        onClickAddGroup(){
-            console.log('add clicked');
-            this.isAddGroupShowed = true;
-        },
+        // onSelectGroup(items){
+        //     this.selected = items
+        // },  
+        // onClickAddGroup(){
+        //     console.log('add clicked');
+        //     this.isAddGroupShowed = true;
+        // },
         onClickEditGroup(){
-            console.log('edit clicked');
+            this.editDialogProp = this.selected[0]
+            console.log("this.editDialogProp",this.editDialogProp);
+
+            this.EditGroupDialogShowed = true
         },
         onClickDeleteGroup(){
             console.log('delete clicked');
@@ -122,11 +137,48 @@ export default {
         },
 
         onClose(screen) {
-            if(screen == 1)
-                this.EditWorklogDialog = false;
-            else if (screen == 2)
-                this.AddHolidayDialog = false;
+            if(screen == 1){
+                this.AddGroupDialogShowed = false;
+            }
+            else if(screen == 2){
+                this.EditGroupDialogShowed = false;
+            }
         },
+
+        openAddGroupModal(){
+            this.AddGroupDialogShowed = true;
+        },
+
+        async onCreateGroup(params){
+            console.log('params for create group', params);
+            const response = await AdminGroupServices.createGroup(params);
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                alert('Some thing wrong! Call Fail')
+            }
+            else {
+                console.log('Create Group Successfully');
+                this._getGroupCompany()
+            }
+        },
+
+        async onEditGroup(params){
+            console.log('params for edit group', params);
+            const response = await AdminGroupServices.editGroup(params);
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                alert('Some thing wrong! Call Fail')
+            }
+            else {
+                console.log('Edit Group Successfully');
+                this.EditGroupDialogShowed = false;
+                this.selected = []
+                this._getGroupCompany()
+            }
+        }
+        
     },
 
     beforeCreate() {

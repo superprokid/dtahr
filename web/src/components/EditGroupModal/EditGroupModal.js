@@ -12,7 +12,10 @@ export default {
         Input,
     },
     props: {
-        
+        editDialogProp:{
+            type: Object,
+            default: {},
+        },
     },
     data() {
         return {
@@ -50,16 +53,26 @@ export default {
 
             listFreeManager: [],
 
+            previousParam: {},
         };
     },
     mounted(){
+        this.previousParam = {
+            ...this.editDialogProp
+        }
+        console.log('props in child ', this.editDialogProp);
+        this.groupName = this.editDialogProp.group_name;
+        this.groupFullName = this.editDialogProp.group_full_name;
+        this.managerStartDate = this.editDialogProp.manager_start_date
+        
         this.$eventBus.$emit('show-spinner', true);
         this._getAllFreeManager()
+
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
         onClose() {
-            this.$emit('on-close',1);
+            this.$emit('on-close',2);
         },
         async onSave() {
             // this.$emit('on-save');
@@ -71,15 +84,42 @@ export default {
             return true
         },
 
-        onClickCreateGroup () {
+        onClickEditGroup () {
             if(this.$refs.form.validate()){
+                
+                
+                let isEditApproved = false;
+
                 const params = {
-                    groupName: this.groupName,
-                    groupFullName: this.groupFullName,
-                    managerId: this.managerSelect[0].employee_id,
-                    managerStartDate: this.managerStartDate,
+                    groupId: this.editDialogProp.group_id,
+                    // groupName: this.groupName,
+                    // groupFullName: this.groupFullName,
+                    // managerId: this.managerSelect[0].employee_id,
+                    // managerStartDate: this.managerStartDate,
                 }
-                // console.log('params for create group', params);
+                if(this.previousParam.group_name !== this.groupName){
+                    isEditApproved =true
+                    params.groupName = this.groupName
+                }
+                if(this.previousParam.group_full_name !== this.groupFullName){
+                    isEditApproved =true
+                    params.groupFullName = this.groupFullName
+                }
+                if(this.previousParam.manager_id !== this.managerSelect[0].employee_id){
+                    isEditApproved =true
+                    params.managerId = this.managerSelect[0].employee_id
+                }
+                if(this.previousParam.manager_start_date != this.managerStartDate){
+                    console.log(this.previousParam.manager_start_date, this.managerStartDate);
+                    isEditApproved =true
+                    params.managerStartDate = this.managerStartDate
+                }
+
+                if(isEditApproved){
+                    // goi api
+                    console.log('params cho goi api',params);
+                    this.$emit('on-edit-group', params);
+                }
                 // const response = await AdminGroupServices.createGroup(params);
                 // if(!response){
                 //     this.$router.push('/admin/login')
@@ -89,7 +129,7 @@ export default {
                 // else {
                 //     console.log('Create Group Successfully');
                 // }
-                this.$emit('on-create-group', params);
+                
             }
         },
         reset () {
@@ -123,7 +163,10 @@ export default {
                 this.listFreeManager = response.data.map((item) => {
                     return {...item, }
                 })
+                this.listFreeManager.push({employee_id: this.editDialogProp.manager_id, full_name: this.editDialogProp.manager_name})
                 console.log('this.listFreeManager',this.listFreeManager);
+
+                this.managerSelect.push({employee_id: this.editDialogProp.manager_id, full_name: this.editDialogProp.manager_name})
             }
         },
     },
