@@ -6,6 +6,7 @@ import Button from '@/components/Button/Button.vue';
 import { ABSENT_TICKET_SCREEN } from '../../../../config/screenName';
 import CookieUtls from '../../../../services/CookieUtls';
 
+import { LEAVE_CHANNEL } from '../../../../config/channel';
 export default {
 	name: 'AbsentHistory',
 	components: {
@@ -109,8 +110,7 @@ export default {
 				this.$router.push('/user/login');
 				return;
 			}
-			await this._getListAbsentTicket();
-			this.$mySocket.emit(LEAVE_CHANNEL, 1);
+			this.$mySocket.emit(LEAVE_CHANNEL, 0);
 		},
 	},
 };

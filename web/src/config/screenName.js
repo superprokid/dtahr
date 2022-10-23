@@ -10,3 +10,4 @@ export const TIME_TRACKING_SCREEN = "TimeTracking";
 export const REPORT_MAIN_SCREEN = "ReportMain";
 export const REPORT_HISTORY_SCREEN = "ReportHISTORY";
 export const REPORT_RECEIVER_SCREEN = "ReportReceiver";
+export const REAL_TIME_TRACKING_SCREEN = "RealTimeTracking";

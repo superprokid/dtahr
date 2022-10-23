@@ -2,7 +2,9 @@
 import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import Button from '@/components/Button/Button.vue';
+
 import { ABSENT_HISTORY_SCREEN, ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { LEAVE_CHANNEL } from '../../../../config/channel';
 
 export default {
 	name: 'AbsentHistory',
@@ -108,8 +110,8 @@ export default {
 				this.$router.push('/user/login');
 				return;
 			}
-			await this._getListAbsentHistory();
 			this.$mySocket.emit(LEAVE_CHANNEL, 2);
+			await this._getListAbsentHistory();
 		},
 	},
 };

@@ -1,5 +1,6 @@
 import EditWorklog from '@/components/EditWorklog/EditWorklog.vue';
 import AddHoliday from '@/components/AddHoliday/AddHoliday.vue';
+import { TIME_TRACKING_CHANNEL } from '../../config/channel';
 
 export default {
     name: 'VuetifyDialog',
@@ -33,10 +34,12 @@ export default {
         },
         onSaveAddHoliday() {
             this.AddHolidayDialog = false;
+            this.$mySocket.emit(TIME_TRACKING_CHANNEL,this.id)
             this.$emit('on-update-worklog');
         },
         onSaveEditWorklog() {
             this.EditWorklogDialog = false;
+            this.$mySocket.emit(TIME_TRACKING_CHANNEL,this.id)
             this.$emit('on-update-worklog');
         }
     },
