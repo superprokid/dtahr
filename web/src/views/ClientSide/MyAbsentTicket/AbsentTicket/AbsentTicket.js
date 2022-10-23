@@ -3,7 +3,7 @@ import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import SessionUtls from '@/services/SessionUtls';
 import Button from '@/components/Button/Button.vue';
-import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { ABSENT_TICKET_SCREEN } from '../../../../config/screenName';
 import CookieUtls from '../../../../services/CookieUtls';
 
 export default {
@@ -19,6 +19,10 @@ export default {
 				{
 					text: 'Information',
 					value: 'information',
+				},
+				{
+					text: 'Reason',
+					value: 'reason'
 				},
 				{
 					text: 'Created At',
@@ -38,9 +42,12 @@ export default {
 				text: 'Actions',
 				value: 'actions',
 				sortable: false,
+				align: 'center'
 			});
 		}
-		this.$root.$on(ABSENT_REGISTER_SCREEN, () => {
+
+		// register event listener
+		this.$root.$on(ABSENT_TICKET_SCREEN, () => {
 			this._getListAbsentTicket();
 		});
 	},
@@ -103,6 +110,7 @@ export default {
 				return;
 			}
 			await this._getListAbsentTicket();
+			this.$mySocket.emit(LEAVE_CHANNEL, 1);
 		},
 	},
 };

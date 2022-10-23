@@ -27,7 +27,6 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
         this.$root.$on(REPORT_RECEIVER_SCREEN, () => {
             this._getReportReceive();
-            console.log('ReportREceiver get message success');
         })
     },
     methods: {

@@ -6,7 +6,8 @@ import Button from '@/components/Button/Button.vue';
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import ReportServices from '../../../../services/API/ReportAPI/ReportServices';
 import moment from 'moment';
-import { REPORT_MAIN_SCREEN } from '../../../../config/screenName';
+import { REPORT_HISTORY_SCREEN, REPORT_MAIN_SCREEN, REPORT_RECEIVER_SCREEN } from '../../../../config/screenName';
+import { REPORT_CHANNEL } from '../../../../config/channel';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss'
 const DATE_FORMAT = 'YYYY-MM-DD'
@@ -159,9 +160,6 @@ export default {
                 }
             }
             this.isListSelectedUserEmpty = listUserReceiver.length ? false : true;
-            
-            this.$mySocket.emit('overttime','send message ne');
-            console.log(this.$mySocket);
 
             // check required
             if (this.isListSelectedUserEmpty || this.isNextDayPlanEmpty || this.isProblemsEmpty || this.isProcessStatusEmpty || this.isProjectNameEmpty || this.isTaskEmpty) {
@@ -186,7 +184,8 @@ export default {
                 } else {
                     alert("register success");
                     this.onClickResetButton();
-                    // this.$root.$emit(REPORT_MAIN_SCREEN);
+                    this.$root.$emit(REPORT_HISTORY_SCREEN);
+                    this.$mySocket.emit(REPORT_CHANNEL, 0);
 
                 }
             }

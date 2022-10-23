@@ -9,6 +9,10 @@ const LOG_CATEGORY = "ADMIN EMPLOYEE CONTROLLER"
 const GET_NEWEST_EMPLPOYEE_ID = "SELECT employee_id FROM employee ORDER BY employee_id DESC LIMIT 1";
 const GET_CURRENT_EMAIL = "SELECT email FROM employee WHERE email = ? LIMIT 1";
 const GET_CURRENT_GROUP = "SELECT group_id FROM `group` WHERE group_id = ? LIMIT 1";
+const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.last_name) as full_name, avt "
++ "                           FROM `employee` e"
++ "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
++ "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
 
 async function createNewEmployee(req, res) {
@@ -300,7 +304,24 @@ async function editEmployee(req, res) {
     }
 }
 
+/**
+ * Get all manager is not manage any group
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function getAllFreeManager(req, res) {
+    try {
+        const result = await dbaccess.exeQuery(GET_ALL_MANAGER_FREE);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] get success, length = ${result.length}`);
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     createNewEmployee,
     editEmployee,
+    getAllFreeManager,
 }

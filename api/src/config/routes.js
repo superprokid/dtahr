@@ -67,6 +67,7 @@ Router.get('/admin/getstart', adminAuthen, adminController.getStartAdmin);
 Router.get('/admin/getalluser', adminAuthen, adminController.getAllUser);
 Router.post('/admin/create/employee', adminEmpController.createNewEmployee);
 Router.get('/admin/group/get', adminAuthen, adminGroupController.getAllGroup);
+Router.get('/admin/employee/getfreemanager', adminAuthen, adminEmpController.getAllFreeManager);
 Router.get('/admin/group/getalluser', adminAuthen, adminGroupController.getAllEmployeeInGroup);
 Router.post('/admin/group/create', adminAuthen, adminGroupController.createGroup);
 Router.post('/admin/group/update', adminAuthen, adminGroupController.updateGroup);
