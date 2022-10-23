@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { MAX_EMPLOYEE_ID_LENGTH } = require("../config/constants");
-const YYYY_MM_DD = 'YYYY-MM-DD'
+const YYYY_MM_DD = 'YYYY-MM-DD';
+const YYYY_MM_DD_HH_MM_SS = "YYYY-MM-DD hh:mm:ss";
 
 /**
  * Generate random string
@@ -61,6 +62,15 @@ function getDateString(date) {
     } else {
         return moment().format(YYYY_MM_DD);
     }
+}
+
+/**
+ * Get date with YYYY-MM-DD hh:mm:ss format
+ * @param {*} date 
+ * @returns 
+ */
+function getDateTimeString(date) {
+    return moment(new Date(date)).format(YYYY_MM_DD_HH_MM_SS);
 }
 
 /**
@@ -131,6 +141,8 @@ function validateType(value, type) {
             return isValidDate(value);
         case 'number':
             return isValidNumber(value);
+        case 'array':
+            return isValidArray(value);
         default:
             return false;
     }
@@ -153,6 +165,10 @@ function isValidNumber(n) {
     return !isNaN(n)
 }
 
+function isValidArray(arr) {
+    return Array.isArray(arr) && arr.length;
+}
+
 function generateEmployeeId(employeeId) {
     let empId = Number(employeeId);
     empId = String(empId + 1);
@@ -163,8 +179,26 @@ function generateEmployeeId(employeeId) {
     return empId;
 }
 
+function generateId(latestId, maxLength) {
+    let newId = Number(latestId);
+    newId = String(newId + 1);
+    const length = maxLength - newId.length;
+    for (let i = 0; i < length; i++) {
+        newId = '0' + newId;
+    }
+    return newId;
+}
+
 function isNullOrUndefinded(value) {
     return value === null || value === undefined;
+}
+
+function groupArrayByKey(arr, key) {
+    return arr.reduce(function (newArr, item) {
+        newArr[item[key]] = newArr[item[key]] || [];
+        newArr[item[key]].push(item);
+        return newArr;
+    }, {});
 }
 
 module.exports = {
@@ -177,5 +211,9 @@ module.exports = {
     calWorkingTime,
     generateEmployeeId,
     isNullOrUndefinded,
-    getDateString
+    getDateString,
+    groupArrayByKey,
+    isValidDate,
+    generateId,
+    getDateTimeString,
 }

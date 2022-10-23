@@ -3,6 +3,9 @@ import OvertimeTicketServices from '@/services/API/MyOvertimeAPI/OvertimeTicketS
 import { getDateString, getTimeString } from "@/services/utilities";
 import SessionUtls from "@/services/SessionUtls"
 import Button from '@/components/Button/Button.vue';
+import { OT_TICKET_SCREEN } from '../../../../config/screenName';
+import CookieUtls from '../../../../services/CookieUtls';
+import { OVERTIME_CHANNEL } from '../../../../config/channel';
 
 export default {
     name: 'OVertimeTicket',
@@ -44,14 +47,14 @@ export default {
                  ]
         }
     },
-    computed: {
-        
-    },
     mounted() {
         this._getListOvertimeTicket();
-        if(SessionUtls.getItem(SessionUtls.role) == 1){
+        if(CookieUtls.getCookie(CookieUtls.role) == 1){
             this.headers.push({ text: 'Actions', value: 'actions', sortable: false })
         }
+        this.$root.$on(OT_TICKET_SCREEN, () => {
+			this._getListOvertimeTicket();
+		});
     },
     methods: {
         filterOnlyCapsText(value, search, item) {
@@ -70,7 +73,7 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            this.listOvertimeTicket = response.data.map(item => {
+            this.listOvertimeTicket = response.data.reverse().map(item => {
                 return {...item, ottime: this._formatDateTime(item.start_date) + ' --> ' + this._formatDateTime(item.end_date), createdat: this._formatDateTime(item.create_at), 
                                 status:  item.status === 0 ? 'PENDING' : item.status === 1 ?  'APPROVED' : 'REJECTED' }
             })
@@ -91,7 +94,7 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            await this._getListOvertimeTicket();
+            this.$mySocket.emit(OVERTIME_CHANNEL, 0);
         },
    
     },

@@ -1,5 +1,7 @@
 import HolidayService from "../../../services/API/HolidayAPI/HolidayServices";
 import { getDateString } from "../../../services/utilities";
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
 
 export default {
     data() {
@@ -25,8 +27,10 @@ export default {
             ]
         },
     },
-    mounted() {
-        this._getListHoliday();
+    async mounted() {
+        this.$eventBus.$emit('show-spinner', true);
+        await this._getListHoliday();
+        this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
         filterOnlyCapsText(value, search, item) {
@@ -48,4 +52,8 @@ export default {
             })
         }
     },
+
+    beforeCreate() {
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.holidayUser);
+      },
 }

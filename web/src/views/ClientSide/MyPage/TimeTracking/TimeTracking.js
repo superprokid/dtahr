@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { mapState } from 'vuex'
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
+import { REAL_TIME_TRACKING_CHANNEL } from '../../../../config/channel';
+import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 const TIME_FORMAT = 'HH:mm:ss';
@@ -46,7 +48,37 @@ export default {
   computed:{
     ...mapState(["startDataUser"])
   },
+  watch: {
+    startDataUser(newVal) {
+      if (newVal.workLog?.work_status == 0) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = false;
+      } else {
+        this.isClockInDisable = false;
+        this.isClockOutDisable = true;
+      }
+      
+      const today = new Date();
+      if (newVal.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = true;
+      }
+    }
+  },
   methods: {
+    checkClockIn() {
+      if (!this.startDataUser.workLog) return
+      if (this.startDataUser.workLog?.work_status == 0) {
+          this.isClockInDisable = true;
+          this.isClockOutDisable = false;
+      }
+
+      const today = new Date();
+      if (this.startDataUser.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = true;
+      }
+    },
     onInputBreakTime(params) {
       if (params === '' || params === undefined || params === null) {
         this.isBreakTimeTotalEmpty = true;
@@ -132,7 +164,8 @@ export default {
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
-      this.$root.$emit('TimeTracking');
+      this.$root.$emit(TIME_TRACKING_SCREEN,this.startDataUser.employee_id);
+      this.$mySocket.emit(REAL_TIME_TRACKING_CHANNEL, this.startDataUser.employee_id)
     },
     onClickCancelButton() {
       this.isTimeConfirmModalShowed = false;
@@ -219,11 +252,8 @@ export default {
 
     },
   },
-  mounted() {
+  created() {
     this._getCurrentWorklog();
-    if (this.startDataUser?.workLog?.work_status == 0) {
-      this.isClockInDisable = true;
-      this.isClockOutDisable = false;
-    }
+    this.checkClockIn()
   },
 };

@@ -5,8 +5,8 @@ import Button from '@/components/Button/Button.vue';
 import TimeTracking from '@/views/ClientSide/MyPage/TimeTracking/TimeTracking.vue';
 import HistoryTracking from '@/views/ClientSide/MyPage/HistoryTracking/HistoryTracking.vue';
 
-import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
-import SessionUtls from '@/services/SessionUtls';
+import SessionUtls from '../../../services/SessionUtls';
+import tabName from '../../../config/tabname';
 
 export default {
   name: 'EmployeeTab',
@@ -28,10 +28,6 @@ export default {
   },
 
   async created() {
-    this.$eventBus.$emit("show-spinner", true);
-    this._getCurrentUserName();
-    await this._getStartUser()
-    this.$eventBus.$emit("show-spinner", false);
     this.tabItems = [
       {
         tabName:  'Time Tracking',
@@ -60,23 +56,9 @@ export default {
     onClickCancelButton() {
       this.isLogOutModalShowed = false;
     },
-    async _getCurrentUserName() {
-      // this.currentUserName =
-      //   await GetCurrentUserNameService.getCurrentUserName().then((res) => {
-      //     return res.username;
-      //   });
-    },
-    async _getStartUser() {
-      const response = await MyPageServices.getStartUser();
-      if(!response){
-          this.$router.push('/user/login')
-      } else {
-          console.log(response.data)
-          //Use Vuex set Data
-          this.$store.commit("setStartDataUser", response.data)
-          SessionUtls.setItem(SessionUtls.role,response.data.role)
-      }
-    },
-    
+  },
+
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.myPageUser);
   },
 };

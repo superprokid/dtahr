@@ -26,10 +26,16 @@ async function authen(req, res, next) {
     }
 
     const user = await verifyUser(data);
+    if (!user) {
+        res.status(InvalidToken.statusCode).send(InvalidToken);
+        return
+    }
     req.employee_id = user.employee_id;
     req.employer_id = user.employer_id;
     req.group_id = user.group_id;
     req.role = user.role;
+    logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] request with body: ${JSON.stringify(req.body)} and params: ${JSON.stringify(req.query)}`);
+
     next()
 }
 

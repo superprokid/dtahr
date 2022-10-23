@@ -7,7 +7,7 @@
             class="d-flex align-end"
         >
         <h4 class="d-inline-block ">Current Annual Holiday: </h4>
-		<h4 class="d-inline-block red--text ml-1"> {{startDataUser.holiday_time.toFixed(3)}}</h4>
+		<h4 class="d-inline-block red--text ml-1"> {{startDataUser.holiday_time | holidayDisplay }}</h4>
 
         </v-col>
         <v-col cols="3" class="d-flex align-items-center">
@@ -76,8 +76,8 @@
             small
           >
             <v-row justify="space-between">
-              <v-col class="description-timeline" cols="7">{{ item.workhistory_description }} </v-col>
-              <v-col class="text-right" cols="5">
+              <v-col class="description-timeline">{{ item.workhistory_description }} </v-col>
+              <v-col class="text-right" cols="3">
                 {{ new Date(item.work_date).toLocaleDateString() }}
               </v-col>
             </v-row>

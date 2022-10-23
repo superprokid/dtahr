@@ -1,0 +1,18 @@
+.daily-report-container {
+    border: 1px solid gray;
+    /* padding: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px; */
+    padding-top: 0px;
+}
+
+.daily-report-header {
+    background-color: #C0C0C0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.daily-report-desc {
+    white-space: pre-line;
+    min-height: 50px;
+}

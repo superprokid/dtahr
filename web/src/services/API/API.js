@@ -1,5 +1,5 @@
 import axiosBase from 'axios';
-import SessionUtls from '../SessionUtls';
+import CookieUtls from '../CookieUtls';
 import {
 	USER_REFRESH_TOKEN_URL,
 	// LIMIT_RECALL_API,
@@ -10,7 +10,7 @@ import {
 function getAccessTokenHeader() {
 	axiosBase.defaults.headers.common[
 		'Authorization'
-	] = `Bearer ${SessionUtls.getAccessToken()}`;
+	] = `Bearer ${CookieUtls.getAccessToken()}`;
 }
 
 const axiosClient = {
@@ -34,7 +34,7 @@ const axiosClient = {
 };
 
 async function refreshToken() {
-	const refreshToken = SessionUtls.getRefreshToken();
+	const refreshToken = CookieUtls.getRefreshToken();
 	if (!refreshToken) {
 		return false
 	}
@@ -42,11 +42,11 @@ async function refreshToken() {
 		const response = await axiosClient.post(USER_REFRESH_TOKEN_URL, {
 			refreshToken,
 		});
-		SessionUtls.setAccessToken(response.data.accessToken);
+		CookieUtls.setAccessToken(response.data.accessToken);
 		return true;
 	} catch {
-			SessionUtls.clearLoginSession();
-			return false
+		CookieUtls.removeAllCookie();
+		return false
 	}
 }
 
@@ -59,14 +59,15 @@ export function asyncRecallFunction(apiFunction) {
 		// asyncRecallNum = 0;
 		return result;
 	}).catch(async error => {
-		
 		if (error.response.status === 401) {
 			let response = await refreshToken();
 			console.log(response);
-			if (!response) { 
+			if (!response) {
 				return response
 			}
 			return await apiFunction();
+		} else {
+			return -1;
 		}
 
 		// if (error.response.status === 403) {

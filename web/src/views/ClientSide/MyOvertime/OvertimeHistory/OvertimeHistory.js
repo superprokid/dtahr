@@ -1,38 +1,118 @@
-/*eslint-disable*/
-import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue';
-import Input from '@/components/Input/Input.vue';
-import Button from '@/components/Button/Button.vue';
-
+/* eslint-disable */
 import OvertimeHistoryServices from '@/services/API/MyOvertimeAPI/OvertimeHistoryServices';
-import moment from 'moment';
-
-const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss'
-const DATE_FORMAT = 'YYYY-MM-DD'
-const TIME_FORMAT = 'hh:mm:ss'
+import { getDateString, getTimeString } from '@/services/utilities';
+import Button from '@/components/Button/Button.vue';
+import { OT_HISTORY_SCREEN } from '../../../../config/screenName';
+import { OVERTIME_CHANNEL } from '../../../../config/channel';
 
 export default {
-  name: 'OvertimeHistory',
-  components: {
-    DateTimePicker,
-    Input,
-    Button,
-  },
-  data() {
-    return {
-        
-    };
-  },
-  
-  watch: {
-    startTime(newstartTime, oldstartTime){
-        console.log('newstartTime ',newstartTime);
-        console.log('oldstartTime ',oldstartTime);
-    },
-  },
-  mounted() {
-    
-  },
-  methods: {
-    
-  },
+	name: 'AbsentHistory',
+	components: {
+		Button,
+	},
+	data() {
+		return {
+			search: '',
+			listOvertimeTicket: [],
+			headers: [
+				{
+					text: 'Payment',
+					value: 'payment',
+				},
+				{
+					text: 'Project',
+					value: 'project_name',
+				},
+				{
+					text: 'OT Time',
+					value: 'ottime',
+				},
+				{
+					text: 'Created At',
+					value: 'createdat',
+				},
+				{
+					text: 'Status',
+					value: 'status',
+				},
+				{
+					text: 'Actions',
+					value: 'actions',
+					sortable: false,
+					align: 'center',
+				},
+			],
+		};
+	},
+	computed: {},
+	mounted() {
+		this._getListOvertimeHistory();
+		this.$root.$on(OT_HISTORY_SCREEN, () => {
+			this._getListOvertimeHistory();
+		});
+	},
+	methods: {
+		filterOnlyCapsText(value, search, item) {
+			item - 1;
+			return (
+				value != null &&
+				search != null &&
+				typeof value === 'string' &&
+				value
+					.toString()
+					.toLocaleUpperCase()
+					.indexOf(search.toLocaleUpperCase()) !== -1
+			);
+		},
+
+		async _getListOvertimeHistory() {
+			this.$eventBus.$emit('show-spinner', true);
+			const response =
+				await OvertimeHistoryServices.getOvertimeTickets();
+			this.$eventBus.$emit('show-spinner', false);
+			if (!response) {
+				this.$router.push('/user/login');
+				return;
+			}
+			this.listOvertimeTicket = response.data.reverse().map((item) => {
+				return {
+					...item,
+					ottime:
+						this._formatDateTime(item.start_date) +
+						' --> ' +
+						this._formatDateTime(item.end_date),
+					createdat: this._formatDateTime(item.create_at),
+					status:
+						item.status === 0
+							? 'PENDING'
+							: item.status === 1
+							? 'APPROVED'
+							: 'REJECTED',
+				};
+			});
+		},
+		_formatDateTime(date) {
+			return (
+				getDateString(new Date(date)) +
+				' ' +
+				new Date(date).toLocaleTimeString()
+			);
+		},
+
+		async deleteOTTicket(overtime_id) {
+			const params = {
+				overtimeId: overtime_id,
+			};
+			this.$eventBus.$emit('show-spinner', true);
+			const response =
+				await OvertimeHistoryServices.deleteOverTimeTicket(params);
+			this.$eventBus.$emit('show-spinner', false);
+			if (!response) {
+				this.$router.push('/user/login');
+				return;
+			}
+			await this._getListOvertimeHistory();
+			this.$mySocket.emit(OVERTIME_CHANNEL, 2);
+		},
+	},
 };

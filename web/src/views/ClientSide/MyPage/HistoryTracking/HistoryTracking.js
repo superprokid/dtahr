@@ -4,6 +4,7 @@ import moment from 'moment';
 import { mapState } from 'vuex'
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import Button from '@/components/Button/Button.vue'
+import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 
 const DATE_FORMAT = 'YYYY/MM/DD';
 
@@ -27,6 +28,11 @@ export default {
             return this.events.slice().reverse()
         },
     },
+    filters: {
+        holidayDisplay(value) {
+            return value ? value.toFixed(3) : 0 
+        }
+    },
     created() {
         let date = new Date();
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -36,12 +42,15 @@ export default {
     },
 
     mounted() {
+        console.log("mounted history treacking");
         this.$eventBus.$emit("show-spinner", true);
         this._getUserHistoryTracking();
 
         // Re call api when checkin/checkout
-        this.$root.$on('TimeTracking', () => {
-            this._getUserHistoryTracking();
+        this.$root.$on(TIME_TRACKING_SCREEN, (msg) => {
+            if (msg == this.startDataUser.employee_id) {
+                this._getUserHistoryTracking();            
+            }
         })
         this.$eventBus.$emit("show-spinner", false);
     },
@@ -56,6 +65,7 @@ export default {
                 this.$router.push('/user/login')
             } else {
                 this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
+                console.log("this.userTrackingHistory",this.userTrackingHistory);
             }
         },
         _groupArrayByDateKey(arr, dateKey) {

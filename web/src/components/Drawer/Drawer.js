@@ -1,6 +1,7 @@
 import tabName from "../../config/tabname";
 import SessionUtls from "../../services/SessionUtls";
 
+import { mapState } from "vuex";
 export default {
     data() {
         return {
@@ -19,7 +20,7 @@ export default {
                 },
                 {
                     title: 'Leave ticket',
-                    icon: 'mdi-alien-outline',
+                    icon: 'mdi-exit-run',
                     to: "absentticket", // name of router path
                     id: tabName.leaveUser, // id of page
                 },
@@ -28,17 +29,52 @@ export default {
                     icon: 'mdi-calendar-star-outline',
                     to: "holiday",
                     id: tabName.holidayUser,
+                },
+                {
+                    title: 'Daily report',
+                    icon: 'mdi-file-chart-outline',
+                    to: "dailyreport",
+                    id: tabName.dailyreportUser,
                 }
             ],
             right: null,
+            role: '',
             currentTab: SessionUtls.getItem(SessionUtls.tabNameKey),
         }
+    },
+    computed: {
+        ...mapState(["startDataUser", "drawerMini"])
+        
+    },
+
+    watch: {
+        startDataUser: {
+            handler(newVal){
+                if (newVal.role == 1 && this.items.length < 7) {
+                    this.items.push({
+                        title: 'Employee Management',
+                        icon: 'mdi-account-cog',
+                        to: "usermanagement",
+                        id: tabName.userManagement,
+                    },
+                    {
+                        title: 'Realtime Check',
+                        icon: 'mdi-calendar-clock-outline',
+                        to: "realtimecheck",
+                        id: tabName.realtimeCheck,
+                    })
+                }
+            }
+        },
     },
     methods: {
         redirect(item) {
             this.$router.push(item.to);
-            SessionUtls.setItem(SessionUtls.tabNameKey, item.id);
             this.currentTab = item.id;
         }
-    }
+    },
+
+    mounted() {
+        this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+    },
 }

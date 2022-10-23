@@ -1,0 +1,35 @@
+<script src="/socket.io/socket.io.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<input id="image-file" type="file" onchange="()=> {console.log('hsdsd')}" accept=".csv" />
+</body>
+
+</html>
+
+<script>
+	var socket = io();
+	var file;
+	const files = document.getElementById('image-file');
+	files.addEventListener('change', (event) => {
+		const file = event.target.files.length ? event.target.files[0] : null;
+		if (file.type !== "text/csv") {
+			console.log("not file csv");
+		} else {
+			console.log('is file csv');
+			var formData = new FormData();
+			formData.append('file', file);
+			fetch('http://127.0.0.1:3000/user/test/post', {method: 'POST', body: formData});
+		}
+	})
+
+</script>

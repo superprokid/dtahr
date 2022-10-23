@@ -1,7 +1,8 @@
 <template>
-    
-    <div class="employee-site-container">
-    <TabNav v-if="tabItems" :tabItems="tabItems" :tabData="tabData"/>
+  <div class="employee-site-container">
+    <v-app>
+      <TabNav v-if="tabItems" :tabItems="tabItems" :tabData="tabData" />
+    </v-app>
     <Notification
       :notiHeaderBgColor="notiType"
       :notiTitle="logOutNotiTitle"
@@ -12,7 +13,6 @@
       :isModalShowed="isLogOutModalShowed"
     />
   </div>
-
 </template>
 
 <script src="./MyAbsentTicket.js"></script>
