@@ -1,6 +1,8 @@
 const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
+const upoloadFile = require('../common/uploadUtls');
+const path = require('path')
 const Router = express.Router();
 // Import for user controller
 const userController = require('../controller/user/user.controller');
@@ -42,6 +44,11 @@ Router.post('/user/delete/leave', authen, leaveController.deleteLeaveTicket);
 Router.post('/user/delete/overtime', authen, overtimeController.deleteOvertimeTicket);
 Router.post('/user/delete/dailyreport', authen, dailyreportController.deleteMyReport);
 Router.post('/user/edit/dailyreport', authen, dailyreportController.editMyDailyReport);
+Router.post('/user/changepassword', authen, userController.changePassword);
+Router.post('/user/changeprofile',upoloadFile.any(), authen, userController.updateInformation);
+Router.get('/public/avts/:filename', (req, res) => {
+    res.sendFile(path.join(__basedir, './public/avts', req.params.filename))
+})
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
 Router.post('/user/manager/update/overtime', authen, overtimeController.updateStatusOvertimeTicket);
@@ -56,9 +63,14 @@ Router.post('/user/manager/holiday/update', authen, worklogController.updateHoli
 
 // admin
 Router.post('/admin/login', adminController.login);
+Router.get('/admin/getstart', adminAuthen, adminController.getStartAdmin);
 Router.get('/admin/getalluser', adminAuthen, adminController.getAllUser);
 Router.post('/admin/create/employee', adminEmpController.createNewEmployee);
 Router.get('/admin/group/get', adminAuthen, adminGroupController.getAllGroup);
 Router.get('/admin/group/getalluser', adminAuthen, adminGroupController.getAllEmployeeInGroup);
+Router.post('/admin/group/create', adminAuthen, adminGroupController.createGroup);
+Router.post('/admin/group/update', adminAuthen, adminGroupController.updateGroup);
+Router.post('/admin/group/delete', adminAuthen, adminGroupController.deleteGroup);
+Router.post('/admin/employee/update', adminAuthen, adminEmpController.editEmployee);
 
-module.exports = Router;
+module.exports = Router;  

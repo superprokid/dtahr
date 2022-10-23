@@ -9,7 +9,7 @@ const GET_LEAVE_BY_ID_AND_USER = "SELECT * FROM `leave` WHERE leave_id = ? and e
 const GET_LEAVE_BY_USER = "SELECT * FROM `leave` WHERE employee_id = ?";
 const GET_ALL_LEAVE_OF_GROUP = "SELECT l.*, CONCAT(e.first_name, ' ', e.last_name) as name "
     + "                         FROM `leave` l INNER JOIN employee e ON l.employee_id = e.employee_id "
-    + "                         WHERE e.group_id = ?";
+    + "                         WHERE e.group_id = ? and e.is_deleted <> 1";
 const UPDATE_LEAVE_STATUS = "UPDATE `leave` SET status = ? WHERE leave_id = ?";
 const DELETE_LEAVE_TICKET = "DELETE FROM `leave` WHERE leave_id = ? "
 

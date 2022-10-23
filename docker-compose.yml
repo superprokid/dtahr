@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    restart: unless-stopped
+    container_name: ute-hrm-mysql
+    environment: 
+      - MYSQL_ROOT_PASSWORD=1234 
+      - MYSQL_DATABASE=hrm
+      - TZ=Asia/Ho_Chi_Minh
+    ports:
+      - "8088:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  api:
+    depends_on:
+      - mysql
+    build: ./api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/app
+    restart: unless-stopped
+    container_name: ute-hrm-api
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:

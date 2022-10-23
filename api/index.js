@@ -7,6 +7,8 @@ const { WORKER_MAX, PORT } = require('./src/config/constants');
 const HTTP_WORKER_INDEX = 0;
 const BATCH_WORKER_INDEX = 1;
 
+global.__basedir = __dirname;
+
 if (cluster.isMaster) {
     let workerList = [0, 0];
     for (let i = 0; i < WORKER_MAX; i++) {

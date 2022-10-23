@@ -17,7 +17,7 @@ const GET_LIST_OVERTIME_TICKET_OF_USER = "  SELECT ot.*, p.project_name "
 const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, CONCAT(e.first_name, ' ', e.last_name) as name, p.project_name "
     + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
     + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
-    + "                                     WHERE group_id = ?";
+    + "                                     WHERE group_id = ? and e.is_deleted <> 1";
 const UPDATE_OVERTIME_STATUS = " UPDATE overtime SET status = ? where overtime_id = ?";
 const DELETE_OT_TICKET = "DELETE FROM overtime WHERE overtime_id = ? "
 

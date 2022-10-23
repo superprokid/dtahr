@@ -8,7 +8,7 @@ const GET_DAILYREPORT_SEND_TO_USER = "  SELECT DISTINCT dr.*, CONCAT(e.first_nam
     + "                                 FROM dailyreport dr INNER JOIN reportreceiver rr ON dr.dailyreport_id = rr.dailyreport_id "
     + "                                                     INNER JOIN employee e ON dr.employee_id = e.employee_id "
     + "                                                     INNER JOIN project p ON p.project_id = dr.project_id "
-    + "                                 WHERE rr.employee_id = ? "
+    + "                                 WHERE rr.employee_id = ? and e.is_deleted <> 1"
     + "                                 ORDER BY dailyreport_date DESC "
 const GET_DAILYREPORT_DETAILS_BY_ID = "SELECT dr.*, p.project_name, rr.employee_id as receiver_id"
     + "                                 FROM dailyreport dr "

@@ -68,6 +68,10 @@ async function adminAuthen(req, res, next) {
         await queryTransaction(connection, UPDATE_SESSION_EXPIRES_DATE, [today, decryptData.username]);
         await commitTransaction(connection);
         releaseConnection(connection);
+
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] body: ${JSON.stringify(req.body)})`);
+        req.username = admin.username;
+
         next()
     } catch (error) {
         await rollback(connection);
