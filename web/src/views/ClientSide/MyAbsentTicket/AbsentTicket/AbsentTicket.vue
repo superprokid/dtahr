@@ -34,23 +34,35 @@
             <div v-else>LATE</div>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
-              v-if="item.status == 'PENDING'"
-              small
-              class="mr-2"
-              style="color: green"
-              @click="updateStatusAbsentTicket(item.leave_id, 1)"
-            >
-              mdi-check
-            </v-icon>
-            <v-icon
-              v-if="item.status == 'PENDING'"
-              small
-              @click="updateStatusAbsentTicket(item.leave_id, 2)"
-              style="color: red"
-            >
-              mdi-delete
-            </v-icon>
+            <v-tooltip bottom v-if="item.status == 'PENDING'">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  color="green"
+                  small
+                  class="mr-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="updateStatusAbsentTicket(item.leave_id, 1)"
+                >
+                  mdi-check
+                </v-icon>
+              </template>
+              <span>Approve</span>
+            </v-tooltip>
+            <v-tooltip bottom v-if="item.status == 'PENDING'">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  color="red"
+                  small
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="updateStatusAbsentTicket(item.leave_id, 2)"
+                >
+                  mdi-close
+                </v-icon>
+              </template>
+              <span>Reject</span>
+            </v-tooltip>
           </template>
         </v-data-table>
       </div>

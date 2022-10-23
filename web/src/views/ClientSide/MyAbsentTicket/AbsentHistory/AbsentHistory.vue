@@ -27,14 +27,21 @@
             <div v-else>LATE</div>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
-              v-if="item.status == 'PENDING'"
-              small
-              @click="deleteAbsentTicket(item.leave_id)"
-              style="color: red"
-            >
-              mdi-delete
-            </v-icon>
+            <v-tooltip bottom v-if="item.status == 'PENDING'">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  color="red"
+                  small
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="deleteAbsentTicket(item.leave_id)"
+                  
+                >
+                  mdi-delete
+                </v-icon>
+              </template>
+              <span>Delete</span>
+            </v-tooltip>
           </template>
         </v-data-table>
       </div>

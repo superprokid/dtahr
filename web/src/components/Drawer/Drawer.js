@@ -50,7 +50,7 @@ export default {
     watch: {
         startDataUser: {
             handler(newVal){
-                if (newVal.role == 1) {
+                if (newVal.role == 1 && this.items.length < 7) {
                     this.items.push({
                         title: 'Employee Management',
                         icon: 'mdi-account-cog',

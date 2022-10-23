@@ -5,7 +5,8 @@ import Button from '@/components/Button/Button.vue';
 
 import AbsentService from '@/services/API/MyAbsentAPI/AbsentServices';
 import moment from 'moment';
-import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { ABSENT_HISTORY_SCREEN, ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { LEAVE_CHANNEL } from '../../../../config/channel';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -121,16 +122,16 @@ export default {
 			) {
 				console.log('1 trong cac field bi thieu');
 			} else {
-				console.log('params', params);
 				this.$eventBus.$emit('show-spinner', true);
 				const response = await AbsentService.registerAbsent(params);
 				if (!response) {
 					this.$router.push('/user/login');
 				} else {
-					console.log(response);
 					alert('Success');
+					this.onClickResetButton();
 				}
-				this.$root.$emit(ABSENT_REGISTER_SCREEN);
+				this.$root.$emit(ABSENT_HISTORY_SCREEN);
+				this.$mySocket.emit(LEAVE_CHANNEL, 2);
 				this.$eventBus.$emit('show-spinner', false);
 			}
 		},

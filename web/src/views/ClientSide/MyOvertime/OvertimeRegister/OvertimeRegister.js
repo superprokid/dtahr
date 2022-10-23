@@ -5,7 +5,8 @@ import Button from '@/components/Button/Button.vue';
 
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import moment from 'moment';
-import { OT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { OT_HISTORY_SCREEN, OT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { OVERTIME_CHANNEL } from '../../../../config/channel';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -132,8 +133,10 @@ export default {
 				} else {
 					console.log(response);
 					alert('Success');
+					this.onClickResetButton();
+					this.$root.$emit(OT_HISTORY_SCREEN);
+					this.$mySocket.emit(OVERTIME_CHANNEL, 2);
 				}
-				this.$root.$emit(OT_REGISTER_SCREEN);
 				this.$eventBus.$emit('show-spinner', false);
 			}
 		},

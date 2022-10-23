@@ -3,9 +3,8 @@ import CookieUtls from '../../services/CookieUtls';
 
 import PasswordService from '@/services/API/UserManagementAPI/PasswordService';
 import UserManagementServices from '@/services/API/UserManagementAPI/UserManagementServices';
-const OVERTIME_CHANNEL = 'overttime';
-const LEAVE_CHANNEL = 'leave';
-const REPORT_CHANNEL = 'report';
+import { ABSENT_HISTORY_SCREEN, ABSENT_TICKET_SCREEN, OT_HISTORY_SCREEN, OT_TICKET_SCREEN, REPORT_RECEIVER_SCREEN, TIME_TRACKING_SCREEN } from '../../config/screenName';
+import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL } from '../../config/channel';
 
 export default {
     name: 'Header',
@@ -26,31 +25,59 @@ export default {
             genderItems: [{
                 text: 'Male',
                 value: 0,
-                },
-                {
-                    text: 'Female',
-                    value: 1,
-                },
-                {
-                    text: 'Other',
-                    value: 2,
-                }]
+            },
+            {
+                text: 'Female',
+                value: 1,
+            },
+            {
+                text: 'Other',
+                value: 2,
+            }]
         }
     },
     mounted() {
 
         this.$mySocket.on(OVERTIME_CHANNEL, (msg) => {
-            console.log(msg);
+            switch (msg) {
+                case 0:
+                    this.$root.$emit(OT_HISTORY_SCREEN);
+                    this.$root.$emit(OT_TICKET_SCREEN);
+                    break;
+                case 1:
+                    this.$root.$emit(OT_HISTORY_SCREEN);
+                    break;
+                case 2:
+                    this.$root.$emit(OT_TICKET_SCREEN);
+                    break;
+                default:
+                    break;
+            }
         });
-        
+
         this.$mySocket.on(LEAVE_CHANNEL, (msg) => {
-            // this.$root.$emit(REPORT_RECEIVER_SCREEN);
-            console.log(msg);
+            switch (msg) {
+                case 0:
+                    this.$root.$emit(ABSENT_HISTORY_SCREEN);
+                    this.$root.$emit(ABSENT_TICKET_SCREEN);
+                    break;
+                case 1:
+                    this.$root.$emit(ABSENT_HISTORY_SCREEN);
+                    break;
+                case 2:
+                    this.$root.$emit(ABSENT_TICKET_SCREEN);
+                    break;
+                default:
+                    break;
+            }
         });
-        
-        this.$mySocket.on(REPORT_CHANNEL, (msg) => {
-            // this.$root.$emit(REPORT_RECEIVER_SCREEN);
-            console.log(msg);
+
+        this.$mySocket.on(REPORT_CHANNEL, () => {
+            this.$root.$emit(REPORT_RECEIVER_SCREEN);
+        });
+
+        this.$mySocket.on(TIME_TRACKING_CHANNEL, () => {
+            this.$root.$emit(TIME_TRACKING_SCREEN);
         });
 
         this.profileModel = this.startDataUser

@@ -58,7 +58,7 @@ export default {
       }
       
       const today = new Date();
-      if (newVal.workTime?.isHoliday || today.getDay() === 1 || today.getDay() === 6) {
+      if (newVal.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
         this.isClockInDisable = true;
         this.isClockOutDisable = true;
       }
@@ -73,7 +73,7 @@ export default {
       }
 
       const today = new Date();
-      if (this.startDataUser.workTime?.isHoliday || today.getDay() === 1 || today.getDay() === 6) {
+      if (this.startDataUser.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
         this.isClockInDisable = true;
         this.isClockOutDisable = true;
       }

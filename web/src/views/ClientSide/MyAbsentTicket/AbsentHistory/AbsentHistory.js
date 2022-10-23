@@ -2,7 +2,7 @@
 import AbsentServices from '@/services/API/MyAbsentAPI/AbsentServices';
 import { getDateString, getTimeString } from '@/services/utilities';
 import Button from '@/components/Button/Button.vue';
-import { ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
+import { ABSENT_HISTORY_SCREEN, ABSENT_REGISTER_SCREEN } from '../../../../config/screenName';
 
 export default {
 	name: 'AbsentHistory',
@@ -38,6 +38,7 @@ export default {
 					text: 'Actions',
 					value: 'actions',
 					sortable: false,
+					align: 'center',
 				},
 			],
 		};
@@ -45,7 +46,7 @@ export default {
 	computed: {},
 	mounted() {
 		this._getListAbsentHistory();
-		this.$root.$on(ABSENT_REGISTER_SCREEN, () => {
+		this.$root.$on(ABSENT_HISTORY_SCREEN, () => {
 			this._getListAbsentHistory();
 		});
 	},
@@ -108,6 +109,7 @@ export default {
 				return;
 			}
 			await this._getListAbsentHistory();
+			this.$mySocket.emit(LEAVE_CHANNEL, 2);
 		},
 	},
 };

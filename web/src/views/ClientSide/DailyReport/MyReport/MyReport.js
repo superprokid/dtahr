@@ -4,6 +4,7 @@ import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegis
 import Button from '@/components/Button/Button.vue';
 import moment from 'moment';
 import { MY_REPORT_SCREEN } from "../../../../config/screenName";
+import { REPORT_CHANNEL } from "../../../../config/channel";
 // import moment from 'moment';
 
 export default {
@@ -79,7 +80,7 @@ export default {
     },
     async mounted() {
         this.loadMyReport();
-        // Re call api when checkin/checkout
+        // Re call api
         this.$root.$on(MY_REPORT_SCREEN, () => {
             this.loadMyReport();
         })
@@ -269,6 +270,7 @@ export default {
                     this.loadMyReport().then(() => {
                         this.toggleIsEdit();
                     });
+                    this.$mySocket.emit(REPORT_CHANNEL, 0);
                 }
             })
         },
