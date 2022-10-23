@@ -7,8 +7,6 @@ const logger = require('../common/logger')
 const { PORT } = require('../config/constants');
 const { Server } = require("socket.io");
 
-global.__basedir = __dirname;
-
 const app = express();
 app.use(express.json());
 // app.use(cookieParser())

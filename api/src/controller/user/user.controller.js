@@ -1,4 +1,6 @@
 const logger = require('../../common/logger');
+const fs = require('fs');
+const path = require('path');
 const moment = require('moment')
 const { signToken, signRefreshToken, verifyRefreshToken, compare, hash } = require('../../common/cryptcommon');
 const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
@@ -36,6 +38,7 @@ const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(fi
     + "                                 WHERE e.employer_id = ? and e.is_deleted <> 1 ORDER BY e.employee_id ASC"
 const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 const UPDATE_PASSWORD = "UPDATE employee SET password = ? WHERE employee_id = ?";
+const AVT_PATH = "../../../public/avts/";
 
 async function verifyUser(data) {
     try {
@@ -296,7 +299,7 @@ async function changePassword(req, res) {
             return;
         }
 
-        const {currentPassword, newPassword} = req.body;
+        const { currentPassword, newPassword } = req.body;
 
         // if current password is equal than new password
         if (currentPassword === newPassword) {
@@ -306,7 +309,7 @@ async function changePassword(req, res) {
             res.status(403).send("New password must be difference from current password");
             return;
         }
-        
+
         const userResult = await queryTransaction(connection, QUERY_VERIFY_USER, [empId]);
         if (!userResult.length) {
             await rollback(connection);
@@ -511,11 +514,13 @@ async function getEmployeeInfoById(req, res) {
 }
 
 async function updateInformation(req, res) {
+    const avt = req.files?.length ? req.files[0]?.filename : null;
     const connection = await getConnection();
     await beginTransaction(connection);
     try {
         const empId = req.employee_id;
         if (!empId) {
+            if (avt) deleteAvt(avt);
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
             await rollback(connection);
             releaseConnection(connection);
@@ -548,10 +553,6 @@ async function updateInformation(req, res) {
                 type: 'string',
                 required: false,
             },
-            avt: {
-                type: 'string',
-                required: false,
-            },
             mainSkill: {
                 type: 'string',
                 required: false,
@@ -564,6 +565,7 @@ async function updateInformation(req, res) {
 
         const validResult = validateRequest(req.body, validateSchema);
         if (validResult) {
+            if (avt) deleteAvt(avt);
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
             await rollback(connection);
             releaseConnection(connection);
@@ -571,7 +573,7 @@ async function updateInformation(req, res) {
             return;
         }
 
-        const { firstName, lastName, dob, address, gender, phone, avt, mainSkill, subSkill } = req.body;
+        const { firstName, lastName, dob, address, gender, phone, mainSkill, subSkill } = req.body;
 
         const setClauseArray = [];
         const whereClause = ` WHERE employee_id = '${empId}'`;
@@ -581,11 +583,20 @@ async function updateInformation(req, res) {
         if (address) setClauseArray.push(` address = '${address}' `);
         if (gender) setClauseArray.push(` gender = '${gender}' `);
         if (phone) setClauseArray.push(` phone = '${phone}' `);
-        if (avt) setClauseArray.push(` avt = '${avt}' `);
         if (mainSkill) setClauseArray.push(` main_skill = '${mainSkill}' `);
         if (subSkill) setClauseArray.push(` sub_skill = '${subSkill}' `);
 
+        if (avt) {
+            const currentUser = await queryTransaction(connection, QUERY_VERIFY_USER, [empId]);
+            const currentAvt = currentUser.length ? currentUser[0].avt : null;
+            if (currentAvt) {
+                deleteAvt(currentAvt);
+            }
+            setClauseArray.push(` avt = '${avt}' `);
+        }
+
         if (!setClauseArray.length) {
+            if (avt) deleteAvt(avt);
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] no columns update`);
             await rollback(connection);
             releaseConnection(connection);
@@ -594,7 +605,7 @@ async function updateInformation(req, res) {
         }
         const setClause = " SET " + setClauseArray.join(',');
         const query = "UPDATE `employee` " + setClause + whereClause;
-            
+
         await queryTransaction(connection, query);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update profile success`);
 
@@ -602,10 +613,19 @@ async function updateInformation(req, res) {
         releaseConnection(connection);
         res.status(200).send("update profile success");
     } catch (error) {
+        if (avt) deleteAvt(avt);
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
+    }
+}
+
+function deleteAvt(filename) {
+    const newPath = path.join(__basedir, "/public/avts", filename);
+    if (fs.existsSync(newPath)) {
+        fs.unlink(newPath, (err) => {});
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete old avt success`);
     }
 }
 

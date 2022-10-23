@@ -1,6 +1,8 @@
 const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
+const upoloadFile = require('../common/uploadUtls');
+const path = require('path')
 const Router = express.Router();
 // Import for user controller
 const userController = require('../controller/user/user.controller');
@@ -43,7 +45,10 @@ Router.post('/user/delete/overtime', authen, overtimeController.deleteOvertimeTi
 Router.post('/user/delete/dailyreport', authen, dailyreportController.deleteMyReport);
 Router.post('/user/edit/dailyreport', authen, dailyreportController.editMyDailyReport);
 Router.post('/user/changepassword', authen, userController.changePassword);
-Router.post('/user/changeprofile', authen, userController.updateInformation);
+Router.post('/user/changeprofile',upoloadFile.any(), authen, userController.updateInformation);
+Router.get('/public/avts/:filename', (req, res) => {
+    res.sendFile(path.join(__basedir, './public/avts', req.params.filename))
+})
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
 Router.post('/user/manager/update/overtime', authen, overtimeController.updateStatusOvertimeTicket);
