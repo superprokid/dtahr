@@ -31,7 +31,9 @@ export const USER_GET_MYDAILYREPORT = BASE_API_USER_URL + "/dailyreport/get";
 export const USER_DELETE_MYDAILYREPORT = BASE_API_USER_URL + "/delete/dailyreport";
 export const USER_GET_DAILY_REPORT_DETAILS = BASE_API_USER_URL + "/dailyreport/getdetails";
 export const USER_EDIT_DAILY_REPORT = BASE_API_USER_URL + "/edit/dailyreport";
-
+export const USER_CHANGE_PASSWORD = BASE_API_USER_URL + "/changepassword";
+export const USER_UPDATE_PROFILE = BASE_API_USER_URL + "/changeprofile";
+export const USER_GET_IMAGE = "/api/public/avts";
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";
