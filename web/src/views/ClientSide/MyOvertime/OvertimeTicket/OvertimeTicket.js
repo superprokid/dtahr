@@ -94,8 +94,7 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            await this._getListOvertimeTicket();
-            this.$mySocket.emit(OVERTIME_CHANNEL, 1);
+            this.$mySocket.emit(OVERTIME_CHANNEL, 0);
         },
    
     },

@@ -17,6 +17,7 @@ import EmployeeModal from "@/components/EmployeeModal/EmployeeModal.vue";
 
 import SessionUtls from '../../../services/SessionUtls';
 import tabName from '../../../config/tabname';
+import { REAL_TIME_TRACKING_SCREEN } from "../../../config/screenName";
 
 const WORKLOG_DEFAULT = {
     work_status: null,
@@ -187,6 +188,11 @@ export default {
         await this._getListUser();
         // this._getUserHistoryTracking();
         this.$eventBus.$emit('show-spinner', false);
+        this.$root.$on(REAL_TIME_TRACKING_SCREEN, (msg) => {
+            if (msg == this.userSelected.employee_id) {
+                this.onUpdateWorklog()
+            }
+        })
     },
     methods: {
         setItemRowCLass(item) {

@@ -3,8 +3,8 @@ import CookieUtls from '../../services/CookieUtls';
 
 import PasswordService from '@/services/API/UserManagementAPI/PasswordService';
 import UserManagementServices from '@/services/API/UserManagementAPI/UserManagementServices';
-import { ABSENT_HISTORY_SCREEN, ABSENT_TICKET_SCREEN, OT_HISTORY_SCREEN, OT_TICKET_SCREEN, REPORT_RECEIVER_SCREEN, TIME_TRACKING_SCREEN } from '../../config/screenName';
-import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL } from '../../config/channel';
+import { ABSENT_HISTORY_SCREEN, ABSENT_TICKET_SCREEN, OT_HISTORY_SCREEN, OT_TICKET_SCREEN, REAL_TIME_TRACKING_SCREEN, REPORT_RECEIVER_SCREEN, TIME_TRACKING_SCREEN } from '../../config/screenName';
+import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL, REAL_TIME_TRACKING_CHANNEL } from '../../config/channel';
 
 import moment from 'moment';
 
@@ -80,10 +80,12 @@ export default {
             this.$root.$emit(REPORT_RECEIVER_SCREEN);
         });
 
-        this.$mySocket.on(TIME_TRACKING_CHANNEL, () => {
-            this.$root.$emit(TIME_TRACKING_SCREEN);
+        this.$mySocket.on(TIME_TRACKING_CHANNEL, (msg) => {
+            this.$root.$emit(TIME_TRACKING_SCREEN,msg);
         });
-
+        this.$mySocket.on(REAL_TIME_TRACKING_CHANNEL, (msg) => {
+            this.$root.$emit(REAL_TIME_TRACKING_SCREEN,msg);
+        });
         this.profileModel = this.startDataUser
     },
     computed: {

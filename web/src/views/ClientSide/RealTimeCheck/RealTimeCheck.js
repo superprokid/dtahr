@@ -6,6 +6,7 @@ import SessionUtls from '../../../services/SessionUtls';
 import tabName from '../../../config/tabname';
 
 import moment from "moment"
+import { REAL_TIME_TRACKING_SCREEN } from '../../../config/screenName';
 export default {
   name: 'RealTimeCheck',
   components: {DateTimePicker},
@@ -57,6 +58,11 @@ export default {
     this.startDate = moment().startOf('month').format('YYYY-MM-DD')
     this.endDate = moment().format('YYYY-MM-DD')
     this.getGroupStatus()
+  },
+  mounted() {
+    this.$root.$on(REAL_TIME_TRACKING_SCREEN, () => { 
+      this.getGroupStatus()
+    });
   },
   methods: {
     onInputStartDate(date) {

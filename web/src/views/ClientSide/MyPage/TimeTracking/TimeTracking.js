@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { mapState } from 'vuex'
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
+import { REAL_TIME_TRACKING_CHANNEL } from '../../../../config/channel';
 import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
@@ -163,7 +164,8 @@ export default {
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
-      this.$root.$emit(TIME_TRACKING_SCREEN);
+      this.$root.$emit(TIME_TRACKING_SCREEN,this.startDataUser.employee_id);
+      this.$mySocket.emit(REAL_TIME_TRACKING_CHANNEL, this.startDataUser.employee_id)
     },
     onClickCancelButton() {
       this.isTimeConfirmModalShowed = false;

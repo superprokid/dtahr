@@ -47,8 +47,10 @@ export default {
         this._getUserHistoryTracking();
 
         // Re call api when checkin/checkout
-        this.$root.$on(TIME_TRACKING_SCREEN, () => {
-            this._getUserHistoryTracking();
+        this.$root.$on(TIME_TRACKING_SCREEN, (msg) => {
+            if (msg == this.startDataUser.employee_id) {
+                this._getUserHistoryTracking();            
+            }
         })
         this.$eventBus.$emit("show-spinner", false);
     },
