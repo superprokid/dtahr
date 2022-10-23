@@ -51,3 +51,6 @@ export const BASE_API_ADMIN_URL = BASE_URL + '/api/admin';
 export const ADMIN_LOGIN_URL = BASE_API_ADMIN_URL + '/login';
 export const ADMIN_GET_START_URL = BASE_API_ADMIN_URL + '/getstart';
 export const ADMIN_GET_GROUP_URL = BASE_API_ADMIN_URL + '/group/get';
+export const ADMIN_GET_ALL_FREE_MANAGER_URL = BASE_API_ADMIN_URL + '/employee/getfreemanager';
+export const ADMIN_CREATE_GROUP_URL = BASE_API_ADMIN_URL + '/group/create';
+export const ADMIN_EDIT_GROUP_URL = BASE_API_ADMIN_URL + '/group/update';
