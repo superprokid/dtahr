@@ -99,13 +99,37 @@
                       type="text"
                       hint="Your last name">
                     </v-text-field>
-                    <v-text-field
+                    <!-- <v-text-field
                       label="Day of birth *"
                       :rules="[() => !!profileModel.dob || 'This field is required']"
                       v-model="profileModel.dob"
                       type="text"
                       hint="Your day of birth">
-                    </v-text-field>
+                    </v-text-field> -->
+                    <v-menu
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="profileModel.dob"
+                          label="Day of birth *"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="profileModel.dob"
+                        :allowed-dates="allowedDates"
+                        @input="menu = false"
+                      ></v-date-picker>
+                    </v-menu>
                     <v-text-field
                       label="Address *"
                       :rules="[() => !!profileModel.address || 'This field is required']"
