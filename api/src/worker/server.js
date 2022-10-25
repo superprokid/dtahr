@@ -40,6 +40,8 @@ app.use('/api', router);
 const OVERTIME_CHANNEL = 'overttime';
 const LEAVE_CHANNEL = 'leave';
 const REPORT_CHANNEL = 'report';
+const TIME_TRACKING_CHANNEL = 'timetracking';
+const REAL_TIME_TRACKING_CHANNEL = 'realtime';
 
 function run() {
     const server = http.createServer(app);
@@ -68,6 +70,14 @@ function run() {
 
         socket.on(REPORT_CHANNEL, msg => {
             io.emit(REPORT_CHANNEL, msg);
+        });
+
+        socket.on(TIME_TRACKING_CHANNEL, msg => {
+            io.emit(TIME_TRACKING_CHANNEL, msg);
+        });
+
+        socket.on(REAL_TIME_TRACKING_CHANNEL, msg => {
+            io.emit(REAL_TIME_TRACKING_CHANNEL, msg);
         });
 
         socket.on('disconnect', () => {
