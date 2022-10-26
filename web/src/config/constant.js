@@ -34,6 +34,7 @@ export const USER_EDIT_DAILY_REPORT = BASE_API_USER_URL + "/edit/dailyreport";
 export const USER_CHANGE_PASSWORD = BASE_API_USER_URL + "/changepassword";
 export const USER_UPDATE_PROFILE = BASE_API_USER_URL + "/changeprofile";
 export const USER_GET_IMAGE = "/api/public/avts";
+export const USER_REGISTER_WORK_FROM_HOME = BASE_API_USER_URL + "/create/wfh"
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";

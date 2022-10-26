@@ -156,7 +156,7 @@ export default {
             if (this.profileModel.last_name != this.startDataUser.last_name) {
                 form.append('lastName', this.profileModel.last_name)
             }
-            if (this.profileModel.dob != moment(this.startDataUser.dob).locale().format('YYYY-MM-DD')) {
+            if (this.profileModel.dob != moment(this.startDataUser.dob).local().format('YYYY-MM-DD')) {
                 form.append('dob', this.profileModel.dob);
             }
             if (this.profileModel.address != this.startDataUser.address) {

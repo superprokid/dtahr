@@ -15,6 +15,7 @@ import MyAbsentTicket from "@/views/ClientSide/MyAbsentTicket/MyAbsentTicket.vue
 import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
 import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue"
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
+import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -81,6 +82,10 @@ const router = new Router({
                 {
                     path: 'realtimecheck',
                     component: RealTimeCheck,
+                },
+                {
+                    path: 'workfromhome',
+                    component: WorkFromHome,
                 }
             ]
         },
