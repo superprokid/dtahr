@@ -35,7 +35,13 @@ export default {
                     icon: 'mdi-file-chart-outline',
                     to: "dailyreport",
                     id: tabName.dailyreportUser,
-                }
+                },
+                {
+                    title: 'Work From Home ticket',
+                    icon: 'mdi-cast-education',
+                    to: "workfromhome", // name of router path
+                    id: tabName.workFromHome,
+                },
             ],
             right: null,
             role: '',
@@ -50,7 +56,7 @@ export default {
     watch: {
         startDataUser: {
             handler(newVal){
-                if (newVal.role == 1 && this.items.length < 7) {
+                if (newVal.role == 1 && this.items.length < 8) {
                     this.items.push({
                         title: 'Employee Management',
                         icon: 'mdi-account-cog',
