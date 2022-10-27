@@ -43,7 +43,13 @@ module.exports = {
         pending: 0,
         reject: 2,
     },
+    WFH_TICKET_STATUS: {
+        approve: 1,
+        pending: 0,
+        reject: 2,
+    },
     CHECKOUT_BATCH_CRON: "0 30 18 * * 1-5", // At 19:00 on every day-of-week from Monday through Friday 
+    MONTHLY_REPORT_BATCH_CRON: "0 1 0 1 * *", // At 00:01 every first day of month
     VALID_HOUR: 7,
     WORK_TIME_FULL: 8,
     MAX_EMPLOYEE_ID_LENGTH: 7,

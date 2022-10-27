@@ -143,6 +143,8 @@ function validateType(value, type) {
             return isValidNumber(value);
         case 'array':
             return isValidArray(value);
+        case 'time':
+            return isValidTime(value);
         default:
             return false;
     }
@@ -159,6 +161,10 @@ function isValidString(s) {
 function isValidDate(d) {
     const date = new Date(d);
     return date instanceof Date && !isNaN(date);
+}
+
+function isValidTime(time) {
+    return moment(time, 'HH:mm', true).isValid()
 }
 
 function isValidNumber(n) {
@@ -201,6 +207,14 @@ function groupArrayByKey(arr, key) {
     }, {});
 }
 
+function getDateStartOfMonth(date) {
+    return moment(date).startOf('month').format(YYYY_MM_DD);
+}
+
+function getDateEndOfMonth(date) {
+    return moment(date).endOf('month').format(YYYY_MM_DD);
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -216,4 +230,6 @@ module.exports = {
     isValidDate,
     generateId,
     getDateTimeString,
+    getDateStartOfMonth,
+    getDateEndOfMonth,
 }
