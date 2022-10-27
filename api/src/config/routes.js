@@ -12,6 +12,7 @@ const holidayController = require('../controller/user/holiday.controller');
 const projectController = require('../controller/user/project.controller');
 const leaveController = require('../controller/user/leave.controller');
 const dailyreportController = require('../controller/user/dailyreport.controller');
+const workFromHomeController = require('../controller/user/workfromhome.controller');
 
 // Import for admin controller
 const adminController = require('../controller/admin/admin.controller');
@@ -29,9 +30,11 @@ Router.get('/user/workhistory', authen, worklogController.getWorkHistory);
 Router.get('/user/worklog', authen, worklogController.getWorkLogByUser);
 Router.post('/user/create/overtime', authen, overtimeController.registerOverTime);
 Router.post('/user/create/dailyreport', authen, dailyreportController.createDailyReport);
-Router.post('/user/create/leave', authen, leaveController.registerLeaveTicket)
+Router.post('/user/create/leave', authen, leaveController.registerLeaveTicket);
+Router.post('/user/create/wfh', authen, workFromHomeController.registerWFHTicket);
 Router.get('/user/overtime/get', authen, overtimeController.getListOverTimeTicketOfUser);
 Router.get('/user/overtime/getall', authen, overtimeController.getListOverTimeTicketOfGroup);
+Router.get('/user/wfh/get', authen, workFromHomeController.getListWFHTicketOfUser);
 Router.get('/user/getstart', authen, userController.getStart);
 Router.get('/user/getholidays', authen, holidayController.getAllHoliday);
 Router.get('/user/getprojects', authen, projectController.getAllProjects);
@@ -43,6 +46,7 @@ Router.get('/user/dailyreport/getdetails', authen, dailyreportController.getDeta
 Router.post('/user/delete/leave', authen, leaveController.deleteLeaveTicket);
 Router.post('/user/delete/overtime', authen, overtimeController.deleteOvertimeTicket);
 Router.post('/user/delete/dailyreport', authen, dailyreportController.deleteMyReport);
+Router.post('/user/delete/wfh', authen, workFromHomeController.deleteWFHTicket);
 Router.post('/user/edit/dailyreport', authen, dailyreportController.editMyDailyReport);
 Router.post('/user/changepassword', authen, userController.changePassword);
 Router.post('/user/changeprofile',upoloadFile.any(), authen, userController.updateInformation);
@@ -52,12 +56,14 @@ Router.get('/public/avts/:filename', (req, res) => {
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
 Router.post('/user/manager/update/overtime', authen, overtimeController.updateStatusOvertimeTicket);
+Router.post('/user/manager/update/wfh', authen, workFromHomeController.updateStatusWFHTicket);
 Router.get('/user/manager/getalluser', authen, userController.getAllUserByManager);
 Router.get('/user/manager/getrealtime', authen, userController.getRealTimeStatusByManager);
 Router.get('/user/manager/worklog/get', authen, worklogController.getWorkLogOfUserByManager);
 Router.get('/user/manager/workhistory/get', authen, worklogController.getWorkHistoryByManager);
 Router.get('/user/manager/employee/getinfo', authen, userController.getEmployeeInfoById);
 Router.get('/user/manager/project/get', authen, projectController.getDetailsPojectByManager);
+Router.get('/user/manager/wfh/get', authen, workFromHomeController.getListWFHByManager);
 Router.post('/user/manager/worklog/update', authen, worklogController.updateWorklogByManager);
 Router.post('/user/manager/holiday/update', authen, worklogController.updateHolidayTimeByManager);
 
