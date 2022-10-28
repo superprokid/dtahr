@@ -1,2 +1,5 @@
 # local env files
 env/
+
+# python Cached files
+*.pyc
