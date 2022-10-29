@@ -1,4 +1,6 @@
 /* eslint-disable */ 
+import moment from "moment";
+import { WFH_CHANNEL } from "../../../../config/channel";
 import WorkFromHomeServices from "../../../../services/API/WorkFromHomeAPI/WorkFromHomeServices";
 
 export default {
@@ -33,6 +35,13 @@ export default {
   },
 
   methods: {
+    allowedDates(date) {
+        const currDate = new Date(date);
+        if((currDate.getDay() == 0 || currDate.getDay() == 6) || moment().isSameOrAfter(currDate)){
+            return false
+        }
+        return true
+    },
     async onClickRegisterWorkFromHome(){
         if(this.$refs.form.validate()){
             const params = {
@@ -54,7 +63,8 @@ export default {
                 if (response == -1) {
                     alert("register failed");
                 } else {
-                    alert("register success");         
+                    alert("register success");    
+                    this.$mySocket.emit(WFH_CHANNEL, 0);
                 }
             }
         }

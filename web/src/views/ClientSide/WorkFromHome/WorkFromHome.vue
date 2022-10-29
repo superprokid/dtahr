@@ -11,6 +11,8 @@
     background-color: whitesmoke;
     padding: 1.5%;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    overflow-x: auto ;
+
   }
 </style>

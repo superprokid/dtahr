@@ -1,6 +1,6 @@
 <!-- eslint-disable -->
 <template>
-  <div style="margin-left: -4vw" id="absenthistory">
+  <div >
     <v-container class="main-page">
       <md-toolbar class="mb-3" md-elevation="0">
         <h3 class="md-title">OVERTIME HISTORY</h3>
@@ -11,7 +11,7 @@
           :headers="headers"
           :items="listOvertimeTicket"
           item-key="createdat"
-          class="elevation-1 absenthistory-table"
+          class="elevation-1 othistory-table"
           :search="search"
           :custom-filter="filterOnlyCapsText"
         >

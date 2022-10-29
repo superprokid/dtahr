@@ -62,7 +62,7 @@
                                     </v-row>
                                 </v-col>
                                 <v-col cols="12" md="4" class="d-flex justify-center">
-                                    <v-date-picker full-width v-model="dates" multiple></v-date-picker>
+                                    <v-date-picker full-width v-model="dates" multiple :allowed-dates="allowedDates"></v-date-picker>
                                 </v-col>
                             </v-row>
                             <div class="d-flex justify-end">
