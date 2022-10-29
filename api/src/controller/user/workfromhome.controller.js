@@ -6,7 +6,7 @@ const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE, WFH_TICKET_STATU
 
 const LOG_CATEGORY = "WorkFromHomeController";
 const GET_WFH_TICKET_BY_ID = "SELECT * FROM `workfromhome` WHERE employee_id = ? and wfh_date = ?";
-const GET_LIST_WFH_TICKET_OF_USER = "SELECT * FROM workfromhome WHERE employee_id = ?";
+const GET_LIST_WFH_TICKET_OF_USER = "SELECT wfh_title, wfh_description, CONCAT(CAST(wfh_date as DATE), ' ', wfh_start_time) as start_date, CONCAT(CAST(wfh_date as DATE), ' ', wfh_end_time) as end_date FROM workfromhome WHERE employee_id = ? ORDER BY wfh_date DESC";
 const GET_LIST_WFH_TICKET_OF_GROUP = "  SELECT wfh.*, CONCAT(e.first_name, ' ', e.last_name) as name"
     + "                                     FROM workfromhome wfh "
     + "                                         INNER JOIN employee e on e.employee_id = wfh.employee_id"
