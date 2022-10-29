@@ -10,9 +10,9 @@ const GET_WORK_TOTAL_BY_ID = "SELECT count(*) as totalDays, sum(work_total) as t
 const GET_ANNUAL_HOLIDAY_AND_SALARY = "SELECT holiday_time, salary FROM employee WHERE employee_id = ?";
 const GET_OT_PAYMENT = "SELECT SUM(payment) as payment FROM overtime WHERE employee_id = ? and status = 1 and CAST(start_date as DATE) BETWEEN ? and ?";
 const INSERT_MONTHLY_REPORT = "INSERT INTO monthlyreport (employee_id, month, year, work_total_hours, work_total_days, annual_holiday, overtime_payment_total, salary_basic, salary_total)"
-    + "                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) as newRow"
-    + "                         ON DUPLICATE KEY UPDATE `work_total_hours`=newRow.`work_total_hours`, `work_total_days`=newRow.`work_total_days`, `annual_holiday`=newRow.`annual_holiday`,"
-    + "                         						`overtime_payment_total`=newRow.`overtime_payment_total`, `salary_basic`=newRow.`salary_basic`, `salary_total`=newRow.`salary_total`";
+    + "                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
+    + "                         ON DUPLICATE KEY UPDATE `work_total_hours`=VALUES(`work_total_hours`), `work_total_days`=VALUES(`work_total_days`), `annual_holiday`=VALUES(`annual_holiday`),"
+    + "                         						`overtime_payment_total`=VALUES(`overtime_payment_total`), `salary_basic`=VALUES(`salary_basic`), `salary_total`=VALUES(`salary_total`)";
 
 module.exports = {
     run

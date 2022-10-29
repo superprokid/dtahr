@@ -1,21 +1,22 @@
 const logger = require('../../common/logger');
 const moment = require('moment');
-const { validateRequest, getStartOfDate, minDiff, isValidDate } = require('../../common/utils');
+const { validateRequest, getStartOfDate, minDiff, isValidDate, getDateString } = require('../../common/utils');
 const { exeQuery, queryTransaction, getConnection, beginTransaction, commitTransaction, releaseConnection, rollback } = require('../../common/dbaccess');
 const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE, WFH_TICKET_STATUS } = require('../../config/constants');
 
 const LOG_CATEGORY = "WorkFromHomeController";
-const GET_WFH_TICKET_BY_ID = "SELECT * FROM `workfromhome` WHERE wfh_id = ? and employee_id = ?";
-const GET_LIST_WFH_TICKET_OF_USER = "SELECT * FROM workfromhome WHERE employee_id = ?";
-const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, CONCAT(e.first_name, ' ', e.last_name) as name, p.project_name "
-    + "                                     FROM overtime ot INNER JOIN project p on ot.project_id = p.project_id"
-    + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
-    + "                                     WHERE group_id = ? and e.is_deleted <> 1";
-const UPDATE_WFH_STATUS = " UPDATE workfromhome SET status = ? where status = 0 and wfh_id in ";
-const DELETE_OT_TICKET = "DELETE FROM `workfromhome` WHERE wfh_id = ? "
+const GET_WFH_TICKET_BY_ID = "SELECT * FROM `workfromhome` WHERE employee_id = ? and wfh_date = ?";
+const GET_LIST_WFH_TICKET_OF_USER = "SELECT wfh_title, wfh_description, CONCAT(CAST(wfh_date as DATE), ' ', wfh_start_time) as start_date, CONCAT(CAST(wfh_date as DATE), ' ', wfh_end_time) as end_date FROM workfromhome WHERE employee_id = ? ORDER BY wfh_date DESC";
+const GET_LIST_WFH_TICKET_OF_GROUP = "  SELECT wfh.*, CONCAT(e.first_name, ' ', e.last_name) as name"
+    + "                                     FROM workfromhome wfh "
+    + "                                         INNER JOIN employee e on e.employee_id = wfh.employee_id"
+    + "                                     WHERE group_id = ? and e.is_deleted <> 1 ORDER BY create_at DESC, wfh_date DESC";
+const UPDATE_WFH_STATUS = " UPDATE workfromhome SET status = ? where status = 0 and employee_id = ? and wfh_date = ? ";
+const DELETE_WFH_TICKET = "DELETE FROM `workfromhome` WHERE employee_id = ? and wfh_date = ? "
 
 
-const INSERT_NEW_WFH_TICKET = "INSERT INTO workfromhome (employee_id, wfh_title, wfh_description, wfh_start_date, wfh_end_date, status) VALUES (?, ?, ?, ?, ?, ?)"
+const INSERT_NEW_WFH_TICKET = "INSERT INTO workfromhome (employee_id, wfh_date, wfh_title, wfh_description, wfh_start_time, wfh_end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?) "
++ "                                 ON DUPLICATE KEY UPDATE `wfh_title`=VALUES(`wfh_title`), `wfh_description`=VALUES(`wfh_description`), `wfh_start_time`=VALUES(`wfh_start_time`), `wfh_end_time`=VALUES(`wfh_end_time`), `status`=VALUES(`status`)"
 
 async function registerWFHTicket(req, res) {
     const connection = await getConnection();
@@ -81,11 +82,17 @@ async function registerWFHTicket(req, res) {
                 res.status(403).send("date must be an array of days");
                 return;
             }
-            const startDate = `${insertDate} ${startTime}`;
-            const endDate = `${insertDate} ${endTime}`;
 
-            await queryTransaction(connection, INSERT_NEW_WFH_TICKET, [empId, title, description, startDate, endDate, WFH_TICKET_STATUS.pending]);
-            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new wfh ticket from ${startDate} to ${endDate}`);
+            if (moment(getDateString()).isSameOrAfter(insertDate)) {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] date can not before current date`);
+                await rollback(connection);
+                releaseConnection(connection);
+                res.status(403).send("date can not before current date");
+                return;
+            }
+
+            await queryTransaction(connection, INSERT_NEW_WFH_TICKET, [empId, insertDate, title, description, startTime, endTime, WFH_TICKET_STATUS.pending]);
+            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new wfh ticket`);
         }
 
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
@@ -179,7 +186,7 @@ async function updateStatusWFHTicket(req, res) {
         }
 
         const validateSchema = {
-            listWorkFromHomeId: {
+            listWFHTickets: {
                 type: 'array',
                 required: true
             },
@@ -196,10 +203,14 @@ async function updateStatusWFHTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { listWorkFromHomeId, status } = req.body;
+        const { listWFHTickets, status } = req.body;
 
-        const query = `${UPDATE_WFH_STATUS} (${listWorkFromHomeId.join(',')})`
-        await queryTransaction(connection, query, [status]);
+        for (let i = 0; i< listWFHTickets.length; i++) {
+            const wfhTicket = listWFHTickets[i];
+            const { employee_id, wfh_date } = wfhTicket;
+            await queryTransaction(connection, UPDATE_WFH_STATUS, [status, employee_id, wfh_date]);
+        }
+        
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update work from home ticket status success`);
         await commitTransaction(connection);
         releaseConnection(connection);
@@ -210,6 +221,32 @@ async function updateStatusWFHTicket(req, res) {
         res.status(500).send("SERVER ERROR");
         await rollback(connection);
         releaseConnection(connection);
+    }
+}
+
+async function getListWFHOfGroup(req, res) {
+    try {
+        const empId = req.employee_id;
+        const role = req.role;
+        const groupId = req.group_id;
+        if (!empId || !groupId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id or group_id is not exist`);
+            res.status(403).send("Get group's WFH ticket failed");
+            return;
+        }
+
+        if (role != ROLE.employer) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not a manager`);
+            res.status(403).send("GET work from home ticket failed");
+            return;
+        }
+
+        const listWFH = await exeQuery(GET_LIST_WFH_TICKET_OF_GROUP, [groupId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response - length: ${listWFH.length}`);
+        res.status(200).send(listWFH);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
     }
 }
 
@@ -227,10 +264,14 @@ async function deleteWFHTicket(req, res) {
         }
 
         const validateSchema = {
-            workFromHomeId: {
-                type: 'number',
+            employeeId: {
+                type: 'string',
                 required: true
             },
+            date: {
+                type: 'datetime',
+                require: true
+            }
         }
         const validResult = validateRequest(req.body, validateSchema);
         if (validResult) {
@@ -240,8 +281,8 @@ async function deleteWFHTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { workFromHomeId } = req.body;
-        const wfhTicket = await queryTransaction(connection, GET_WFH_TICKET_BY_ID, [workFromHomeId, empId]);
+        const { employeeId, date } = req.body;
+        const wfhTicket = await queryTransaction(connection, GET_WFH_TICKET_BY_ID, [employeeId, getDateString(date)]);
         if (!wfhTicket.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] work from home ticket not exist`);
             await rollback(connection);
@@ -258,7 +299,7 @@ async function deleteWFHTicket(req, res) {
             return;
         }
 
-        await queryTransaction(connection, DELETE_OT_TICKET, [workFromHomeId]);
+        await queryTransaction(connection, DELETE_WFH_TICKET, [employeeId, date]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete work from home ticket success`);
         await commitTransaction(connection);
         releaseConnection(connection);
@@ -278,4 +319,5 @@ module.exports = {
     updateStatusWFHTicket,
     getListWFHTicketOfUser,
     getListWFHByManager,
+    getListWFHOfGroup,
 }

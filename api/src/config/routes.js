@@ -64,6 +64,7 @@ Router.get('/user/manager/workhistory/get', authen, worklogController.getWorkHis
 Router.get('/user/manager/employee/getinfo', authen, userController.getEmployeeInfoById);
 Router.get('/user/manager/project/get', authen, projectController.getDetailsPojectByManager);
 Router.get('/user/manager/wfh/get', authen, workFromHomeController.getListWFHByManager);
+Router.get('/user/manager/wfh/getall', authen, workFromHomeController.getListWFHOfGroup);
 Router.post('/user/manager/worklog/update', authen, worklogController.updateWorklogByManager);
 Router.post('/user/manager/holiday/update', authen, worklogController.updateHolidayTimeByManager);
 
