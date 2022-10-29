@@ -35,6 +35,9 @@ export const USER_CHANGE_PASSWORD = BASE_API_USER_URL + "/changepassword";
 export const USER_UPDATE_PROFILE = BASE_API_USER_URL + "/changeprofile";
 export const USER_GET_IMAGE = "/api/public/avts";
 export const USER_REGISTER_WORK_FROM_HOME = BASE_API_USER_URL + "/create/wfh"
+export const USER_GET_THEIR_WFH_TICKET = BASE_API_USER_URL + "/wfh/get"
+export const USER_DELETE_THEIR_WFH_TICKET = BASE_API_USER_URL + "/delete/wfh"
+
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";
@@ -45,6 +48,10 @@ export const MANAGER_UPDATE_WORKLOG = BASE_API_USER_URL + "/manager/worklog/upda
 export const MANAGER_GET_HISTORY_WORKLOGS_OF_USER = BASE_API_USER_URL + "/manager/workhistory/get"
 export const MANAGER_GET_PROJECT_USER_JOINED = BASE_API_USER_URL + "/manager/project/get"
 export const MANAGER_UPDATE_HOLIDAY = BASE_API_USER_URL + "/manager/holiday/update"
+export const MANAGER_GET_ALL_WFH_TICKET = BASE_API_USER_URL + "/manager/wfh/getall"
+export const MANAGER_UPDATE_WFH_TICKET = BASE_API_USER_URL + "/manager/update/wfh"
+export const MANAGER_GET_WFH_TICKET_OF_SELECTED_USER = BASE_API_USER_URL + "/manager/wfh/get"
+
 
 
 // admin url api
