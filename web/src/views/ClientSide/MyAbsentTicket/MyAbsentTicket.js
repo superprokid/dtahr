@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import TabNav from '@/components/TabNav/TabNav.vue';
 import Notification from '@/components/Notification/Notification.vue';
 import Button from '@/components/Button/Button.vue';
@@ -8,7 +9,6 @@ import AbsentTicket from '@/views/ClientSide/MyAbsentTicket/AbsentTicket/AbsentT
 
 import SessionUtls from '../../../services/SessionUtls';
 import tabName from '../../../config/tabname';
-
 
 export default {
   name: 'AbsentTicketTab',
