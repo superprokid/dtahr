@@ -57,18 +57,6 @@ def register(name, image):
     numpy.savez_compressed(npz_path, face_encode)
     return True
 
-@app.route("/id", methods=["GET"])
-@cross_origin()
-def get_id():
-    face_engine.update_id_list()
-    try:
-        staff_id = str(max(face_engine.id_list) + 1)
-        return staff_id.zfill(3)
-    except:
-        staff_id = "1"
-        return staff_id.zfill(3)
-
-
 @app.route("/user", methods=["POST"])
 @cross_origin()
 def add_staff():

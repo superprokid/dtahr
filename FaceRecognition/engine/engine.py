@@ -42,7 +42,7 @@ class FaceRecognitionLib(object):
         """
         encoding = []
         # TODO: Experiment with 200, 500
-        image = imutils.resize(image, width=200, height=150)
+        image = imutils.resize(image, width=400, height=300)
 
         face_encodes = face_recognition.face_encodings(image)
 
