@@ -6,7 +6,7 @@ const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE, WFH_TICKET_STATU
 
 const LOG_CATEGORY = "WorkFromHomeController";
 const GET_WFH_TICKET_BY_ID = "SELECT * FROM `workfromhome` WHERE employee_id = ? and wfh_date = ?";
-const GET_LIST_WFH_TICKET_OF_USER = "SELECT wfh_title, wfh_description, CONCAT(CAST(wfh_date as DATE), ' ', wfh_start_time) as start_date, CONCAT(CAST(wfh_date as DATE), ' ', wfh_end_time) as end_date FROM workfromhome WHERE employee_id = ? ORDER BY wfh_date DESC";
+const GET_LIST_WFH_TICKET_OF_USER = "SELECT wfh_title, wfh_description, CONCAT(CAST(wfh_date as DATE)) as wfh_date, CONCAT(CAST(wfh_date as DATE), ' ', wfh_start_time) as start_date, CONCAT(CAST(wfh_date as DATE), ' ', wfh_end_time) as end_date, status FROM workfromhome WHERE employee_id = ? ORDER BY wfh_date DESC";
 const GET_LIST_WFH_TICKET_OF_GROUP = "  SELECT wfh.*, CONCAT(e.first_name, ' ', e.last_name) as name"
     + "                                     FROM workfromhome wfh "
     + "                                         INNER JOIN employee e on e.employee_id = wfh.employee_id"
@@ -65,7 +65,7 @@ async function registerWFHTicket(req, res) {
         let { title, description, date, startTime, endTime } = req.body;
 
         // check startDate and endDate
-        if (startTime >= endTime) {
+        if (moment('2000-10-10 '+ startTime).isSameOrAfter(moment('2000-10-10 ' + endTime), 'minute')) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startTime can not greater than or equal endDate`);
             await rollback(connection);
             releaseConnection(connection);
@@ -264,10 +264,6 @@ async function deleteWFHTicket(req, res) {
         }
 
         const validateSchema = {
-            employeeId: {
-                type: 'string',
-                required: true
-            },
             date: {
                 type: 'datetime',
                 require: true
@@ -281,8 +277,8 @@ async function deleteWFHTicket(req, res) {
             res.status(403).send(validResult);
             return;
         }
-        const { employeeId, date } = req.body;
-        const wfhTicket = await queryTransaction(connection, GET_WFH_TICKET_BY_ID, [employeeId, getDateString(date)]);
+        const { date } = req.body;
+        const wfhTicket = await queryTransaction(connection, GET_WFH_TICKET_BY_ID, [empId, getDateString(date)]);
         if (!wfhTicket.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] work from home ticket not exist`);
             await rollback(connection);
@@ -299,7 +295,7 @@ async function deleteWFHTicket(req, res) {
             return;
         }
 
-        await queryTransaction(connection, DELETE_WFH_TICKET, [employeeId, date]);
+        await queryTransaction(connection, DELETE_WFH_TICKET, [empId, date]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete work from home ticket success`);
         await commitTransaction(connection);
         releaseConnection(connection);
