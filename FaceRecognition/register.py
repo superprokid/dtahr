@@ -17,7 +17,7 @@ from engine.engine import FaceRecognitionLib
 # Constant
 current_dir = path.dirname(path.abspath(__file__))
 npz_dir = os.path.join(current_dir, "dataset", "npz")
-image_dir = os.path.join(current_dir, "dataset", "img")
+image_dir = os.path.join(current_dir, "dataset", "imgs")
 app = Flask(
     __name__,
     instance_relative_config=True,
@@ -38,38 +38,47 @@ def register(name, image):
     #:param name:
     #:param face_encode:
     #:param image:
-    face_encode = face_engine.make_face_encoding(image)
-    if not face_encode:
+    face_position = face_engine.get_face_position(image)
+    print(face_position)
+    if face_position:
+        image_path = os.path.join(image_dir, name + ".jpg")
+        Image.fromarray(image).crop((face_position[3],face_position[0],face_position[1],face_position[2])).save(image_path)
+
+        # npz_path = os.path.join(npz_dir, file_name)
+        # numpy.savez_compressed(npz_path, face_encode)
+        return True
+    else:
         return False
-    try:
-        staff_id = str(max(face_engine.id_list) + 1)
-    except:
-        staff_id = "1"
-
-    file_name = name + "_" + staff_id
-
-    npz_path = os.path.join(npz_dir, file_name)
-
-    image_path = os.path.join(image_dir, name + ".jpg")
-
-    cv2.imwrite(image_path, image)
-
-    numpy.savez_compressed(npz_path, face_encode)
-    return True
 
 @app.route("/user", methods=["POST"])
 @cross_origin()
 def add_staff():
     pic = request.files["file"]
-    name = request.form["name"]
+    employeeId = request.form["employeeId"]
     image = numpy.array(Image.open(pic))
-    check = register(name, image)
+    check = register(employeeId, image)
     if check:
         return "Register Complete"
     else:
         return "Register Incomplete"
 
+@app.route('/test', methods=['GET'])
+@cross_origin()
+def get_staff():
+    return {
+        "message": "Ok LA",
+    }
+
+@app.route("/check", methods=["POST"])
+@cross_origin()
+def check_staff():
+    pic = request.files["file"]
+    image = numpy.array(Image.open(pic))
+    id = face_engine.checkImage(image)
+    return {
+        "employeeId": id,
+    }
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True, host="26.74.195.215")
     # app.run(debug=True, host="0.0.0.0", ssl_context=context)
