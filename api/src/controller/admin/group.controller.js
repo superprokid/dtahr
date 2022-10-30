@@ -9,7 +9,10 @@ const GET_ALL_GROUP = "SELECT g.*, CONCAT(e.first_name, ' ', e.last_name) as man
     + "	                    INNER JOIN employee e ON g.manager_id = e.employee_id"
     + "                     LEFT JOIN employee ee ON ee.group_id = g.group_id"
     + "                 GROUP BY g.group_id";
-const GET_ALL_USER_BY_GROUP = "SELECT * FROM employee WHERE group_id = ?";
+const GET_ALL_USER_BY_GROUP = "SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name "
+    + "                         FROM employee e "
+    + "                              LEFT JOIN employee er ON e.employer_id = er.employee_id "
+    + "                         WHERE e.group_id = ? ";
 const GET_NEWEST_GROUP_ID = "SELECT group_id FROM `group` ORDER BY group_id DESC LIMIT 1";
 const CHECK_EXIST_EMPLOYEE_ID = "SELECT employee_id FROM employee where employee_id = ?";
 const INSERT_NEW_GROUP = "INSERT INTO `group` (group_id, group_name, group_full_name, manager_id, manager_start_date) VALUES (?, ?, ?, ?, ?) ";
@@ -175,7 +178,7 @@ async function updateGroup(req, res) {
         }
         const setClause = " SET " + setClauseArray.join(',');
         const query = "UPDATE `group` " + setClause + whereClause;
-            
+
         await queryTransaction(connection, query);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update new group success`);
 

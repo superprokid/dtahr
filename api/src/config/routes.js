@@ -1,7 +1,7 @@
 const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
-const upoloadFile = require('../common/uploadUtls');
+const { uploadFile, sendFile } = require('../common/uploadUtls');
 const path = require('path')
 const Router = express.Router();
 // Import for user controller
@@ -18,11 +18,13 @@ const workFromHomeController = require('../controller/user/workfromhome.controll
 const adminController = require('../controller/admin/admin.controller');
 const adminEmpController = require('../controller/admin/employee.controller');
 const adminGroupController = require('../controller/admin/group.controller');
+const { faceRecogAuthen } = require('../policy/facerecog.authentication');
 
 // user
 Router.post('/user/login', userController.login);
 Router.post('/user/refreshtoken', userController.refreshToken);
-Router.get('/user/get', authen, userController.get);
+// Router.get('/user/get', userController.get);
+Router.post('/user/app/checkin', sendFile.any(), userController.checkInMobile);
 Router.get('/user/getalluser', authen, userController.getAllUser);
 Router.post('/user/checkin', authen, userController.checkin);
 Router.post('/user/checkout', authen, userController.checkout);
@@ -49,7 +51,7 @@ Router.post('/user/delete/dailyreport', authen, dailyreportController.deleteMyRe
 Router.post('/user/delete/wfh', authen, workFromHomeController.deleteWFHTicket);
 Router.post('/user/edit/dailyreport', authen, dailyreportController.editMyDailyReport);
 Router.post('/user/changepassword', authen, userController.changePassword);
-Router.post('/user/changeprofile',upoloadFile.any(), authen, userController.updateInformation);
+Router.post('/user/changeprofile', uploadFile.any(), authen, userController.updateInformation);
 Router.get('/public/avts/:filename', (req, res) => {
     res.sendFile(path.join(__basedir, './public/avts', req.params.filename))
 })
@@ -80,5 +82,8 @@ Router.post('/admin/group/create', adminAuthen, adminGroupController.createGroup
 Router.post('/admin/group/update', adminAuthen, adminGroupController.updateGroup);
 Router.post('/admin/group/delete', adminAuthen, adminGroupController.deleteGroup);
 Router.post('/admin/employee/update', adminAuthen, adminEmpController.editEmployee);
+
+// face python system
+Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);
 
 module.exports = Router;  

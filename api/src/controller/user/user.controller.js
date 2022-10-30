@@ -1,11 +1,14 @@
 const logger = require('../../common/logger');
 const fs = require('fs');
 const path = require('path');
-const moment = require('moment')
+const moment = require('moment');
+const FormData = require('form-data');
+const { axiosBase } = require('../../common/axiosBase')
 const { signToken, signRefreshToken, verifyRefreshToken, compare, hash } = require('../../common/cryptcommon');
 const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
 const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString, isValidDate, validateRequest } = require('../../common/utils');
 const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR, ROLE } = require('../../config/constants');
+const { log } = require('console');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -122,8 +125,39 @@ async function login(req, res) {
 
 }
 
-function get(req, res) {
-    res.status(200).send("get success");
+async function checkInFaceId(req, res) {
+    req.employee_id = req.body.employeeId;
+    await checkin(req, res);
+    return
+}
+
+async function checkInMobile(req, res) {
+    const file = req.files?.length ? req.files[0] : null;
+    if (file) {
+        const form = new FormData();
+        const fileStream = fs.createReadStream(file.path);
+        form.append('file', fileStream);
+        fileStream.on('close', () => {
+            deleteFile(file.path)
+        });
+        fileStream.on('error', () => {
+            deleteFile(file.path)
+        });
+        form.append('employeeId', '0000001');
+        axiosBase.post('http://26.74.195.215:5000/check', form).then((result) => {
+            console.log(result.data);
+            res.status(200).send('success')
+        }).catch((err) => {
+            console.log("failed")
+            console.log(err)
+            res.status(400).send('success')
+        }).finally(() => {
+            deleteAvt(file.path);
+        })
+    } else {
+        res.status(400).send('failed')
+    }
+
 }
 
 async function isAvalibleCheckinTime(connection) {
@@ -136,6 +170,11 @@ async function isAvalibleCheckinTime(connection) {
     if (now.getHours() < VALID_HOUR) {
         return false;
     }
+
+    if (now.getDay() === 0 || now.getDay() === 6) {
+        return false;
+    }
+
     if (compareTwoTimeGreaterOrEqual(now.getHours(), now.getMinutes(), workTime.hour_end, workTime.min_end)) {
         return false;
     }
@@ -629,9 +668,21 @@ function deleteAvt(filename) {
     }
 }
 
+function deleteFile(filePath) {
+    if (fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => { 
+            if (err) {
+                logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete file failed ${err.stack}`)
+            } else {
+                logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete file success`)
+            }
+        });
+    }
+}
+
 module.exports = {
     login,
-    get,
+    checkInFaceId,
     refreshToken,
     checkin,
     checkout,
@@ -642,4 +693,5 @@ module.exports = {
     getEmployeeInfoById,
     changePassword,
     updateInformation,
+    checkInMobile
 }
