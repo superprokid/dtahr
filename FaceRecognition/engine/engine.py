@@ -84,6 +84,22 @@ class FaceRecognitionLib(object):
             self.encoded_image_name.append(filename)
         print("Encoding all faces done!")
 
+    def update_new_face(self, img_path):
+        """
+        Update new face to database
+        :param img_path: path to image
+        :return:
+        """
+        img = numpy.array(Image.open(img_path))
+        img_encoding = face_recognition.face_encodings(img)[0]
+        # Get the filename only from the initial file path.
+        basename = os.path.basename(img_path)
+        (filename, ext) = os.path.splitext(basename)
+        # Add to encoded image list
+        self.encoded_image.append(img_encoding)
+        self.encoded_image_name.append(filename)
+        print("New face added to encodedList!")
+
     @staticmethod
     def get_face_position(image):
         """

@@ -39,11 +39,11 @@ def register(name, image):
     #:param face_encode:
     #:param image:
     face_position = face_engine.get_face_position(image)
-    print(face_position)
     if face_position:
         image_path = os.path.join(image_dir, name + ".jpg")
         Image.fromarray(image).crop((face_position[3],face_position[0],face_position[1],face_position[2])).save(image_path)
 
+        face_engine.update_new_face(image_path)
         # npz_path = os.path.join(npz_dir, file_name)
         # numpy.savez_compressed(npz_path, face_encode)
         return True
