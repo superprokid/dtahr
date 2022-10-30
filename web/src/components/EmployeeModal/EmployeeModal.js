@@ -1,4 +1,4 @@
-
+import {USER_GET_IMAGE} from '../../config/constant'
 
 export default{
     name: 'EmployeeModal',
@@ -15,7 +15,9 @@ export default{
         // Instead of trying to access the prop value on the data block
         // Set up a watcher for this prop, and do the value assignment there
         // selectPackage: this.propPackage,
-        selectPackage: ''
+        selectPackage: '',
+        avtBaseUrl: USER_GET_IMAGE,
+        
     }),  
     watch: {
         propPackage(val) {

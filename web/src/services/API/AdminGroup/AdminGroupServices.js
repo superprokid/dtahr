@@ -1,4 +1,4 @@
-import { ADMIN_GET_GROUP_URL, ADMIN_GET_ALL_FREE_MANAGER_URL, ADMIN_CREATE_GROUP_URL ,ADMIN_EDIT_GROUP_URL} from "@/config/constant";
+import { ADMIN_GET_GROUP_URL, ADMIN_GET_ALL_FREE_MANAGER_URL, ADMIN_CREATE_GROUP_URL ,ADMIN_EDIT_GROUP_URL, ADMIN_DELETE_GROUP_URL, ADMIN_GET_ALL_EMPLOYEE_OF_GROUP_URL} from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
 
 const AdminGroupServices = {
@@ -45,7 +45,26 @@ const AdminGroupServices = {
             return error;
         }
     },
-
+    deleteGroup: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_DELETE_GROUP_URL, params)
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+    getAllUserOfSpecificGroup: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.get(ADMIN_GET_ALL_EMPLOYEE_OF_GROUP_URL, {params})
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
 }
 
 export default AdminGroupServices;

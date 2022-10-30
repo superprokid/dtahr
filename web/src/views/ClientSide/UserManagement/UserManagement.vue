@@ -108,7 +108,8 @@
                                     </v-list-item-content>
 
                                     <v-list-item-avatar class="rounded-circle" tile size="80" color="grey">
-                                        <img src="@/assets/user-default.png" alt="">
+                                        <img :src="avtBaseUrl+'/'+informationOfUserClicked.avt" alt="" v-if="informationOfUserClicked.avt != null">
+                                        <img src="@/assets/user-default.png" alt="" v-else>
                                     </v-list-item-avatar>
 
                                 </v-list-item>
