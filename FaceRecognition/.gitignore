@@ -1,5 +1,8 @@
 # local env files
 env/
 
+# Data set files
+dataset/
+
 # python Cached files
 *.pyc
