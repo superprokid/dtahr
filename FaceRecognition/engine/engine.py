@@ -79,12 +79,12 @@ class FaceRecognitionLib(object):
             basename = os.path.basename(img_path)
             (filename, ext) = os.path.splitext(basename)
             # Get encoding
-            
-            img_encoding = face_recognition.face_encodings(img)[0]
+            if filename not in self.encoded_image_name:
+                img_encoding = face_recognition.face_encodings(img)[0]
 
-            # Store file name and file encoding
-            self.encoded_image.append(img_encoding)
-            self.encoded_image_name.append(filename)
+                # Store file name and file encoding
+                self.encoded_image.append(img_encoding)
+                self.encoded_image_name.append(filename)
         print("Encoding all faces done!")
 
     def update_new_face(self, img_path):

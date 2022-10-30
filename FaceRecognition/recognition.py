@@ -1,8 +1,9 @@
 # Internal libraries
-from threading import Thread
+import sched, time
 
 # External libraries
 import cv2
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Internal libraries
 from engine.engine import FaceRecognitionLib
@@ -15,7 +16,9 @@ engine = FaceRecognitionLib()
 cap = cv2.VideoCapture(0)
 
 # Update encoded image every 5m
-
+scheduler = BackgroundScheduler()
+scheduler.add_job(engine.encode_all_face, 'interval', minutes=1)
+scheduler.start()
 
 while True:
     ret, frame = cap.read()
