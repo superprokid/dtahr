@@ -78,6 +78,7 @@ export default {
                     groupFullName: this.groupFullName,
                     managerId: this.managerSelect[0].employee_id,
                     managerStartDate: this.managerStartDate,
+                    managerAddGroupSelected: this.managerSelect[0]
                 }
                 // console.log('params for create group', params);
                 // const response = await AdminGroupServices.createGroup(params);

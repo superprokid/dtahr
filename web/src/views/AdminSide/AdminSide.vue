@@ -5,7 +5,7 @@
     <!-- <v-content class="ma-4">
       <router-view></router-view>
     </v-content> -->
-    <v-main class="ma-4" >
+    <v-main class="ma-4">
       <router-view></router-view>
     </v-main>
     <!-- <Footer /> -->

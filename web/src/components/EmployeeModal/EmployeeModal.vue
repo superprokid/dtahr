@@ -37,7 +37,7 @@
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
                                                 <v-text-field label="Gender"
-                                                    :value="propPackage.gender == 0 ? 'Male' : 'Female' " type="text"
+                                                    :value="propPackage.gender == 0 ? 'Male' : 'Female'" type="text"
                                                     readonly>
                                                 </v-text-field>
                                             </v-col>
@@ -81,10 +81,13 @@
                                 <img src="@/assets/user-default.png" alt="">
                             </v-list-item-avatar> -->
                             <v-card class="mx-auto" max-width="45vw" outlined>
+
+                                <v-img contain height="100%" width="100%" :src="avtBaseUrl + '/' + propPackage.avt"
+                                    v-if="propPackage.avt != null"></v-img>
                                 <v-img contain lazy-src="https://picsum.photos/id/11/10/6" height="100%" width="100%"
-                                src="https://www.bootdey.com/app/webroot/img/Content/avatar/avatar1.png"></v-img>
+                                    src="https://www.bootdey.com/app/webroot/img/Content/avatar/avatar1.png" v-else></v-img>
                             </v-card>
-                            
+
                         </v-col>
 
                     </v-row>

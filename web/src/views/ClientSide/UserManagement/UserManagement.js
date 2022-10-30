@@ -19,6 +19,8 @@ import SessionUtls from '../../../services/SessionUtls';
 import tabName from '../../../config/tabname';
 import { REAL_TIME_TRACKING_SCREEN } from "../../../config/screenName";
 
+import {USER_GET_IMAGE} from '../../../config/constant'
+
 const WORKLOG_DEFAULT = {
     work_status: null,
     work_total: 0,
@@ -69,6 +71,7 @@ export default {
             informationOfUserClicked: {},
             projectUserJoined: {},
 
+            avtBaseUrl: USER_GET_IMAGE
         }
     },
     created() {
