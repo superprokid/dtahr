@@ -6,7 +6,7 @@ from os import path
 import os
 from PIL import Image
 import ssl
-
+from threading import Thread
 # External libraries
 import cv2
 from flask import Flask, request, jsonify
@@ -42,8 +42,7 @@ def register(name, image):
     if face_position:
         image_path = os.path.join(image_dir, name + ".jpg")
         Image.fromarray(image).crop((face_position[3],face_position[0],face_position[1],face_position[2])).save(image_path)
-
-        face_engine.update_new_face(image_path)
+        Thread(target=face_engine.update_new_face, args=(image_path,)).start()
         # npz_path = os.path.join(npz_dir, file_name)
         # numpy.savez_compressed(npz_path, face_encode)
         return True

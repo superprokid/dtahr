@@ -137,6 +137,7 @@ class FaceRecognitionLib(object):
         """
         try:
             image = cv2.resize(image, (0, 0), fx=0.25, fy=0.25)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             face_location = face_recognition.face_locations(image)
             image_encoding = face_recognition.face_encodings(image, face_location)[0]
             results = face_recognition.compare_faces(self.encoded_image, image_encoding, tolerance=FaceRecognitionLib.__tolerance)
