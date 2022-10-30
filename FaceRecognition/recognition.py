@@ -17,7 +17,7 @@ cap = cv2.VideoCapture(0)
 
 # Update encoded image every 5m
 scheduler = BackgroundScheduler()
-scheduler.add_job(engine.encode_all_face, 'interval', minutes=1)
+scheduler.add_job(engine.encode_all_face, 'interval', minutes=5)
 scheduler.start()
 
 while True:
