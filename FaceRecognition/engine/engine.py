@@ -14,6 +14,9 @@ import dlib
 import concurrent.futures
 from PIL import Image
 
+# Internal libraries
+from engine.api import checkin
+
 current_dir = path.dirname(path.abspath(__file__))
 npz_dir = os.path.join(current_dir, "../dataset", "npz")
 image_dir = os.path.join(current_dir, "../dataset", "imgs")
@@ -146,7 +149,6 @@ class FaceRecognitionLib(object):
                 return self.encoded_image_name[result_index]
             return ""
         except Exception as e:
-            print(e)
             return ""
 
     def recognize(self, image: numpy.array):
@@ -155,25 +157,34 @@ class FaceRecognitionLib(object):
         :param image: target image
         :return:
         """
-        face_encoding = self.make_face_encoding(image)
-        name = "Unknown"
-        staff_id = "0"
+        try:
 
-        if len(face_encoding) != 0:
-            results = face_recognition.compare_faces(
-                self.list_all_faces(),
-                numpy.array(face_encoding),
-                tolerance=FaceRecognitionLib.__tolerance,
-            )
+            image = cv2.resize(image, (0, 0), fx=0.25, fy=0.25)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+            face_location = face_recognition.face_locations(image)
+            image_encoding = face_recognition.face_encodings(image, face_location)[0]
+            results = face_recognition.compare_faces(self.encoded_image, image_encoding, tolerance=FaceRecognitionLib.__tolerance)
 
-            for index, result in enumerate(results):
-                if result:
-                    name = self.__people[index]
-                    staff_id = self.__id[index]
-                    break
-        self.name = name
-        self.id = staff_id
-        # return name, staff_id
+            face_location = numpy.array(face_location)
+            face_location = face_location * 4
+
+            if True in results:
+                result_index = results.index(True)
+                id = self.encoded_image_name[result_index]
+                if(self.id != id):
+                    self.id = id
+                    checkin(id)
+                return face_location.astype(int)[0], id
+
+            elif len(face_location) > 0:
+                return face_location.astype(int)[0], "Unknown"
+
+            else:
+                return [], ""
+
+        except Exception as e:
+            return [], ""
 
     def run(self, frame, image, scale):
         """
