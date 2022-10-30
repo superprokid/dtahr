@@ -74,12 +74,12 @@ class FaceRecognitionLib(object):
 
         # Store image encoding and names
         for img_path in images_path:
-            img = numpy.array(Image.open(img_path))
             # Get the filename only from the initial file path.
             basename = os.path.basename(img_path)
             (filename, ext) = os.path.splitext(basename)
             # Get encoding
             if filename not in self.encoded_image_name:
+                img = numpy.array(Image.open(img_path))
                 img_encoding = face_recognition.face_encodings(img)[0]
 
                 # Store file name and file encoding
