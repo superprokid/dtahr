@@ -1,3 +1,4 @@
+## Getting Started
 - Clone the dlib library in some directory of the system
   - git clone https://github.com/davisking/dlib.git
 - get into the cloned directory
@@ -14,3 +15,8 @@
 - python3 setup.py install
 - pip install Pillow
 - pip install face_recognition
+
+## Run
+* For register: python register.py
+- For RealTime Face Check: python recognition.py
+  - Note: New Image gonna be updated every 5m
