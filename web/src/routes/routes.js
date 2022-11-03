@@ -20,6 +20,7 @@ import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
 import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
+import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
 
 Vue.use(Router);
 
@@ -44,6 +45,10 @@ const router = new Router({
                     path: 'group',
                     component: AdminGroup
                 },
+                {
+                    path: 'holiday',
+                    component: AdminHoliday
+                }
             ]
         },
         { 

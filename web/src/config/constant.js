@@ -64,3 +64,6 @@ export const ADMIN_CREATE_GROUP_URL = BASE_API_ADMIN_URL + '/group/create';
 export const ADMIN_EDIT_GROUP_URL = BASE_API_ADMIN_URL + '/group/update';
 export const ADMIN_DELETE_GROUP_URL = BASE_API_ADMIN_URL + '/group/delete';
 export const ADMIN_GET_ALL_EMPLOYEE_OF_GROUP_URL = BASE_API_ADMIN_URL + '/group/getalluser';
+export const ADMIN_GET_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/get';
+export const ADMIN_CREATE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/create';
+export const ADMIN_DELETE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/delete';

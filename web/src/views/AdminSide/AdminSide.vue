@@ -30,7 +30,6 @@ export default {
   methods: {
     async _getStartAdmin() {
       const response = await AdminSideServices.getStartAdmin();
-      console.log('response',response);
       if(!response){
           this.$router.push('/admin/login')
       } else if(response == -1){

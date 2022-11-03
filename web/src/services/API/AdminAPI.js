@@ -9,7 +9,6 @@ function getAdminSessionHeader() {
 }
 
 export function callAdminAPI(apiFuction){
-	console.log('apiFuction',apiFuction);
     return apiFuction().then(async (result)=>{
         return result;
     }).catch(async (error)=>{
