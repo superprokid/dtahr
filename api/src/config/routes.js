@@ -1,6 +1,7 @@
 const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
+const { faceRecogAuthen } = require('../policy/facerecog.authentication');
 const { uploadFile, sendFile } = require('../common/uploadUtls');
 const path = require('path')
 const Router = express.Router();
@@ -18,7 +19,8 @@ const workFromHomeController = require('../controller/user/workfromhome.controll
 const adminController = require('../controller/admin/admin.controller');
 const adminEmpController = require('../controller/admin/employee.controller');
 const adminGroupController = require('../controller/admin/group.controller');
-const { faceRecogAuthen } = require('../policy/facerecog.authentication');
+const adminHolidayController = require('../controller/admin/holiday.controller');
+const adminWorkTimeController = require('../controller/admin/worktime.controler');
 
 // user
 Router.post('/user/login', userController.login);
@@ -82,6 +84,13 @@ Router.post('/admin/group/create', adminAuthen, adminGroupController.createGroup
 Router.post('/admin/group/update', adminAuthen, adminGroupController.updateGroup);
 Router.post('/admin/group/delete', adminAuthen, adminGroupController.deleteGroup);
 Router.post('/admin/employee/update', adminAuthen, adminEmpController.editEmployee);
+Router.post('/admin/holiday/create', adminAuthen, adminHolidayController.addNewHoliday);
+Router.post('/admin/holiday/delete', adminAuthen, adminHolidayController.deleteHoliday);
+Router.get('/admin/holiday/get', adminAuthen, adminHolidayController.getAllHoliday);
+Router.get('/admin/worktime/get', adminAuthen, adminWorkTimeController.getAllWorkTime);
+Router.post('/admin/worktime/create', adminAuthen, adminWorkTimeController.addNewWorktime);
+Router.post('/admin/worktime/update', adminAuthen, adminWorkTimeController.updateWorkTime);
+Router.post('/admin/worktime/delete', adminAuthen, adminWorkTimeController.deleteWorkTime);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);
