@@ -136,6 +136,13 @@
             </v-card>
         </v-dialog>
 
+        <!-- NOTIFICATION AFTER EDIT SUCCESS -->
+        <v-dialog v-model="EditGroupSuccessDialogShowed" persistent max-width="600px" transition="dialog-top-transition"> 
+            <v-card>
+                <EditGroupSuccessModal @on-close="onClose" :editGroupSuccessInfo="editGroupSuccessInfo" />
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 

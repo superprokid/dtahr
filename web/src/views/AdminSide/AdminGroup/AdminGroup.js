@@ -13,6 +13,7 @@ import EditGroupModal from "../../../components/EditGroupModal/EditGroupModal.vu
 
 import AdminEmployeeManagement from "../AdminEmployeeManagement/AdminEmployeeManagement.vue"
 import AddGroupSuccessModal from "../../../components/AddGroupSuccessModal/AddGroupSuccessModal.vue"
+import EditGroupSuccessModal from "../../../components/EditGroupSuccessModal/EditGroupSuccessModal.vue"
 import DeleteGroupSuccessModal from "../../../components/DeleteGroupSuccessModal/DeleteGroupSuccessModal.vue"
 import ConfirmDeleteGroupModal from "../../../components/ConfirmDeleteGroupModal/ConfirmDeleteGroupModal.vue"
 
@@ -26,7 +27,7 @@ export default {
         AddGroupSuccessModal,
         DeleteGroupSuccessModal,
         ConfirmDeleteGroupModal,
-
+        EditGroupSuccessModal,
 
         // views
         AdminEmployeeManagement,
@@ -38,6 +39,7 @@ export default {
     data() {
         return {
             addGroupSuccessInfo: {},
+            editGroupSuccessInfo: {},
             confirmDeleteInfo: {},
 
             singleSelect: false,
@@ -64,6 +66,7 @@ export default {
 
             AddGroupSuccessDialogShowed: false,
             DeleteGroupSuccessDialogShowed: false,
+            EditGroupSuccessDialogShowed: false,
 
             ConfirmDeleteGroupDialogShowed: false,
 
@@ -203,6 +206,8 @@ export default {
                 this.DeleteGroupSuccessDialogShowed = false;
             }else if(screen == 5){
                 this.ConfirmDeleteGroupDialogShowed = false;
+            }else if(screen == 6){
+                this.EditGroupSuccessDialogShowed = false;
             }
         },
 
@@ -240,6 +245,9 @@ export default {
                 this.EditGroupDialogShowed = false;
                 this.selected = []
                 this._getGroupCompany()
+
+                this.editGroupSuccessInfo = params;
+                this.EditGroupSuccessDialogShowed = true;
             }
         },
 
