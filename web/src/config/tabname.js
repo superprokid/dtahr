@@ -8,6 +8,7 @@ const tabName = {
     realtimeCheck: 'user-realtimecheck-001',
     workFromHome: 'user-work-from-home-001',
     addTaskUser: 'user-add-task-001',
+    taskBoardUser: 'user-task-board-001',
 
     homeAdmin: 'admin-home-001',
     groupAdmin: 'admin-group-001',
