@@ -48,6 +48,12 @@ export default {
                     to: "addtask", // name of router path
                     id: tabName.addTaskUser,
                 },
+                {
+                    title: 'Task Board',
+                    icon: 'mdi-calendar-check',
+                    to: "taskboard", // name of router path
+                    id: tabName.taskBoardUser,
+                }
             ],
             right: null,
             role: '',
