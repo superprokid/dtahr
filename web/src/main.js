@@ -15,11 +15,18 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import i18n from './locales/i18n';
 import { storeVuex } from './services/store';
 
+
+// import VueQuillEditor from 'vue-quill-editor'
+
+
+
+
 const EventBus = new Vue();
 Vue.prototype.$eventBus = EventBus;
 
 Vue.use(BootstrapVue);
 Vue.use(VueMaterial);
+// Vue.use(VueQuillEditor, /* { default global options } */)
 
 import router from './routes/routes';
 

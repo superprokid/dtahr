@@ -42,6 +42,12 @@ export default {
                     to: "workfromhome", // name of router path
                     id: tabName.workFromHome,
                 },
+                {
+                    title: 'Add Task',
+                    icon: 'mdi-calendar-check',
+                    to: "addtask", // name of router path
+                    id: tabName.addTaskUser,
+                },
             ],
             right: null,
             role: '',
