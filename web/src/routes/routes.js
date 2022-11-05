@@ -17,6 +17,7 @@ import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
 import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
+import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -76,6 +77,10 @@ const router = new Router({
                 {
                     path: 'myovertime',
                     component: MyOvertime
+                },
+                {
+                    path: 'taskboard',
+                    component: TaskBoard
                 },
                 {
                     path: 'dailyreport',
