@@ -59,4 +59,25 @@ module.exports = {
         employer: 1,
     },
     EMPLOYEE_WEB_LOGIN: 'http://127.0.0.1:8080/user/login',
+    TASK_PRIORITY: {
+        low: 0,
+        normal: 1,
+        high: 2
+    },
+    TASK_PRIORITY_TEXT: ['Low', 'Normal', 'High'],
+    TASK_STATUS: {
+        open: 0,
+        inProgress: 1,
+        resolved: 2,
+        closed: 3
+    },
+    TASK_STATUS_TEXT: ['Open', 'In Progress', 'Resolved', 'Closed'],
+    EXPORT_TYPE: {
+        infor: 1,
+        overtime: 2,
+        leave: 3,
+        workHistory: 4,
+        monthlyreport: 5,
+        workLog: 6,
+    },
 }

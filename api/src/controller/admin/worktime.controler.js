@@ -79,6 +79,9 @@ async function addNewWorktime(req, res) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
     }
+    
+    await dbaccess.commitTransaction(connection);
+    dbaccess.releaseConnection(connection);
 }
 
 async function updateWorkTime(req, res) {
@@ -173,6 +176,8 @@ async function updateWorkTime(req, res) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
     }
+    await dbaccess.commitTransaction(connection);
+    dbaccess.releaseConnection(connection);
 }
 
 async function deleteWorkTime(req, res) {
@@ -223,6 +228,8 @@ async function deleteWorkTime(req, res) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
     }
+    await dbaccess.commitTransaction(connection);
+    dbaccess.releaseConnection(connection);
 }
 
 async function getAllWorkTime(req, res) {

@@ -14,6 +14,7 @@ const projectController = require('../controller/user/project.controller');
 const leaveController = require('../controller/user/leave.controller');
 const dailyreportController = require('../controller/user/dailyreport.controller');
 const workFromHomeController = require('../controller/user/workfromhome.controller');
+const taskController = require('../controller/user/task.controller');
 
 // Import for admin controller
 const adminController = require('../controller/admin/admin.controller');
@@ -56,7 +57,17 @@ Router.post('/user/changepassword', authen, userController.changePassword);
 Router.post('/user/changeprofile', uploadFile.any(), authen, userController.updateInformation);
 Router.get('/public/avts/:filename', (req, res) => {
     res.sendFile(path.join(__basedir, './public/avts', req.params.filename))
-})
+});
+Router.post('/user/task/create', authen, taskController.addNewTask);
+Router.post('/user/category/create', authen, taskController.addNewCategory);
+Router.post('/user/comment/create', authen, taskController.addNewComment);
+Router.post('/user/task/update', authen, taskController.updateTask);
+Router.post('/user/comment/update', authen, taskController.editComment);
+Router.get('/user/task/getbystatus', authen, taskController.getAllTaskWithStatus);
+Router.get('/user/task/getall', authen, taskController.getAllTask);
+Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
+Router.get('/user/category/getall', authen, taskController.getAllCategory);
+
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
 Router.post('/user/manager/update/overtime', authen, overtimeController.updateStatusOvertimeTicket);

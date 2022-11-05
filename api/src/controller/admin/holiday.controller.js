@@ -40,6 +40,8 @@ async function addNewHoliday(req, res) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
     }
+    await dbaccess.commitTransaction(connection);
+    dbaccess.releaseConnection(connection);
 }
 
 async function deleteHoliday(req, res) {
@@ -71,6 +73,8 @@ async function deleteHoliday(req, res) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
     }
+    await dbaccess.commitTransaction(connection);
+    dbaccess.releaseConnection(connection);
 }
 
 async function getAllHoliday(req, res) {
