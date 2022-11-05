@@ -16,6 +16,7 @@ import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
 import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue"
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
+import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -91,6 +92,10 @@ const router = new Router({
                 {
                     path: 'workfromhome',
                     component: WorkFromHome,
+                },
+                {
+                    path: 'addtask',
+                    component: AddTask,
                 }
             ]
         },
