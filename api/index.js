@@ -9,6 +9,13 @@ const BATCH_WORKER_INDEX = 1;
 
 global.__basedir = __dirname;
 
+// const Excel = require('./src/model/excel');
+// const exportOT = require('./src/model/export/overtime.export');
+// const excel = new Excel('./src/template/overtime_template.xlsx');
+// exportOT.run(excel, '2022-10-01', '2022-10-30')
+// .then(() => excel.save('./test.xlsx'))
+
+
 if (cluster.isMaster) {
     let workerList = [0, 0];
     for (let i = 0; i < WORKER_MAX; i++) {
