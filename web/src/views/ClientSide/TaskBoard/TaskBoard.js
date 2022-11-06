@@ -2,8 +2,9 @@ import TaskCard from "../../../components/TaskCard/TaskCard"
 import draggable from "vuedraggable"
 
 import TaskBoardServices from "../../../services/API/TaskBoard/TaskBoardService";
+import ReportService from "../../../services/API/ReportAPI/ReportServices";
 
-
+import { USER_GET_IMAGE } from "../../../config/constant"; 
 export default {
   name: 'TaskBoard',
   components: {
@@ -18,124 +19,108 @@ export default {
         'Resolved',
         'Closed'
       ],
-      columns: [
-        {
-          title: "Backlog",
-          tasks: [
-            {
-              id: 1,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 2,
-              title: "Provide documentation on integrations",
-              date: "Sep 12"
-            },
-            {
-              id: 3,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 4,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 5,
-              title: "Test checkout flow",
-              date: "Sep 15",
-              type: "QA"
-            }
-          ]
-        },
-        {
-          title: "In Progress",
-          tasks: [
-            {
-              id: 6,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 7,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 8,
-              title: "Provide documentation on integrations",
-              date: "Sep 12",
-              type: "Backend"
-            }
-          ]
-        },
-        {
-          title: "Review",
-          tasks: [
-            {
-              id: 9,
-              title: "Provide documentation on integrations",
-              date: "Sep 12"
-            },
-            {
-              id: 10,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 11,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 12,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 13,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            }
-          ]
-        },
-        {
-          title: "Done",
-          tasks: [
-            {
-              id: 14,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 15,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 16,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            }
-          ]
-        }
-      ],
-      data: [],
+      statusColorArr: ['#ed8077', '#4488c5', '#5eb5a6', '#a1af2f'],
+      categoryList: [],
+      userList: [],
+
+      selectedCategory: '',
+      selectedUser: '',
+
+      taskData: [],
+      filteredData: [],
+
+      avtBaseUrl: USER_GET_IMAGE,
     };
+  },
+  watch: {
+    selectedCategory(newValue) {
+      this.filteredData = []
+      if (newValue == '') {
+        if (this.selectedUser != '') {
+          for (let i = 0; i < this.taskData.length; i++) {
+            let tasks = []
+            for (let j = 0; j < this.taskData[i].tasks.length; j++) {
+              if (this.taskData[i].tasks[j].assignee_id === this.selectedUser) {
+                tasks.push(this.taskData[i].tasks[j])
+              }
+            }
+            this.filteredData.push({
+              title: this.taskData[i].title,
+              tasks: tasks
+            })
+          }
+        }
+        else {
+          this.filteredData = this.taskData
+        }
+      }
+      else {
+        for (let i = 0; i < this.taskData.length; i++) {
+          let tasks = []
+          for (let j = 0; j < this.taskData[i].tasks.length; j++) {
+            if (this.taskData[i].tasks[j].category_id === newValue) {
+              if (this.selectedUser == '') {
+                tasks.push(this.taskData[i].tasks[j])
+              }
+              else {
+                if (this.taskData[i].tasks[j].assignee_id === this.selectedUser) {
+                  tasks.push(this.taskData[i].tasks[j])
+                }
+              }
+            }
+          }
+          this.filteredData.push({
+            title: this.taskData[i].title,
+            tasks: tasks
+          })
+        }
+      }
+    },
+
+    selectedUser(newValue) {
+      this.filteredData = []
+      if (newValue == '') {
+        
+        if (this.selectedCategory != '') {
+          for (let i = 0; i < this.taskData.length; i++) {
+            let tasks = []
+            for (let j = 0; j < this.taskData[i].tasks.length; j++) {
+              if (this.taskData[i].tasks[j].category_id === this.selectedCategory) {
+                tasks.push(this.taskData[i].tasks[j])
+              }
+            }
+            this.filteredData.push({
+              title: this.taskData[i].title,
+              tasks: tasks
+            })
+          }
+        }
+        else {
+          this.filteredData = this.taskData
+        }
+      }
+      else {
+        for (let i = 0; i < this.taskData.length; i++) {
+          let tasks = []
+          for (let j = 0; j < this.taskData[i].tasks.length; j++) {
+            if (this.taskData[i].tasks[j].assignee_id === newValue) {
+              if (this.selectedCategory == '') {
+                tasks.push(this.taskData[i].tasks[j])
+              }
+              else {
+                if (this.taskData[i].tasks[j].category_id === this.selectedCategory) {
+                  tasks.push(this.taskData[i].tasks[j])
+                }
+              }
+            }
+          }
+          this.filteredData.push({
+            title: this.taskData[i].title,
+            tasks: tasks
+          })
+        }
+      }
+    }
   },
   methods: {
     async getAllTask() {
@@ -145,16 +130,40 @@ export default {
       }
       else {
         for (const [key, value] of Object.entries(response.data)) {
-          this.data.push({
+          this.taskData.push({
             title: key,
             tasks: value
           })
         }
       }
+      this.filteredData = this.taskData
     },
+
+    async getAllCategory() {
+      const response = await TaskBoardServices.getAllCategory();
+      if (!response) {
+        this.$router.push("/user/login");
+      }
+      else {
+        this.categoryList = ['',...response.data];
+      }
+    },
+
+    async getAllUser() {
+      const response = await ReportService.getAllUser();
+      if (!response) {
+        this.$router.push("/user/login");
+      }
+      else {
+        console.log(response.data)
+        this.userList = ['',...response.data];
+      }
+    },
+
     onClickTask(task) {
       console.log(task)
     },
+
     async onChangeColumn(event, column_id) {
       if (event.added) {
         let task = event.added.element;
@@ -166,7 +175,10 @@ export default {
       }
     }
   },
+
   created() {
+    this.getAllUser();
+    this.getAllCategory()
     this.getAllTask();
   }
 };
