@@ -18,6 +18,7 @@ import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
 import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
 import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
+import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -101,6 +102,10 @@ const router = new Router({
                 {
                     path: 'addtask',
                     component: AddTask,
+                },
+                {
+                    path: 'taskdetail/:taskId',
+                    component: TaskDetail,
                 }
             ]
         },
