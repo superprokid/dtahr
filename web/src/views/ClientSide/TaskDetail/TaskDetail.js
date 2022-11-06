@@ -11,7 +11,7 @@ import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 import TaskDetailServices from "../../../services/API/TaskDetailAPI/TaskDetailServices"
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
 import ReportServices from "../../../services/API/ReportAPI/ReportServices"
-
+import { getDateString, getTimeString} from "../../../services/utilities";
 
 import {USER_GET_IMAGE} from '../../../config/constant'
 
@@ -33,7 +33,16 @@ export default {
 
             endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             endDateModalShowed: false,
-  
+
+            taskDetailData: {},
+            statusTextArr: ['Open', 'Inprogress', 'Resolved', 'Closed'],
+            statusColorArr: ['#ed8077', '#4488c5', '#5eb5a6', '#a1af2f'],
+
+            priorityName: ['Low', "Normal", 'High'],
+
+            avtBaseUrl: USER_GET_IMAGE,
+
+            reveal: false,
         }
     },
     watch: {
@@ -71,6 +80,24 @@ export default {
                 alert("Call Fail")
             }
             console.log('response', response.data);
+            this.taskDetailData = response.data
+            this.taskDetailData.start_date = getDateString(response.data.start_date)
+            this.taskDetailData.end_date = getDateString(response.data.end_date)      
+            this.taskDetailData.create_at = getDateString(response.data.create_at) + ' ' +getTimeString(response.data.create_at)
+        },
+
+        getStatus(status) {
+            return {
+                text: this.statusTextArr[status],
+                color: this.statusColorArr[status],
+            }
+        },
+        getPriorityName(priority){
+            return this.priorityName[priority]
+        },
+
+        onClickEditTaskDetail(){
+            console.log('onclick edit task detail');
         },
     },
     computed: {
