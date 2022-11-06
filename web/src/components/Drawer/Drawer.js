@@ -13,6 +13,24 @@ export default {
                     id: tabName.myPageUser, // id of page
                 },
                 {
+                    title: 'Add Task',
+                    icon: 'mdi-plus-thick',
+                    to: "/addtask", // name of router path
+                    id: tabName.addTaskUser,
+                },
+                {
+                    title: 'Tasks',
+                    icon: 'mdi-file-tree',
+                    to: "/tasks", // name of router path
+                    id: tabName.taskUser,
+                },
+                {
+                    title: 'Task Board',
+                    icon: 'mdi-poll',
+                    to: "/taskboard", // name of router path
+                    id: tabName.taskBoardUser,
+                },
+                {
                     title: 'Overtime ticket',
                     icon: 'mdi-clock',
                     to: "/myovertime", // name of router path
@@ -42,18 +60,6 @@ export default {
                     to: "/workfromhome", // name of router path
                     id: tabName.workFromHome,
                 },
-                {
-                    title: 'Add Task',
-                    icon: 'mdi-calendar-check',
-                    to: "/addtask", // name of router path
-                    id: tabName.addTaskUser,
-                },
-                {
-                    title: 'Task Board',
-                    icon: 'mdi-calendar-check',
-                    to: "/taskboard", // name of router path
-                    id: tabName.taskBoardUser,
-                }
             ],
             right: null,
             role: '',
@@ -68,7 +74,7 @@ export default {
     watch: {
         startDataUser: {
             handler(newVal){
-                if (newVal.role == 1 && this.items.length < 8) {
+                if (newVal.role == 1 && this.items.length < 10) {
                     this.items.push({
                         title: 'Employee Management',
                         icon: 'mdi-account-cog',

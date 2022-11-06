@@ -43,6 +43,7 @@ export const USER_CREATE_TASK = BASE_API_USER_URL + "/task/create"
 export const USER_GET_ALL_TASK = BASE_API_USER_URL + "/task/getbystatus"
 export const USER_UPDATE_TASK = BASE_API_USER_URL + "/task/update"
 export const USER_GET_TASK_DETAIL = BASE_API_USER_URL + "/task/getdetails"
+export const USER_GET_ALL_TASK_LIST = BASE_API_USER_URL + "/task/getall"
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
