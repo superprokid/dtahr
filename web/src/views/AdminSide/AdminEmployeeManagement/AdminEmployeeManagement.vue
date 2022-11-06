@@ -57,7 +57,7 @@
 }
 </style>
 
-<style >
+<style scoped >
   table > tbody > tr > td:nth-child(1),
   table > thead > tr > th:nth-child(1) {
     position: sticky !important;

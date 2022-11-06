@@ -17,6 +17,7 @@ import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
 import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
 import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
+import Tasks from "../views/ClientSide/Tasks/Tasks.vue";
 import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
 import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
 
@@ -98,6 +99,10 @@ const router = new Router({
                 {
                     path: 'workfromhome',
                     component: WorkFromHome,
+                },
+                {
+                    path: 'tasks',
+                    component: Tasks
                 },
                 {
                     path: 'addtask',
