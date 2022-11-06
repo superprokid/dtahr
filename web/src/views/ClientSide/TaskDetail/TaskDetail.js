@@ -111,5 +111,8 @@ export default {
         this._getTaskDetailById()
         this.$eventBus.$emit('show-spinner', false);
     },
-
+    beforeCreate() {
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.taskUser);
+        this.$root.$emit('drawer');
+    },
 }

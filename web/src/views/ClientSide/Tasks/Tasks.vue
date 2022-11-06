@@ -27,7 +27,7 @@
                   <div style="min-width: 80%" v-bind="data.attrs" :input-value="data.selected" close @click="data.select">
                     <v-avatar left>
                       <v-img max-height="30" max-width="30"
-                        src="https://www.bootdey.com/app/webroot/img/Content/avatar/avatar1.png"></v-img>
+                        :src="getAvt(data.item.avt)"></v-img>
                     </v-avatar>
                     {{ data.item.name }}
                   </div>
@@ -36,7 +36,7 @@
                   <template>
                     <v-list-item-avatar>
                       <v-img max-height="35" max-width="35"
-                        src="https://www.bootdey.com/app/webroot/img/Content/avatar/avatar1.png"></v-img>
+                      :src="getAvt(data.item.avt)"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title v-html="data.item.name">

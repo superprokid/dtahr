@@ -248,13 +248,11 @@ export default {
                 alert("Something wrong, please try again!")
                 return;
             }
-            console.log('listUserWorklogs before', response.data);
             this.listUserWorklogs = response.data.map(item => {
                 return {...item, full_name: this.userSelected.full_name, work_date: moment(item.work_date).format('YYYY-MM-DD'), create_at: this._formatDateTime(item.create_at)
                                 , update_at: this._formatDateTime(item.update_at), work_status: item.work_status == 0 ? 'Đã Checkin' : 'Đã Checkout'
                                 , }
             })
-            console.log('listUserWorklogs after', this.listUserWorklogs);
 
         },
         async _getOneWorklog(params){
@@ -268,7 +266,6 @@ export default {
                 return;
             }
             const formatWorklog = response.data.length? response.data[0] : WORKLOG_DEFAULT;
-            console.log('this.singleUserWorklog',this.singleUserWorklog);
 
             this.singleUserWorklog = {
                 work_date: formatWorklog.work_date? this._formatDate(formatWorklog.work_date) : 'No work schedule today',

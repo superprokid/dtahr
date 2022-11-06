@@ -20,7 +20,6 @@ export default {
 				year: "2000"
 			}
 			let res = await axiosClient.get(BASE_API_USER_URL + '/get', {params})
-			console.log(res);
 		}
 	},
 };

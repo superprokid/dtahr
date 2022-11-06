@@ -126,7 +126,6 @@ export default {
         },
         onClickEditGroup(){
             this.editDialogProp = this.selected[0]
-            console.log("this.editDialogProp",this.editDialogProp);
 
             this.EditGroupDialogShowed = true
         },
@@ -164,7 +163,6 @@ export default {
                     alert('Some thing wrong! Call Fail')
                 }
                 else {
-                    console.log('delete Group Successfully');
                     this._getGroupCompany()
                     this.selected = []
                     this.DeleteGroupSuccessDialogShowed = true;
@@ -216,7 +214,6 @@ export default {
         },
 
         async onCreateGroup(params){
-            console.log('params for create group', params);
             const response = await AdminGroupServices.createGroup(params);
             if(!response){
                 this.$router.push('/admin/login')
@@ -224,7 +221,6 @@ export default {
                 alert('Some thing wrong! Call Fail')
             }
             else {
-                console.log('Create Group Successfully');
                 this.AddGroupDialogShowed = false;
                 this._getGroupCompany()
                 this.addGroupSuccessInfo = params
@@ -233,7 +229,6 @@ export default {
         },
 
         async onEditGroup(params){
-            console.log('params for edit group', params);
             const response = await AdminGroupServices.editGroup(params);
             if(!response){
                 this.$router.push('/admin/login')
@@ -241,7 +236,6 @@ export default {
                 alert('Some thing wrong! Call Fail')
             }
             else {
-                console.log('Edit Group Successfully');
                 this.EditGroupDialogShowed = false;
                 this.selected = []
                 this._getGroupCompany()
@@ -253,7 +247,6 @@ export default {
 
         
         onClickGroupRow(groupRowSelected){
-            console.log('item',groupRowSelected);
             this.isAdminEmployeeManagementShowed = true;
             this.groupRowSelectedProp = groupRowSelected
             this.isAdminGroupManagementShowed = false;

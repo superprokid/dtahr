@@ -155,13 +155,12 @@ export default {
         this.$router.push("/user/login");
       }
       else {
-        console.log(response.data)
         this.userList = ['',...response.data];
       }
     },
 
     onClickTask(task) {
-      console.log(task)
+      this.$router.push('/user/taskdetail/'+task.task_id);
     },
 
     async onChangeColumn(event, column_id) {

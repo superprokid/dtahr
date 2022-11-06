@@ -58,7 +58,6 @@ export default {
       if (!response) {
         this.$router.push('/user/login');
       } else {
-        console.log(response.data);
         this.startDataUser = response.data;
         this.checkClockIn();
       }

@@ -13,7 +13,7 @@
 .card_holder{
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 80vh;
+  height: 90%;
 }
 .column_title{
   letter-spacing: .025em;
@@ -34,4 +34,13 @@ but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
   opacity: 0.5;
   background: #F7FAFC;
   border: 1px solid #4299e1;
+}
+.bg-white-smoke {
+  background-color: whitesmoke;
+}
+.tasks-board-title {
+  font-size: large;
+  color: #448aff;
+  font-weight: bold;
+  margin: 10px 0px;
 }

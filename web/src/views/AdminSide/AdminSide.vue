@@ -36,7 +36,6 @@ export default {
         alert('Some thing wrong! Call Fail')
       }
       else {
-          console.log(response.data)
           //Use Vuex set Data
           this.$store.commit("setStartDataAdmin", response.data)
       }
