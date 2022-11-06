@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     async login(data) {
-      console.log('data', data);
       if (data.userName === "" || data.password === "") {
         this.isLoginDataEmpty = true;
       } else {

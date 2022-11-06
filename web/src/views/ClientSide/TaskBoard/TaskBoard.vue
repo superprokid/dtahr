@@ -2,6 +2,9 @@
   <div id="task-board">
     <v-app>
       <v-row class="bg-white-smoke">
+        <div class="tasks-board-title">Task board</div>
+      </v-row>
+      <v-row class="bg-white-smoke">
         <v-col cols=12 md=3>
           Category
           <v-autocomplete v-model="selectedCategory"
@@ -60,7 +63,7 @@
         </v-col>
       </v-row>
     </v-app>
-    <div class="d-flex justify-center">
+    <div class="d-flex justify-center" style="height: 85%">
       <div class="d-flex overflow-auto">
         <div
           v-for="(column, idx) in filteredData"
@@ -70,7 +73,6 @@
           <p class="column_title" :style="`background-color:${statusColorArr[idx]}`">{{columnTitles[idx]}}</p>
           <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
           <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" class="card_holder"
-          @click.native="onClickTask(column)"
           @change="onChangeColumn($event, idx)"
           >
             <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
@@ -78,6 +80,7 @@
               v-for="(task) in column.tasks"
               :key="task.task_id"
               :task="task"
+              @click.native="onClickTask(task)"
             ></task-card>
             <!-- </transition-group> -->
           </draggable>

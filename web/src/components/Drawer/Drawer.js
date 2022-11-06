@@ -100,5 +100,8 @@ export default {
 
     mounted() {
         this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+        this.$root.$on('drawer', () => {
+            this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+        })
     },
 }

@@ -99,7 +99,6 @@ export default {
             }
         },
         searchTasks() {
-            console.log(this.categorySelected, this.employeeSelected, this.keyword);
             this.listFiltered = this.allTasks.filter((task) => {
                 if (this.categorySelected && this.categorySelected != task.category_id) {
                     return false;
@@ -118,8 +117,8 @@ export default {
         setItemRowCLass(){
             return 'item-row'
         },
-        openTaskDetails(id) {
-            console.log('id', id); // TODO: Open task details
+        openTaskDetails(task) {
+            this.$router.push('/user/taskdetail/'+task.task_id);
         }
     },
     beforeCreate() {

@@ -65,7 +65,7 @@ export default {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
     margin-top: 0.75rem;
-    cursor: move;
+    cursor: pointer;
     border-width: 1px;
     border-radius: 0.25rem;
 }
