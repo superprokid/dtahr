@@ -87,7 +87,7 @@ async function addNewTask(req, res) {
             },
             taskDescription: {
                 type: 'string',
-                required: true
+                required: false
             },
             assigneeId: {
                 type: 'string',
@@ -138,7 +138,7 @@ async function addNewTask(req, res) {
             return;
         }
 
-        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskDescription, employeeId, assigneeId || null, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
+        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);

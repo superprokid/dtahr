@@ -1,3 +1,5 @@
+import storageUtls from "./storageUtls";
+
 export const BASE_URL = "http://26.197.75.244:3000";
 // export const BASE_URL = "http://127.0.0.1:3000";
 
@@ -42,26 +44,49 @@ const GET = 'GET';
 
 const apiUtls = {
     login: async (data) => {
-        const result = await callAPI(USER_LOGIN_URL, POST, data)
+        const result = await callAPI(USER_LOGIN_URL, HEADER, POST, data);
+        return result;
+    },
+    getStart: async () => {
+        const result = await recallAPI(USER_GET_START_URL, HEADER, GET);
         return result;
     }
 }
 
-const callAPI = (url, method, data) => {
+const refreshToken = async () => {
+    const refreshToken = await storageUtls.getString(storageUtls.refresh_token);
+    const result = await callAPI(USER_REFRESH_TOKEN_URL, HEADER, POST, {
+        refreshToken
+    });
+    if (result.failed) {
+        return false;
+    } else {
+        storageUtls.setString(storageUtls.access_token, result.accessToken);
+        return true;
+    }
+    
+}
+
+const callAPI = (url, header, method, data = {}) => {
     return new Promise((resolve, reject) => {
         fetch(url, {
             method: method,
-            headers: HEADER,
-            body: JSON.stringify(data)
+            headers: header,
+            body: method == GET ? null : JSON.stringify(data)
         }).then(result => {
             if (result.status === 200) {
                 resolve(result.json())
             } else {
                 resolve({
+                    status: result.status,
                     failed: true,
                 });
             }
-        }).catch(error => reject(error))
+        }).catch(error => reject({
+            failed: true,
+            error: true,
+            errorMsg: error
+        }))
 
         setTimeout(() => {
             reject({
@@ -70,6 +95,32 @@ const callAPI = (url, method, data) => {
             })
         }, 10000)
     })
+}
+
+const callAPIWithToken = async (url, header, method, data) => {
+    const accessToken = await storageUtls.getString(storageUtls.access_token);
+    header['Authorization'] = 'Bearer ' + accessToken;
+    const response = await callAPI(url, header, method, data);
+    return response;
+}
+
+const recallAPI = async (url, header, method, data) => {
+    const response = await callAPIWithToken(url, header, method, data);
+    if (response.error) {
+        return -1;
+    }
+    if (response.failed) {
+        if (response.status === 401) {
+            const refresh = await refreshToken();
+            if (!refresh) {
+                return refresh;
+            } else {
+                return await callAPIWithToken(url, header, method, data);
+            }
+        }
+        return -1;
+    }
+    return response;
 }
 
 export default apiUtls;
