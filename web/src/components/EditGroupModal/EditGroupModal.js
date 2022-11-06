@@ -60,7 +60,6 @@ export default {
         this.previousParam = {
             ...this.editDialogProp
         }
-        console.log('props in child ', this.editDialogProp);
         this.groupName = this.editDialogProp.group_name;
         this.groupFullName = this.editDialogProp.group_full_name;
         this.managerStartDate = this.editDialogProp.manager_start_date
@@ -110,14 +109,12 @@ export default {
                     params.managerId = this.managerSelect[0].employee_id
                 }
                 if(this.previousParam.manager_start_date != this.managerStartDate){
-                    console.log(this.previousParam.manager_start_date, this.managerStartDate);
                     isEditApproved =true
                     params.managerStartDate = this.managerStartDate
                 }
 
                 if(isEditApproved){
                     // goi api
-                    console.log('params cho goi api',params);
                     this.$emit('on-edit-group', params);
                 }
                 // const response = await AdminGroupServices.createGroup(params);
@@ -164,7 +161,6 @@ export default {
                     return {...item, }
                 })
                 this.listFreeManager.push({employee_id: this.editDialogProp.manager_id, full_name: this.editDialogProp.manager_name})
-                console.log('this.listFreeManager',this.listFreeManager);
 
                 this.managerSelect.push({employee_id: this.editDialogProp.manager_id, full_name: this.editDialogProp.manager_name})
             }

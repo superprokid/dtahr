@@ -61,7 +61,6 @@ export function asyncRecallFunction(apiFunction) {
 	}).catch(async error => {
 		if (error.response.status === 401) {
 			let response = await refreshToken();
-			console.log(response);
 			if (!response) {
 				return response
 			}

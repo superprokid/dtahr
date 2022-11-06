@@ -9,7 +9,6 @@ function getAdminSessionHeader() {
 }
 
 export function callAdminAPI(apiFuction){
-	console.log('apiFuction',apiFuction);
     return apiFuction().then(async (result)=>{
         return result;
     }).catch(async (error)=>{
@@ -32,7 +31,6 @@ const axiosAdmin = {
 	// Overwrite method POST
 	post: async (url, data, config) => {
 		getAdminSessionHeader();
-		console.log(data)
 		return axiosBase.post(url, data, config);
 	},
 

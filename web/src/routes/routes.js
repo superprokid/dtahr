@@ -15,10 +15,16 @@ import MyAbsentTicket from "@/views/ClientSide/MyAbsentTicket/MyAbsentTicket.vue
 import DailyReport from "../views/ClientSide/DailyReport/DailyReportMain.vue";
 import UserManagement from "@/views/ClientSide/UserManagement/UserManagement.vue"
 import RealTimeCheck from "@/views/ClientSide/RealTimeCheck/RealTimeCheck.vue"
+import WorkFromHome from '@/views/ClientSide/WorkFromHome/WorkFromHome.vue';
+import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
+import Tasks from "../views/ClientSide/Tasks/Tasks.vue";
+import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
+import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
 import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
+import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
 
 Vue.use(Router);
 
@@ -43,6 +49,10 @@ const router = new Router({
                     path: 'group',
                     component: AdminGroup
                 },
+                {
+                    path: 'holiday',
+                    component: AdminHoliday
+                }
             ]
         },
         { 
@@ -71,6 +81,10 @@ const router = new Router({
                     component: MyOvertime
                 },
                 {
+                    path: 'taskboard',
+                    component: TaskBoard
+                },
+                {
                     path: 'dailyreport',
                     component: DailyReport,
                 },
@@ -81,6 +95,22 @@ const router = new Router({
                 {
                     path: 'realtimecheck',
                     component: RealTimeCheck,
+                },
+                {
+                    path: 'workfromhome',
+                    component: WorkFromHome,
+                },
+                {
+                    path: 'tasks',
+                    component: Tasks
+                },
+                {
+                    path: 'addtask',
+                    component: AddTask,
+                },
+                {
+                    path: 'taskdetail/:taskId',
+                    component: TaskDetail,
                 }
             ]
         },

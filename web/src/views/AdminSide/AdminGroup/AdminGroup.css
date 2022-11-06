@@ -1,0 +1,21 @@
+.group-management-title{
+    font-size: large;
+    color: #448aff;
+    font-weight: bold;
+}
+
+.admin-employee-management-title{
+    font-size: large;
+    color: #448aff;
+    font-weight: bold;
+}
+
+.admin-employee-management-title:hover{
+    color: #0a47b1;
+    display: inline;
+    cursor: pointer;
+}
+
+.item-row {
+    cursor: pointer;
+}

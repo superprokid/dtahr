@@ -6,11 +6,12 @@ import Notification from '@/components/Notification/Notification.vue';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
 import { REAL_TIME_TRACKING_CHANNEL } from '../../../../config/channel';
 import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
+import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 const TIME_FORMAT = 'HH:mm:ss';
@@ -31,7 +32,7 @@ export default {
       notiBody: '',
       notiType: '',
       registerTime: '',
-      isClockInDisable: false,
+      isClockInDisable: true,
       isClockOutDisable: true,
       mode: '',
       isErrorModalShowed: false,
@@ -43,39 +44,41 @@ export default {
       isClockInShow: true,
       labelInputBreakTime: 'Total BreakTime:',
       errorLabelInputBreakTime: 'Total Break Time required!',
+      startDataUser: {},
     };
   },
-  computed:{
-    ...mapState(["startDataUser"])
+
+  mounted() {
+    this._getStartUser();
   },
-  watch: {
-    startDataUser(newVal) {
-      if (newVal.workLog?.work_status == 0) {
+
+  methods: {
+    async _getStartUser() {
+      const response = await MyPageServices.getStartUser();
+      if (!response) {
+        this.$router.push('/user/login');
+      } else {
+        this.startDataUser = response.data;
+        this.checkClockIn();
+      }
+    },
+    checkClockIn() {
+      const today = new Date();
+      if (
+        this.startDataUser.workTime?.isHoliday ||
+        today.getDay() === 0 ||
+        today.getDay() === 6
+      ) {
+        this.isClockInDisable = true;
+        this.isClockOutDisable = true;
+      } else if (!this.startDataUser.workLog) {
+        this.isClockOutDisable = true;
+        this.isClockInDisable = false;
+      } else if (this.startDataUser.workLog?.work_status == 0) {
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
       } else {
         this.isClockInDisable = false;
-        this.isClockOutDisable = true;
-      }
-      
-      const today = new Date();
-      if (newVal.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
-        this.isClockInDisable = true;
-        this.isClockOutDisable = true;
-      }
-    }
-  },
-  methods: {
-    checkClockIn() {
-      if (!this.startDataUser.workLog) return
-      if (this.startDataUser.workLog?.work_status == 0) {
-          this.isClockInDisable = true;
-          this.isClockOutDisable = false;
-      }
-
-      const today = new Date();
-      if (this.startDataUser.workTime?.isHoliday || today.getDay() === 0 || today.getDay() === 6) {
-        this.isClockInDisable = true;
         this.isClockOutDisable = true;
       }
     },
@@ -126,46 +129,50 @@ export default {
      ********************************/
     async onClickOkButton() {
       this.isTimeConfirmModalShowed = false;
-      if(this.mode == CLOCKIN){
-        this.$eventBus.$emit("show-spinner", true);
-        let curr = new Date()
-        if (`${this.startDataUser.workTime.hour_end}:${this.startDataUser.workTime.min_end}:00` <
-          `${curr.getHours()}:${curr.getMinutes()}:${curr.getSeconds()}` || this.startDataUser.workTime.isHoliday == true) {
-          this.$eventBus.$emit("show-spinner", false);
+      if (this.mode == CLOCKIN) {
+        this.$eventBus.$emit('show-spinner', true);
+        let curr = new Date();
+        if (
+          `${this.startDataUser.workTime.hour_end}:${this.startDataUser.workTime.min_end}:00` <
+            `${curr.getHours()}:${curr.getMinutes()}:${curr.getSeconds()}` ||
+          this.startDataUser.workTime.isHoliday == true
+        ) {
+          this.$eventBus.$emit('show-spinner', false);
           this.notiTitle = `Cannot Clock In `;
           this.notiBody = `Not in working time!`;
           this.notiType = 'danger';
           this.isErrorModalShowed = true;
-          this.$eventBus.$emit("show-spinner", false);
+          this.$eventBus.$emit('show-spinner', false);
           return;
         }
-        await TimeTrackingServices.checkIn()
-        this.$eventBus.$emit("show-spinner", false);
+        await TimeTrackingServices.checkIn();
+        this.$eventBus.$emit('show-spinner', false);
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
-      }
-      else{
-        this.$eventBus.$emit("show-spinner", true);
+      } else {
+        this.$eventBus.$emit('show-spinner', true);
         try {
-          let response = await TimeTrackingServices.checkOut()
+          let response = await TimeTrackingServices.checkOut();
           if (!response) {
             this.notiTitle = `Cannot Clock Out`;
             this.notiBody = `It's not working time!`;
             this.notiType = 'danger';
             this.isErrorModalShowed = true;
-            this.$eventBus.$emit("show-spinner", false);
+            this.$eventBus.$emit('show-spinner', false);
             return;
           }
-        } 
-        catch (e) {
-          console.log(e)
+        } catch (e) {
+          console.log(e);
         }
-        this.$eventBus.$emit("show-spinner", false);
+        this.$eventBus.$emit('show-spinner', false);
         this.isClockInDisable = false;
         this.isClockOutDisable = true;
       }
-      this.$root.$emit(TIME_TRACKING_SCREEN,this.startDataUser.employee_id);
-      this.$mySocket.emit(REAL_TIME_TRACKING_CHANNEL, this.startDataUser.employee_id)
+      this.$root.$emit(TIME_TRACKING_SCREEN, this.startDataUser.employee_id);
+      this.$mySocket.emit(
+        REAL_TIME_TRACKING_CHANNEL,
+        this.startDataUser.employee_id
+      );
     },
     onClickCancelButton() {
       this.isTimeConfirmModalShowed = false;
@@ -183,77 +190,5 @@ export default {
     onClickErrorOkButton() {
       this.isErrorModalShowed = false;
     },
-    /********************************
-     * @todo Get Current Worklog Info
-     ********************************/
-    async _getCurrentWorklog() {
-    },
-    /********************************
-     * @todo Check Clock Buton status
-     * @param {object} employeeWorklog : {id, userName, startTime, endTime, recordType} all properties are string
-     *******************************/
-    _checkClockButtonStatus(employeeWorklog) {
-      // Disable both ClockIn and ClockOut button
-      if (employeeWorklog.clock_out != '') {
-        this.isClockInDisable = true;
-        this.isClockOutDisable = true;
-      }
-      // Enable ClockOut button
-      else {
-        this.isClockInDisable = true;
-        this.isClockOutDisable = false;
-      }
-    },
-    /********************************
-     * @todo Get UTC Time
-     * @param {string} registerDate registerTime
-     * @return timeUTC: string
-     ********************************/
-    _getTimeUTC(registerDate, registerTime) {
-      let time = moment(registerDate + 'T' + registerTime);
-      let timeUTC = time.utc().format(DATE_TIME_FORMAT) + 'Z';
-      return timeUTC;
-    },
-    /**
-     * Get Date string in Zulu Time UTC format
-     * @param {object} date: Date object
-     * @returns {string} zuluTimeUTC: format 'YYYY-MM-DDTHH:mm:ssZ'
-     */
-    _getConvertTimeString(date) {
-      let zuluTimeUTC = moment(date).utc().format(DATE_TIME_FORMAT) + 'Z';
-      return zuluTimeUTC;
-    },
-    /**
-     * Get End time of day
-     * @param date : All date format
-     * @returns {number}
-     */
-    _getEndTimeOfDay(date) {
-      let endTime = new Date(date).setHours(23, 59, 59, 0);
-      return endTime;
-    },
-
-    /**
-     * Get Begin time of day
-     * @param date : All date format
-     * @returns {number}
-     */
-    _getBeginTimeOfDay(date) {
-      let beginTime = new Date(date).setHours(0, 0, 0, 0);
-      return beginTime;
-    },
-    /**
-     * Get existed working schedule in date range
-     * @param {string} startDate register start date
-     * @param {string} endDate register end date
-     * @returns {array} array of existed working schedule objects
-     */
-    async _getExistedSchedule(startDate, endDate) {
-
-    },
-  },
-  created() {
-    this._getCurrentWorklog();
-    this.checkClockIn()
   },
 };

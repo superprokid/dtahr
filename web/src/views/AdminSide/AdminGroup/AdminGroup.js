@@ -1,3 +1,4 @@
+/* eslint-disable */
 import SessionUtls from '../../../services/SessionUtls';
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
 import { getDateString } from "../../../services/utilities";
@@ -10,13 +11,26 @@ import AddHoliday from '@/components/AddHoliday/AddHoliday.vue';
 import AddGroupModal from "../../../components/AddGroupModal/AddGroupModal.vue"
 import EditGroupModal from "../../../components/EditGroupModal/EditGroupModal.vue"
 
+import AdminEmployeeManagement from "../AdminEmployeeManagement/AdminEmployeeManagement.vue"
+import AddGroupSuccessModal from "../../../components/AddGroupSuccessModal/AddGroupSuccessModal.vue"
+import EditGroupSuccessModal from "../../../components/EditGroupSuccessModal/EditGroupSuccessModal.vue"
+import DeleteGroupSuccessModal from "../../../components/DeleteGroupSuccessModal/DeleteGroupSuccessModal.vue"
+import ConfirmDeleteGroupModal from "../../../components/ConfirmDeleteGroupModal/ConfirmDeleteGroupModal.vue"
+
 export default {
     name: "AdminGroup",
     components: {
         Table,
         AddHoliday,
         AddGroupModal,
-        EditGroupModal
+        EditGroupModal,
+        AddGroupSuccessModal,
+        DeleteGroupSuccessModal,
+        ConfirmDeleteGroupModal,
+        EditGroupSuccessModal,
+
+        // views
+        AdminEmployeeManagement,
     },
     props: {
 
@@ -24,6 +38,10 @@ export default {
 
     data() {
         return {
+            addGroupSuccessInfo: {},
+            editGroupSuccessInfo: {},
+            confirmDeleteInfo: {},
+
             singleSelect: false,
             selected: [],
             
@@ -41,6 +59,17 @@ export default {
 
             editDialogProp: {},
 
+            isAdminGroupManagementShowed: true,
+            isAdminEmployeeManagementShowed: false,
+
+            groupRowSelectedProp: {},
+
+            AddGroupSuccessDialogShowed: false,
+            DeleteGroupSuccessDialogShowed: false,
+            EditGroupSuccessDialogShowed: false,
+
+            ConfirmDeleteGroupDialogShowed: false,
+
         }
     },
     computed: {
@@ -55,11 +84,6 @@ export default {
                 {
                     text: 'Group Name',
                     value: 'group_name',
-                    // width: 120,
-                },
-                {
-                    text: 'Group Full Name',
-                    value: 'group_full_name',
                     // width: 120,
                 },
                 {
@@ -97,21 +121,53 @@ export default {
     },
 
     methods: {
-        // onSelectGroup(items){
-        //     this.selected = items
-        // },  
-        // onClickAddGroup(){
-        //     console.log('add clicked');
-        //     this.isAddGroupShowed = true;
-        // },
+        setItemRowCLass(){
+            return 'item-row'
+        },
         onClickEditGroup(){
             this.editDialogProp = this.selected[0]
-            console.log("this.editDialogProp",this.editDialogProp);
 
             this.EditGroupDialogShowed = true
         },
-        onClickDeleteGroup(){
-            console.log('delete clicked');
+        async onClickDeleteGroup(){
+            this.confirmDeleteInfo = this.selected[0]
+
+            this.ConfirmDeleteGroupDialogShowed = true;
+            // const params = {
+            //     groupId: this.selected[0].group_id
+            // }
+            // const response = await AdminGroupServices.deleteGroup(params);
+            // if(!response){
+            //     this.$router.push('/admin/login')
+            // } else if(response == -1){
+            //     alert('Some thing wrong! Call Fail')
+            // }
+            // else {
+            //     console.log('delete Group Successfully');
+            //     this._getGroupCompany()
+            //     this.selected = []
+            //     this.DeleteGroupSuccessDialogShowed = true;
+            // }
+        },
+
+        async onConfirmDeleteGroup(param){
+            if(param == 'confirm'){
+                this.ConfirmDeleteGroupDialogShowed = false;
+                const params = {
+                    groupId: this.selected[0].group_id
+                }
+                const response = await AdminGroupServices.deleteGroup(params);
+                if(!response){
+                    this.$router.push('/admin/login')
+                } else if(response == -1){
+                    alert('Some thing wrong! Call Fail')
+                }
+                else {
+                    this._getGroupCompany()
+                    this.selected = []
+                    this.DeleteGroupSuccessDialogShowed = true;
+                }
+            }
         },
 
         async _getGroupCompany(){
@@ -142,6 +198,14 @@ export default {
             }
             else if(screen == 2){
                 this.EditGroupDialogShowed = false;
+            }else if(screen == 3){
+                this.AddGroupSuccessDialogShowed = false;
+            }else if(screen == 4){
+                this.DeleteGroupSuccessDialogShowed = false;
+            }else if(screen == 5){
+                this.ConfirmDeleteGroupDialogShowed = false;
+            }else if(screen == 6){
+                this.EditGroupSuccessDialogShowed = false;
             }
         },
 
@@ -150,7 +214,6 @@ export default {
         },
 
         async onCreateGroup(params){
-            console.log('params for create group', params);
             const response = await AdminGroupServices.createGroup(params);
             if(!response){
                 this.$router.push('/admin/login')
@@ -158,13 +221,14 @@ export default {
                 alert('Some thing wrong! Call Fail')
             }
             else {
-                console.log('Create Group Successfully');
+                this.AddGroupDialogShowed = false;
                 this._getGroupCompany()
+                this.addGroupSuccessInfo = params
+                this.AddGroupSuccessDialogShowed = true;
             }
         },
 
         async onEditGroup(params){
-            console.log('params for edit group', params);
             const response = await AdminGroupServices.editGroup(params);
             if(!response){
                 this.$router.push('/admin/login')
@@ -172,13 +236,29 @@ export default {
                 alert('Some thing wrong! Call Fail')
             }
             else {
-                console.log('Edit Group Successfully');
                 this.EditGroupDialogShowed = false;
                 this.selected = []
                 this._getGroupCompany()
+
+                this.editGroupSuccessInfo = params;
+                this.EditGroupSuccessDialogShowed = true;
             }
-        }
+        },
+
         
+        onClickGroupRow(groupRowSelected){
+            this.isAdminEmployeeManagementShowed = true;
+            this.groupRowSelectedProp = groupRowSelected
+            this.isAdminGroupManagementShowed = false;
+        },
+        goBackGroupManagementLayout(){
+            this.isAdminEmployeeManagementShowed = false;
+            this.isAdminGroupManagementShowed = true;
+        },
+
+        onClickTestNotiModal(){
+            this.AddGroupSuccessDialogShowed = true;
+        },
     },
 
     beforeCreate() {

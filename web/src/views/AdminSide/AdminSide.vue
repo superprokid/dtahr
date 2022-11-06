@@ -5,7 +5,7 @@
     <!-- <v-content class="ma-4">
       <router-view></router-view>
     </v-content> -->
-    <v-main class="ma-4" >
+    <v-main class="ma-4">
       <router-view></router-view>
     </v-main>
     <!-- <Footer /> -->
@@ -30,14 +30,12 @@ export default {
   methods: {
     async _getStartAdmin() {
       const response = await AdminSideServices.getStartAdmin();
-      console.log('response',response);
       if(!response){
           this.$router.push('/admin/login')
       } else if(response == -1){
         alert('Some thing wrong! Call Fail')
       }
       else {
-          console.log(response.data)
           //Use Vuex set Data
           this.$store.commit("setStartDataAdmin", response.data)
       }
