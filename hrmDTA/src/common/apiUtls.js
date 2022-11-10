@@ -7,7 +7,7 @@ export const BASE_URL = "http://26.197.75.244:3000";
 export const BASE_API_USER_URL = BASE_URL + '/api/user';
 export const USER_LOGIN_URL = BASE_API_USER_URL + '/login';
 export const USER_REFRESH_TOKEN_URL = BASE_API_USER_URL + '/refreshtoken';
-const USER_GET_TRACKING_HISTORY_URL = BASE_API_USER_URL + '/workhistory';
+const USER_GET_WORK_HISTORY = BASE_API_USER_URL + '/workhistory';
 const USER_GET_START_URL = BASE_API_USER_URL + '/getstart';
 const USER_CHECK_IN_URL = BASE_API_USER_URL + '/checkin';
 const USER_CHECK_OUT_URL = BASE_API_USER_URL + '/checkout';
@@ -50,7 +50,12 @@ const apiUtls = {
     getStart: async () => {
         const result = await recallAPI(USER_GET_START_URL, HEADER, GET);
         return result;
+    },
+    getWorkHistory: async(startDate, endDate) => {
+        const result = await recallAPI(`${USER_GET_WORK_HISTORY}?startDate=${startDate}&endDate=${endDate}`, HEADER, GET);
+        return result;
     }
+
 }
 
 const refreshToken = async () => {
