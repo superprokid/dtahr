@@ -105,6 +105,21 @@ export default StyleSheet.create({
     color: 'black'
   },
 
+  dropdown_container: {
+    backgroundColor: "white",
+    width: primaryButtonWidth,
+  },
+
+  dropdown: {
+    height: dimen.primaryButtonHeight,
+    width: primaryButtonWidth,
+    fontSize: 17,
+    padding: 10,
+    paddingStart: 15,
+    paddingEnd: 15,
+    color: 'black'
+  },
+
   // input style for weight and height
   weight_input: {
     backgroundColor: "white",

@@ -2,9 +2,10 @@ import { Image, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styles from './style';
 import colors from '../../assets/colors';
-import { CHECKIN_SCREEN, HISTORY_SCREEN } from '../../config/screen';
+import { CHECKIN_SCREEN, HISTORY_SCREEN, LEAVE_SCREEN } from '../../config/screen';
 import Checin from '../CheckinScreen';
 import HistoryScreen from '../HistoryScreen';
+import LeaveMainScreen from '../LeaveMainScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,26 +21,36 @@ export default Home = () => {
                 tabBarShowLabel: true,
                 headerShown: false
             }}>
-                <Tab.Screen
-                    name={CHECKIN_SCREEN}
-                    component={Checin}
-                    options={{
-                        tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/dashboard.png')} style={{ width: 25, height: 25, tintColor: color }} />,
-                        tabBarLabel: 'Checin',
-                        headerShown: true,
-                        headerTitle: "Check in",
-                        headerTitleAlign: 'center'
-                      }}/>
-                      <Tab.Screen
-                    name={HISTORY_SCREEN}
-                    component={HistoryScreen}
-                    options={{
-                        tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/history.png')} style={{ width: 25, height: 25, tintColor: color }} />,
-                        tabBarLabel: 'My Page',
-                        headerShown: true,
-                        headerTitle: "History",
-                        headerTitleAlign: 'center'
-                      }}/>
+            <Tab.Screen
+                name={CHECKIN_SCREEN}
+                component={Checin}
+                options={{
+                    tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/dashboard.png')} style={{ width: 25, height: 25, tintColor: color }} />,
+                    tabBarLabel: 'Checin',
+                    headerShown: true,
+                    headerTitle: "Check in",
+                    headerTitleAlign: 'center'
+                }} />
+            <Tab.Screen
+                name={HISTORY_SCREEN}
+                component={HistoryScreen}
+                options={{
+                    tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/history.png')} style={{ width: 25, height: 25, tintColor: color }} />,
+                    tabBarLabel: 'My Page',
+                    headerShown: true,
+                    headerTitle: "History",
+                    headerTitleAlign: 'center'
+                }} />
+            <Tab.Screen
+                name={LEAVE_SCREEN}
+                component={LeaveMainScreen}
+                options={{
+                    tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/leave.png')} style={{ width: 25, height: 25, tintColor: color }} />,
+                    tabBarLabel: 'Leave',
+                    headerShown: false,
+                    // headerTitle: "History",
+                    // headerTitleAlign: 'center'
+                }} />
         </Tab.Navigator>
     );
 }
