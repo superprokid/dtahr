@@ -20,6 +20,7 @@ import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
 import Tasks from "../views/ClientSide/Tasks/Tasks.vue";
 import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
 import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
+import EditTask from "../views/ClientSide/EditTask/EditTask.vue"
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -111,6 +112,10 @@ const router = new Router({
                 {
                     path: 'taskdetail/:taskId',
                     component: TaskDetail,
+                },
+                {
+                    path: 'edittask/:taskId',
+                    component: EditTask
                 }
             ]
         },
