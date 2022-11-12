@@ -70,6 +70,9 @@ Router.get('/user/task/getbystatus', authen, taskController.getAllTaskWithStatus
 Router.get('/user/task/getall', authen, taskController.getAllTask);
 Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
 Router.get('/user/category/getall', authen, taskController.getAllCategory);
+Router.get('/public/download/:filename', (req, res) => {
+    res.download(path.join(__basedir, './public/download', req.params.filename))
+})
 
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);

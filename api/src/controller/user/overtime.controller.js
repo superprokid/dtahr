@@ -102,7 +102,7 @@ async function registerOverTime(req, res) {
         await queryTransaction(connection, INSERT_OVERTIME, [empId, projectId, startDate, endDate, reason, OT_TICKET_STATUS.pending, payment]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert into overtime`);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        res.status(200).send("Create success");
+        res.status(200).send({ message: "Create success" });
         await commitTransaction(connection);
         releaseConnection(connection);
     } catch (error) {
@@ -275,7 +275,7 @@ async function deleteOvertimeTicket(req, res) {
         await commitTransaction(connection);
         releaseConnection(connection);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        return res.status(200).send('Delete overtime ticket success');
+        return res.status(200).send({message: 'Delete overtime ticket success'});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");
