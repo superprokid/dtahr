@@ -54,6 +54,17 @@ const storageUtls = {
             return false;
         }
     },
+    clearItem: async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+        } catch (error) {
+            return false;
+        }
+    },
+    clearLoginSession: async () => {
+        storageUtls.clearItem(storageUtls.access_token);
+        storageUtls.clearItem(storageUtls.refresh_token);
+    }
 }
 
 export default storageUtls;

@@ -11,12 +11,14 @@ const InputWidth = screenWidth * 0.85;
 function PrimaryInput(props)  {
 
     let textLabel = props.label
-    if (props.required) {
+    if (props.required && textLabel) {
         textLabel = textLabel.concat('*')
     }
+    const editable = props.editable ==  false ? false : true;
 
     return (
         <View style = {{flexDirection: 'column'}}>
+            {console.log(props.value)}
             <Text style = {Styles.input_label}>{textLabel}</Text>
             <TextInput style = {Styles.primary_input}
                 placeholder = {props.placeholder}
@@ -24,6 +26,7 @@ function PrimaryInput(props)  {
                 autoCapitalize='none'
                 onChangeText = {props.onChangeText}
                 secureTextEntry = {props.isPassword}
+                editable = {editable}
                 value = {props.value}></TextInput>
         </View>
     )

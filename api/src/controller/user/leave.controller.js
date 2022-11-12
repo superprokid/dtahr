@@ -69,7 +69,7 @@ async function registerLeaveTicket(req, res) {
         await dbaccess.queryTransaction(connection, INSERT_LEAVE, [empId, type, startDate, endDate, reason, LEAVE_TICKET_STATUS.pending]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert into leave`);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        res.status(200).send("Create success");
+        res.status(200).send({ message: "Create success" });
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
     } catch (error) {
@@ -218,7 +218,7 @@ async function deleteLeaveTicket(req, res) {
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        return res.status(200).send('Delete leave ticket success');
+        return res.status(200).send({ message: 'Delete leave ticket success' });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send("SERVER ERROR");

@@ -29,6 +29,10 @@ const GET_ALL_COMMENT_OF_TASK = "SELECT tc.*, CONCAT(first_name, ' ', last_name)
     + "                         WHERE task_id = ?";
 const GET_ALL_CATEGORY = "SELECT * FROM category";
 
+const GET_FULL_NAME_OF_EMPLOYEE = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? LIMIT 1";
+
+const DELETE_COMMENT = "DELETE FROM taskcomment WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?"
+
 async function addNewCategory(req, res) {
     const connection = await dbaccess.getConnection();
     await dbaccess.beginTransaction(connection);
@@ -87,7 +91,7 @@ async function addNewTask(req, res) {
             },
             taskDescription: {
                 type: 'string',
-                required: true
+                required: false
             },
             assigneeId: {
                 type: 'string',
@@ -138,7 +142,7 @@ async function addNewTask(req, res) {
             return;
         }
 
-        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskDescription, employeeId, assigneeId || null, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
+        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
@@ -257,9 +261,11 @@ async function updateTask(req, res) {
             setClauseArray.push(` task_description = '${taskDescription}'`);
             commentContent = commentContent.concat(`<p>Content changed</p></br>`);
         }
-        if (assigneeId) {
+        if (assigneeId && targetTask.assignee_id != assigneeId) {
             setClauseArray.push(` assignee_id = '${assigneeId}'`);
-            commentContent = commentContent.concat(`<p>Assignee changed</p></br>`);
+            const targetEmployeeName = await getTargetEmployeeName(connection, targetTask.assignee_id);
+            const updateEmployeeName = await getTargetEmployeeName(connection, assigneeId);
+            commentContent = commentContent.concat(`<p>Assignee changed: ${targetEmployeeName} → ${updateEmployeeName}</p></br>`);
         }
         if (!isNullOrUndefinded(status)) {
             setClauseArray.push(` status = '${status}'`);
@@ -287,7 +293,7 @@ async function updateTask(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] no columns update`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(403).send("Update failed, no columns need to update");
+            res.status(200).send("Update failed, no columns need to update");
             return;
         }
 
@@ -482,6 +488,53 @@ async function getAllCategory(req, res) {
     }
 }
 
+async function getTargetEmployeeName(connection, employeeId) {
+    const result = await dbaccess.queryTransaction(connection, GET_FULL_NAME_OF_EMPLOYEE, [employeeId]);
+    return result.length ? result[0].full_name : 'Anonymous';
+}
+
+async function deleteComment(req, res) {
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const employeeId = req.employee_id;
+        if (!employeeId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send("Update failed");
+            return;
+        }
+
+        const validateSchema = {
+            commentId: {
+                type: 'number',
+                required: true,
+            }
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+
+        const { commentId } = req.body;
+        await dbaccess.queryTransaction(connection, DELETE_COMMENT, [commentId, employeeId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete comment done`);
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+        res.status(200).send('Delete success');
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+    }
+}
+
 module.exports = {
     addNewCategory,
     addNewComment,
@@ -492,4 +545,5 @@ module.exports = {
     getAllTask,
     getTaskByID,
     getAllCategory,
+    deleteComment
 }
