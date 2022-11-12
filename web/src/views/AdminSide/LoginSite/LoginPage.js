@@ -34,7 +34,6 @@ export default {
 	created() {},
 	methods: {
 		async login(data) {
-			console.log('data', data);
 			if (data.email === '' || data.password === '') {
 				this.isLoginDataEmpty = true;
 			} else {

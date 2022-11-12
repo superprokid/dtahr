@@ -42,7 +42,6 @@ export default {
     },
 
     mounted() {
-        console.log("mounted history treacking");
         this.$eventBus.$emit("show-spinner", true);
         this._getUserHistoryTracking();
 
@@ -88,7 +87,6 @@ export default {
             if (!response) {
                 this.$router.push('/user/login')
             } else {
-                console.log(response)
                 this.userTrackingHistory = this._groupArrayByDateKey(response.data.reverse(), "work_date")
             }
             this.$eventBus.$emit("show-spinner", false);

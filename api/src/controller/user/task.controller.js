@@ -1,7 +1,7 @@
 const dbaccess = require('../../common/dbaccess');
 const logger = require('../../common/logger');
 const moment = require('moment');
-const { validateRequest, getDateString } = require('../../common/utils');
+const { validateRequest, getDateString, isNullOrUndefinded } = require('../../common/utils');
 const { TASK_STATUS, TASK_STATUS_TEXT, TASK_PRIORITY_TEXT } = require('../../config/constants');
 
 const LOG_CATEGORY = "Task Controller"
@@ -261,19 +261,19 @@ async function updateTask(req, res) {
             setClauseArray.push(` assignee_id = '${assigneeId}'`);
             commentContent = commentContent.concat(`<p>Assignee changed</p></br>`);
         }
-        if (status) {
+        if (!isNullOrUndefinded(status)) {
             setClauseArray.push(` status = '${status}'`);
             commentContent = commentContent.concat(`<p>Status changed: ${TASK_STATUS_TEXT[targetTask.status]} → ${TASK_STATUS_TEXT[status]}</p></br>`);
         }
-        if (priority) {
+        if (!isNullOrUndefinded(priority)) {
             setClauseArray.push(` priority = '${priority}'`);
             commentContent = commentContent.concat(`<p>Priority changed: ${TASK_PRIORITY_TEXT[targetTask.priority]} → ${TASK_STATUS_TEXT[priority]}</p></br>`);
         }
-        if (estimatedHours) {
+        if (!isNullOrUndefinded(estimatedHours)) {
             setClauseArray.push(` estimated_hours = '${estimatedHours}'`);
             commentContent = commentContent.concat(`<p>Estimated hours changed: ${targetTask.estimated_hours} → ${estimatedHours}</p></br>`);
         }
-        if (actualHours) {
+        if (!isNullOrUndefinded(actualHours)) {
             setClauseArray.push(` actual_hours = '${actualHours}'`);
             commentContent = commentContent.concat(`<p>Estimated hours changed: ${Number(targetTask.actual_hours).toFixed(2)} → ${Number(actualHours).toFixed(2)}</p></br>`);
         }
@@ -285,8 +285,8 @@ async function updateTask(req, res) {
 
         if (!setClauseArray.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] no columns update`);
-            await rollback(connection);
-            releaseConnection(connection);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
             res.status(403).send("Update failed, no columns need to update");
             return;
         }

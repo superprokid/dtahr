@@ -37,6 +37,13 @@ export const USER_GET_IMAGE = BASE_URL + "/api/public/avts";
 export const USER_REGISTER_WORK_FROM_HOME = BASE_API_USER_URL + "/create/wfh"
 export const USER_GET_THEIR_WFH_TICKET = BASE_API_USER_URL + "/wfh/get"
 export const USER_DELETE_THEIR_WFH_TICKET = BASE_API_USER_URL + "/delete/wfh"
+export const USER_GET_ALL_CATEGORY_TASK = BASE_API_USER_URL + "/category/getall"
+export const USER_CREATE_CATEGORY_TASK = BASE_API_USER_URL + "/category/create"
+export const USER_CREATE_TASK = BASE_API_USER_URL + "/task/create"
+export const USER_GET_ALL_TASK = BASE_API_USER_URL + "/task/getbystatus"
+export const USER_UPDATE_TASK = BASE_API_USER_URL + "/task/update"
+export const USER_GET_TASK_DETAIL = BASE_API_USER_URL + "/task/getdetails"
+export const USER_GET_ALL_TASK_LIST = BASE_API_USER_URL + "/task/getall"
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';

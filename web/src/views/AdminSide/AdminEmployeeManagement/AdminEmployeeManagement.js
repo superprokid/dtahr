@@ -119,7 +119,6 @@ export default {
         },
     },
     mounted() {
-        console.log('groupRowSelected', this.groupRowSelected);
         this.$eventBus.$emit('show-spinner', true);
         this._getEmployeeOfSpecificGroup()
         this.$eventBus.$emit('show-spinner', false);
@@ -151,7 +150,6 @@ export default {
                 this.listUsersOfSpecificGroup = response.data.map((item) => {
                     return {...item, dob: getDateString(item.dob), gender: item.gender == 0 ? 'Male' : item.gender == 1 ? 'Female' : 'Other', join_date: getDateString(item.join_date)}
                 })
-                console.log('listUsersOfSpecificGroup', this.listUsersOfSpecificGroup);
             }
         }
     },
