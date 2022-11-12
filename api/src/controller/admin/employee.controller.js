@@ -14,6 +14,7 @@ const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.
 + "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
 + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
+const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 
 async function createNewEmployee(req, res) {
     const connection = await dbaccess.getConnection();
@@ -320,8 +321,34 @@ async function getAllFreeManager(req, res) {
     }
 }
 
+async function getEmployeeInfoById(req, res) {
+    try {
+        const { employeeId } = req.query;
+
+        if (!employeeId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employeeId is required`);
+            res.status(403).send("Get failed");
+            return;
+        }
+
+        let result = await dbaccess.exeQuery(GET_USER_INFO_BY_ID, [employeeId]);
+        if (result.length) {
+            result = result[0];
+        } else {
+            result = {};
+        }
+        delete result.password;
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+    }
+}
+
 module.exports = {
     createNewEmployee,
     editEmployee,
     getAllFreeManager,
+    getEmployeeInfoById,
 }

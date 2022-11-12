@@ -1,10 +1,8 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useEffect } from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar} from 'react-native';
 import { LEAVE_REGISTER_TAB, LEAVE_TICKET_TAB } from '../../config/screen';
 import LeaveRegisterScreen from './LeaveRegisterScreen';
 import LeaveTicketScreen from './LeaveTicketScreen';
-import Animated from 'react-native-reanimated';
 
 const Tab = createMaterialTopTabNavigator();
 

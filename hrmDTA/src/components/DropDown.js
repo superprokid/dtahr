@@ -34,6 +34,7 @@ function DropDown(props) {
                 value={props.value}
                 items={props.items}
                 setOpen={setOpen}
+                listMode='SCROLLVIEW'
                 setValue={props.setValue}
                 setItems={props.setItems}
                 containerStyle={Styles.dropdown_container}

@@ -12,9 +12,9 @@ const UPDATE_LOGIN_STATUS = "   UPDATE administrator "
 const UPDATE_LOGIN_FAILED_STATUS = "   UPDATE administrator "
     + "                         SET login_failed_date = now()"
     + "                         WHERE username = ? "
-const GET_ALL_USER = "  SELECT employee_id, CONCAT(first_name, ' ', last_name) as full_name, dob, address, gender, email, avt, group_name "
-    + "                 FROM employee e INNER JOIN `group` g WHERE e.group_id = g.group_id "
-    + "                      INNER JOIN employee er WHERE e.employer_id = er.employee_id";
+const GET_ALL_USER = "  SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name, g.group_name  "
+    + "                 FROM employee e INNER JOIN `group` g ON e.group_id = g.group_id "
+    + "                      INNER JOIN employee er ON e.employer_id = er.employee_id";
 const GET_START_ADMIN = " SELECT username, login_date, login_failed_date, password_expired, create_at, update_at FROM administrator WHERE username = ? "
 
 /**

@@ -22,6 +22,8 @@ const adminEmpController = require('../controller/admin/employee.controller');
 const adminGroupController = require('../controller/admin/group.controller');
 const adminHolidayController = require('../controller/admin/holiday.controller');
 const adminWorkTimeController = require('../controller/admin/worktime.controler');
+const adminWorkLogController = require('../controller/admin/worklog.controller');
+const adminProjectController = require('../controller/admin/project.controller')
 
 // user
 Router.post('/user/login', userController.login);
@@ -63,6 +65,7 @@ Router.post('/user/category/create', authen, taskController.addNewCategory);
 Router.post('/user/comment/create', authen, taskController.addNewComment);
 Router.post('/user/task/update', authen, taskController.updateTask);
 Router.post('/user/comment/update', authen, taskController.editComment);
+Router.post('/user/comment/delete', authen, taskController.deleteComment);
 Router.get('/user/task/getbystatus', authen, taskController.getAllTaskWithStatus);
 Router.get('/user/task/getall', authen, taskController.getAllTask);
 Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
@@ -102,6 +105,12 @@ Router.get('/admin/worktime/get', adminAuthen, adminWorkTimeController.getAllWor
 Router.post('/admin/worktime/create', adminAuthen, adminWorkTimeController.addNewWorktime);
 Router.post('/admin/worktime/update', adminAuthen, adminWorkTimeController.updateWorkTime);
 Router.post('/admin/worktime/delete', adminAuthen, adminWorkTimeController.deleteWorkTime);
+Router.get('/admin/worklog/get', adminAuthen, adminWorkLogController.getWorkLogOfUser);
+Router.get('/admin/workhistory/get', adminAuthen, adminWorkLogController.getWorkHistoryByEmployee);
+Router.get('/admin/employee/get', adminAuthen, adminEmpController.getEmployeeInfoById);
+Router.get('/admin/employee/getproject', adminAuthen, adminProjectController.getDetailsPojectByEmployee);
+Router.post('/admin/worklog/update', adminAuthen, adminWorkLogController.updateWorklog);
+Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.updateHolidayTime);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

@@ -29,6 +29,7 @@
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "~3.15.0",
     "react-native-tab-view": "^3.3.0",
+    "react-native-table-component": "^1.2.2",
     "react-native-timeline-flatlist": "^0.8.0"
   },
   "devDependencies": {

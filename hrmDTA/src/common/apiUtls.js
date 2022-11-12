@@ -51,9 +51,33 @@ const apiUtls = {
         const result = await recallAPI(USER_GET_START_URL, HEADER, GET);
         return result;
     },
-    getWorkHistory: async(startDate, endDate) => {
+    getWorkHistory: async (startDate, endDate) => {
         const result = await recallAPI(`${USER_GET_WORK_HISTORY}?startDate=${startDate}&endDate=${endDate}`, HEADER, GET);
         return result;
+    },
+    registerLeaveTicker: async (data) => {
+        try {
+            const result = await recallAPI(USER_REGISTER_ABSENT, HEADER, POST, data);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    getMyLeaveTicket: async () => {
+        try {
+            const result = await recallAPI(USER_GET_ABSENT, HEADER, GET);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    deleteLeaveTicker: async (leaveId) => {
+        try {
+            const result = await recallAPI(USER_DELETE_ABSENT, HEADER, POST, { leaveId });
+            return result;
+        } catch (error) {
+            throw error;
+        }
     }
 
 }
@@ -64,12 +88,13 @@ const refreshToken = async () => {
         refreshToken
     });
     if (result.failed) {
+        storageUtls.clearLoginSession()
         return false;
     } else {
         storageUtls.setString(storageUtls.access_token, result.accessToken);
         return true;
     }
-    
+
 }
 
 const callAPI = (url, header, method, data = {}) => {
@@ -80,7 +105,7 @@ const callAPI = (url, header, method, data = {}) => {
             body: method == GET ? null : JSON.stringify(data)
         }).then(result => {
             if (result.status === 200) {
-                resolve(result.json())
+                resolve(result.json());
             } else {
                 resolve({
                     status: result.status,
