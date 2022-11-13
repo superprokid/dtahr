@@ -1,3 +1,4 @@
+const fs = require('fs');
 const dbaccess = require('../../common/dbaccess');
 const logger = require('../../common/logger');
 const moment = require('moment');
@@ -27,11 +28,18 @@ const GET_TASK_DETAILS_BY_ID = "SELECT t.*, CONCAT(e.first_name, ' ', e.last_nam
 const GET_ALL_COMMENT_OF_TASK = "SELECT tc.*, CONCAT(first_name, ' ', last_name) as creator, avt"
     + "                         FROM taskcomment tc INNER JOIN employee e ON tc.employee_id = e.employee_id"
     + "                         WHERE task_id = ?";
+const GET_ALL_ATTACHMENTS_OF_TASK = "SELECT * FROM taskattachment where task_id = ?";
 const GET_ALL_CATEGORY = "SELECT * FROM category";
 
 const GET_FULL_NAME_OF_EMPLOYEE = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? LIMIT 1";
 
-const DELETE_COMMENT = "DELETE FROM taskcomment WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?"
+const DELETE_COMMENT = "DELETE FROM taskcomment WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?";
+
+const INSERT_ATTACHMENT = "INSERT INTO taskattachment (task_id, path) VALUES (?, ?)";
+
+const GET_ATTACHMENT_BY_ID = "SELECT * FROM taskattachment WHERE attachment_id = ?";
+
+const DELETE_ATTACHMENT = "DELETE FROM taskattachment WHERE attachment_id = ?";
 
 async function addNewCategory(req, res) {
     const connection = await dbaccess.getConnection();
@@ -469,6 +477,8 @@ async function getTaskByID(req, res) {
         const task = listTask[0];
         const listComment = await dbaccess.exeQuery(GET_ALL_COMMENT_OF_TASK, [taskId]);
         task.comments = listComment
+        const listAttachments = await dbaccess.exeQuery(GET_ALL_ATTACHMENTS_OF_TASK, [taskId]);
+        task.attachments = listAttachments;
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
         res.status(200).send(task);
     } catch (error) {
@@ -535,6 +545,124 @@ async function deleteComment(req, res) {
     }
 }
 
+async function addAttachments(req, res) {
+    const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const employeeId = req.employee_id;
+        if (!employeeId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send("Update failed");
+            return;
+        }
+
+        const validateSchema = {
+            taskId: {
+                type: 'number',
+                required: true,
+            }
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            deleteAttachments(req.files);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { taskId } = req.body;
+        for (let i = 0; i < req.files?.length; i++) {
+            const element = req.files[i];
+            const filename = String(element.path).substring(ATTACHMENTS_PATH.length);
+            await dbaccess.queryTransaction(connection, INSERT_ATTACHMENT, [taskId, filename]);
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Add attachments success`);
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+        res.status(200).send({message: "OK"});
+    } catch (error) {
+        deleteAttachments(req.files);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+    }
+}
+
+async function deleteTaskAttachments(req, res) {
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const employeeId = req.employee_id;
+        if (!employeeId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send("Update failed");
+            return;
+        }
+
+        const validateSchema = {
+            attachmentId: {
+                type: 'number',
+                required: true,
+            }
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            deleteAttachments(req.files);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { attachmentId } = req.body;
+        const targetAttachmentsList = await dbaccess.queryTransaction(connection, GET_ATTACHMENT_BY_ID, [attachmentId]);
+        if (targetAttachmentsList.length) {
+            const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
+            const targetAttachment = targetAttachmentsList[0];
+            const filepath = ATTACHMENTS_PATH + targetAttachment.path;
+            deleteAttachments([{path: filepath}]);
+            await dbaccess.queryTransaction(connection, DELETE_ATTACHMENT, [attachmentId]);
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Delete attachment success`);
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+        res.status(200).send({message: "OK"});
+    } catch (error) {
+        deleteAttachments(req.files);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send("SERVER ERROR");
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+    }
+}
+
+function deleteAttachments(files) {
+    const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
+    for (let i = 0; i < files?.length; i++) {
+        const element = files[i];
+        if (fs.existsSync(element.path)) {
+            fs.unlink(element.path, (err) => {
+                if (err) logger.warn('delete file failed - ' + err);
+                const filename = String(element.path).substring(ATTACHMENTS_PATH.length);
+                const dirArr = filename.split("\\");
+                const dirPath = ATTACHMENTS_PATH + dirArr[0];
+                if (fs.existsSync(dirPath)) {
+                    fs.rmdir(dirPath, (err) => {
+                        if (err) logger.warn('delete path failed - ' + err)
+                    });
+                }
+            });
+        }
+    }
+}
+
 module.exports = {
     addNewCategory,
     addNewComment,
@@ -545,5 +673,7 @@ module.exports = {
     getAllTask,
     getTaskByID,
     getAllCategory,
-    deleteComment
+    deleteComment,
+    addAttachments,
+    deleteTaskAttachments,
 }
