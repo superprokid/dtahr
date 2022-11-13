@@ -1,0 +1,31 @@
+Part 1: Human --> Cognitive Science
+text, image, audio
+co che tiep nhan thong tin cua nao bo
+
+Part 2: Interaction - Tools
+figma, 
+balsmiq
+Adobe
+sketch --> prottotype
+prototype
+
+Part 3: Evaluation
+Đánh giá cần:
+- tiêu chuẩn đánh giá
+- phương pháp đánh giá
+một trong những pp nổi tiếng: cognitive walkthrough
+
+
+3 bài tập lớn đóng góp cho project final
+Mục tiêu chính mà project phải đạt được:
+- thiết kế
+- tính khả dụng của việc thiết kế (bao gồm tính thân thiện vs ng dùng)
+
+Phần mềm:
+- hoạt dộng được
+- giao diện hài hòa
+- tính tương tác
+- giảm thiểu lỗi
+- cơ chế khắc phục lỗi hay không
+
+Điểm quá trình: thông qua báo cáo các chủ đề của môn học, điểm danh, bài tập hàng tuần

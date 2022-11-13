@@ -2,7 +2,7 @@ const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
 const { faceRecogAuthen } = require('../policy/facerecog.authentication');
-const { uploadFile, sendFile } = require('../common/uploadUtls');
+const { uploadFile, sendFile, attachment } = require('../common/uploadUtls');
 const path = require('path')
 const Router = express.Router();
 // Import for user controller
@@ -69,9 +69,11 @@ Router.post('/user/comment/delete', authen, taskController.deleteComment);
 Router.get('/user/task/getbystatus', authen, taskController.getAllTaskWithStatus);
 Router.get('/user/task/getall', authen, taskController.getAllTask);
 Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
+Router.post('/user/task/attachment/upload', authen, attachment.array('file'), taskController.addAttachments);
+Router.post('/user/task/attachment/delete', authen, taskController.deleteTaskAttachments)
 Router.get('/user/category/getall', authen, taskController.getAllCategory);
-Router.get('/public/download/:filename', (req, res) => {
-    res.download(path.join(__basedir, './public/download', req.params.filename))
+Router.get('/public/download/:dirname/:filename', (req, res) => {
+    res.download(path.join(__basedir, './public/attachments/', req.params.dirname, '/', req.params.filename))
 })
 
 // user - manager

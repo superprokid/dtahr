@@ -54,6 +54,7 @@ module.exports = {
     WORK_TIME_FULL: 8,
     MAX_EMPLOYEE_ID_LENGTH: 7,
     MAX_GROUP_ID_LENGTH: 6,
+    MAX_PROJECT_ID_LENGTH: 4,
     ROLE: {
         employee: 0,
         employer: 1,

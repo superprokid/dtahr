@@ -1,0 +1,67 @@
+bán sách, 
+sách gồm các thông tin ( id, tên sách, tác giả, mô tả, năm xuất bản, nhà xuất bản, giá, khuyến mãi(%), số lượng)
+Tính năng:
+Đăng nhập, đăng kí, đăng xuất, quên mật khẩu.
+Home: 
+	Sách mới nhất
+	Sách được quan tâm nhiều nhất
+	Gợi ý tác giả
+By categories( thể loại)
+Search có filter(giá, thể loại, tác giả, NXB) 
+Giỏ hàng
+Mua hàng
+Quan tâm
+Xem đơn hàng đã đặt(tình trạng)
+
+-----------------------------------------------------
+Quản lý sách
+Quản lý Đơn hàng
+Quản lý categories
+
+
+========================================Thắng===================================================
+
+- Header 
+	+ Category
+	+ Thanh Search
+	+ Login Modal, Register Modal, Forget Password Modal, Change Password Modal
+	+ Giỏ hàng
+- Footer
+- Trang chủ
+	+ Sách mới nhất
+	+ Sách được quan tâm nhiều nhất
+	+ Sách được mua nhiều nhất
+	+ Thể loại được mua nhiều nhất
+===============================Thành====================================================
+- Trang tìm kiếm kiểu filter 
+	+ Theo Tác giả, NXB, giá, số sao, thể loại, ngôn ngữ
+
+- Tra cứu đơn hàng theo sdt or nếu đã đăng nhập thì xem theo tài khoản
+- Quản lý thông tin cá nhân.
+	+ Đổi tên, địa chỉ, số điện thoại.
+	+ Danh mục quan tâm ( chứa sách được quan tâm)
+==================================Hảo==================================================
+- Trang chi tiết sản phẩm 
+	+ Chi tiết
+	+ Box add vào giỏ hàng
+	+ Quan tâm
+	+ Đánh giá
+	+ Sản phẩm liên quan
+- Trang Mua hàng
+	+ Sản phẩm + số lượng ( giá tính theo lúc mua) 
+	+ Yêu cầu thông tin như sau: Tên, SDT, Địa chỉ 
+-Trang quản lý:
+	+ Quản lý categories, subcategories (thêm, sửa, xóa(đối với categories k có sách), ẩn)
+========================================Hoàng=========================================================
+- Trang quản lý: (3,7)
+	+ Quản lý sách (Thêm, Xóa, sửa, search)
+	+ Quản đơn hàng (chuyển đổi trạng thái)
+		• Bao gồm các tình trạng: Chờ, Đã duyệt, đã xuất hàng, đã nhận hàng, đã hủy
+		• tìm kiếm đơn hàng
+
+============================THỎA THUẬN=======================================================
+Deadline phần Figma: Hết ngày (9/5/2022)
+Tài khoản figma:
+	aeck.figma@gmail.com
+	aeck123@
+		
