@@ -12,17 +12,19 @@ import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 import TaskDetailServices from "../../../services/API/TaskDetailAPI/TaskDetailServices"
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
 import ReportServices from "../../../services/API/ReportAPI/ReportServices"
-import { getDateString, getTimeString} from "../../../services/utilities";
+import { getDateString, getTimeString, isPastDate} from "../../../services/utilities";
 
-import {USER_GET_IMAGE} from '../../../config/constant'
+import {USER_GET_IMAGE, USER_DOWN_ATTACHMENT} from '../../../config/constant'
 
 import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentModal/ConfirmDeleteCommentModal.vue"
+import AddAttachmentModal from "../../../components/AddAttachmentModal/AddAttachmentModal.vue"
 
 export default {
     components: {
         quillEditor,
         AddCategoryTaskModal,
-        ConfirmDeleteCommentModal
+        ConfirmDeleteCommentModal,
+        AddAttachmentModal
     },
     data() {
 
@@ -90,8 +92,10 @@ export default {
             updateCommentSelectedId: undefined,
 
             ConfirmDeleteCommentDialogShowed: false,
+            AddAttachmentModalShowed: false,
             
-
+            listAttachment: [],
+            numberOfAttachment: 0,
         }
     },
     watch: {
@@ -138,6 +142,7 @@ export default {
             this.taskDetailData.start_date = getDateString(response.data.start_date)
             this.taskDetailData.end_date = getDateString(response.data.end_date)      
             this.taskDetailData.create_at = getDateString(response.data.create_at) + ' ' +getTimeString(response.data.create_at)
+            this.taskDetailData.isLate = isPastDate(response.data.end_date) && response.data.status != 3
             return this.taskDetailData
         },
 
@@ -152,7 +157,6 @@ export default {
         },
 
         onClickEditTaskDetail(){
-            console.log('onclick edit task detail');
             this.$router.push('/user/edittask/'+this.taskDetailData.task_id);
         },
 
@@ -234,10 +238,8 @@ export default {
                     alert("Call Fail")
                 }
             }
-            
-            
+                    
             // update task detail frontend
-            const userTempList = await this.getAllUser()
             this._getTaskDetailById().then((result)=>{
                 console.log('result', result);
                 this.selectedProgress = Number(result.status)
@@ -248,11 +250,19 @@ export default {
                         create_at: getDateString(item.create_at) + ' ' +getTimeString(item.create_at),       
                     }
                 })
+                this.listAttachment = result.attachments.map((item) =>{
+                    const arr = item.path.split("\\")
+                    console.log('arr', arr);
+                    return {
+                        ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
+                    }
+                })
+                this.numberOfAttachment = this.listAttachment.length
     
                 this.numberOfComments = this.listComments.length
                 console.log('listcomments', this.listComments);
-                for (let index = 0; index < userTempList.length; index++) {
-                    const element = userTempList[index];
+                for (let index = 0; index < this.userList.length; index++) {
+                    const element = this.userList[index];
                     if(element.employee_id == result.assignee_id){
                         this.selectedUser = element
                         console.log('this.selectedUser', this.selectedUser);
@@ -272,16 +282,13 @@ export default {
 
 
         onClickEditComment(item){
-            console.log('edit comment clicked', item);
             this.content = item.content
             this.isUpdateComment = true
             this.updateCommentSelectedId = item.taskcomment_id
             this.reveal = true;
-
         },
 
         onClickDeleteComment(item){
-            console.log('delete comment clicked', item);
             this.confirmDeleteInfo = item
             this.ConfirmDeleteCommentDialogShowed = true
             
@@ -298,7 +305,7 @@ export default {
             if(deleteCommentResponse === -1){
                 alert("Call Fail")
             }
-            const userTempList = await this.getAllUser()
+
             this._getTaskDetailById().then((result)=>{
                 console.log('result', result);
                 this.selectedProgress = Number(result.status)
@@ -309,11 +316,19 @@ export default {
                         create_at: getDateString(item.create_at) + ' ' +getTimeString(item.create_at),       
                     }
                 })
+                this.listAttachment = result.attachments.map((item) =>{
+                    const arr = item.path.split("\\")
+                    console.log('arr', arr);
+                    return {
+                        ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
+                    }
+                })
+                this.numberOfAttachment = this.listAttachment.length
     
                 this.numberOfComments = this.listComments.length
                 console.log('listcomments', this.listComments);
-                for (let index = 0; index < userTempList.length; index++) {
-                    const element = userTempList[index];
+                for (let index = 0; index < this.userList.length; index++) {
+                    const element = this.userList[index];
                     if(element.employee_id == result.assignee_id){
                         this.selectedUser = element
                         console.log('this.selectedUser', this.selectedUser);
@@ -328,7 +343,142 @@ export default {
         onClose(param){
             if(param == 1){
                 this.ConfirmDeleteCommentDialogShowed = false
+            }else if(param == 2){
+                this.AddAttachmentModalShowed = false
             }
+        },
+
+        onClickAttachFileButton(){
+            this.AddAttachmentModalShowed = true
+        },
+        async onClickUploadAttachment(data){
+            if(data.length){
+                let form = new FormData();
+                for (let index = 0; index < data.length; index++) {
+                    const element = data[index];
+                    form.append('file', element)
+                }
+                form.append('taskId', this.taskDetailData.task_id)
+
+                let response = await TaskDetailServices.uploadAttachment(form);
+                if (!response) {
+                    this.$router.push('/user/login')
+                    return;
+                }
+                if(response == -1){
+                    this.$toast.open({
+                        message: "Upload Attachment Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
+                }
+                this._getTaskDetailById().then((result)=>{
+                    console.log('result', result);
+                    this.selectedProgress = Number(result.status)
+        
+                    this.listComments = result.comments.map((item) => {
+                        return {
+                            ...item,    
+                            create_at: getDateString(item.create_at) + ' ' +getTimeString(item.create_at),       
+                        }
+                    })
+                    this.listAttachment = result.attachments.map((item) =>{
+                        const arr = item.path.split("\\")
+                        console.log('arr', arr);
+                        return {
+                            ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
+                        }
+                    })
+                    this.numberOfAttachment = this.listAttachment.length
+        
+                    this.numberOfComments = this.listComments.length
+                    console.log('listcomments', this.listComments);
+                    for (let index = 0; index < this.userList.length; index++) {
+                        const element = this.userList[index];
+                        if(element.employee_id == result.assignee_id){
+                            this.selectedUser = element
+                            console.log('this.selectedUser', this.selectedUser);
+                            break
+                        }
+                    }
+                    this.startDate = getDateString(result.start_date)
+                    this.endDate = getDateString(result.end_date)
+                })
+                this.AddAttachmentModalShowed = false
+                this.$root.$emit('AddAttachmentModal')
+
+                this.$toast.open({
+                    message: "Upload Attachment Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+            }
+            
+        },
+
+        async onClickRemoveAttachment(attachment_id){
+            const params = {
+                attachmentId: attachment_id
+            }
+            const response = await TaskDetailServices.deleteAttachment(params);
+            if (!response) {
+                this.$router.push('/user/login')
+                return;
+            }
+            if(response == -1){
+                alert('Call Fail')
+                return
+            }
+            // alert('Delete Success')
+            this._getTaskDetailById().then((result)=>{
+                console.log('result', result);
+                this.selectedProgress = Number(result.status)
+    
+                this.listComments = result.comments.map((item) => {
+                    return {
+                        ...item,    
+                        create_at: getDateString(item.create_at) + ' ' +getTimeString(item.create_at),       
+                    }
+                })
+                this.listAttachment = result.attachments.map((item) =>{
+                    const arr = item.path.split("\\")
+                    console.log('arr', arr);
+                    return {
+                        ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
+                    }
+                })
+                this.numberOfAttachment = this.listAttachment.length
+    
+                this.numberOfComments = this.listComments.length
+                console.log('listcomments', this.listComments);
+                for (let index = 0; index < this.userList.length; index++) {
+                    const element = this.userList[index];
+                    if(element.employee_id == result.assignee_id){
+                        this.selectedUser = element
+                        console.log('this.selectedUser', this.selectedUser);
+                        break
+                    }
+                }
+                this.startDate = getDateString(result.start_date)
+                this.endDate = getDateString(result.end_date)
+            })
+            this.$toast.open({
+                message: "Test message from Vue",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+
+        },
+
+        onClickAddAttachmentShortIcon(){
+            this.AddAttachmentModalShowed = true
         },
 
     },
@@ -339,9 +489,9 @@ export default {
       },
     async mounted() {
         
-        console.log('this is current quill instance object', this.editor)
-        const userTempList = await this.getAllUser()
+        console.log('this is current quill instance object', this.editor)  
         this.$eventBus.$emit('show-spinner', true);
+        const userTempList = await this.getAllUser()
         this._getTaskDetailById().then((result)=>{
             console.log('result', result);
             this.selectedProgress = Number(result.status)
@@ -352,6 +502,14 @@ export default {
                     create_at: getDateString(item.create_at) + ' ' +getTimeString(item.create_at),       
                 }
             })
+            this.listAttachment = result.attachments.map((item) =>{
+                const arr = item.path.split("\\")
+                console.log('arr', arr);
+                return {
+                    ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
+                }
+            })
+            this.numberOfAttachment = this.listAttachment.length
 
             this.numberOfComments = this.listComments.length
             console.log('listcomments', this.listComments);

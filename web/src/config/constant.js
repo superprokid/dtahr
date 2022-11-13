@@ -47,6 +47,10 @@ export const USER_GET_ALL_TASK_LIST = BASE_API_USER_URL + "/task/getall"
 export const USER_CREATE_COMMENT = BASE_API_USER_URL + "/comment/create"
 export const USER_UPDATE_COMMENT = BASE_API_USER_URL + "/comment/update"
 export const USER_DELETE_COMMENT = BASE_API_USER_URL + "/comment/delete"
+export const USER_UPLOAD_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/upload"
+export const USER_DELETE_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/delete"
+
+export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';

@@ -15,3 +15,10 @@
 .v-application--wrap {
     min-height: 0vh !important;
   }
+
+.v-toast__item{
+    /* min-height: 2em !important; */
+    /* max-height: 2em !important */
+    min-height: auto !important;
+    height: 45px !important;
+}
