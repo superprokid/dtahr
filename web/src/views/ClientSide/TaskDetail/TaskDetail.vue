@@ -8,15 +8,24 @@
                         <v-chip small :color="taskDetailData.category_color" dark class="mr-3">
                             {{ taskDetailData.category_name }}
                         </v-chip>
-                        {{ taskDetailData.task_id }}
+                        #{{ taskDetailData.task_id }}
                     </v-col>
 
                     <v-col cols="12" md="9" class="d-flex justify-end align-center">
                         <span class="text-caption mb-0 mr-2">Start Date</span>
                         <span class="text-subtitle-2 mr-4">{{ taskDetailData.start_date }}</span>
-                        <span class="text-caption mb-0 mr-2 red--text lighten-1">Due Date</span>
-                        <span class="text-subtitle-2 mr-2 red--text lighten-1">{{ taskDetailData.end_date
-                        }}</span>
+                        <span class="text-caption mb-0 mr-2  lighten-1">Due Date</span>
+
+
+                        <span class="text-subtitle-2 mr-2 red--text lighten-1" v-if="taskDetailData.isLate">
+                            {{ taskDetailData.end_date }}
+                            <v-icon color="red">
+                                mdi-fire
+                            </v-icon>
+                        </span>
+                        <span class="text-subtitle-2 mr-2 lighten-1" v-else>{{ taskDetailData.end_date }}</span>
+
+
                         <v-chip small :color="getStatus(taskDetailData.status).color" dark>
                             <!-- color="red" text-color="white" -->
                             {{ getStatus(taskDetailData.status).text }}
@@ -143,6 +152,63 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
+
+
+                <!-- ATTACH FILE -->
+                <v-card class="mt-8">
+                    <v-tabs background-color="transparent">
+
+                        <v-tab key="attachment">
+                            Attachment({{numberOfAttachment}})
+                        </v-tab>
+                        <v-tab-item key="attachment">
+                            <v-card flat>
+                                <v-card-text>
+                                    <v-row>
+                                        <v-col cols="12" md="8">
+                                            <div v-for="item in listAttachment" :key="item.attachment_id">
+                                                <v-icon small color="teal darken-2">
+                                                    mdi-file-document
+                                                </v-icon>
+                                                <a :href="item.href">
+                                                    {{ item.file_name }}
+                                                </a>
+                                                <v-icon small  @click="onClickRemoveAttachment(item.attachment_id)">
+                                                    mdi-close-thick
+                                                </v-icon>
+                                            </div>
+                                        </v-col>
+                                        <v-col cols="12" md="4" class="d-flex justify-end">
+                                            <!-- <FormulateInput type="file" name="file"
+                                                label="Select your documents to upload"
+                                                help="Select one or more Files to upload"
+                                                multiple /> -->
+
+                                            <v-btn rounded outlined color="primary" dar
+                                                @click="onClickAttachFileButton">
+                                                <v-icon>
+                                                    mdi-plus
+                                                </v-icon>
+                                                Attach File
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </v-tab-item>
+
+                        <v-tab key="subtasking">
+                            Substasking
+                        </v-tab>
+                        <v-tab-item key="subtasking">
+                            <v-card flat>
+                                <v-card-text>this is subtasking</v-card-text>
+                            </v-card>
+                        </v-tab-item>
+                    </v-tabs>
+
+                </v-card>
+
                 <!-- COMMENTS(123456) -->
                 <v-row :align="'center'" class="mt-2">
                     <v-col cols="12" md="12">
@@ -151,12 +217,13 @@
                         </span>
                     </v-col>
                 </v-row>
-                <!-- COMMENT -->
+                <!-- COMMENT LIST-->
                 <v-card elevation="2">
                     <v-card-text>
                         <v-row no-gutters class="container-bottom-divider" v-for="item in listComments"
                             :key="item.taskcomment_id">
-                            <v-col cols="12" md="10">
+                            <a :href="`#${item.taskcomment_id}`"></a>
+                            <v-col cols="12" md="10" :id="item.taskcomment_id">
                                 <v-list-item class="pl-0">
                                     <v-list-item-avatar>
                                         <v-img :src="avtBaseUrl + '/' + item.avt" v-if="item.avt != null"></v-img>
@@ -184,9 +251,9 @@
                                             <v-icon>mdi-format-list-bulleted</v-icon>
                                         </v-btn>
                                     </template>
-                                    <v-list >
-                                        <v-list-item >
-                                            <v-btn  text color="primary" @click="onClickEditComment(item)" width="100%">
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-btn text color="primary" @click="onClickEditComment(item)" width="100%">
                                                 <v-icon class="mr-2">
                                                     mdi-pencil
                                                 </v-icon>
@@ -194,7 +261,7 @@
                                             </v-btn>
                                         </v-list-item>
                                         <v-list-item>
-                                            <v-btn  text color="error"  width="100%" @click="onClickDeleteComment(item)">
+                                            <v-btn text color="error" width="100%" @click="onClickDeleteComment(item)">
                                                 <v-icon class="mr-2">
                                                     mdi-delete
                                                 </v-icon>
@@ -226,8 +293,8 @@
         <v-card class=" comment-area" style="height: 80px">
             <v-card-text>
                 <v-row no-gutters>
-                    <v-col cols="12" md="1">
-                        <v-btn class="ma-2" outlined fab x-small>
+                    <v-col cols="12" md="1" class="d-flex justify-center">
+                        <v-btn class="ma-2" outlined fab x-small @click="onClickAddAttachmentShortIcon">
                             <v-icon>mdi-paperclip-plus</v-icon>
                         </v-btn>
                     </v-col>
@@ -249,8 +316,8 @@
 
             <!-- reveal card -->
             <v-expand-transition>
-                <v-card v-if="reveal && isUpdateComment == false" class="transition-fast-in-fast-out v-card--reveal elevation-8"
-                    style="height: 400px;">
+                <v-card v-if="reveal && isUpdateComment == false"
+                    class="transition-fast-in-fast-out v-card--reveal elevation-8" style="height: 400px;">
                     <v-card-text class="pb-0">
                         <v-row>
                             <v-col cols="12" md="1" class="d-flex justify-center align-center">
@@ -272,7 +339,7 @@
                                 </v-row> -->
                             </v-col>
                             <!-- CHANGE STATUS -->
-                            <v-col cols="12" md="3" >
+                            <v-col cols="12" md="3">
                                 <v-row no-gutters>
                                     Status
                                     <v-col cols="12">
@@ -377,17 +444,17 @@
 
                 </v-card>
 
-                <v-card v-if="reveal && isUpdateComment == true" class="transition-fast-in-fast-out v-card--reveal elevation-8"
-                    style="height: 400px;">
+                <v-card v-if="reveal && isUpdateComment == true"
+                    class="transition-fast-in-fast-out v-card--reveal elevation-8" style="height: 400px;">
                     <v-card-text class="pb-0">
-                        <v-row >
+                        <v-row>
                             <v-col cols="12" md="1" class="d-flex justify-center align-center">
                                 <v-btn outlined fab x-small>
                                     <v-icon>mdi-paperclip-plus</v-icon>
                                 </v-btn>
                             </v-col>
-                            <v-col cols="12" md="10" >
-                                <v-row >
+                            <v-col cols="12" md="10">
+                                <v-row>
                                     <quill-editor ref="myQuillEditor" v-model="content" :options="editorOption"
                                         style=" height: 240px" @blur="onEditorBlur($event)"
                                         @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
@@ -398,7 +465,7 @@
                                             dense></v-text-field>
                                     </v-col>
                                 </v-row> -->
-                            </v-col>                       
+                            </v-col>
                         </v-row>
                     </v-card-text>
                     <v-card-actions class="pt-0 d-flex justify-center " style="margin-top: 80px">
@@ -414,14 +481,23 @@
             </v-expand-transition>
         </v-card>
         <!-- NOTIFICITION BEFORE DELETE DIALOG -->
-        <v-dialog v-model="ConfirmDeleteCommentDialogShowed" v-if="ConfirmDeleteCommentDialogShowed" persistent max-width="600px" transition="dialog-top-transition"> 
+        <v-dialog v-model="ConfirmDeleteCommentDialogShowed" v-if="ConfirmDeleteCommentDialogShowed" persistent
+            max-width="600px" transition="dialog-top-transition">
             <v-card>
-                <ConfirmDeleteCommentModal @on-close="onClose" @on-confirm-delete="onConfirmDeleteComment" :confirmDeleteInfo="confirmDeleteInfo" />
+                <ConfirmDeleteCommentModal @on-close="onClose" @on-confirm-delete="onConfirmDeleteComment"
+                    :confirmDeleteInfo="confirmDeleteInfo" />
             </v-card>
         </v-dialog>
+
+        <!-- ADD ATTACHMENT MODAL -->
+        <v-dialog v-model="AddAttachmentModalShowed"  persistent max-width="1000px" transition="dialog-top-transition">
+            <v-card>
+                <AddAttachmentModal @on-close="onClose" @on-confirm-upload-attachment="onClickUploadAttachment" />
+            </v-card>
+        </v-dialog>
+
+
     </v-app>
-
-
 </template>
 
 <script src="./TaskDetail.js"></script>
@@ -467,5 +543,14 @@
 
 .task-detail-comment {
     padding-bottom: 20px;
+}
+
+/* Helper classes */
+.basil {
+    background-color: #FFFBE6 !important;
+}
+
+.basil--text {
+    color: #356859 !important;
 }
 </style>
