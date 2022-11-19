@@ -14,7 +14,7 @@ const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.
     + "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
     + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, now(), now())";
-const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
+const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ?";
 const SOFT_DELETE_EMPLOYEE = "UPDATE employee SET is_deleted = 1 WHERE employee_id = ?";
 
 async function createNewEmployee(req, res) {
