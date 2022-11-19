@@ -109,6 +109,12 @@ export default {
                 id: tabName.groupAdmin, // id of page
             },
             {
+                title: 'Employee',
+                icon: 'mdi-view-dashboard',
+                to: "user", // name of router path
+                id: tabName.userAdmin, // id of page
+            },
+            {
                 title: 'Holiday',
                 icon: 'mdi-view-dashboard',
                 to: "holiday", // name of router path

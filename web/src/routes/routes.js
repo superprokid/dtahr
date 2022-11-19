@@ -26,6 +26,7 @@ import EditTask from "../views/ClientSide/EditTask/EditTask.vue"
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
 import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
 import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
+import AdminUserManagement from "@/views/AdminSide/AdminUserManagement/AdminUserManagement.vue"
 
 Vue.use(Router);
 
@@ -51,9 +52,13 @@ const router = new Router({
                     component: AdminGroup
                 },
                 {
+                    path: 'user',
+                    component: AdminUserManagement
+                },
+                {
                     path: 'holiday',
                     component: AdminHoliday
-                }
+                },
             ]
         },
         { 

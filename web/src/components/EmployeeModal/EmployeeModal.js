@@ -10,14 +10,17 @@ export default{
           required: true,
           default: {}
         },
-      },
+      isAdminEdit: {
+        type: Boolean,
+      }
+    },
     data: () => ({
         // Instead of trying to access the prop value on the data block
         // Set up a watcher for this prop, and do the value assignment there
         // selectPackage: this.propPackage,
         selectPackage: '',
         avtBaseUrl: USER_GET_IMAGE,
-        
+        cameraShow: false,
     }),  
     watch: {
         propPackage(val) {
@@ -53,6 +56,17 @@ export default{
           // as the v-model of the component it also gets updated
           // on the parent component
           this.show = false
-        },
+      },
+      openCamera() {
+        this.cameraShow = true
+        let video = document.getElementById('camera')
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then((stream) => {
+            video.srcObject = stream;
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
     },
 }
