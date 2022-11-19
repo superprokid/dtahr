@@ -18,6 +18,8 @@ import {USER_GET_IMAGE} from '../../../config/constant'
 
 import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentModal/ConfirmDeleteCommentModal.vue"
 
+import $ from 'jquery';
+
 export default {
     components: {
         quillEditor,
@@ -106,6 +108,8 @@ export default {
 
             estimatedHours: undefined,
             actualHours: undefined,
+
+            currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
 
@@ -185,17 +189,30 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            if(response === -1){
-                alert("Call Fail")
+            if (response === -1) {
+                this.$toast.open({
+                    message: "Something went wrong, please try later",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                });
+                return;
             }
-            alert('Create Category Successfully')
+            this.$toast.open({
+                message: "Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
             const allCats = this._getAllCategoryTask()
             console.log('allCats', allCats);
             this.addCategoryTaskDialogShowed = false
         },
 
         onClickCloseEditTask(){
-            this.$router.push('/user/taskdetail/'+this.taskDetailData.task_id);
+            this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${this.taskDetailData.task_id}`);
         },
 
         async onClickUpdateEditTask(){
@@ -227,12 +244,28 @@ export default {
                     return;
                 }
                 if(response === -1){
-                    alert("Call Fail")
+                    this.$toast.open({
+                        message: "Something went wrong, please try again",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
+                    return;
                 }
-                alert("Update Task Success")
-                this.$router.push('/user/taskdetail/'+this.taskDetailData.task_id);         
+                this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${this.taskDetailData.task_id}`);      
             }
         },
+    },
+
+    watch: {
+        taskDetailData: () => {
+            setTimeout(() => {
+                $('img').css('height', '200px');
+                console.log('img', $('img'))
+            }, 300)
+        }
     },
 
     async mounted() {

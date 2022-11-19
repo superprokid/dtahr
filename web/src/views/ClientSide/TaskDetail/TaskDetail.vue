@@ -4,11 +4,11 @@
             <v-container>
                 <!-- status task -->
                 <v-row :align="'center'">
-                    <v-col cols="12" md="3" class="d-flex  align-center">
+                    <v-col cols="12" md="3" class="d-flex  align-center" style="font-weight: 500">
                         <v-chip small :color="taskDetailData.category_color" dark class="mr-3">
                             {{ taskDetailData.category_name }}
                         </v-chip>
-                        #{{ taskDetailData.task_id }}
+                        {{taskDetailData.project_name}} - {{ taskDetailData.task_id }}
                     </v-col>
 
                     <v-col cols="12" md="9" class="d-flex justify-end align-center">
@@ -82,7 +82,7 @@
                             </v-col>
                         </v-row>
                         <!-- Task Description -->
-                        <v-row no-gutters class="mb-4">
+                        <v-row no-gutters class="mb-4" id="task-detail-description">
                             <v-col cols=12 md="12" v-html="taskDetailData.task_description">
 
                             </v-col>
@@ -496,7 +496,11 @@
             </v-card>
         </v-dialog>
 
-
+        <v-dialog v-model="imgDialog" width="700">
+            <v-card>
+                <img :src="mySrc"/>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 

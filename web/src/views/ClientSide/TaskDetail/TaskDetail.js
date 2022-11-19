@@ -19,6 +19,8 @@ import {USER_GET_IMAGE, USER_DOWN_ATTACHMENT} from '../../../config/constant'
 import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentModal/ConfirmDeleteCommentModal.vue"
 import AddAttachmentModal from "../../../components/AddAttachmentModal/AddAttachmentModal.vue"
 
+import $ from 'jquery';
+
 export default {
     components: {
         quillEditor,
@@ -96,6 +98,11 @@ export default {
             
             listAttachment: [],
             numberOfAttachment: 0,
+
+            mySrc: '',
+            imgDialog: false,
+
+            currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
     watch: {
@@ -112,16 +119,16 @@ export default {
             this.isUpdateComment = false
         },
         onEditorBlur(quill) {
-          console.log('editor blur!', quill)
+        //   console.log('editor blur!', quill)
         },
         onEditorFocus(quill) {
-          console.log('editor focus!', quill)
+        //   console.log('editor focus!', quill)
         },
         onEditorReady(quill) {
-          console.log('editor ready!', quill)
+        //   console.log('editor ready!', quill)
         },
         onEditorChange({ quill, html, text }) {
-          console.log('editor change!', quill, html, text)
+        //   console.log('editor change!', quill, html, text)
           this.content = html
         },
 
@@ -137,7 +144,6 @@ export default {
             if(response === -1){
                 alert("Call Fail")
             }
-            console.log('response', response.data);
             this.taskDetailData = response.data
             this.taskDetailData.start_date = getDateString(response.data.start_date)
             this.taskDetailData.end_date = getDateString(response.data.end_date)      
@@ -157,7 +163,7 @@ export default {
         },
 
         onClickEditTaskDetail(){
-            this.$router.push('/user/edittask/'+this.taskDetailData.task_id);
+            this.$router.push(`/user/taskside/edittask/${this.currentProjectId}/${this.taskDetailData.task_id}`);
         },
 
         async getAllUser() {
@@ -176,7 +182,6 @@ export default {
             // call create api
 
             if(this.isUpdateComment == true){
-                console.log('update comment ko phai create comment');
                 const updateCommentParams = {
                     commentId: this.updateCommentSelectedId,
                 }
@@ -241,7 +246,6 @@ export default {
                     
             // update task detail frontend
             this._getTaskDetailById().then((result)=>{
-                console.log('result', result);
                 this.selectedProgress = Number(result.status)
     
                 this.listComments = result.comments.map((item) => {
@@ -252,7 +256,6 @@ export default {
                 })
                 this.listAttachment = result.attachments.map((item) =>{
                     const arr = item.path.split("\\")
-                    console.log('arr', arr);
                     return {
                         ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
                     }
@@ -260,12 +263,10 @@ export default {
                 this.numberOfAttachment = this.listAttachment.length
     
                 this.numberOfComments = this.listComments.length
-                console.log('listcomments', this.listComments);
                 for (let index = 0; index < this.userList.length; index++) {
                     const element = this.userList[index];
                     if(element.employee_id == result.assignee_id){
                         this.selectedUser = element
-                        console.log('this.selectedUser', this.selectedUser);
                         break
                     }
                 }
@@ -307,7 +308,6 @@ export default {
             }
 
             this._getTaskDetailById().then((result)=>{
-                console.log('result', result);
                 this.selectedProgress = Number(result.status)
     
                 this.listComments = result.comments.map((item) => {
@@ -318,7 +318,6 @@ export default {
                 })
                 this.listAttachment = result.attachments.map((item) =>{
                     const arr = item.path.split("\\")
-                    console.log('arr', arr);
                     return {
                         ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
                     }
@@ -326,12 +325,10 @@ export default {
                 this.numberOfAttachment = this.listAttachment.length
     
                 this.numberOfComments = this.listComments.length
-                console.log('listcomments', this.listComments);
                 for (let index = 0; index < this.userList.length; index++) {
                     const element = this.userList[index];
                     if(element.employee_id == result.assignee_id){
                         this.selectedUser = element
-                        console.log('this.selectedUser', this.selectedUser);
                         break
                     }
                 }
@@ -376,7 +373,6 @@ export default {
                     return
                 }
                 this._getTaskDetailById().then((result)=>{
-                    console.log('result', result);
                     this.selectedProgress = Number(result.status)
         
                     this.listComments = result.comments.map((item) => {
@@ -387,7 +383,6 @@ export default {
                     })
                     this.listAttachment = result.attachments.map((item) =>{
                         const arr = item.path.split("\\")
-                        console.log('arr', arr);
                         return {
                             ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
                         }
@@ -395,12 +390,10 @@ export default {
                     this.numberOfAttachment = this.listAttachment.length
         
                     this.numberOfComments = this.listComments.length
-                    console.log('listcomments', this.listComments);
                     for (let index = 0; index < this.userList.length; index++) {
                         const element = this.userList[index];
                         if(element.employee_id == result.assignee_id){
                             this.selectedUser = element
-                            console.log('this.selectedUser', this.selectedUser);
                             break
                         }
                     }
@@ -431,12 +424,17 @@ export default {
                 return;
             }
             if(response == -1){
-                alert('Call Fail')
+                this.$toast.open({
+                    message: "Something went wrong, please try later",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 return
             }
             // alert('Delete Success')
             this._getTaskDetailById().then((result)=>{
-                console.log('result', result);
                 this.selectedProgress = Number(result.status)
     
                 this.listComments = result.comments.map((item) => {
@@ -447,7 +445,6 @@ export default {
                 })
                 this.listAttachment = result.attachments.map((item) =>{
                     const arr = item.path.split("\\")
-                    console.log('arr', arr);
                     return {
                         ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
                     }
@@ -455,12 +452,10 @@ export default {
                 this.numberOfAttachment = this.listAttachment.length
     
                 this.numberOfComments = this.listComments.length
-                console.log('listcomments', this.listComments);
                 for (let index = 0; index < this.userList.length; index++) {
                     const element = this.userList[index];
                     if(element.employee_id == result.assignee_id){
                         this.selectedUser = element
-                        console.log('this.selectedUser', this.selectedUser);
                         break
                     }
                 }
@@ -487,13 +482,37 @@ export default {
         //   return this.$refs.myQuillEditor.quill
         // }
       },
+    watch: {
+        taskDetailData(newVal) {
+            setTimeout(() => {
+                // const listImg = $('#task-detail-description img');
+                // for (let i = 0; i < listImg.length; i++) {
+                //     const element = listImg[i];
+                //     element.addEventListener('click', (e) => {
+                //         console.log(e.srcElement)
+                //     })
+                    
+                // }
+                // $('#task-detail-description img').on('click', (event) => {
+                //     // event.preventDefault();
+                //     this.mySrc = $(this).attr('src');
+                // })
+                const listImg = document.getElementsByTagName('img');
+                for (let i = 0; i < listImg.length; i++) {
+                    const element = listImg[i];
+                    element.addEventListener('click', (e) => {
+                        this.mySrc = element.src;
+                        this.imgDialog = true;
+                    })
+                }
+                $('#task-detail-description img').css('height', '200px');
+            }, 0)
+        }
+    },
     async mounted() {
-        
-        console.log('this is current quill instance object', this.editor)  
         this.$eventBus.$emit('show-spinner', true);
         const userTempList = await this.getAllUser()
         this._getTaskDetailById().then((result)=>{
-            console.log('result', result);
             this.selectedProgress = Number(result.status)
 
             this.listComments = result.comments.map((item) => {
@@ -504,7 +523,6 @@ export default {
             })
             this.listAttachment = result.attachments.map((item) =>{
                 const arr = item.path.split("\\")
-                console.log('arr', arr);
                 return {
                     ...item, dir_path: arr[0], file_name: arr[1], href: `${USER_DOWN_ATTACHMENT}/${arr[0]}/${arr[1]}`
                 }
@@ -512,12 +530,10 @@ export default {
             this.numberOfAttachment = this.listAttachment.length
 
             this.numberOfComments = this.listComments.length
-            console.log('listcomments', this.listComments);
             for (let index = 0; index < userTempList.length; index++) {
                 const element = userTempList[index];
                 if(element.employee_id == result.assignee_id){
                     this.selectedUser = element
-                    console.log('this.selectedUser', this.selectedUser);
                     break
                 }
             }
@@ -526,7 +542,7 @@ export default {
         })
         
         this.$eventBus.$emit('show-spinner', false);   
-        
+               
     },
     beforeCreate() {
         SessionUtls.setItem(SessionUtls.tabNameKey, tabName.taskUser);

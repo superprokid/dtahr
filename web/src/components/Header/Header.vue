@@ -15,7 +15,8 @@
     <div class="d-flex flex-row align-center">
       <v-app class="item-container">
         <v-list-item class="item-account">
-          <v-icon large color="white"> mdi-account-circle </v-icon>
+          <v-icon v-if="!startDataUser.avt" large color="white"> mdi-account-circle </v-icon>
+          <img v-else large color="white" :src="getAvt(startDataUser.avt)" style="width: 36px; height: 36px; border-radius: 50%"/>
           <md-menu md-size="medium" md-align-trigger>
             <md-button md-menu-trigger class="user-name">{{
               startDataUser.first_name + " " + startDataUser.last_name

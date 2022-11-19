@@ -2,7 +2,7 @@
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue';
 import Input from '@/components/Input/Input.vue';
 import Button from '@/components/Button/Button.vue';
-
+import { USER_GET_IMAGE } from '../../../../config/constant';
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import ReportServices from '../../../../services/API/ReportAPI/ReportServices';
 import moment from 'moment';
@@ -180,9 +180,21 @@ export default {
                 this.$router.push('/user/login');
             } else {
                 if (response == -1) {
-                    alert("register failed");
+                    this.$toast.open({
+                        message: "Something went wrong, please try later",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
                 } else {
-                    alert("register success");
+                    this.$toast.open({
+                        message: "Register success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
                     this.onClickResetButton();
                     this.$root.$emit(REPORT_HISTORY_SCREEN);
                     this.$mySocket.emit(REPORT_CHANNEL, 0);
@@ -209,6 +221,14 @@ export default {
             this.isProblemsEmpty = true;
             this.isNextDayPlanEmpty = true;
             this.isProcessStatusEmpty = true;
+        },
+        getAvt(avt) {
+            if (avt) {
+                return USER_GET_IMAGE + '/' + avt
+            }
+            else {
+                return require("@/assets/user-default.png")
+            }
         },
     },
 };
