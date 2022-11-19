@@ -89,7 +89,7 @@ async function createDailyReport(req, res) {
         dbaccess.releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -107,7 +107,7 @@ async function getDailyrepotByUser(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_DAILYREPORT_BY_USER, [empId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -123,7 +123,7 @@ async function getDailyreportToUser(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_DAILYREPORT_SEND_TO_USER, [empId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -155,7 +155,7 @@ async function getDetailsDailyReportById(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -199,7 +199,7 @@ async function deleteMyReport(req, res) {
         res.status(200).send("Delete success");
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -279,7 +279,7 @@ async function editMyDailyReport(req, res) {
         dbaccess.releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }

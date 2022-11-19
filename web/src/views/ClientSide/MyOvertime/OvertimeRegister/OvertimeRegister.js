@@ -132,7 +132,13 @@ export default {
 					this.$router.push('/user/login');
 				} else {
 					console.log(response);
-					alert('Success');
+					this.$toast.open({
+						message: "Success",
+						type: "success",
+						duration: 2000,
+						dismissible: true,
+						position: "top-right",
+					})
 					this.onClickResetButton();
 					this.$root.$emit(OT_HISTORY_SCREEN);
 					this.$mySocket.emit(OVERTIME_CHANNEL, 2);

@@ -8,6 +8,7 @@
 #report-receiver-page .user-image-circle {
     width: 25px;
     height: 25px;
+    border-radius: 50%;
 }
 
 #report-receiver-page .list-search-user-container {

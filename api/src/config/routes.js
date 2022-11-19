@@ -119,6 +119,7 @@ Router.post('/admin/worklog/update', adminAuthen, adminWorkLogController.updateW
 Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.updateHolidayTime);
 Router.post('/admin/project/create', adminAuthen, adminProjectController.createNewProject);
 Router.post('/admin/project/update', adminAuthen, adminProjectController.editProject);
+Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmployee);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

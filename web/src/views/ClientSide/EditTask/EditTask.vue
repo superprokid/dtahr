@@ -287,3 +287,8 @@
     font-weight: bold;
 }
 </style>
+<style>
+#edit-task-id img {
+    height: 200px;
+}
+</style>

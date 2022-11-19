@@ -30,7 +30,7 @@ async function login(req, res) {
         const { username, password } = req.body;
         if (!username || !password) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] username or password is undefinded`);
-            res.status(400).send("Username or Password is invalid"); 
+            res.status(400).send({message: "Username or Password is invalid"}); 
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -38,7 +38,7 @@ async function login(req, res) {
         const result = await exeQuery(GET_ADMIN_BY_USERNAME, [username]);
         if (!result.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] username is not exist in database`);
-            res.status(400).send("Username or Password is invalid");
+            res.status(400).send({message: "Username or Password is invalid"});
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -52,7 +52,7 @@ async function login(req, res) {
             // commit query and release
             await commitTransaction(connection);
             releaseConnection(connection)
-            res.status(400).send("Username or Password is invalid");
+            res.status(400).send({message: "Username or Password is invalid"});
             return;
         }
         delete admin.password;
@@ -73,7 +73,7 @@ async function login(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({message: "SERVER ERROR"})
     }
 }
 
@@ -90,7 +90,7 @@ async function getAllUser(req, res) {
         })
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({message: "SERVER ERROR"})
     }
 }
 
@@ -102,7 +102,7 @@ async function getStartAdmin(req, res) {
         res.status(200).send(result.length ? result[0] : {});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({message: "SERVER ERROR"})
     }
 }
 

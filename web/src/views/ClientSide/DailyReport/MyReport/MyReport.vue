@@ -40,9 +40,7 @@
                                 <v-list-item v-for="(user, i) in searching" :key="i" ripple @click="() => {}">
                                     <v-checkbox v-model="user.ischecked">
                                     </v-checkbox>
-                                    <!-- <img :src="user.avt ? user.avt : '../../../../assets/user-default.png'" alt=""
-                              class="user-image-circle"> -->
-                                    <img src="../../../../assets/user-default.png" alt="" class="user-image-circle">
+                                    <img :src="getAvt(user.avt)" alt="" class="user-image-circle">
                                     <div class="ml-3">{{user.name}}</div>
                                 </v-list-item>
                             </v-list>

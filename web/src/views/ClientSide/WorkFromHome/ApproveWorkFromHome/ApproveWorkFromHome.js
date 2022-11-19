@@ -90,7 +90,13 @@ export default {
             if(!response){
                 this.$router.push('/user/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Something went wrong, please try later",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                  })
             }
             else {
                 console.log('response',response.data);

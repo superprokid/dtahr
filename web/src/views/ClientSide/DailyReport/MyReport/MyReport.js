@@ -5,6 +5,7 @@ import Button from '@/components/Button/Button.vue';
 import moment from 'moment';
 import { MY_REPORT_SCREEN } from "../../../../config/screenName";
 import { REPORT_CHANNEL } from "../../../../config/channel";
+import { USER_GET_IMAGE } from '../../../../config/constant';
 // import moment from 'moment';
 
 export default {
@@ -183,9 +184,21 @@ export default {
                 return;
             }
             if (response === -1) {
-                alert('Delete failed');
+                this.$toast.open({
+                    message: "Something went wrong, please try later",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                  })
             } else {
-                alert('Delete success');
+                this.$toast.open({
+                    message: "Delete success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                  })
                 await this.loadMyReport();
             }
         },
@@ -264,9 +277,21 @@ export default {
                     return;
                 }
                 if (result === -1) {
-                    alert('Update failed, please try again');
+                    this.$toast.open({
+                        message: "Something went wrong, please try later",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
                 } else {
-                    alert('Update success');
+                    this.$toast.open({
+                        message: "Update success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
                     this.loadMyReport().then(() => {
                         this.toggleIsEdit();
                     });
@@ -302,6 +327,14 @@ export default {
 
         toggleIsEdit() {
             this.isEdit = !this.isEdit
-        }
+        },
+        getAvt(avt) {
+            if (avt) {
+                return USER_GET_IMAGE + '/' + avt
+            }
+            else {
+                return require("@/assets/user-default.png")
+            }
+        },
     },
 }

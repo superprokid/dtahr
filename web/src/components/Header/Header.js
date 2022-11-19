@@ -6,6 +6,7 @@ import UserManagementServices from '@/services/API/UserManagementAPI/UserManagem
 import { ABSENT_HISTORY_SCREEN, ABSENT_TICKET_SCREEN, OT_HISTORY_SCREEN, OT_TICKET_SCREEN, REAL_TIME_TRACKING_SCREEN, REPORT_RECEIVER_SCREEN, TIME_TRACKING_SCREEN
         , MANAGER_WORK_FROM_HOME_TICKET_SCREEN } from '../../config/screenName';
 import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL, REAL_TIME_TRACKING_CHANNEL, WFH_CHANNEL } from '../../config/channel';
+import { USER_GET_IMAGE } from '../../config/constant'
 
 import moment from 'moment';
 
@@ -125,6 +126,14 @@ export default {
         openInput() {
             document.getElementById('imgupload').click();
         },
+        getAvt(avt) {
+            if (avt) {
+                return USER_GET_IMAGE + '/' + avt
+            }
+            else {
+                return require("@/assets/user-default.png")
+            }
+        },
         async imgInput(event) {
             let file = event.target.files[0];
             this.isChangeImg = true
@@ -151,7 +160,13 @@ export default {
                 this.$router.push('/user/login')
                 return;
             } else {
-                alert('Success')
+                this.$toast.open({
+                    message: "Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
             }
             this.passwdModal = false;
         },
@@ -189,7 +204,13 @@ export default {
                 this.$router.push('/user/login')
                 return;
             } else {
-                alert('Success')
+                this.$toast.open({
+                    message: "Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 this.$router.go()
             }
         },

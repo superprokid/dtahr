@@ -140,7 +140,13 @@ export default {
             if(response === -1){
                 alert("Call Fail")
             }
-            alert('Create Category Successfully')
+            this.$toast.open({
+                message: "Create success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+              })
             this._getAllCategoryTask()
             this.addCategoryTaskDialogShowed = false
         },

@@ -14,7 +14,8 @@ const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.
     + "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
     + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, now(), now())";
-const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
+const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ?";
+const SOFT_DELETE_EMPLOYEE = "UPDATE employee SET is_deleted = 1 WHERE employee_id = ?";
 
 async function createNewEmployee(req, res) {
     const connection = await dbaccess.getConnection();
@@ -116,7 +117,6 @@ async function createNewEmployee(req, res) {
             return;
         }
 
-
         const { email, firstName, lastName, dob, address, gender, groupId, joinDate,
             phone, mainSkill, subSkill, jobRole, employerId, relativeName, relativeGender, relativeAddress,
             relativePhone, relativeDob, relationShip, salary, bankAccount, bankName } = req.body;
@@ -162,12 +162,15 @@ async function createNewEmployee(req, res) {
             res.status(400).send('Can not send your password to email, please check your email');
             return;
         }
-        res.status(200).send("Create new employee success");
+        res.status(200).send({
+            email,
+            password
+        });
     } catch (error) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -305,7 +308,7 @@ async function editEmployee(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -321,7 +324,7 @@ async function getAllFreeManager(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -346,7 +349,38 @@ async function getEmployeeInfoById(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
+    }
+}
+
+async function deleteEmployee(req, res) {
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const validateSchema = {
+            employeeId: {
+                type: 'string',
+                required: true,
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { employeeId } = req.body
+        await dbaccess.queryTransaction(connection, SOFT_DELETE_EMPLOYEE, [employeeId]);
+        res.status(200).send('Delete success');
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+    } catch (error) {
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -355,4 +389,5 @@ module.exports = {
     editEmployee,
     getAllFreeManager,
     getEmployeeInfoById,
+    deleteEmployee,
 }
