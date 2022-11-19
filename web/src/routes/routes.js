@@ -21,6 +21,8 @@ import Tasks from "../views/ClientSide/Tasks/Tasks.vue";
 import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
 import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
 import EditTask from "../views/ClientSide/EditTask/EditTask.vue"
+import TaskSide from '../views/ClientSide/TaskSide/TaskSide.vue';
+import Project from '../views/ClientSide/Project/Project.vue';
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -87,10 +89,6 @@ const router = new Router({
                     component: MyOvertime
                 },
                 {
-                    path: 'taskboard',
-                    component: TaskBoard
-                },
-                {
                     path: 'dailyreport',
                     component: DailyReport,
                 },
@@ -107,20 +105,34 @@ const router = new Router({
                     component: WorkFromHome,
                 },
                 {
-                    path: 'tasks',
-                    component: Tasks
+                    path: 'project',
+                    component: Project,
                 },
                 {
-                    path: 'addtask',
-                    component: AddTask,
-                },
-                {
-                    path: 'taskdetail/:taskId',
-                    component: TaskDetail,
-                },
-                {
-                    path: 'edittask/:taskId',
-                    component: EditTask
+                    path: 'taskside',
+                    component: TaskSide,
+                    children: [
+                        {
+                            path: 'tasks/:projectId',
+                            component: Tasks
+                        },
+                        {
+                            path: 'addtask/:projectId',
+                            component: AddTask,
+                        },
+                        {
+                            path: 'taskdetail/:projectId/:taskId',
+                            component: TaskDetail,
+                        },
+                        {
+                            path: 'edittask/:projectId/:taskId',
+                            component: EditTask
+                        },
+                        {
+                            path: 'taskboard/:projectId',
+                            component: TaskBoard
+                        },
+                    ]
                 }
             ]
         },
@@ -135,6 +147,13 @@ router.beforeEach((to, from, next) => {
     let accessToken = CookieUtls.getAccessToken()
     let refreshToken = CookieUtls.getRefreshToken()
     let role = CookieUtls.getCookie(CookieUtls.role);
+    
+    // set current projectId if exist
+    const {projectId} = to.params;
+    if (projectId) {
+        SessionUtls.setItem(SessionUtls.projectSelectedKey, projectId);
+    }
+
     const publicPages = ['/user/login','/admin/login']
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {

@@ -68,7 +68,7 @@
         <v-row>
           <v-data-table :headers="headers" :items="listFiltered" class="elevation-1" style="min-width: 900px" :item-class="setItemRowCLass" @click:row="openTaskDetails">
             <template v-slot:item.task_id="{ item }">
-              <a class="task-key">{{ item.task_id }}</a>
+              <a class="task-key">{{ item.task_number }}</a>
             </template>
             <template v-slot:item.category_name="{ item }">
               <v-chip small :color="item.category_color" dark>

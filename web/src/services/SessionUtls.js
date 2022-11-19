@@ -4,6 +4,8 @@ export default class SessionUtls {
     static adminSession = "ute-hrm-adminsession";
     static role = "ute-hrm-role";
     static tabNameKey = 'hrm-tab-name';
+    static tabTypeKey = 'hrm-tab-type';
+    static projectSelectedKey = 'hrm-project';
     /**
      * Get value from sessionStorage by key
      * @param {String} key 

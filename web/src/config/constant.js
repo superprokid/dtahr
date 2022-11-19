@@ -51,6 +51,7 @@ export const USER_UPLOAD_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/uplo
 export const USER_DELETE_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/delete"
 
 export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
+export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
@@ -91,3 +92,10 @@ export const ADMIN_GET_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/get';
 export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
 export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
 export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
+
+
+// constant
+export const TAB_TYPE = {
+    USER: 'user',
+    TASK: 'task'
+}

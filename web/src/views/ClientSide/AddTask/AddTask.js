@@ -84,6 +84,7 @@ export default {
                 v => !!v || 'Category Task is required',
             ],
 
+            currentProjectId: SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
     watch: {
@@ -164,11 +165,11 @@ export default {
         },
         async onClickAddTask(){
             if(this.$refs.form.validate()){
-                console.log('ok can add task');
                 const params = {
                     taskTitle: this.taskTitle,
                     taskDescription: this.content,
                     assigneeId: this.assignee,
+                    projectId: this.currentProjectId,
                     priority: this.prioritySelectValue,
                     categoryId: this.categorySelectValue,
                     startDate: this.startDate,
@@ -177,15 +178,15 @@ export default {
                     actualHours: this.actualHours || null,
                 }
                 const response = await AddTaskServices.createTask(params)
-                console.log('paramsparams',params);
                 if (!response) {
                     this.$router.push('/user/login');
                     return;
                 }
                 if(response === -1){
-                    alert("Call Fail")
+                    alert("Call Fail");
+                    return;
                 }
-                alert("Create Task Success")
+                alert("Create Task Success");
             }
         },
 
@@ -196,6 +197,7 @@ export default {
         }
       },
     mounted() {
+        this.currentProjectId = this.$route.params.projectId ?? this.currentProjectId;
         console.log('this is current quill instance object', this.editor)
         this.$eventBus.$emit('show-spinner', true);
         this._getAllCategoryTask()

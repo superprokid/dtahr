@@ -10,6 +10,7 @@ const tabName = {
     addTaskUser: 'user-add-task-001',
     taskBoardUser: 'user-task-board-001',
     taskUser: 'user-tasks-001',
+    projectUser: 'user-project-001',
 
     homeAdmin: 'admin-home-001',
     groupAdmin: 'admin-group-001',
