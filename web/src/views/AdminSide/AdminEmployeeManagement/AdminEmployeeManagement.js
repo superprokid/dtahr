@@ -13,10 +13,12 @@ import EditGroupModal from "../../../components/EditGroupModal/EditGroupModal.vu
 
 import AdminEmployeeManagement from "../AdminEmployeeManagement/AdminEmployeeManagement.vue"
 
+import CreateUserModal from "../../../components/CreateUserModal/CreateUserModal.vue"
+
 export default {
     name: "AdminEmployeeManagement",
     components: {
-
+        CreateUserModal,
     },
     props: {
         groupRowSelected: {
@@ -25,6 +27,9 @@ export default {
                 return {}
             }
         },
+        testmethod:{
+            type: Function,
+        }
     },
 
     data() {
@@ -33,6 +38,9 @@ export default {
             listUsersOfSpecificGroup: [],
 
             selected: [],
+
+            CreateUserDialogShowed: false,
+
         }
     },
     computed: {
@@ -150,6 +158,18 @@ export default {
                 this.listUsersOfSpecificGroup = response.data.map((item) => {
                     return {...item, dob: getDateString(item.dob), gender: item.gender == 0 ? 'Male' : item.gender == 1 ? 'Female' : 'Other', join_date: getDateString(item.join_date)}
                 })
+            }
+        },
+
+        onClickCreateUser(){
+            // this.testmethod('data from child comp')
+
+            this.CreateUserDialogShowed = true
+        },
+
+        onClose(param){
+            if(param == 1){
+                this.CreateUserDialogShowed = false
             }
         }
     },

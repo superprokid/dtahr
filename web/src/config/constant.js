@@ -92,7 +92,7 @@ export const ADMIN_GET_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/get';
 export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
 export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
 export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
-
+export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
 
 // constant
 export const TAB_TYPE = {

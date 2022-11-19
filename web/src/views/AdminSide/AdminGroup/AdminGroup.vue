@@ -32,11 +32,6 @@
                                 Add Group
                             </v-btn>
                         </v-list-item>
-
-                        <!-- <v-list-item @click="() => {onClickEditGroup()}">
-                    <v-icon style="margin-right: 10px">mdi-text-box-edit-outline</v-icon>
-                    <v-list-item-title>Edit</v-list-item-title>
-                </v-list-item> -->
                         <v-list-item>
                             <v-btn @click="onClickEditGroup" text
                                 :disabled="selected.length >= 2 || selected.length == 0">
@@ -56,20 +51,21 @@
                             </v-btn>
                         </v-list-item>
                         <!-- <v-list-item>
-                            <v-btn @click="onClickTestNotiModal" text>
+                            <v-btn @click="onClickCreateUser" text
+                                :disabled="selected.length == 0 || selected.length >= 2">
                                 <v-icon style="margin-right: 10px">
                                     mdi-trash-can-outline
                                 </v-icon>
-                                TEST NOTI MODAL
+                                Delete Group
                             </v-btn>
                         </v-list-item> -->
                     </v-list>
                 </v-menu>
 
                 <!-- TABLE OF GROUP -->
-                <v-data-table v-model="selected" :headers="headers" :items="listGroup" :item-class="setItemRowCLass" :single-select="singleSelect"
-                    :search="search" :custom-filter="filterOnlyCapsText" item-key="group_id" show-select
-                    class="elevation-1" @click:row="onClickGroupRow">
+                <v-data-table v-model="selected" :headers="headers" :items="listGroup" :item-class="setItemRowCLass"
+                    :single-select="singleSelect" :search="search" :custom-filter="filterOnlyCapsText"
+                    item-key="group_id" show-select class="elevation-1" @click:row="onClickGroupRow">
                     <template v-slot:top>
                         <v-switch v-model="singleSelect" label="Single select" class="pa-3"></v-switch>
                         <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
@@ -83,17 +79,89 @@
 
         <!-- EMPLOYEE MANAGEMENT LAYOUT -->
         <div v-if="isAdminEmployeeManagementShowed">
-                <div class="admin-employee-management-title" @click="goBackGroupManagementLayout">
-                    <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon>
-                    EMPLOYEE MANAGEMENT
-                </div>
+            <div class="admin-employee-management-title" @click="goBackGroupManagementLayout">
+                <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon>
+                EMPLOYEE MANAGEMENT
+            </div>
 
-            <AdminEmployeeManagement :groupRowSelected="groupRowSelectedProp" />
+            <!-- <AdminEmployeeManagement :groupRowSelected="groupRowSelectedProp" :testmethod="testmethod"/> -->
+            <div class="mt-5">
+                <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                            Actions
+                            <v-icon>mdi-menu-down</v-icon>
+                        </v-btn>
+
+                    </template>
+                    <v-list>
+                        <v-list-item>
+                            <v-btn text @click="onClickCreateUser">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-account-multiple-plus-outline
+                                </v-icon>
+                                Create User
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-btn text @click="onClickDeleteUser"
+                                :disabled="AdminEmployeeManagementSelected.length >= 2 || AdminEmployeeManagementSelected.length == 0">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-trash-can-outline
+                                </v-icon>
+                                Delete User
+                            </v-btn>
+                        </v-list-item>
+
+                    </v-list>
+                </v-menu>
+                <v-data-table v-model="AdminEmployeeManagementSelected" :headers="AdminEmployeeManagementHeaders"
+                    :items="listUsersOfSpecificGroup" item-key="employee_id" :item-class="setItemRowCLass" show-select
+                    :single-select="singleSelectEmployeeManagement" class="elevation-1" :search="search" @click:row="onClickUserRow"
+                    :custom-filter="filterOnlyCapsText">
+                    <template v-slot:top>
+                        <v-switch v-model="singleSelectEmployeeManagement" label="Single select" class="pa-3">
+                        </v-switch>
+                        <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
+                    </template>
+                    <template v-slot:item.is_deleted="{ item }">
+                        <div class="grey--text" v-if="item.is_deleted">
+                            Disable
+                        </div>
+                        <div class="green--text" v-else>
+                            Active
+                        </div>
+                    </template>
+                </v-data-table>
+            </div>
+
         </div>
 
+        <!-- CREATE USER DIALOG -->
+        <v-dialog v-model="CreateUserDialogShowed" v-if="CreateUserDialogShowed" persistent max-width="800px"
+            transition="dialog-top-transition">
+            <v-card>
+                <CreateUserModal @on-close="onClose" :groupRowSelected="groupRowSelectedProp"
+                    @on-create-user="onCreateUser" />
+            </v-card>
+        </v-dialog>
 
+        <!-- NOTIFICATION CREATE USER SUCCESS -->
+        <v-dialog v-model="CreateUserDialogSuccessShowed" persistent max-width="800px"
+            transition="dialog-top-transition">
+            <v-card>
+                <CreateUserSuccessModal @on-close="onClose" :createUserSuccessInfo="createUserSuccessInfo" />
+            </v-card>
+        </v-dialog>
 
-
+        <!-- CONFIRM DELETE USER DIALOG -->
+        <v-dialog v-model="ConfirmDeleteUserDialogShowed" persistent max-width="800px"
+            transition="dialog-top-transition">
+            <v-card>
+                <ConfirmDeleteUserModal @on-close="onClose" :confirmDeleteInfo="confirmDeleteUserInfo"
+                    @on-confirm-delete-user="onConfirmDeleteUser" />
+            </v-card>
+        </v-dialog>
 
         <!-- ADD GROUP DIALOG -->
         <v-dialog v-model="AddGroupDialogShowed" v-if="AddGroupDialogShowed" persistent max-width="800px">
@@ -116,28 +184,32 @@
 
 
         <!-- NOTIFICITION ADD SUCCESS DIALOG -->
-        <v-dialog v-model="AddGroupSuccessDialogShowed"  persistent max-width="600px" transition="dialog-top-transition"> 
+        <v-dialog v-model="AddGroupSuccessDialogShowed" persistent max-width="600px" transition="dialog-top-transition">
             <v-card>
                 <AddGroupSuccessModal @on-close="onClose" :addGroupSuccessInfo="addGroupSuccessInfo" />
             </v-card>
         </v-dialog>
 
         <!-- NOTIFICITION DELETE SUCCESS DIALOG -->
-        <v-dialog v-model="DeleteGroupSuccessDialogShowed"  persistent max-width="600px" transition="dialog-top-transition"> 
+        <v-dialog v-model="DeleteGroupSuccessDialogShowed" persistent max-width="600px"
+            transition="dialog-top-transition">
             <v-card>
                 <DeleteGroupSuccessModal @on-close="onClose" />
             </v-card>
         </v-dialog>
 
         <!-- NOTIFICITION BEFORE DELETE DIALOG -->
-        <v-dialog v-model="ConfirmDeleteGroupDialogShowed" v-if="ConfirmDeleteGroupDialogShowed" persistent max-width="600px" transition="dialog-top-transition"> 
+        <v-dialog v-model="ConfirmDeleteGroupDialogShowed" v-if="ConfirmDeleteGroupDialogShowed" persistent
+            max-width="600px" transition="dialog-top-transition">
             <v-card>
-                <ConfirmDeleteGroupModal @on-close="onClose" @on-confirm-delete="onConfirmDeleteGroup" :confirmDeleteInfo="confirmDeleteInfo" />
+                <ConfirmDeleteGroupModal @on-close="onClose" @on-confirm-delete="onConfirmDeleteGroup"
+                    :confirmDeleteInfo="confirmDeleteInfo" />
             </v-card>
         </v-dialog>
 
         <!-- NOTIFICATION AFTER EDIT SUCCESS -->
-        <v-dialog v-model="EditGroupSuccessDialogShowed" persistent max-width="600px" transition="dialog-top-transition"> 
+        <v-dialog v-model="EditGroupSuccessDialogShowed" persistent max-width="600px"
+            transition="dialog-top-transition">
             <v-card>
                 <EditGroupSuccessModal @on-close="onClose" :editGroupSuccessInfo="editGroupSuccessInfo" />
             </v-card>

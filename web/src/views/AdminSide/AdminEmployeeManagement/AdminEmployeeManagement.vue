@@ -10,34 +10,14 @@
             </template>
             <v-list>
                 <v-list-item>
-                    <v-btn text>
+                    <v-btn text @click="onClickCreateUser">
                         <v-icon style="margin-right: 10px">
-                            mdi-receipt-text-plus-outline
+                            mdi-account-multiple-plus-outline
                         </v-icon>
-                        Add Group
+                        Create User
                     </v-btn>
                 </v-list-item>
 
-                <!-- <v-list-item @click="() => {onClickEditGroup()}">
-                    <v-icon style="margin-right: 10px">mdi-text-box-edit-outline</v-icon>
-                    <v-list-item-title>Edit</v-list-item-title>
-                </v-list-item> -->
-                <v-list-item>
-                    <v-btn text>
-                        <v-icon style="margin-right: 10px">
-                            mdi-text-box-edit-outline
-                        </v-icon>
-                        Edit Group
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <v-btn text>
-                        <v-icon style="margin-right: 10px">
-                            mdi-trash-can-outline
-                        </v-icon>
-                        Delete Group
-                    </v-btn>
-                </v-list-item>
             </v-list>
         </v-menu>
         <v-data-table v-model="selected" :headers="headers" :items="listUsersOfSpecificGroup" item-key="employee_id" :item-class="setItemRowCLass" show-select
@@ -46,6 +26,13 @@
                 <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
             </template>
         </v-data-table>
+        
+        <!-- CREATE USER DIALOG --> 
+        <v-dialog v-model="CreateUserDialogShowed"  persistent max-width="800px" transition="dialog-top-transition">
+            <v-card>
+                <CreateUserModal @on-close="onClose" :groupRowSelected="groupRowSelected" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 

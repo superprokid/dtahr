@@ -99,25 +99,25 @@ export default {
             {
                 title: 'Dashboard',
                 icon: 'mdi-view-dashboard',
-                to: "home", // name of router path
+                to: "/admin/home", // name of router path
                 id: tabName.homeAdmin, // id of page
             },
             {
                 title: 'Group',
-                icon: 'mdi-view-dashboard',
-                to: "group", // name of router path
+                icon: 'mdi-scoreboard',
+                to: "/admin/group", // name of router path
                 id: tabName.groupAdmin, // id of page
             },
             {
                 title: 'Employee',
-                icon: 'mdi-view-dashboard',
-                to: "user", // name of router path
+                icon: 'mdi-account-group',
+                to: "/admin/user", // name of router path
                 id: tabName.userAdmin, // id of page
             },
             {
                 title: 'Holiday',
-                icon: 'mdi-view-dashboard',
-                to: "holiday", // name of router path
+                icon: 'mdi-airplane-clock',
+                to: "/admin/holiday", // name of router path
                 id: tabName.holidayAdmin, // id of page
             }
         ],
