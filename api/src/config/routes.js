@@ -74,7 +74,8 @@ Router.post('/user/task/attachment/delete', authen, taskController.deleteTaskAtt
 Router.get('/user/category/getall', authen, taskController.getAllCategory);
 Router.get('/public/download/:dirname/:filename', (req, res) => {
     res.download(path.join(__basedir, './public/attachments/', req.params.dirname, '/', req.params.filename))
-})
+});
+Router.get('/user/project/getlist', authen, projectController.getAllProjectByUser);
 
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);

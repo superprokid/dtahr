@@ -10,10 +10,10 @@ const GET_NEWEST_EMPLPOYEE_ID = "SELECT employee_id FROM employee ORDER BY emplo
 const GET_CURRENT_EMAIL = "SELECT email FROM employee WHERE email = ? LIMIT 1";
 const GET_CURRENT_GROUP = "SELECT group_id FROM `group` WHERE group_id = ? LIMIT 1";
 const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.last_name) as full_name, avt "
-+ "                           FROM `employee` e"
-+ "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
-+ "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
-const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
+    + "                           FROM `employee` e"
+    + "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
+    + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
+const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, now(), now())";
 const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 
 async function createNewEmployee(req, res) {
@@ -85,6 +85,10 @@ async function createNewEmployee(req, res) {
                 type: 'string',
                 required: false
             },
+            relativeAddress: {
+                type: 'string',
+                required: false
+            },
             relationShip: {
                 type: 'string',
                 required: false
@@ -114,7 +118,7 @@ async function createNewEmployee(req, res) {
 
 
         const { email, firstName, lastName, dob, address, gender, groupId, joinDate,
-            phone, mainSkill, subSkill, jobRole, employerId, relativeName, relativeGender,
+            phone, mainSkill, subSkill, jobRole, employerId, relativeName, relativeGender, relativeAddress,
             relativePhone, relativeDob, relationShip, salary, bankAccount, bankName } = req.body;
 
         const currentEmail = await dbaccess.queryTransaction(connection, GET_CURRENT_EMAIL, [email]);
@@ -145,7 +149,7 @@ async function createNewEmployee(req, res) {
         }
         const params = [generateEmployeeId(empId), firstName, lastName, new Date(dob), address, gender, email, hashPassword, groupId, 0, joinDate || now, phone || null,
         mainSkill ?? null, subSkill ?? null, jobRole ?? null, ROLE.employee, employerId, relativeName ?? null, relativeGender ?? null,
-        relativePhone ?? null, relativeDob ?? null, relationShip ?? null, null, salary ?? null, bankAccount ?? null, bankName ?? null, null, 0];
+        relativePhone ?? null, relativeAddress ?? null, relativeDob ?? null, relationShip ?? null, null, salary ?? null, bankAccount ?? null, bankName ?? null, null];
         logger.info('Your password is: ' + password);
         await dbaccess.queryTransaction(connection, INSERT_NEW_EMPLOYEE, params);
         await dbaccess.commitTransaction(connection);
@@ -263,7 +267,7 @@ async function editEmployee(req, res) {
             }
             setClauseArray.push(` email = '${email}' `);
         }
-        
+
         if (groupId) setClauseArray.push(` group_id = '${groupId}' `);
         if (joinDate) setClauseArray.push(` join_date = '${getDateString(joinDate)}' `);
         if (jobRole) setClauseArray.push(` job_role = '${jobRole}' `);
