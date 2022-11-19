@@ -107,7 +107,7 @@ async function registerOverTime(req, res) {
         releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -148,7 +148,7 @@ async function getListOverTimeTicketOfUser(req, res) {
         res.status(200).send(listOT);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -166,7 +166,7 @@ async function getListOverTimeTicketOfGroup(req, res) {
         res.status(200).send(listOT);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -219,7 +219,7 @@ async function updateStatusOvertimeTicket(req, res) {
         return res.status(200).send('Update overtime ticket success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -278,7 +278,7 @@ async function deleteOvertimeTicket(req, res) {
         return res.status(200).send({message: 'Delete overtime ticket success'});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }

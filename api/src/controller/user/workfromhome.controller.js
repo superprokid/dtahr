@@ -101,7 +101,7 @@ async function registerWFHTicket(req, res) {
         releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -121,7 +121,7 @@ async function getListWFHTicketOfUser(req, res) {
         res.status(200).send(listOT);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -159,7 +159,7 @@ async function getListWFHByManager(req, res) {
         res.status(200).send(listWFH);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -218,7 +218,7 @@ async function updateStatusWFHTicket(req, res) {
         return res.status(200).send('Update work from home ticket success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -246,7 +246,7 @@ async function getListWFHOfGroup(req, res) {
         res.status(200).send(listWFH);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -303,7 +303,7 @@ async function deleteWFHTicket(req, res) {
         return res.status(200).send('Delete work from home ticket success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
