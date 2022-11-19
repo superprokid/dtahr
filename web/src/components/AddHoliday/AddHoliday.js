@@ -2,6 +2,8 @@ import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import Input from '@/components/Input/Input.vue';
 
 import HolidayServices from '@/services/API/HolidayAPI/HolidayServices';
+import AdminUserManagementService from '../../services/API/AdminUserManagement/AdminUserManagement.service';
+
 export default {
     name: 'AddHoliday',
     components: {
@@ -16,6 +18,10 @@ export default {
         id: {
             type: String,
             default: '',
+        },
+        isAdminEdit: {
+            type: Boolean,
+            default: false,
         }
     },
     data() {
@@ -40,11 +46,17 @@ export default {
             if (!this.time || !this.reason) {
                 return;
             }
+            let response
             this.$eventBus.$emit('show-spinner', true);
-            let response = await HolidayServices.updateHoliday(params);
+            if (this.isAdminEdit) {
+                response = await AdminUserManagementService.updateUserHoliday(params);
+            }
+            else {
+                response = await HolidayServices.updateHoliday(params);                
+            }
             this.$eventBus.$emit('show-spinner', false);
             if (!response) {
-                this.$router.push('user/login')
+                this.$router.push(this.isAdminEdit ? 'admin/login' : 'user/login')
                 return
             }
             this.resetData()

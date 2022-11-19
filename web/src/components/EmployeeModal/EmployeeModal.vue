@@ -2,10 +2,14 @@
     <!-- @click:outside="close", if dialog's "persistent" prop isn't used,
      there's no need to handle outside click to close the dialog -->
 
-    <v-dialog v-model="show" persistent width="80vw">
+    <div>
+        <v-dialog v-model="show" persistent width="80vw">
         <v-toolbar class="text-h5" color="#154C79" dark>
             Employee Information
             <v-spacer></v-spacer>
+            <v-btn dark text @click="openCamera">
+                Change Face Recognition
+            </v-btn>
             <v-btn dark text @click="close">
                 CLOSE
             </v-btn>
@@ -202,46 +206,12 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+    <v-dialog v-model="cameraShow" persistent width="80vw">
+        <video autoplay = true id="camera">
+        </video>
+    </v-dialog>
+    </div>
 
-    <!-- <v-row justify="start" class="mb-2">
-        <v-dialog v-model="show" persistent max-width="800px">
-            <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ml-3" max-width="170px" color="primary" dark v-bind="attrs" v-on="on">
-                    Change Worklog
-                </v-btn>
-            </template>
-            <v-card>
-
-                <v-toolbar class="text-h5" color="primary" dark>User Profile</v-toolbar>
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12">
-                                <DateTimePicker :selectDate="date" @select-date="onInputDate" dateTimePickerTitle="Date" ></DateTimePicker>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="Total Time"
-                                type = "number"
-                                @click:append-outer="increment" @click:prepend="decrement"
-                                 hint="Total working time">
-                                </v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea filled name="input-7-4" label="Reason *" v-model="reasonInputValue" @input="onInputReason"></v-textarea>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                    <small>*indicates required field</small>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </v-row> -->
 </template>
   
 <script src="./EmployeeModal.js"></script>

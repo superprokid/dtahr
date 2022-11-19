@@ -13,6 +13,7 @@ const tabName = {
 
     homeAdmin: 'admin-home-001',
     groupAdmin: 'admin-group-001',
+    userAdmin: 'admin-user-001',
     holidayAdmin: 'admin-holiday-001',
 }
 

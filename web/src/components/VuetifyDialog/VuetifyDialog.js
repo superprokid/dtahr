@@ -16,6 +16,10 @@ export default {
         id: {
             type: String,
             default: '',
+        },
+        isAdminEdit: {
+            type: Boolean,
+            default: false,
         }
     },
     data() {
