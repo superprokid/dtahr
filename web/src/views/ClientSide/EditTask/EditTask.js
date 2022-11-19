@@ -236,8 +236,6 @@ export default {
                 if(this.estimatedHours != this.taskDetailData.estimated_hours) updateTaskParams.estimatedHours = this.estimatedHours
                 if(this.actualHours != this.taskDetailData.actual_hours) updateTaskParams.actualHours = this.actualHours
 
-                console.log('paramsparams',updateTaskParams);
-
                 const response = await TaskDetailServices.userUpdateTask(updateTaskParams)
                 if (!response) {
                     this.$router.push('/user/login');
@@ -257,15 +255,6 @@ export default {
                 this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${this.taskDetailData.task_id}`);      
             }
         },
-    },
-
-    watch: {
-        taskDetailData: () => {
-            setTimeout(() => {
-                $('img').css('height', '200px');
-                console.log('img', $('img'))
-            }, 300)
-        }
     },
 
     async mounted() {

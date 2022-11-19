@@ -14,7 +14,7 @@
                     <v-col cols="12" md="9" class="d-flex justify-end align-center">
                         <span class="text-caption mb-0 mr-2">Start Date</span>
                         <span class="text-subtitle-2 mr-4">{{ taskDetailData.start_date }}</span>
-                        <span class="text-caption mb-0 mr-2  lighten-1">Due Date</span>
+                        <span class="text-caption mb-0 mr-2  lighten-1" style="color: #E16304">Due Date</span>
 
 
                         <span class="text-subtitle-2 mr-2 red--text lighten-1" v-if="taskDetailData.isLate">
@@ -23,7 +23,7 @@
                                 mdi-fire
                             </v-icon>
                         </span>
-                        <span class="text-subtitle-2 mr-2 lighten-1" v-else>{{ taskDetailData.end_date }}</span>
+                        <span class="text-subtitle-2 mr-2 lighten-1" style="color: #E16304" v-else>{{ taskDetailData.end_date }}</span>
 
 
                         <v-chip small :color="getStatus(taskDetailData.status).color" dark>
@@ -556,5 +556,14 @@
 
 .basil--text {
     color: #356859 !important;
+}
+</style>
+<style>
+#task-detail img {
+    height: 200px;
+}
+
+#task-detail img:hover {
+    cursor: pointer;
 }
 </style>

@@ -485,18 +485,6 @@ export default {
     watch: {
         taskDetailData(newVal) {
             setTimeout(() => {
-                // const listImg = $('#task-detail-description img');
-                // for (let i = 0; i < listImg.length; i++) {
-                //     const element = listImg[i];
-                //     element.addEventListener('click', (e) => {
-                //         console.log(e.srcElement)
-                //     })
-                    
-                // }
-                // $('#task-detail-description img').on('click', (event) => {
-                //     // event.preventDefault();
-                //     this.mySrc = $(this).attr('src');
-                // })
                 const listImg = document.getElementsByTagName('img');
                 for (let i = 0; i < listImg.length; i++) {
                     const element = listImg[i];
@@ -505,7 +493,6 @@ export default {
                         this.imgDialog = true;
                     })
                 }
-                $('#task-detail-description img').css('height', '200px');
             }, 0)
         }
     },
