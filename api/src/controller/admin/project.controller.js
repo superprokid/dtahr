@@ -47,7 +47,7 @@ async function getDetailsPojectByEmployee(req, res) {
         res.status(200).send(response.length ? response[0] : {});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -57,7 +57,7 @@ async function getAllProjects(req, res) {
         res.status(200).send(await exeQuery(GET_CURRENT_PROJECT));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
 
     }
 }
@@ -124,7 +124,7 @@ async function createNewProject(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -202,7 +202,7 @@ async function editProject(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 

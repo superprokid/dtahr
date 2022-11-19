@@ -74,7 +74,7 @@ async function registerLeaveTicket(req, res) {
         dbaccess.releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -92,7 +92,7 @@ async function getLeaveTicketByUser(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_LEAVE_BY_USER, [empId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -109,7 +109,7 @@ async function getAllLeaveTicket(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_ALL_LEAVE_OF_GROUP, [groupId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -162,7 +162,7 @@ async function updateStatusLeaveTicket(req, res) {
         return res.status(200).send('Update leave ticket success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -221,7 +221,7 @@ async function deleteLeaveTicket(req, res) {
         return res.status(200).send({ message: 'Delete leave ticket success' });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }

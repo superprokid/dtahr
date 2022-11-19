@@ -127,7 +127,13 @@ export default {
 				if (!response) {
 					this.$router.push('/user/login');
 				} else {
-					alert('Success');
+					this.$toast.open({
+						message: "Success",
+						type: "success",
+						duration: 2000,
+						dismissible: true,
+						position: "top-right",
+					})
 					this.onClickResetButton();
 				}
 				this.$root.$emit(ABSENT_HISTORY_SCREEN);
