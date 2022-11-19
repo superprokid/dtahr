@@ -5,6 +5,7 @@ import Header from '../../components/Header/Header.vue';
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import SessionUtls from '@/services/SessionUtls';
 import CookieUtls from '../../services/CookieUtls';
+import { TAB_TYPE } from '../../config/constant';
 
 export default {
   name: 'ClientSide',
@@ -25,5 +26,8 @@ export default {
           CookieUtls.setCookie(CookieUtls.employeeId, response.data.employee_id);
       }
     },
-  }
+  },
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabTypeKey, TAB_TYPE.USER);
+  },
 };

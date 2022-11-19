@@ -14,10 +14,10 @@ const TaskBoardServices = {
 		}
   },
 
-  getAllTask: async () => {
+  getAllTask: async (params) => {
     try {
       const response = await asyncRecallFunction(() => {
-        return axiosClient.get(USER_GET_ALL_TASK)
+        return axiosClient.get(USER_GET_ALL_TASK, { params })
       });
       return response;
     } catch (error) {

@@ -7,17 +7,19 @@ const { TASK_STATUS, TASK_STATUS_TEXT, TASK_PRIORITY_TEXT } = require('../../con
 
 const LOG_CATEGORY = "Task Controller"
 const INSERT_NEW_CATEGORY = "INSERT INTO category (category_name, category_color) VALUES (?, ?)";
-const INSERT_NEW_TASK = "INSERT INTO task (task_title, task_description, employee_id, assignee_id, `status`, priority, category_id, start_date, end_date, estimated_hours, actual_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const INSERT_NEW_TASK = "INSERT INTO task (task_title, task_number, project_id, task_description, employee_id, assignee_id, `status`, priority, category_id, start_date, end_date, estimated_hours, actual_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const INSERT_NEW_COMMENT = "INSERT INTO taskcomment (task_id, employee_id, content, is_edit) VALUES (?, ?, ?, ?)";
 const EDIT_COMMENT = "UPDATE taskcomment SET content = ? WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?";
 const GET_TASK_BY_ID = "SELECT * FROM task WHERE task_id = ?";
 const GET_ALL_TASK_BY_STATUS = "  SELECT t.*, CONCAT(first_name, ' ', last_name) as assignee, avt, category_name, category_color "
     + "                 FROM task t INNER JOIN employee e on t.assignee_id = e.employee_id"
     + "                 	LEFT JOIN category c ON t.category_id = c.category_id"
+    + "                 WHERE t.project_id = ?"
     + "                 ORDER BY task_id DESC";
 const GET_ALL_TASK = "  SELECT t.*, CONCAT(first_name, ' ', last_name) as assignee, avt, category_name, category_color "
     + "                 FROM task t INNER JOIN employee e on t.assignee_id = e.employee_id"
     + "                 	LEFT JOIN category c ON t.category_id = c.category_id"
+    + "                 WHERE t.project_id = ?"
     + "                 ORDER BY t.update_at DESC";
 const GET_TASK_DETAILS_BY_ID = "SELECT t.*, CONCAT(e.first_name, ' ', e.last_name) as creator, e.avt as creator_avt, category_name, category_color , CONCAT(a.first_name, ' ', a.last_name) as assignee, a.avt as assignee_avt"
     + "                         FROM task t "
@@ -30,16 +32,13 @@ const GET_ALL_COMMENT_OF_TASK = "SELECT tc.*, CONCAT(first_name, ' ', last_name)
     + "                         WHERE task_id = ?";
 const GET_ALL_ATTACHMENTS_OF_TASK = "SELECT * FROM taskattachment where task_id = ?";
 const GET_ALL_CATEGORY = "SELECT * FROM category";
-
 const GET_FULL_NAME_OF_EMPLOYEE = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? LIMIT 1";
-
 const DELETE_COMMENT = "DELETE FROM taskcomment WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?";
-
 const INSERT_ATTACHMENT = "INSERT INTO taskattachment (task_id, path) VALUES (?, ?)";
-
 const GET_ATTACHMENT_BY_ID = "SELECT * FROM taskattachment WHERE attachment_id = ?";
-
 const DELETE_ATTACHMENT = "DELETE FROM taskattachment WHERE attachment_id = ?";
+const GET_CURRENT_PROECT = "SELECT project_id FROM project WHERE project_id = ? LIMIT 1";
+const GET_NEWEST_TASK_NUMBER = "SELECT * FROM task WHERE project_id = ? ORDER BY task_number DESC LIMIT 1";
 
 async function addNewCategory(req, res) {
     const connection = await dbaccess.getConnection();
@@ -97,6 +96,10 @@ async function addNewTask(req, res) {
                 type: 'string',
                 required: true
             },
+            projectId: {
+                type: 'string',
+                required: true
+            },
             taskDescription: {
                 type: 'string',
                 required: false
@@ -140,7 +143,7 @@ async function addNewTask(req, res) {
             return;
         }
 
-        const { taskTitle, taskDescription, assigneeId, priority, categoryId, startDate, endDate, estimatedHours, actualHours } = req.body;
+        const { taskTitle, projectId, taskDescription, assigneeId, priority, categoryId, startDate, endDate, estimatedHours, actualHours } = req.body;
 
         if (moment(startDate).isAfter(moment(startDate))) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate must be smaller or equal than endDate`);
@@ -150,7 +153,22 @@ async function addNewTask(req, res) {
             return;
         }
 
-        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
+        const currentProject = await dbaccess.queryTransaction(connection, GET_CURRENT_PROECT, [projectId]);
+        if (!currentProject.length) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate must be smaller or equal than endDate`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+
+        const newestTask = await dbaccess.queryTransaction(connection, GET_NEWEST_TASK_NUMBER, [projectId]);
+        let taskNumber = 1;
+        if (newestTask.length) {
+            taskNumber = Number(newestTask[0].task_number) + 1;
+        }
+
+        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskNumber, projectId, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
@@ -417,7 +435,13 @@ async function editComment(req, res) {
 
 async function getAllTaskWithStatus(req, res) {
     try {
-        const listTask = await dbaccess.exeQuery(GET_ALL_TASK_BY_STATUS);
+        const { projectId } = req.query;
+        if (!projectId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] projectId is required`);
+            res.status(200).send([]);
+            return;
+        }
+        const listTask = await dbaccess.exeQuery(GET_ALL_TASK_BY_STATUS, [projectId]);
         const response = {
             open: [],
             inProgress: [],
@@ -453,7 +477,13 @@ async function getAllTaskWithStatus(req, res) {
 
 async function getAllTask(req, res) {
     try {
-        const listTask = await dbaccess.exeQuery(GET_ALL_TASK);
+        const { projectId } = req.query;
+        if (!projectId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] projectId is required`);
+            res.status(200).send([]);
+            return;
+        }
+        const listTask = await dbaccess.exeQuery(GET_ALL_TASK, [projectId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
         res.status(200).send(listTask);
     } catch (error) {
@@ -583,7 +613,7 @@ async function addAttachments(req, res) {
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Add attachments success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
-        res.status(200).send({message: "OK"});
+        res.status(200).send({ message: "OK" });
     } catch (error) {
         deleteAttachments(req.files);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
@@ -627,13 +657,13 @@ async function deleteTaskAttachments(req, res) {
             const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
             const targetAttachment = targetAttachmentsList[0];
             const filepath = ATTACHMENTS_PATH + targetAttachment.path;
-            deleteAttachments([{path: filepath}]);
+            deleteAttachments([{ path: filepath }]);
             await dbaccess.queryTransaction(connection, DELETE_ATTACHMENT, [attachmentId]);
         }
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Delete attachment success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
-        res.status(200).send({message: "OK"});
+        res.status(200).send({ message: "OK" });
     } catch (error) {
         deleteAttachments(req.files);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);

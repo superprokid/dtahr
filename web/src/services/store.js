@@ -7,6 +7,7 @@ export const storeVuex = new Vuex.Store({
         startDataUser: {},
         drawerMini: false,
         startDataAdmin: {},
+        projectSelected: '',
     },
     mutations: {
         setStartDataUser(state, startDataUser) {
@@ -17,6 +18,9 @@ export const storeVuex = new Vuex.Store({
         },
         setStartDataAdmin(state, startDataAdmin) {
             state.startDataAdmin = startDataAdmin
+        },
+        setProjectSelected(state, projectSelected) {
+            state.projectSelected = projectSelected
         },
     },
 })

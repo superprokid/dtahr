@@ -33,6 +33,7 @@ export default {
             categorySelected: '',
             employeeSelected: '',
             keyword: '',
+            currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
     mounted() {
@@ -42,7 +43,7 @@ export default {
     },
     methods: {
         async _getAllTasks() {
-            const response = await TasksServices.getAllTasks();
+            const response = await TasksServices.getAllTasks({ projectId: this.currentProjectId });
             if (!response) {
                 this.$router.push('/user/login');
                 return;
@@ -118,10 +119,11 @@ export default {
             return 'item-row'
         },
         openTaskDetails(task) {
-            this.$router.push('/user/taskdetail/'+task.task_id);
+            this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${task.task_id}`);
         }
     },
     beforeCreate() {
         SessionUtls.setItem(SessionUtls.tabNameKey, tabName.taskUser);
+        this.$root.$emit('drawer');
     },
 }
