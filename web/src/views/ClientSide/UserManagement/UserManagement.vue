@@ -46,38 +46,7 @@
                             <v-app>
                                 <v-list-item three-line>
                                     <v-list-item-content>
-                                        <!-- <div class="text-overline ">
-                                            Employee ID:
-                                             
-                                        </div>
-                                        <div class="text-overline ">
-                                            Full Name: 
-                                        </div>
-                                        <div class="text-overline ">
-                                            Email: 
-                                        </div>
-                                        <div class="text-overline ">
-                                            DOB: {{userSelected.dob}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Gender: {{userSelected.gender}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Phone: {{userSelected.phone}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Main Skill: 
-                                        </div>
-                                        <div class="text-overline ">
-                                            Salary: {{userSelected.salary}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Join Date: {{userSelected.join_date}}
-                                        </div>
-                                        <div class="text-overline ">
-                                            Working in Project: {{userSelected.project_name}}
-                                        </div> -->
-
+                                        
                                         <div class=" ">
                                             <span class="text-overline blue--text text--lighten-1">Employee ID:</span>
                                             <span class="subtitle-2">{{userSelected.employee_id}}</span> 

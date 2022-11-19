@@ -17,6 +17,11 @@ import EditGroupSuccessModal from "../../../components/EditGroupSuccessModal/Edi
 import DeleteGroupSuccessModal from "../../../components/DeleteGroupSuccessModal/DeleteGroupSuccessModal.vue"
 import ConfirmDeleteGroupModal from "../../../components/ConfirmDeleteGroupModal/ConfirmDeleteGroupModal.vue"
 
+import CreateUserModal from "../../../components/CreateUserModal/CreateUserModal.vue"
+import CreateUserSuccessModal from "../../../components/CreateUserSuccessModal/CreateUserSuccessModal.vue"
+
+import ConfirmDeleteUserModal from "../../../components/ConfirmDeleteUserModal/ConfirmDeleteUserModal.vue"
+
 export default {
     name: "AdminGroup",
     components: {
@@ -28,6 +33,10 @@ export default {
         DeleteGroupSuccessModal,
         ConfirmDeleteGroupModal,
         EditGroupSuccessModal,
+        CreateUserModal,
+        CreateUserSuccessModal,
+        ConfirmDeleteUserModal,
+        
 
         // views
         AdminEmployeeManagement,
@@ -70,6 +79,18 @@ export default {
 
             ConfirmDeleteGroupDialogShowed: false,
 
+            // Admin employee management
+            searchAdminEmployeeManagement: '',
+            listUsersOfSpecificGroup: [],
+            singleSelectEmployeeManagement: false,
+            AdminEmployeeManagementSelected: [],
+
+            CreateUserDialogShowed: false,
+            CreateUserDialogSuccessShowed: false,
+
+            createUserSuccessInfo: {},
+            confirmDeleteUserInfo: {},
+            ConfirmDeleteUserDialogShowed: false,
         }
     },
     computed: {
@@ -113,14 +134,114 @@ export default {
                 },
             ]   
         },
+        AdminEmployeeManagementHeaders(){
+            return [
+                {
+                    text: 'Employee ID',
+                    align: 'start',
+                    value: 'employee_id',
+                    width: 120,
+                },
+                {
+                    text: 'Status',
+                    value: 'is_deleted',
+                    width: 120,
+                },
+                {
+                    text: 'Full Name',
+                    value: 'full_name',
+                    width: 150,
+                },
+                {
+                    text: "Gender",
+                    value: 'gender',
+                    width: 100,
+                },
+                {
+                    text: 'Employer ID',
+                    value: 'employer_id',
+                    width: 120,
+                },
+                {
+                    text: 'Employer Full Name',
+                    value: 'employer_full_name',
+                    width: 200,
+                },
+                {
+                    text: "Main Skill",
+                    value: 'main_skill',
+                    width: 120,
+                },
+                {
+                    text: "Sub Skill",
+                    value: 'sub_skill',
+                    width: 120,
+                },
+                {
+                    text: "Job Role",
+                    value: 'job_role',
+                    width: 120,
+                },
+                {
+                    text: "DOB",
+                    value: 'dob',
+                    width: 150,
+                },
+                {
+                    text: "Phone",
+                    value: 'phone',
+                    width: 120,
+                },
+                {
+                    text: 'Email',
+                    value: 'email',
+                    width: 200,
+                },
+                {
+                    text: 'Address',
+                    value: 'address',
+                    width: 200,
+                },
+                {
+                    text: "Join Date",
+                    value: 'join_date',
+                    width: 150,
+                },
+                {
+                    text: "Bank Name",
+                    value: 'bank_name',
+                    width: 150,
+                },
+                {
+                    text: "Bank Account",
+                    value: 'bank_account',
+                    width: 200,
+                },
+
+            ]
+        },
     },
      mounted() {
         this.$eventBus.$emit('show-spinner', true);
         this._getGroupCompany()
         this.$eventBus.$emit('show-spinner', false);
     },
-
+    watch: {
+        loader () {
+          const l = this.loader
+          this[l] = !this[l]
+  
+          setTimeout(() => (this[l] = false), 3000)
+  
+          this.loader = null
+        },
+    },
     methods: {
+        
+        testmethod(data){
+            console.log(data);
+            // call api here
+        },
         setItemRowCLass(){
             return 'item-row'
         },
@@ -206,7 +327,14 @@ export default {
                 this.ConfirmDeleteGroupDialogShowed = false;
             }else if(screen == 6){
                 this.EditGroupSuccessDialogShowed = false;
+            }else if(screen == 7){
+                this.CreateUserDialogShowed = false;
+            }else if(screen == 8){
+                this.CreateUserDialogSuccessShowed = false;
+            }else if(screen == 9){
+                this.ConfirmDeleteUserDialogShowed = false;
             }
+            
         },
 
         openAddGroupModal(){
@@ -249,6 +377,7 @@ export default {
         onClickGroupRow(groupRowSelected){
             this.isAdminEmployeeManagementShowed = true;
             this.groupRowSelectedProp = groupRowSelected
+            this._getEmployeeOfSpecificGroup()
             this.isAdminGroupManagementShowed = false;
         },
         goBackGroupManagementLayout(){
@@ -258,6 +387,102 @@ export default {
 
         onClickTestNotiModal(){
             this.AddGroupSuccessDialogShowed = true;
+        },
+
+        async _getEmployeeOfSpecificGroup(){
+            const params = {
+                groupId: this.groupRowSelectedProp.group_id
+            }
+            const response = await AdminGroupServices.getAllUserOfSpecificGroup(params);
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                alert('Some thing wrong! Call Fail')
+            }
+            else {
+                this.listUsersOfSpecificGroup = response.data.map((item) => {
+                    return {...item, dob: getDateString(item.dob), gender: item.gender == 0 ? 'Male' : item.gender == 1 ? 'Female' : 'Other', join_date: getDateString(item.join_date)}
+                })
+            }
+        },
+
+        onClickCreateUser(){
+            this.CreateUserDialogShowed = true
+        },
+
+        async onCreateUser(params){
+            const response = await AdminGroupServices.adminCreateUser(params)
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Create User Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Create User Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this._getEmployeeOfSpecificGroup()
+            this.CreateUserDialogShowed = false
+
+            // transfer props here
+            const allProps = Object.assign({}, this.groupRowSelectedProp, params, response.data);
+            this.createUserSuccessInfo = allProps
+            this.CreateUserDialogSuccessShowed = true
+        },
+
+        onClickDeleteUser(){
+            
+            this.confirmDeleteUserInfo = this.AdminEmployeeManagementSelected[0]
+            this.ConfirmDeleteUserDialogShowed = true;
+        },
+
+        async onConfirmDeleteUser(param){
+            if(param == 'confirm'){
+                this.ConfirmDeleteUserDialogShowed = false;
+                const params = {
+                    employeeId: this.AdminEmployeeManagementSelected[0].employee_id
+                }
+                const response = await AdminGroupServices.adminDeleteUser(params);
+                if(!response){
+                    this.$router.push('/admin/login')
+                } else if(response == -1){
+                    this.$toast.open({
+                        message: "Delete User Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    this.AdminEmployeeManagementSelected = []
+                    return
+                }
+                else {
+                    this._getEmployeeOfSpecificGroup()
+                    this.AdminEmployeeManagementSelected = []
+                    this.$toast.open({
+                        message: "Delete User Success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                }
+            }
+        },
+
+        onClickUserRow(userRowSelected){
+            console.log('userRowSelected', userRowSelected);
+            this.$router.push('/admin/userdetail/'+userRowSelected.employee_id);
         },
     },
 

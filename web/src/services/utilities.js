@@ -1,4 +1,5 @@
 import moment from "moment";
+import { USER_GET_IMAGE } from "../config/constant";
 
 const YYYY_MM_DD = "YYYY-MM-DD"
 const HH_MM_SS = "hh:mm:ss"
@@ -17,4 +18,12 @@ export function isPastDate(date) {
 
 export function getTimeString(time) {
     return moment(time).format(HH_MM_SS);
+}
+
+export function getAvatar(avt) {
+    if(avt){
+        return USER_GET_IMAGE + '/' + avt
+    }else{
+        return require('@/assets/user-default.png')
+    }
 }

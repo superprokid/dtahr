@@ -29,6 +29,7 @@ import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
 import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
 import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
 import AdminUserManagement from "@/views/AdminSide/AdminUserManagement/AdminUserManagement.vue"
+import UserDetail from "../views/AdminSide/UserDetail/UserDetail.vue"
 
 Vue.use(Router);
 
@@ -61,6 +62,10 @@ const router = new Router({
                     path: 'holiday',
                     component: AdminHoliday
                 },
+                {
+                    path: 'userdetail/:employeeId',
+                    component: UserDetail
+                }
             ]
         },
         { 
