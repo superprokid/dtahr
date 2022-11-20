@@ -21,7 +21,14 @@ import AddAttachmentModal from "../../../components/AddAttachmentModal/AddAttach
 
 import AdminUserDetailServices from "../../../services/API/AdminUserDetailAPI/AdminUserDetailServices"
 
+import moment from 'moment';
 
+const WORKLOG_DEFAULT = {
+    work_date: 'No work schedule today',
+    checkin_at:  'No work schedule today',
+    work_total: 'No work schedule today',
+    work_status: 'No work schedule today',
+}
 
 export default {
     components: {
@@ -30,18 +37,27 @@ export default {
     data() {
         return { 
             userDetailInfo: {},
+            projectUserJoinedDetailInfo: {},
+            todayWorklog: {},
 
+            startDate: moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format("YYYY-MM-DD"),
+            startDatePicker: false,
+            
+            endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            endDatePicker: false,
+
+            userHistoryTracking: {},
         }
     },
     computed: {
         
     },
     methods: {
+        // Get user detail by Id
         async getUserDetailById(){
             const params = {
                 employeeId: this.$route.params.employeeId
             }
-            console.log('params', params);
             const response = await AdminUserDetailServices.adminGetUserDetailById(params)
             if(!response){
                 this.$router.push('/admin/login')
@@ -59,16 +75,102 @@ export default {
             return this.userDetailInfo
         },
 
+        // Get avatar of user
         getAvatar(){
             return getAvatar(this.userDetailInfo.avt)
         },
         getDateString,
+        getTimeString,
+
+        // Get Today User's Worklog
+        async getUserWorklog(){
+            const params = {
+                startDate: moment(new Date()).format('YYYY-MM-DD'),
+                endDate: moment(new Date()).format('YYYY-MM-DD'),
+                employeeId: this.$route.params.employeeId,
+            }
+            const response = await AdminUserDetailServices.adminGetUserWorklogs(params)
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Get Project User Joined Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.todayWorklog = WORKLOG_DEFAULT
+            if(response.data.length > 0){
+                this.todayWorklog = {
+                    work_date: getDateString(response.data[0].work_date),
+                    checkin_at: getDateString(response.data[0].create_at) + ' ' + getTimeString(response.data[0].create_at),
+                    work_total: response.data[0].work_total,
+                    work_status: response.data[0].work_status == 0 ? 'Already Checkin' : 'Already Checkout'
+                }
+            }
+            return this.todayWorklog
+        },
+
+        _groupArrayByDateKey(arr, dateKey) {
+            return arr.reduce(function (previousResult, item) {
+                const key = moment(item[dateKey]).format('YYYY-MM-DD');
+                previousResult[key] = previousResult[key] || [];
+                previousResult[key].push(item);
+                return previousResult;
+            }, {});
+        },
+
+        // Get User tracking history
+        async getUserHistoryTracking(){
+            const params = {
+                startDate: this.startDate,
+                endDate: this.endDate,
+                employeeId: this.$route.params.employeeId,
+            }
+            const response = await AdminUserDetailServices.adminGetUserTrackingHistory(params)
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Get User Tracking Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.userHistoryTracking = this._groupArrayByDateKey(response.data.reverse(), "work_date")
+            return this.userHistoryTracking
+        },
+        async onSelectStartTrackingDate(startDate){
+            this.startDate = startDate
+            this.startDatePicker = false
+
+            this.$eventBus.$emit('show-spinner', true); 
+            this.getUserHistoryTracking()
+            this.$eventBus.$emit('show-spinner', false); 
+        },
+
+        async onSelectEndTrackingDate(endDate){
+            this.endDate = endDate
+            this.endDatePicker = false
+
+            this.$eventBus.$emit('show-spinner', true); 
+            this.getUserHistoryTracking()
+            this.$eventBus.$emit('show-spinner', false); 
+        }
     },
     
     async mounted() {
         this.$eventBus.$emit('show-spinner', true); 
         const userDetailInfo = await this.getUserDetailById()
         console.log('userDetailInfo', userDetailInfo);
+        const todayWorklog = await this.getUserWorklog()
+        const trackingHistory = await this.getUserHistoryTracking()
         this.$eventBus.$emit('show-spinner', false);  
     },
 
