@@ -83,7 +83,7 @@ export const ADMIN_GET_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/get';
 export const ADMIN_CREATE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/create';
 export const ADMIN_DELETE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/delete';
 export const ADMIN_GET_ALL_USER = BASE_API_ADMIN_URL + '/getalluser';
-export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/get';
+// export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/get';
 export const ADMIN_GET_USER_PROJECT_JOINED = BASE_API_ADMIN_URL + '/employee/getproject';
 export const ADMIN_ADD_USER = BASE_API_ADMIN_URL + '/create/employee';
 export const ADMIN_UPDATE_USER = BASE_API_ADMIN_URL + '/update/employee';
@@ -93,6 +93,8 @@ export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
 export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
 export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
 export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
+
+export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 
 // constant
 export const TAB_TYPE = {
