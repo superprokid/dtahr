@@ -42,6 +42,12 @@ const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(fi
 const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 const UPDATE_PASSWORD = "UPDATE employee SET password = ? WHERE employee_id = ?";
 const AVT_PATH = "../../../public/avts/";
+const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, ' ', last_name) as full_name, avt "
+    + "                         FROM employee e "
+    + "                         	LEFT JOIN (SELECT *"
+    + "                    						FROM assignment a "
+    + "	                    					WHERE project_id = ?) tb1 on e.employee_id = tb1.employee_id"
+    + "                         WHERE e.role = 1 OR tb1.assigned_date is not null"
 
 async function verifyUser(data) {
     try {
@@ -84,7 +90,7 @@ async function refreshToken(req, res) {
         });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"})
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -120,7 +126,7 @@ async function login(req, res) {
         })
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"})
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 
 }
@@ -230,7 +236,7 @@ async function checkin(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -302,7 +308,7 @@ async function checkout(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -375,7 +381,7 @@ async function changePassword(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -418,7 +424,7 @@ async function getStart(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -435,7 +441,7 @@ async function getAllUser(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -459,7 +465,7 @@ async function getAllUserByManager(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -509,7 +515,7 @@ async function getRealTimeStatusByManager(req, res) {
         res.status(200).send(respone)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -548,7 +554,7 @@ async function getEmployeeInfoById(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -656,21 +662,40 @@ async function updateInformation(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function getAllUserOfProject(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist`);
+            res.status(403).send({ message: "Get Failed" });
+            return;
+        }
+        const { projectId } = req.query;
+
+        const result = await exeQuery(GET_USERS_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result)
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
 function deleteAvt(filename) {
     const newPath = path.join(__basedir, "/public/avts", filename);
     if (fs.existsSync(newPath)) {
-        fs.unlink(newPath, (err) => {});
+        fs.unlink(newPath, (err) => { });
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete old avt success`);
     }
 }
 
 function deleteFile(filePath) {
     if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => { 
+        fs.unlink(filePath, (err) => {
             if (err) {
                 logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete file failed ${err.stack}`)
             } else {
