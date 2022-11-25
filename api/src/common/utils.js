@@ -216,7 +216,7 @@ function getDateEndOfMonth(date) {
 }
 
 function getDateStringWithFormat(date, format) {
-    return moment(date).format(format);
+    return moment(new Date(date)).format(format);
 }
 
 module.exports = {

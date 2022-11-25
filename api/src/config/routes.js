@@ -126,6 +126,7 @@ Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmpl
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);
 Router.get('/admin/export/leave', adminExportController.exportLeaveTicket);
 Router.get('/admin/export/salary', adminExportController.exportSalaryAll);
+Router.post('/admin/export/worklog', adminExportController.exportWorklogByListEmp);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);
