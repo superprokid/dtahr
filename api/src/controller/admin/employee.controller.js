@@ -14,8 +14,23 @@ const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.
     + "                               LEFT JOIN `group` g ON e.employee_id = g.manager_id"
     + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, now(), now())";
-const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ?";
 const SOFT_DELETE_EMPLOYEE = "UPDATE employee SET is_deleted = 1 WHERE employee_id = ?";
+const GET_USER_INFO = "SELECT DISTINCT e.*, CONCAT(e.first_name, ' ' ,e.last_name) as full_name, p.project_name, p.project_id "
+    + "                         FROM employee e "
+    + "                             LEFT JOIN (SELECT a.project_id, a.employee_id, a.assigned_date "
+    + "                                         FROM assignment a, "
+    + "                                             (SELECT DISTINCT employee_id, MAX(assigned_date) as assigned_date FROM assignment GROUP BY employee_id) aa"
+    + "                                         WHERE a.employee_id = aa.employee_id and a.assigned_date = aa.assigned_date) asign ON e.employee_id = asign.employee_id"
+    + "                             LEFT JOIN project p ON p.project_id = asign.project_id"
+    + "                         WHERE e.employee_id = ?";
+const GET_PROJECT_DETAILS_OF_USER = "SELECT a.employee_id, a.assigned_date, tb.*"
+    + "                                 FROM assignment a "
+    + "                                 	INNER JOIN (SELECT p.project_name, p.project_id, CONCAT(e.first_name, ' ', e.last_name) as project_manager_name, p.project_manager_id, p.client_id, p.project_manager_assigned_date, COUNT(a.employee_id) as number"
+    + "	                    							FROM `project` p"
+    + "		                								LEFT JOIN assignment a ON p.project_id = a.project_id"
+    + "										                INNER JOIN employee e ON p.project_manager_id = e.employee_id"
+    + "								                    WHERE p.project_id = ?) tb on tb.project_id = a.project_id"
+    + "                                 WHERE a.employee_id = ?"
 
 async function createNewEmployee(req, res) {
     const connection = await dbaccess.getConnection();
@@ -338,13 +353,18 @@ async function getEmployeeInfoById(req, res) {
             return;
         }
 
-        let result = await dbaccess.exeQuery(GET_USER_INFO_BY_ID, [employeeId]);
+        let result = await dbaccess.exeQuery(GET_USER_INFO, [employeeId]);
         if (result.length) {
             result = result[0];
+            let projectDetail = await dbaccess.exeQuery(GET_PROJECT_DETAILS_OF_USER, [result.project_id, employeeId]);
+            if (projectDetail.length) {
+                result.project = projectDetail[0];
+            } else {
+                result.project = {}
+            }
         } else {
             result = {};
         }
-        delete result.password;
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
         res.status(200).send(result);
     } catch (error) {

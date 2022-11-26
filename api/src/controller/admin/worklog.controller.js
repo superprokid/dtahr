@@ -14,7 +14,7 @@ const UPDATE_WORKLOG = "UPDATE worklog SET work_total = work_total + ? WHERE wor
 const UPDATE_HOLIDAY_TIME_ADD = "UPDATE employee SET holiday_time = holiday_time + ? WHERE employee_id = ?";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, ?)";
 
-const ADD_WORKLOG_DES = 'Update by Admin: ';
+const ADD_WORKLOG_DES = 'Update by ADMIN: ';
 
 async function getWorkHistory(req, res) {
     try {
@@ -214,7 +214,7 @@ async function updateHolidayTime(req, res) {
 
         const { employeeId, holidayTime, description } = req.body;
 
-        const workDescription = `Update annual holiday by manager - ${description}, total: ${holidayTime} mins `;
+        const workDescription = `Update annual holiday by ADMIN - ${description}, total: ${holidayTime} mins `;
 
         await queryTransaction(connection, INSERT_NEW_WORKHISTORY, [employeeId, WORKHISTORY_STATUS.byAdmin, workDescription, new Date()]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] add new workhistory success`);
