@@ -59,11 +59,57 @@ export default {
             userSeeMoreModalShowed: false,
             addHolidayInfo: {},
             editWorklogInfo: {},
+            userDetailInfoProp: {},
 
+            userDetailFeatureShowed: true,
+            userDetailWorklogShowed: false,
+
+            startDateWorklog: moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format("YYYY-MM-DD"),
+            startDateWorklogPicker: false,
+            
+            endDateWorklog: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            endDateWorklogPicker: false,
+
+            listUserWorklogs: [],
+
+            searchWorklog: '',
         }
     },
     computed: {
-        
+        worklogHeaders(){
+            return [
+                {
+                    text: 'Employee ID',
+                    align: 'start',
+                    value: 'employee_id',
+                    width: 200,
+                },
+                {
+                    text: 'Full Name',
+                    value: 'full_name'
+                },
+                {
+                    text: 'Work Date',
+                    value: 'work_date',
+                },
+                {
+                    text: "Checkin At",
+                    value: 'create_at'
+                },
+                {
+                    text: "Recent activity",
+                    value: 'update_at'
+                },
+                {
+                    text: "Work Status",
+                    value: 'work_status'
+                },
+                {
+                    text: "Work Total (Min)",
+                    value: 'work_total'
+                },
+            ]
+        },
     },
     methods: {
         onClose(param){
@@ -74,6 +120,13 @@ export default {
             }else if(param == 3){
                 this.userSeeMoreModalShowed = false
             }
+        },
+        filterOnlyCapsText(value, search, item) {
+            item - 1;
+            return value != null &&
+                search != null &&
+                typeof value === 'string' &&
+                value.toString().toLocaleUpperCase().indexOf(search.toLocaleUpperCase()) !== -1
         },
 
         // Get user detail by Id
@@ -262,8 +315,92 @@ export default {
         },
 
         onClickUserInfoSeeMore(){
+            this.userDetailInfoProp = this.userDetailInfo
             this.userSeeMoreModalShowed = true
-        }
+        },
+
+        async onSaveUserSeeMore(params){
+            console.log('params', params);
+            const response = await AdminUserDetailServices.adminUpdatePersonalUserInfo(params)
+            if(!response){
+                this.$router.push('/admin/login')
+                return
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Update Personal User's Info Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Update Personal User's Info Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.userSeeMoreModalShowed = false
+        },
+
+        onClickWorklogSeeMore(){
+            console.log('worklog');
+            this.userDetailFeatureShowed = false
+            this.userDetailWorklogShowed = true
+        },
+
+        goBackUserDetailFeature(){
+            this.userDetailWorklogShowed = false,
+            this.userDetailFeatureShowed = true
+        },
+
+        async onSelectStartDateWorklog(date){
+            console.log('start worklog',date );
+            this.startDateWorklog = date
+            const params = {
+                startDate: this.startDateWorklog,
+                endDate: this.endDateWorklog,
+                employeeId: this.$route.params.employeeId
+            }
+            await this.getListWorklogsOfUser(params)
+        },
+        async onSelectEndDateWorklog(date){
+            this.endDateWorklog = date
+            const params = {
+                startDate: this.startDateWorklog,
+                endDate: this.endDateWorklog,
+                employeeId: this.$route.params.employeeId
+            }
+            await this.getListWorklogsOfUser(params)
+        },
+
+        async getListWorklogsOfUser(params){
+            const response = await AdminUserDetailServices.adminGetUserWorklogs(params)
+            if (!response) {
+                this.$router.push('/admin/login');
+                return;
+            }else if(response == -1){
+                this.$toast.open({
+                    message: "Get Users Worklog Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            
+            this.listUserWorklogs = response.data.map(item => {
+                return {...item, full_name: this.userDetailInfo.full_name, 
+                                work_date: moment(item.work_date).format('YYYY-MM-DD'), 
+                                create_at: getDateString(item.create_at) + ' ' + getTimeString(item.create_at), 
+                                update_at: getDateString(item.update_at) + ' ' + getTimeString(item.update_at), 
+                                work_status: item.work_status == 0 ? 'Đã Checkin' : 'Đã Checkout',}
+            })
+            return this.listUserWorklogs
+        },
     },
     
     async mounted() {
@@ -272,6 +409,13 @@ export default {
         console.log('userDetailInfo', userDetailInfo);
         const todayWorklog = await this.getUserWorklog()
         const trackingHistory = await this.getUserHistoryTracking()
+
+        const params = {
+            startDate: this.startDateWorklog,
+            endDate: this.endDateWorklog,
+            employeeId: this.$route.params.employeeId
+        }
+        const listWorklogs = await this.getListWorklogsOfUser(params)
         this.$eventBus.$emit('show-spinner', false);  
     },
 
