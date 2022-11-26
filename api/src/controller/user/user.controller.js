@@ -138,30 +138,42 @@ async function checkInFaceId(req, res) {
 }
 
 async function checkInMobile(req, res) {
-    const file = req.files?.length ? req.files[0] : null;
-    if (file) {
-        const form = new FormData();
-        const fileStream = fs.createReadStream(file.path);
-        form.append('file', fileStream);
-        fileStream.on('close', () => {
-            deleteFile(file.path)
-        });
-        fileStream.on('error', () => {
-            deleteFile(file.path)
-        });
-        form.append('employeeId', '0000001');
-        axiosBase.post('http://26.74.195.215:5000/check', form).then((result) => {
-            console.log(result.data);
-            res.status(200).send('success')
-        }).catch((err) => {
-            console.log("failed")
-            console.log(err)
-            res.status(400).send('success')
-        }).finally(() => {
-            deleteAvt(file.path);
-        })
-    } else {
-        res.status(400).send('failed')
+    try {
+        const file = req.files?.length ? req.files[0] : null;
+        if (file) {
+            const empId = req.employee_id;
+            console.log('empId', empId);
+            const form = new FormData();
+            const fileStream = fs.createReadStream(file.path);
+            form.append('file', fileStream);
+            fileStream.on('close', () => {
+                deleteFile(file.path)
+            });
+            fileStream.on('error', () => {
+                deleteFile(file.path)
+            });
+            form.append('employeeId', empId);
+            axiosBase.post('http://26.74.195.215:5000/check', form).then((result) => {
+                console.log('faceid = ', result.data);
+                const empFaceId = result.data;
+                if (empFaceId && empFaceId.employeeId === empId) {
+                    checkin(req, res);
+                } else {
+                    logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - can request to face server`);
+                    res.status(400).send({ message: 'Can not recognize your face, please try again!' })
+                }
+            }).catch((err) => {
+                res.status(400).send({ message: 'Request failed, please try again' })
+            }).finally(() => {
+                deleteFile(file.path)
+            })
+        } else {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - file not exist`);
+            res.status(400).send({ message: 'Request failed, please try again' })
+        }
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 
 }
@@ -194,14 +206,14 @@ async function checkin(req, res) {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send("Check in failed");
+            res.status(403).send({ message: "Something went wrong, please try later!" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
         }
         if (!(await isAvalibleCheckinTime(connection))) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] now is not work time`);
-            res.status(403).send("Check in failed");
+            res.status(403).send({ message: "Today is not working day, can't checkin" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -231,7 +243,7 @@ async function checkin(req, res) {
         }
         await commitTransaction(connection);
         releaseConnection(connection);
-        res.status(200).send("Check in success");
+        res.status(200).send({ message: "Check in success" });
     } catch (error) {
         await rollback(connection);
         releaseConnection(connection);
@@ -247,7 +259,7 @@ async function checkout(req, res) {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send("Check out failed");
+            res.status(403).send({ message: "Something went wrong, please try later!" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -258,7 +270,7 @@ async function checkout(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] today worklog not exist - can not check out`);
             await commitTransaction(connection);
             releaseConnection(connection);
-            res.status(403).send("Check out failed");
+            res.status(403).send({ message: "Something went wrong, please try later!" });
             return;
         }
         const workTimeList = await queryTransaction(connection, GET_WORKTIME);
@@ -272,7 +284,7 @@ async function checkout(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] Working time is finished - can not check out`);
             await commitTransaction(connection);
             releaseConnection(connection);
-            res.status(403).send("You are out of working time");
+            res.status(403).send({ message: "You are out of working time" });
             return;
         }
         const currentWorkLog = curWorkLogList[0];
@@ -303,7 +315,7 @@ async function checkout(req, res) {
         }
         await commitTransaction(connection);
         releaseConnection(connection);
-        res.status(200).send("Check out success");
+        res.status(200).send({ message: 'Check out success'});
     } catch (error) {
         await rollback(connection);
         releaseConnection(connection);

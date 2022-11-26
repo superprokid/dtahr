@@ -30,7 +30,7 @@ const adminExportController = require('../controller/admin/export.controller');
 Router.post('/user/login', userController.login);
 Router.post('/user/refreshtoken', userController.refreshToken);
 // Router.get('/user/get', userController.get);
-Router.post('/user/app/checkin', sendFile.any(), userController.checkInMobile);
+Router.post('/user/app/checkin', authen, sendFile.any(), userController.checkInMobile);
 Router.get('/user/getalluser', authen, userController.getAllUser);
 Router.post('/user/checkin', authen, userController.checkin);
 Router.post('/user/checkout', authen, userController.checkout);

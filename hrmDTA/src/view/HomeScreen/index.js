@@ -2,10 +2,11 @@ import { Image, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styles from './style';
 import colors from '../../assets/colors';
-import { CHECKIN_SCREEN, HISTORY_SCREEN, LEAVE_SCREEN } from '../../config/screen';
+import { CHECKIN_SCREEN, HISTORY_SCREEN, LEAVE_SCREEN, OVERTIME_SCREEN } from '../../config/screen';
 import Checin from '../CheckinScreen';
 import HistoryScreen from '../HistoryScreen';
 import LeaveMainScreen from '../LeaveMainScreen';
+import OverTimeMainScreen from '../OverTimeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,9 +27,9 @@ export default Home = () => {
                 component={Checin}
                 options={{
                     tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/dashboard.png')} style={{ width: 25, height: 25, tintColor: color }} />,
-                    tabBarLabel: 'Checin',
+                    tabBarLabel: 'Home',
                     headerShown: true,
-                    headerTitle: "Check in",
+                    headerTitle: "HOME",
                     headerTitleAlign: 'center'
                 }} />
             <Tab.Screen
@@ -40,6 +41,16 @@ export default Home = () => {
                     headerShown: true,
                     headerTitle: "History",
                     headerTitleAlign: 'center'
+                }} />
+            <Tab.Screen
+                name={OVERTIME_SCREEN}
+                component={OverTimeMainScreen}
+                options={{
+                    tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/history.png')} style={{ width: 25, height: 25, tintColor: color }} />,
+                    tabBarLabel: 'OverTime',
+                    headerShown: false,
+                    // headerTitle: "History",
+                    // headerTitleAlign: 'center'
                 }} />
             <Tab.Screen
                 name={LEAVE_SCREEN}
