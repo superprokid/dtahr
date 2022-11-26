@@ -59,8 +59,8 @@ export default {
         this.selectGroup = {group_id: this.userDetailInfo.group_id}
         this.emailEdit = this.userDetailInfo.email
         this.dob = getDateString(this.userDetailInfo.dob)
-        this.userDetailInfo.relative_dob = getDateString(this.userDetailInfo.relative_dob)
-        this.relativeDob = getDateString(this.userDetailInfo.relative_dob)
+        this.userDetailInfo.relative_dob = this.userDetailInfo.relative_dob? getDateString(this.userDetailInfo.relative_dob) : null
+        this.relativeDob = this.userDetailInfo.relative_dob
 
         const temp = await this.getAllGroup()
         let employerName = ''

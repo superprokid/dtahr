@@ -129,6 +129,6 @@ export default {
     },
 
     beforeCreate() {
-        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.userManagement);
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.userAdmin);
     },
 }

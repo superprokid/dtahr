@@ -2,7 +2,7 @@
     <div class="pa-4" style="height: 90vh; overflow-y: auto;">
         <div class="user-detail-title-static">
             <!-- <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon> -->
-            USER DETAIL
+            EMPLOYEE MANAGEMENT
         </div>
         <div class="mt-5">
             <v-data-table :headers="headers" :items="listUsers" item-key="name" :item-class="setItemRowCLass"
