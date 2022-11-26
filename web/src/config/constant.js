@@ -2,6 +2,7 @@ export const LIMIT_RECALL_API = 3;
 export const EXPRIED_COOKIE_DAYS = 10 * 365; // 10 years
 
 export const BASE_URL = "http://26.197.75.244:3000";
+export const FACE_API_URL = "http://26.74.195.215:5000";
 // export const BASE_URL = "http://127.0.0.1:3000";
 
 // user url api

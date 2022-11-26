@@ -221,7 +221,9 @@
                                             @click="onClickAddHoliday">
                                             Add Holiday
                                         </v-btn>
-
+                                        <v-btn class="ml-3" max-width="170px" color="primary" dark @click="onClickFaceRecognition">
+                                            Register Face
+                                        </v-btn>
                                     </v-row>
                                     <hr>
                                     <div style="height: 650px; overflow-y: auto; padding: 0 20px;">
@@ -352,6 +354,12 @@
             <v-card color="#FFFBE6">
                 <UserSeeMoreModal @on-close="onClose" @on-save-user-see-more="onSaveUserSeeMore"
                     :userDetailInfo="userDetailInfoProp" />
+            </v-card>
+        </v-dialog>
+        <!-- FaceDiaLog SEEMORE DIALOG -->
+        <v-dialog v-model="faceRecognitionModalShowed" persistent max-width="1200px" transition="dialog-top-transition">
+            <v-card color="#FFFBE6">
+                <FaceRegister @on-close="onClose" />
             </v-card>
         </v-dialog>
     </div>
