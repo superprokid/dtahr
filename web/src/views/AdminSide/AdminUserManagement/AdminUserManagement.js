@@ -2,6 +2,7 @@
 import { getDateString } from "../../../services/utilities";
 
 import AdminUserManagementService from "../../../services/API/AdminUserManagement/AdminUserManagement.service";
+import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
 
 //Test History
 import moment from 'moment';
@@ -21,11 +22,52 @@ export default {
     },
     data() {
         return {
+            full_name:'',
+            valid: true,
             userSelected: undefined,
             search: '',
             listUsers: [],
+
+            employeeSearchShowed: true,
+            employeeManagementShowed: false,
             
-            avtBaseUrl: USER_GET_IMAGE
+            avtBaseUrl: USER_GET_IMAGE,
+
+            listGroups: [],
+            selectGroup: {},
+
+            emailSearch: '',
+            emailSearchRules: [
+                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            ],
+
+            fullnameSearch: '',
+            genderSearch: undefined,
+            phoneSearch: '',
+            mainSkillSearch: '',
+            jobRoleSearch: '',
+            genderItems: [
+                {
+                    gender_text: "Male",
+                    gender_value: 0
+                },
+                {
+                    gender_text: "Female",
+                    gender_value: 1
+                },
+                {
+                    gender_text: "Other",
+                    gender_value: 2
+                }
+            ],
+
+            expand: true,
+
+            filters: {
+                full_name: '',
+                email: '',
+                gender: '',
+            },
         }
     },
     computed: {
@@ -95,9 +137,14 @@ export default {
     async mounted() {
         this.$eventBus.$emit('show-spinner', true);
         await this._getListUser();
+        await this.getAllGroup()
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        reset () {
+            this.$refs.form.reset()
+        },
+
         setItemRowCLass(item) {
             return 'item-row';
         },
@@ -124,6 +171,48 @@ export default {
 
         async clickOnUser(userSelected){
             this.$router.push('/admin/userdetail/'+ userSelected.employee_id);
+        },
+
+        goBackEmployeeSearch(){
+            this.employeeSearchShowed = true
+            this.employeeManagementShowed = false
+        },
+
+        async getAllGroup(){
+            const response = await AdminGroupServices.getGroupAdmin()
+            if(!response){
+                this.$router.push('/admin/login')
+                return
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Get group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.listGroups = response.data
+            return this.listGroups
+        },
+
+        onChangeGroup(value){
+            console.log(value);
+            this.selectGroup = value
+        },
+        onClickSearchEmployee(){
+            console.log('search employee');
+            const params = {
+                groupId : this.selectGroup.group_id,
+                email: this.emailSearch,
+                fullName: this.fullnameSearch,
+                gender: this.genderSearch,
+                phone: this.phoneSearch,
+                mainSkill: this.mainSkillSearch,
+                jobRole: this.jobRoleSearch
+            }
+            console.log('params for search', params);
         },
 
     },

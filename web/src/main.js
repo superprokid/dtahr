@@ -3,6 +3,7 @@ import App from './App.vue';
 
 //Register BootstrapVue
 import vuetify from '@/plugins/vuetify'
+import MultiFiltersPlugin from "./plugins/MultiFilters" // <-- THIS
 
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css';
@@ -33,6 +34,7 @@ Vue.use(VueToast);
 Vue.use(VueFormulate)
 Vue.use(BootstrapVue);
 Vue.use(VueMaterial);
+Vue.use(MultiFiltersPlugin)
 // Vue.use(VueQuillEditor, /* { default global options } */)
 
 import router from './routes/routes';
