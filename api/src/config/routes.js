@@ -23,7 +23,8 @@ const adminGroupController = require('../controller/admin/group.controller');
 const adminHolidayController = require('../controller/admin/holiday.controller');
 const adminWorkTimeController = require('../controller/admin/worktime.controler');
 const adminWorkLogController = require('../controller/admin/worklog.controller');
-const adminProjectController = require('../controller/admin/project.controller')
+const adminProjectController = require('../controller/admin/project.controller');
+const adminExportController = require('../controller/admin/export.controller');
 
 // user
 Router.post('/user/login', userController.login);
@@ -113,13 +114,19 @@ Router.post('/admin/worktime/update', adminAuthen, adminWorkTimeController.updat
 Router.post('/admin/worktime/delete', adminAuthen, adminWorkTimeController.deleteWorkTime);
 Router.get('/admin/worklog/get', adminAuthen, adminWorkLogController.getWorkLogOfUser);
 Router.get('/admin/workhistory/get', adminAuthen, adminWorkLogController.getWorkHistoryByEmployee);
-Router.get('/admin/employee/get', adminAuthen, adminEmpController.getEmployeeInfoById);
+Router.get('/admin/employee/getinfo', adminAuthen, adminEmpController.getEmployeeInfoById);
 Router.get('/admin/employee/getproject', adminAuthen, adminProjectController.getDetailsPojectByEmployee);
 Router.post('/admin/worklog/update', adminAuthen, adminWorkLogController.updateWorklog);
 Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.updateHolidayTime);
 Router.post('/admin/project/create', adminAuthen, adminProjectController.createNewProject);
 Router.post('/admin/project/update', adminAuthen, adminProjectController.editProject);
 Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmployee);
+
+// Admin export
+Router.get('/admin/export/overtime', adminExportController.exportOverTime);
+Router.get('/admin/export/leave', adminExportController.exportLeaveTicket);
+Router.get('/admin/export/salary', adminExportController.exportSalaryAll);
+Router.post('/admin/export/worklog', adminExportController.exportWorklogByListEmp);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

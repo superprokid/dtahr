@@ -21,13 +21,19 @@ class Excel {
     //font
     static FONT_RED = {
         name: 'Meiryo UI',
-        color: { argb: 'FF000000' },
-        size: 10,
+        color: { argb: 'FFFF0000' },
+        size: 11,
     }
     static FONT_BLACK = {
         name: 'Meiryo UI',
         color: { argb: 'FF000000' },
-        size: 10,
+        size: 11,
+    }
+    static FONT_HEADER = {
+        name: 'Meiryo UI',
+        size: 11,
+        bold: true,
+
     }
 
     /**

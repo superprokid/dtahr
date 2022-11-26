@@ -215,6 +215,10 @@ function getDateEndOfMonth(date) {
     return moment(date).endOf('month').format(YYYY_MM_DD);
 }
 
+function getDateStringWithFormat(date, format) {
+    return moment(new Date(date)).format(format);
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -232,4 +236,5 @@ module.exports = {
     getDateTimeString,
     getDateStartOfMonth,
     getDateEndOfMonth,
+    getDateStringWithFormat,
 }
