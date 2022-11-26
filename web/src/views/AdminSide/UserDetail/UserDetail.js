@@ -25,6 +25,7 @@ import moment from 'moment';
 
 import AddHolidayModal from "../../../components/AddHolidayModal/AddHolidayModal.vue"
 import EditWorklogModal from "../../../components/EditWorklogModal/EditWorklogModal.vue"
+import UserSeeMoreModal from "../../../components/UserSeeMoreModal/UserSeeMoreModal.vue"
 
 const WORKLOG_DEFAULT = {
     work_date: 'No work schedule today',
@@ -36,7 +37,8 @@ const WORKLOG_DEFAULT = {
 export default {
     components: {
         AddHolidayModal,
-        EditWorklogModal
+        EditWorklogModal,
+        UserSeeMoreModal
     },
     data() {
         return { 
@@ -54,8 +56,10 @@ export default {
 
             addHolidayModalShowed: false,
             editWorklogModalShowed: false,
+            userSeeMoreModalShowed: false,
             addHolidayInfo: {},
             editWorklogInfo: {},
+
         }
     },
     computed: {
@@ -67,6 +71,8 @@ export default {
                 this.addHolidayModalShowed = false
             }else if(param == 2){
                 this.editWorklogModalShowed = false
+            }else if(param == 3){
+                this.userSeeMoreModalShowed = false
             }
         },
 
@@ -253,6 +259,10 @@ export default {
             await this.getUserDetailById()
             await this.getUserHistoryTracking()
             this.$eventBus.$emit('show-spinner', false);
+        },
+
+        onClickUserInfoSeeMore(){
+            this.userSeeMoreModalShowed = true
         }
     },
     

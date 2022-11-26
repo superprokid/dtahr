@@ -15,7 +15,7 @@
                                     <div class="text_style">Personal Information </div>
                                 </v-col>
                                 <v-col cols="6" class="d-flex justify-end">
-                                    <v-btn text color="primary">
+                                    <v-btn text color="primary" @click="onClickUserInfoSeeMore">
                                         See More
                                     </v-btn>
                                 </v-col>
@@ -290,6 +290,12 @@
         <v-dialog v-model="editWorklogModalShowed" persistent max-width="800px" transition="dialog-top-transition">
             <v-card>
                 <EditWorklogModal @on-close="onClose" @on-edit-worklog="onEditWorklog" :editWorklogInfo="editWorklogInfo"/>
+            </v-card>
+        </v-dialog>
+        <!-- USER INFO SEEMORE DIALOG -->
+        <v-dialog v-model="userSeeMoreModalShowed" persistent max-width="1200px" transition="dialog-top-transition">
+            <v-card color="#FFFBE6">
+                <UserSeeMoreModal @on-close="onClose" />
             </v-card>
         </v-dialog>
     </div>
