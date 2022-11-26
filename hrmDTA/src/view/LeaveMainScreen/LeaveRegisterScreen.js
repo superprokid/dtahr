@@ -33,7 +33,6 @@ const LeaveRegisterScreen = (props) => {
     const [isShowTimeFromPicker, setIsShowTimeFromPicker] = useState(false);
     const [timeFrom, setTimeFrom] = useState('');
     const onChangeTimeFrom = (event, selectedTime) => {
-        console.log('haha')
         if (selectedTime === undefined) {
             onCancelTimeFrom()
             return;

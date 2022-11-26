@@ -5,6 +5,7 @@ import { LEAVE_STATUS_ARRAY, LEAVE_TYPE_ARRAY } from "../../config/constants";
 import style from "./style";
 import { getDateString, MM_DD_YYYY_HH_MM } from "../../common/datetimeUtls";
 import AppLoader from "../../components/AppLoader";
+import { showErrorNetwork, showLogout } from "../../common/commonFunc";
 
 const LeaveTicketCard = ({ item, showLoader, getData }) => {
     const statusObj = LEAVE_STATUS_ARRAY[item.status];
@@ -69,13 +70,20 @@ const LeaveTicketCard = ({ item, showLoader, getData }) => {
 }
 
 const LeaveTicketScreen = (props) => {
+    const navigation = props.navigation;
     const [isLoading, setIsLoading] = useState([]);
     const [data, setData] = useState([]);
 
     const getData = async () => {
         setIsLoading(true);
         apiUtls.getMyLeaveTicket().then(result => {
-            setData(result.reverse());
+            if (result.failed) {
+                showErrorNetwork();
+            } else if (result == -1) {
+                showLogout();
+            } else {
+                setData(result.reverse());
+            }
         }).catch(error => {
             Alert.alert('Error', 'Some thing went wrong, please try later', [
                 {
@@ -92,8 +100,6 @@ const LeaveTicketScreen = (props) => {
         getData()
     }, [])
 
-
-    const navigation = props.navigation;
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             getData();

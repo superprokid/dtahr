@@ -18,7 +18,6 @@ function PrimaryInput(props)  {
 
     return (
         <View style = {{flexDirection: 'column'}}>
-            {console.log(props.value)}
             <Text style = {Styles.input_label}>{textLabel}</Text>
             <TextInput style = {Styles.primary_input}
                 placeholder = {props.placeholder}

@@ -202,6 +202,38 @@ async function editEmployee(req, res) {
                 type: 'string',
                 required: false,
             },
+            firstName: {
+                type: 'string',
+                required: false,
+            },
+            lastName: {
+                type: 'string',
+                required: false,
+            },
+            dob: {
+                type: 'datetime',
+                required: false,
+            },
+            address: {
+                type: 'string',
+                required: false,
+            },
+            gender: {
+                type: 'number',
+                required: false,
+            },
+            phone: {
+                type: 'string',
+                required: false,
+            },
+            mainSkill: {
+                type: 'string',
+                required: false,
+            },
+            subSkill: {
+                type: 'string',
+                required: false,
+            },
             groupId: {
                 type: 'string',
                 required: false,
@@ -270,7 +302,8 @@ async function editEmployee(req, res) {
         }
 
         const { employeeId, email, groupId, joinDate, jobRole, employerId, relativeName, relativeGender, relativeAddress,
-            relativePhone, relativeDob, relationship, salary, bankAccount, bankName, role } = req.body;
+            relativePhone, relativeDob, relationship, salary, bankAccount, bankName, role,
+            firstName, lastName, dob, address, gender, phone, mainSkill, subSkill } = req.body;
 
         const setClauseArray = [];
         // if change email
@@ -300,12 +333,20 @@ async function editEmployee(req, res) {
         if (bankAccount) setClauseArray.push(` bank_account = '${bankAccount}' `);
         if (bankName) setClauseArray.push(` bank_name = '${bankName}' `);
         if (role) setClauseArray.push(` role = '${role}' `);
+        if (firstName) setClauseArray.push(` first_name = '${firstName}' `);
+        if (lastName) setClauseArray.push(` last_name = '${lastName}' `);
+        if (dob) setClauseArray.push(` dob = '${getDateString(dob)}' `);
+        if (address) setClauseArray.push(` address = '${address}' `);
+        if (gender) setClauseArray.push(` gender = '${gender}' `);
+        if (phone) setClauseArray.push(` phone = '${phone}' `);
+        if (mainSkill) setClauseArray.push(` main_skill = '${mainSkill}' `);
+        if (subSkill) setClauseArray.push(` sub_skill = '${subSkill}' `);
 
         if (!setClauseArray.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] no columns update`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(403).send("Update failed, no columns need to update");
+            res.status(200).send({message: "No columns need to update"});
             return;
         }
 

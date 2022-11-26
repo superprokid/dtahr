@@ -27,9 +27,9 @@ export default Home = () => {
                 component={Checin}
                 options={{
                     tabBarIcon: ({ color }) => <Image source={require('../../assets/icons/dashboard.png')} style={{ width: 25, height: 25, tintColor: color }} />,
-                    tabBarLabel: 'Checin',
+                    tabBarLabel: 'Home',
                     headerShown: true,
-                    headerTitle: "Check in",
+                    headerTitle: "HOME",
                     headerTitleAlign: 'center'
                 }} />
             <Tab.Screen
