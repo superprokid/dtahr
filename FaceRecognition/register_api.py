@@ -18,6 +18,7 @@ from engine.engine import FaceRecognitionLib
 current_dir = path.dirname(path.abspath(__file__))
 npz_dir = os.path.join(current_dir, "dataset", "npz")
 image_dir = os.path.join(current_dir, "dataset", "imgs")
+user_recognition_dir = os.path.join(current_dir, "dataset", "recognition_id")
 app = Flask(
     __name__,
     instance_relative_config=True,
@@ -61,12 +62,21 @@ def add_staff():
     else:
         return "Register Incomplete"
 
-@app.route('/test', methods=['GET'])
+@app.route('/register', methods=['POST'])
 @cross_origin()
-def get_staff():
-    return {
-        "message": "Ok LA",
-    }
+def update_local_id_register():
+    data = request.get_json()
+    if "employeeId" not in data:
+        return jsonify({"message": "Please provide employeeId"}), 400
+    employeeId = data["employeeId"]
+    if not os.path.exists(user_recognition_dir):
+        os.makedirs(user_recognition_dir)
+    elif len(os.listdir(user_recognition_dir)) != 0:
+        for file in os.listdir(user_recognition_dir):
+            os.remove(os.path.join(user_recognition_dir, file))
+    with open(os.path.join(user_recognition_dir, f"{employeeId}.txt"), "w") as f:
+        pass
+    return jsonify({"message": "Update Local Register Complete"})
 
 @app.route("/check", methods=["POST"])
 @cross_origin()
@@ -79,5 +89,5 @@ def check_staff():
     }
 
 if __name__ == "__main__":
-    app.run(debug=True, host="26.74.195.215")
+    app.run(host="26.74.195.215")
     # app.run(debug=True, host="0.0.0.0", ssl_context=context)

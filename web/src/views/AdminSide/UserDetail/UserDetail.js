@@ -13,6 +13,7 @@ import TaskDetailServices from "../../../services/API/TaskDetailAPI/TaskDetailSe
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
 import ReportServices from "../../../services/API/ReportAPI/ReportServices"
 import { getAvatar, getDateString, getTimeString, isPastDate} from "../../../services/utilities";
+import axiosFaceRecognition from '../../../services/API/FaceRecognitionAPI';
 
 import {USER_GET_IMAGE, USER_DOWN_ATTACHMENT} from '../../../config/constant'
 
@@ -57,6 +58,7 @@ export default {
             addHolidayModalShowed: false,
             editWorklogModalShowed: false,
             userSeeMoreModalShowed: false,
+            faceRecognitionModalShowed: false,
             addHolidayInfo: {},
             editWorklogInfo: {},
             userDetailInfoProp: {},
@@ -119,6 +121,8 @@ export default {
                 this.editWorklogModalShowed = false
             }else if(param == 3){
                 this.userSeeMoreModalShowed = false
+            } else if(param == 4){
+                this.faceRecognitionModalShowed = false
             }
         },
         filterOnlyCapsText(value, search, item) {
@@ -283,7 +287,32 @@ export default {
             }
             this.editWorklogModalShowed = true
         },
-
+        async onClickFaceRecognition() {
+            let param = {
+                employeeId: this.userDetailInfo.employee_id,
+            }
+            try {
+                await axiosFaceRecognition.registerLocalRecognition({})
+                this.$toast.open({
+                    message: "Register Face Recognition Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+            } catch (error) {
+                this.$toast.open({
+                    message: "Register Failed",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            // Todo : Show modal
+            // this.faceRecognitionModalShowed = true
+        },
         async onEditWorklog(params){
             params.employeeId = this.userDetailInfo.employee_id
             const response = await AdminUserDetailServices.adminEditWorklog(params)
