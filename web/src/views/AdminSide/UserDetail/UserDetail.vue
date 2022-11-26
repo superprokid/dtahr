@@ -15,7 +15,7 @@
                                     <div class="text_style">Personal Information </div>
                                 </v-col>
                                 <v-col cols="6" class="d-flex justify-end">
-                                    <v-btn text color="primary">
+                                    <v-btn text color="primary" @click="onClickUserInfoSeeMore">
                                         See More
                                     </v-btn>
                                 </v-col>
@@ -174,7 +174,8 @@
                                 <v-row no-gutters :align="'center'">
                                     <v-col cols="12" md="4">
                                         <h4 class="d-inline-block ">Current Annual Holiday: </h4>
-                                        <h4 class="d-inline-block red--text ml-1">{{userDetailInfo.holiday_time.toFixed(2)}}</h4>
+                                        <h4 class="d-inline-block red--text ml-1">
+                                            {{ userDetailInfo.holiday_time?.toFixed(2) }}</h4>
                                     </v-col>
                                     <v-col cols="12" md="6" offset-md="2">
                                         <v-row no-gutters>
@@ -188,7 +189,8 @@
                                                             v-on="on">
                                                         </v-text-field>
                                                     </template>
-                                                    <v-date-picker v-model="startDate" @input="onSelectStartTrackingDate">
+                                                    <v-date-picker v-model="startDate"
+                                                        @input="onSelectStartTrackingDate">
                                                     </v-date-picker>
                                                 </v-menu>
                                             </v-col>
@@ -210,61 +212,66 @@
                                     </v-col>
                                 </v-row>
                                 <v-row no-gutters>
-                                    2 buttons here
+                                    <v-btn  max-width="170px" color="primary" dark @click="onClickEditWorklog">
+                                        Edit Worklog
+                                    </v-btn>
+                                    <v-btn class="ml-3" max-width="170px" color="primary" dark @click="onClickAddHoliday">
+                                        Add Holiday
+                                    </v-btn>
+
                                 </v-row>
                                 <hr>
                                 <div style="height: 650px; overflow-y: auto; padding: 0 20px;">
                                     <v-timeline dense clipped style="padding-top: 0; margin-top: 10px;">
-                                            <div v-for="(value, index) in Object.keys(userHistoryTracking)"
-                                                :key="index">
-                                                <v-timeline-item fill-dot
-                                                    class="black--text mb-6 d-flex align-items-center"
-                                                    color="orange lighten-2" large icon="mdi-check-all">
+                                        <div v-for="(value, index) in Object.keys(userHistoryTracking)" :key="index">
+                                            <v-timeline-item fill-dot class="black--text mb-6 d-flex align-items-center"
+                                                color="orange lighten-2" large icon="mdi-check-all">
 
-                                                    <p class="title-timeline">End activities {{ value }}</p>
-                                                </v-timeline-item>
+                                                <p class="title-timeline">End activities {{ value }}</p>
+                                            </v-timeline-item>
 
-                                                <v-timeline-item v-for="(item, index) in userHistoryTracking[value]"
-                                                    :key="index" class="mb-4" v-bind:color="
+                                            <v-timeline-item v-for="(item, index) in userHistoryTracking[value]"
+                                                :key="index" class="mb-4" v-bind:color="
                                                     item.workhistory_status == 0
                                                         ? 'green'
                                                         : item.workhistory_status == 1
-                                                        ? 'blue'
-                                                        : item.workhistory_status == 2
-                                                        ? 'purple'
-                                                        : item.workhistory_status == 3
-                                                        ? 'red'
-                                                        : 'grey'
-                                                    " v-bind:icon="
-                                                    item.workhistory_status == 0
-                                                        ? 'mdi-map-marker-check'
-                                                        : item.workhistory_status == 1
-                                                        ? 'mdi-clock-remove'
-                                                        : item.workhistory_status == 2
-                                                        ? 'mdi-clock-remove'
-                                                        : item.workhistory_status == 3
-                                                        ? 'mdi-alert'
-                                                        : 'mdi-cog'
-                                                    " icon-color="grey lighten-2" fill-dot small>
-                                                    <v-row justify="space-between">
-                                                        <v-col class="description-timeline" cols="7">{{
-                                                        item.workhistory_description }} </v-col>
-                                                        <v-col class="text-right" cols="5">
-                                                            {{ new Date(item.work_date).toLocaleDateString() }}
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-timeline-item>
-                                                
+                                                            ? 'blue'
+                                                            : item.workhistory_status == 2
+                                                                ? 'purple'
+                                                                : item.workhistory_status == 3
+                                                                    ? 'red'
+                                                                    : 'grey'
+                                                            " v-bind:icon="
+                                                                item.workhistory_status == 0
+                                                                    ? 'mdi-map-marker-check'
+                                                                    : item.workhistory_status == 1
+                                                                        ? 'mdi-clock-remove'
+                                                                        : item.workhistory_status == 2
+                                                                            ? 'mdi-clock-remove'
+                                                                            : item.workhistory_status == 3
+                                                                                ? 'mdi-alert'
+                                                                                : 'mdi-cog'
+                                                            " icon-color="grey lighten-2" fill-dot small>
+                                                <v-row justify="space-between">
+                                                    <v-col class="description-timeline" cols="7">{{
+                                                            item.workhistory_description
+                                                    }} </v-col>
+                                                    <v-col class="text-right" cols="5">
+                                                        {{ new Date(item.work_date).toLocaleDateString() }}
+                                                    </v-col>
+                                                </v-row>
+                                            </v-timeline-item>
 
-                                                <v-timeline-item fill-dot
-                                                    class="black--text mb-12 d-flex align-items-center" color="teal"
-                                                    large icon="mdi-check">
-                                                    <p class="title-timeline">Start activities {{ value }}</p>
-                                                </v-timeline-item>
-                                                <v-timeline-item class="mb-4" hide-dot
-                                                    v-if="index < Object.keys(userHistoryTracking).length - 1 ">
-                                                </v-timeline-item>
-                                            </div>
+
+                                            <v-timeline-item fill-dot
+                                                class="black--text mb-12 d-flex align-items-center" color="teal" large
+                                                icon="mdi-check">
+                                                <p class="title-timeline">Start activities {{ value }}</p>
+                                            </v-timeline-item>
+                                            <v-timeline-item class="mb-4" hide-dot
+                                                v-if="index < Object.keys(userHistoryTracking).length - 1">
+                                            </v-timeline-item>
+                                        </div>
                                     </v-timeline>
                                 </div>
                             </v-card-text>
@@ -273,7 +280,24 @@
                 </v-col>
             </v-row>
         </div>
-
+        <!-- ADD HOLIDAY DIALOG -->
+        <v-dialog v-model="addHolidayModalShowed" persistent max-width="800px" transition="dialog-top-transition">
+            <v-card>
+                <AddHolidayModal @on-close="onClose" @on-add-holiday="onAddHoliday" :addHolidayInfo="addHolidayInfo"/>
+            </v-card>
+        </v-dialog>
+        <!-- EDIT WORKLOG DIALOG -->
+        <v-dialog v-model="editWorklogModalShowed" persistent max-width="800px" transition="dialog-top-transition">
+            <v-card>
+                <EditWorklogModal @on-close="onClose" @on-edit-worklog="onEditWorklog" :editWorklogInfo="editWorklogInfo"/>
+            </v-card>
+        </v-dialog>
+        <!-- USER INFO SEEMORE DIALOG -->
+        <v-dialog v-model="userSeeMoreModalShowed" persistent max-width="1200px" transition="dialog-top-transition">
+            <v-card color="#FFFBE6">
+                <UserSeeMoreModal @on-close="onClose" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -307,12 +331,12 @@
 }
 
 
-.title-timeline{
+.title-timeline {
     font-size: 20px;
     font-weight: 400;
 }
 
-.description-timeline{
+.description-timeline {
     font-size: 18px;
 }
 </style>

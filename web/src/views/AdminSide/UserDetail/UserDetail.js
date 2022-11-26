@@ -23,6 +23,10 @@ import AdminUserDetailServices from "../../../services/API/AdminUserDetailAPI/Ad
 
 import moment from 'moment';
 
+import AddHolidayModal from "../../../components/AddHolidayModal/AddHolidayModal.vue"
+import EditWorklogModal from "../../../components/EditWorklogModal/EditWorklogModal.vue"
+import UserSeeMoreModal from "../../../components/UserSeeMoreModal/UserSeeMoreModal.vue"
+
 const WORKLOG_DEFAULT = {
     work_date: 'No work schedule today',
     checkin_at:  'No work schedule today',
@@ -32,7 +36,9 @@ const WORKLOG_DEFAULT = {
 
 export default {
     components: {
-
+        AddHolidayModal,
+        EditWorklogModal,
+        UserSeeMoreModal
     },
     data() {
         return { 
@@ -47,12 +53,29 @@ export default {
             endDatePicker: false,
 
             userHistoryTracking: {},
+
+            addHolidayModalShowed: false,
+            editWorklogModalShowed: false,
+            userSeeMoreModalShowed: false,
+            addHolidayInfo: {},
+            editWorklogInfo: {},
+
         }
     },
     computed: {
         
     },
     methods: {
+        onClose(param){
+            if(param == 1){
+                this.addHolidayModalShowed = false
+            }else if(param == 2){
+                this.editWorklogModalShowed = false
+            }else if(param == 3){
+                this.userSeeMoreModalShowed = false
+            }
+        },
+
         // Get user detail by Id
         async getUserDetailById(){
             const params = {
@@ -162,6 +185,84 @@ export default {
             this.$eventBus.$emit('show-spinner', true); 
             this.getUserHistoryTracking()
             this.$eventBus.$emit('show-spinner', false); 
+        },
+
+        onClickAddHoliday(){
+            this.addHolidayInfo = {
+                fullName: this.userDetailInfo.full_name
+            }
+            this.addHolidayModalShowed = true
+        },
+
+        async onAddHoliday(params){
+            this.$eventBus.$emit('show-spinner', true);
+            params.employeeId = this.userDetailInfo.employee_id
+            const response = await AdminUserDetailServices.adminAddHoliday(params)
+            if(!response){
+                this.$router.push('/admin/login')
+                return
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Add Holiday Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Add Holiday Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.addHolidayModalShowed = false
+            
+            await this.getUserDetailById()
+            await this.getUserHistoryTracking()
+            this.$eventBus.$emit('show-spinner', false);
+        },
+        onClickEditWorklog(){
+            this.editWorklogInfo = {
+                fullName: this.userDetailInfo.full_name
+            }
+            this.editWorklogModalShowed = true
+        },
+
+        async onEditWorklog(params){
+            params.employeeId = this.userDetailInfo.employee_id
+            const response = await AdminUserDetailServices.adminEditWorklog(params)
+            if(!response){
+                this.$router.push('/admin/login')
+                return
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Edit Worklog Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Edit Worklog Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.editWorklogModalShowed = false
+            
+            await this.getUserDetailById()
+            await this.getUserHistoryTracking()
+            this.$eventBus.$emit('show-spinner', false);
+        },
+
+        onClickUserInfoSeeMore(){
+            this.userSeeMoreModalShowed = true
         }
     },
     
