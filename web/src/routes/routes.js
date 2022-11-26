@@ -30,6 +30,7 @@ import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
 import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
 import AdminUserManagement from "@/views/AdminSide/AdminUserManagement/AdminUserManagement.vue"
 import UserDetail from "../views/AdminSide/UserDetail/UserDetail.vue"
+import AdminCSVExport from "@/views/AdminSide/AdminCSVExport/AdminCSVExport.vue"
 
 Vue.use(Router);
 
@@ -61,6 +62,10 @@ const router = new Router({
                 {
                     path: 'holiday',
                     component: AdminHoliday
+                },
+                {
+                    path: 'csv',
+                    component: AdminCSVExport
                 },
                 {
                     path: 'userdetail/:employeeId',

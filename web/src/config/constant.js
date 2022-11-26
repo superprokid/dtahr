@@ -1,7 +1,7 @@
 export const LIMIT_RECALL_API = 3;
 export const EXPRIED_COOKIE_DAYS = 10 * 365; // 10 years
 
-export const BASE_URL = "http://26.197.75.244:3000";
+export const BASE_URL = "https://26.197.75.244:3000";
 // export const BASE_URL = "http://127.0.0.1:3000";
 
 // user url api
@@ -93,6 +93,8 @@ export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
 export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
 export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
 export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
+export const ADMIN_EXPORT_LEAVE_CSV = BASE_API_ADMIN_URL + '/export/leave';
+export const ADMIN_EXPORT_OVERTIME_CSV = BASE_API_ADMIN_URL + '/export/overtime';
 
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';

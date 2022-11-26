@@ -119,7 +119,14 @@ export default {
                 icon: 'mdi-airplane-clock',
                 to: "/admin/holiday", // name of router path
                 id: tabName.holidayAdmin, // id of page
+            },
+            {
+                title: 'CSV Export',
+                icon: 'mdi-file-document-multiple-outline',
+                to: "/admin/csv", // name of router path
+                id: tabName.csvAdmin, // id of page
             }
+
         ],
         currentTab: '',
 

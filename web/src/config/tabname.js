@@ -16,6 +16,7 @@ const tabName = {
     groupAdmin: 'admin-group-001',
     userAdmin: 'admin-user-001',
     holidayAdmin: 'admin-holiday-001',
+    csvAdmin: 'admin-csv-001',
 }
 
 export default tabName;
