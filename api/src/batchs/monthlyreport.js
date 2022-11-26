@@ -28,7 +28,7 @@ async function run(callback) {
     await dbaccess.beginTransaction(connection);
     try {
         const validUser = await getValidUser(connection);
-        const lastMonth = new Date('2022-11-10');
+        const lastMonth = new Date();
         lastMonth.setMonth(lastMonth.getMonth() - 1);
         const startDate = getDateStartOfMonth(lastMonth);
         const endDate = getDateEndOfMonth(lastMonth);
