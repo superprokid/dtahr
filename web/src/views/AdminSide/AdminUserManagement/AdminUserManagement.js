@@ -329,40 +329,42 @@ export default {
         },
 
         async clickOnUser(userSelected){
-            console.log('item',userSelected);
-            //Hide table list users
-            this.isTableUserShowed = false;
-            //Show user selected management
-            this.isUserManagementLayoutShowed = true;
-            this.userSelected = userSelected;
-            const userActivityParams = {
-                employeeId:  userSelected.employee_id
-            }
-            const params = {
-                startDate: moment(new Date()).format('YYYY-MM-DD'),
-                endDate: moment(new Date()).format('YYYY-MM-DD'),
-                employeeId: this.userSelected.employee_id,
-            }
+            // console.log('item',userSelected);
+            // //Hide table list users
+            // this.isTableUserShowed = false;
+            // //Show user selected management
+            // this.isUserManagementLayoutShowed = true;
+            // this.userSelected = userSelected;
+            // const userActivityParams = {
+            //     employeeId:  userSelected.employee_id
+            // }
+            // const params = {
+            //     startDate: moment(new Date()).format('YYYY-MM-DD'),
+            //     endDate: moment(new Date()).format('YYYY-MM-DD'),
+            //     employeeId: this.userSelected.employee_id,
+            // }
 
-            const specificUserInfoParams = {
-                employeeId:  userSelected.employee_id
-            }
+            // const specificUserInfoParams = {
+            //     employeeId:  userSelected.employee_id
+            // }
 
-            const specificProjectUserJoinedParams = {
-                employeeId:  userSelected.employee_id,
-                projectId: userSelected.project_id
-            }
+            // const specificProjectUserJoinedParams = {
+            //     employeeId:  userSelected.employee_id,
+            //     projectId: userSelected.project_id
+            // }
 
-            this.$eventBus.$emit('show-spinner', true);
+            // this.$eventBus.$emit('show-spinner', true);
             
-            await this._getOneWorklog(params);
+            // await this._getOneWorklog(params);
 
-            await this._getHistoryActivityOfSpecificUser(userActivityParams)
+            // await this._getHistoryActivityOfSpecificUser(userActivityParams)
 
-            await this._getSpecificEmployeeInfo(specificUserInfoParams)
+            // await this._getSpecificEmployeeInfo(specificUserInfoParams)
 
-            await this._getSpecificProjectUserJoined(specificProjectUserJoinedParams)
-            this.$eventBus.$emit('show-spinner', false);
+            // await this._getSpecificProjectUserJoined(specificProjectUserJoinedParams)
+            // this.$eventBus.$emit('show-spinner', false);
+            this.$router.push('/admin/userdetail/'+ userSelected.employee_id);
+
         },
         async onClickWorklogSeeMore(){
             //Hide user selected management
