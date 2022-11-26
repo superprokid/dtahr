@@ -5,7 +5,9 @@ import {
     ADMIN_GET_WORKLOG_USER,
     ADMIN_GET_WORK_HISTORY_USER,
     ADMIN_UPDATE_HOLIDAY_USER,
-    ADMIN_UPDATE_WORKLOG_USER
+    ADMIN_UPDATE_WORKLOG_USER,
+
+    ADMIN_UPDATE_PERSONAL_USER_INFORMATION,
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
 
@@ -75,7 +77,16 @@ const AdminUserDetailServices = {
         }
     },
 
-    
+    adminUpdatePersonalUserInfo:async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_UPDATE_PERSONAL_USER_INFORMATION, params)
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
 }
 
 export default AdminUserDetailServices;
