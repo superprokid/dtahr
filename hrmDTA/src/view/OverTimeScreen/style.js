@@ -13,17 +13,28 @@ const styles = StyleSheet.create({
     titleContainer: {
         marginTop: 8,
         right: 110,
-
+    },
+    buttonChangeContainer: {  
+        backgroundColor: '#1B6D78',
+        padding: 5,
+        borderRadius: 10,
+        paddingHorizontal: 10
     },
     timeContainer: {
+        flex: 1,
         flexDirection: 'row',
+        alignItems: 'center',
         width: 310,
         height: height * 0.08,
         backgroundColor: 'gainsboro',
         marginTop: 10,
-        // marginLeft: -width * 0.2,
-        // marginright: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        justifyContent: 'space-around',
+    },
+    textChange: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: '500'
     },
     textInBtnChange: {
         position: 'absolute',

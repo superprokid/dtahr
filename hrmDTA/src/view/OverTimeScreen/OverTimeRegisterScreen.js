@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { Text, View, Pressable, TextInput, ScrollView } from "react-native"
+import { Text, View, Pressable, TextInput, ScrollView, TouchableOpacity } from "react-native"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDown from "../../components/DropDown";
 import PrimaryButton from "../../components/PrimaryButton";
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import PrimaryInput from "../../components/PrimaryInput";
 import styles from "./style";
+import apiUtls from "../../common/apiUtls";
+import { showErrorNetwork } from "../../common/commonFunc";
+import { getDateString, DD_MMM_YYYY_HH_MM } from "../../common/datetimeUtls";
 
 const OverTimeRegisterScreen = (props) => {
     const navigation = props.navigation;
@@ -17,72 +20,50 @@ const OverTimeRegisterScreen = (props) => {
         return unsubscribe;
     }, [navigation]);
 
+    const [projectId, setProjectId] = useState(null);
 
-    const [type, setType] = useState(null);
-    const [items, setItems] = useState([
-        { label: 'OFF', value: 0 },
-        { label: 'LATE', value: 1 }
-    ]);
+    const [isShowStartDatePicker, setShowStartDatePicker] = useState(false);
+    const [isShowEndDatePicker, setShowEndDatePicker] = useState(false);
 
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
+    const [listProject, setListProject] = useState([])
 
-    const [dateStartPicker, setDateStartPicker] = useState(false);
-
-    const [dateStart, setDateStart] = useState(new Date());
-
-    const [timeStartPicker, setTimeStartPicker] = useState(false);
-
-    const [timeStart, setTimeStart] = useState(new Date(Date.now()));
-
-
-    const [dateEndPicker, setDateEndPicker] = useState(false);
-
-    const [dateEnd, setDateEnd] = useState(new Date());
-
-    const [timeEndPicker, setTimeEndPicker] = useState(false);
-
-    const [timeEnd, setTimeEnd] = useState(new Date(Date.now()));
-
-
-
-    function showDateStartPicker() {
-        setDateStartPicker(true);
+    function showEndDatePicker() {
+        setShowEndDatePicker(true);
     };
 
-    function showTimeStartPicker() {
-        setTimeStartPicker(true);
+    function showStartDatePicker() {
+        setShowStartDatePicker(true);
     };
 
-    function onDateStartSelected(event, value) {
-        setDateStart(value);
-        setDateStartPicker(false);
-    };
+    function onRegisterOT() {
+        // const params = {
+        //     projectId,
+        //     startDate: 
+        // }
+    }
 
-    function onTimeStartSelected(event, value) {
-        setTimeStart(value);
-        setTimeStartPicker(false);
-    };
+    async function getProject() {
+        const result = await apiUtls.getAllProject();
+        if (result.failed || result === -1) {
+            showErrorNetwork();
+            return;
+        }
+        else {
+            const listProject = result?.map((item) => {
+                return { label: item.project_name, value: item.project_id }
+            })
+            setListProject(listProject);
+        }
+    }
 
-
-
-    function showDateEndPicker() {
-        setDateEndPicker(true);
-    };
-
-    function showTimeEndPicker() {
-        setTimeEndPicker(true);
-    };
-
-    function onDateEndSelected(event, value) {
-        setDateEnd(value);
-        setDateEndPicker(false);
-    };
-
-    function onTimeEndSelected(event, value) {
-        setTimeEnd(value);
-        setTimeEndPicker(false);
-    };
-
+    useEffect(() => {
+        (async () => {
+            await getProject();
+        })()
+    })
 
     return (
         <ScrollView>
@@ -90,10 +71,10 @@ const OverTimeRegisterScreen = (props) => {
                 <DropDown
                     label="Name's project"
                     required={true}
-                    items={items}
-                    value={type}
-                    setValue={setType}
-                    setItems={setItems}
+                    items={listProject}
+                    value={projectId}
+                    setValue={setProjectId}
+                    setItems={setListProject}
                 />
 
                 <View style={styles.titleContainer}>
@@ -101,39 +82,9 @@ const OverTimeRegisterScreen = (props) => {
                 </View>
 
                 <View style={styles.timeContainer}>
-                    <Text style={styles.textInTimes}>{dateStart.toDateString() + "  " + timeStart.toLocaleTimeString()}</Text>
-                    {dateStartPicker && (
-                        <DateTimePicker
-                            value={dateStart}
-                            mode={'date'}
-                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                            is24Hour={true}
-                            onChange={onDateStartSelected}
-                        />
-                    )}
-                    {timeStartPicker && (
-                        <DateTimePicker
-                            value={timeStart}
-                            mode={'time'}
-                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                            is24Hour={false}
-                            onChange={onTimeStartSelected}
-                        />
-                    )}
-                    {!dateStartPicker && (
-                        <View style={styles.containerBtnDate} >
-                            <Pressable onPress={showDateStartPicker}>
-                                <Text style={styles.textInBtnChange}>date</Text>
-                            </Pressable>
-                        </View>
-                    )}
-                    {!timeStartPicker && (
-                        <View style={styles.containerBtnTime}>
-                            <Pressable onPress={showTimeStartPicker}>
-                                <Text style={styles.textInBtnChange}>time</Text>
-                            </Pressable>
-                        </View>
-                    )}
+                    <Text>{getDateString(startDate, DD_MMM_YYYY_HH_MM)}</Text>
+                    
+                    <TouchableOpacity style={styles.buttonChangeContainer}><Text style={styles.textChange}>Change</Text></TouchableOpacity>
                 </View>
 
                 <View style={styles.titleContainer}>
@@ -141,39 +92,9 @@ const OverTimeRegisterScreen = (props) => {
                 </View>
 
                 <View style={styles.timeContainer}>
-                    <Text style={styles.textInTimes}>{dateEnd.toDateString() + "  " + timeEnd.toLocaleTimeString()}</Text>
-                    {dateEndPicker && (
-                        <DateTimePicker
-                            value={dateEnd}
-                            mode={'date'}
-                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                            is24Hour={true}
-                            onChange={onDateEndSelected}
-                        />
-                    )}
-                    {timeEndPicker && (
-                        <DateTimePicker
-                            value={timeEnd}
-                            mode={'time'}
-                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                            is24Hour={false}
-                            onChange={onTimeEndSelected}
-                        />
-                    )}
-                    {!dateEndPicker && (
-                        <View style={styles.containerBtnDate}>
-                            <Pressable onPress={showDateEndPicker}>
-                                <Text style={styles.textInBtnChange}>date</Text>
-                            </Pressable>
-                        </View>
-                    )}
-                    {!timeEndPicker && (
-                        <View style={styles.containerBtnTime}>
-                            <Pressable onPress={showTimeEndPicker}>
-                                <Text style={styles.textInBtnChange}>time</Text>
-                            </Pressable>
-                        </View>
-                    )}
+                    <Text>{getDateString(endDate, DD_MMM_YYYY_HH_MM)}</Text>
+                    
+                    <TouchableOpacity style={styles.buttonChangeContainer}><Text style={styles.textChange}>Change</Text></TouchableOpacity>
                 </View>
 
                 <View style={styles.titleContainer}>
@@ -187,9 +108,27 @@ const OverTimeRegisterScreen = (props) => {
                 </View>
 
                 <View >
-
-                    <PrimaryButton type="primary" title="Register"></PrimaryButton>
+                    <PrimaryButton type="primary" title="Register" onPress={() => { onRegisterOT() }}></PrimaryButton>
                 </View>
+
+                {isShowStartDatePicker && (
+                    <DateTimePicker
+                        value={startDate}
+                        mode={'datetime'}
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        is24Hour={true}
+                    // onChange={onDateStartSelected}
+                    />
+                )}
+                {isShowEndDatePicker && (
+                    <DateTimePicker
+                        value={endDate}
+                        mode={'datetime'}
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        is24Hour={false}
+                    // onChange={onTimeStartSelected}
+                    />
+                )}
             </View>
         </ScrollView>
     )
