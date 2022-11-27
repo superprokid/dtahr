@@ -1,5 +1,5 @@
 /* eslint-disable */ 
-import { getDateString } from "../../../services/utilities";
+import { getDateString, getAvatar } from "../../../services/utilities";
 
 import AdminUserManagementService from "../../../services/API/AdminUserManagement/AdminUserManagement.service";
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
@@ -68,6 +68,10 @@ export default {
                 email: '',
                 gender: '',
             },
+
+            genderArray:[
+                'Male', 'Female', 'Other'
+            ]
         }
     },
     computed: {
@@ -123,6 +127,92 @@ export default {
                 // }
             ]
         },
+        AdminEmployeeManagementHeaders(){
+            return [
+                {
+                    text: 'Employee ID',
+                    align: 'start',
+                    value: 'employee_id',
+                    width: 120,
+                },
+                {
+                    text: 'Status',
+                    value: 'is_deleted',
+                    width: 120,
+                },
+                {
+                    text: 'Full Name',
+                    value: 'full_name',
+                    width: 200,
+                },
+                {
+                    text: "Gender",
+                    value: 'gender',
+                    width: 100,
+                },
+                {
+                    text: 'Employer ID',
+                    value: 'employer_id',
+                    width: 120,
+                },
+                {
+                    text: 'Employer Full Name',
+                    value: 'employer_full_name',
+                    width: 200,
+                },
+                {
+                    text: "Main Skill",
+                    value: 'main_skill',
+                    width: 120,
+                },
+                {
+                    text: "Sub Skill",
+                    value: 'sub_skill',
+                    width: 120,
+                },
+                {
+                    text: "Job Role",
+                    value: 'job_role',
+                    width: 120,
+                },
+                {
+                    text: "DOB",
+                    value: 'dob',
+                    width: 150,
+                },
+                {
+                    text: "Phone",
+                    value: 'phone',
+                    width: 120,
+                },
+                {
+                    text: 'Email',
+                    value: 'email',
+                    width: 200,
+                },
+                {
+                    text: 'Address',
+                    value: 'address',
+                    width: 200,
+                },
+                {
+                    text: "Join Date",
+                    value: 'join_date',
+                    width: 150,
+                },
+                {
+                    text: "Bank Name",
+                    value: 'bank_name',
+                    width: 150,
+                },
+                {
+                    text: "Bank Account",
+                    value: 'bank_account',
+                    width: 200,
+                },
+
+            ]
+        },
     },
 
     filters: {
@@ -141,6 +231,7 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        getAvatar,
         reset () {
             this.$refs.form.reset()
         },
@@ -164,7 +255,7 @@ export default {
                 return;
             }
             this.listUsers = response.data.listEmployees.map(item => {
-                return {...item,  dob: getDateString(item.dob), gender: item.gender == 0 ? 'Male' : 'Female', join_date: getDateString(item.join_date)}
+                return {...item,  dob: getDateString(item.dob), gender: this.genderArray[item.gender], join_date: getDateString(item.join_date)}
             })
         },
 

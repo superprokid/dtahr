@@ -29,6 +29,7 @@ export default {
         return
       }
       this.listProjects = response.data;
+      console.log('this.listProjects', this.listProjects);
     },
     redirect(item) {
       this.$router.push(`/user/taskside/tasks/${item.project_id}`);

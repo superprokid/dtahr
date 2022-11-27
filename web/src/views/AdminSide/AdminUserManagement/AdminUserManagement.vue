@@ -138,12 +138,28 @@
                     </v-expand-transition>
                 </div>
                 <div class="mt-5">
-                    <v-data-table :headers="headers" :items="listUsers" item-key="name" :item-class="setItemRowCLass"
+                    <v-data-table :headers="AdminEmployeeManagementHeaders" :items="listUsers" item-key="name" :item-class="setItemRowCLass"
                         class="elevation-4 usermanagement-table" :search="search" :custom-filter="filterOnlyCapsText"
                         @click:row="clickOnUser">
                         <template v-slot:top>
                             <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
-                        </template>              
+                        </template>
+                        <template v-slot:item.is_deleted="{ item }">
+                        <div class="grey--text" v-if="item.is_deleted">
+                            Disable
+                        </div>
+                        <div class="green--text" v-else>
+                            Active
+                        </div>
+                    </template>               
+                    <template v-slot:item.full_name="{ item }">
+                        <div class="assignee-container">
+                            <v-avatar left>
+                                <v-img :src="getAvatar(item.avt)" max-height="25" max-width="25"></v-img>
+                            </v-avatar>
+                            {{ item.full_name }}
+                        </div>
+                    </template>              
                     </v-data-table>
                 </div>
             </v-container>
