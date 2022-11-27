@@ -292,7 +292,7 @@ export default {
                 employeeId: this.userDetailInfo.employee_id,
             }
             try {
-                await axiosFaceRecognition.registerLocalRecognition({})
+                await axiosFaceRecognition.registerLocalRecognition(param)
                 this.$toast.open({
                     message: "Register Face Recognition Success",
                     type: "success",
