@@ -96,7 +96,7 @@ export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/ge
 export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
 export const ADMIN_EXPORT_LEAVE_CSV = BASE_API_ADMIN_URL + '/export/leave';
 export const ADMIN_EXPORT_OVERTIME_CSV = BASE_API_ADMIN_URL + '/export/overtime';
-
+export const ADMIN_EXPORT_SALARY_CSV = BASE_API_ADMIN_URL + '/export/salary';
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
 
