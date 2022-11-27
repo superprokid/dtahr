@@ -16,11 +16,21 @@
       type="month"
       :allowed-dates="allowedMonths"
     ></v-date-picker>
-    <!-- <v-date-picker
-      v-model="monthSelect"
-      type="year"
-      :allowed-dates="allowedMonths"
-    ></v-date-picker> -->
+    <v-btn
+      :loading="loading"
+      :disabled="loading || !isDateValid"
+      color="blue"
+      class="ma-2 white--text"
+      @click="exportCSV"
+    >
+      Download
+      <v-icon
+        right
+        dark
+      >
+        mdi-download-circle-outline
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 
