@@ -5,14 +5,14 @@ import { LEAVE_STATUS_ARRAY, LEAVE_TYPE_ARRAY } from "../../config/constants";
 import style from "./style";
 import { getDateString, MM_DD_YYYY, MM_DD_YYYY_HH_MM } from "../../common/datetimeUtls";
 import AppLoader from "../../components/AppLoader";
-import { showErrorNetwork, showLogout } from "../../common/commonFunc";
+import { getVNDCurrency, showErrorNetwork, showLogout } from "../../common/commonFunc";
 
-const LeaveTicketCard = ({ item, showLoader, getData }) => {
+const OverTimeTicketCard = ({ item, showLoader, getData }) => {
     const statusObj = LEAVE_STATUS_ARRAY[item.status];
 
     const onDeleteItem = async () => {
         showLoader(true);
-        apiUtls.deleteLeaveTicket(item.leave_id).then(result => {
+        apiUtls.deleteOverTimeTicket(item.leave_id).then(result => {
             if (result.failed || result === -1) {
                 Alert.alert('Error', 'Some thing went wrong, please try later', [
                     {
@@ -44,39 +44,41 @@ const LeaveTicketCard = ({ item, showLoader, getData }) => {
     }
 
     return (
-        <View style={style.leaveRegisterContainer}>
-            <View style={style.leaveTickerCard}>
-                <View style={style.leaveTicketInfo}>
+        <View style={style.otRegisterContainer}>
+            <View style={style.otTickerCard}>
+                <View style={style.otTicketInfo}>
                     <View>
-                        <Text style={style.leaveTickerTitle}>{LEAVE_TYPE_ARRAY[item.type]} APPLICATION</Text>
+                        <Text style={style.otTickerTitle}>{item.project_name}</Text>
                         <Text>From: {getDateString(item.start_date, MM_DD_YYYY_HH_MM)}</Text>
                         <Text>To: {getDateString(item.end_date, MM_DD_YYYY_HH_MM)}</Text>
                         <View style={{ alignSelf: 'flex-start' }}>
-                            <Text style={{ ...style.leaveTicketStatus, color: statusObj.color, backgroundColor: statusObj.background }}>{statusObj.text}</Text>
+                            <Text style={{ ...style.otTicketStatus, color: statusObj.color, backgroundColor: statusObj.background }}>{statusObj.text}</Text>
                         </View>
                     </View>
                     <View>
-                        <Text style={style.leaveTickerRegistedText}>Registed at: {getDateString(item.create_at, MM_DD_YYYY)}</Text>
+                        <Text style={style.otTickerRegistedText}>Registed at: {getDateString(item.create_at, MM_DD_YYYY)}</Text>
                     </View>
                 </View>
-                <View style={style.leaveTicketAction}>
-                    {item.status === 0 && <TouchableOpacity onPress={() => onDeleteItem()}>
-                        <Image source={require('../../assets/icons/delete.png')} style={{ width: 30, height: 30, tintColor: 'red' }} />
+                <View style={style.otTicketAction}>
+                    <Text style={style.otPaymentText}>{getVNDCurrency(item.payment)}</Text>
+                    {item.status === 0 && <TouchableOpacity onPress={() => onDeleteItem()} style={{marginEnd: 10}}>
+                        <Image source={require('../../assets/icons/delete.png')} style={{ width: 25, height: 25, tintColor: 'red' }} />
                     </TouchableOpacity>}
+                    {item.status !== 0 && <View></View>}
                 </View>
             </View>
         </View>
     )
 }
 
-const LeaveTicketScreen = (props) => {
+const OvertimeTicketScreen = (props) => {
     const navigation = props.navigation;
     const [isLoading, setIsLoading] = useState([]);
     const [data, setData] = useState([]);
 
     const getData = async () => {
         setIsLoading(true);
-        apiUtls.getMyLeaveTicket().then(result => {
+        apiUtls.getMyOverTimeTicket().then(result => {
             if (result.failed) {
                 showErrorNetwork();
             } else if (result == -1) {
@@ -114,7 +116,7 @@ const LeaveTicketScreen = (props) => {
                 data={data}
                 renderItem={({ item }) => {
                     return (
-                        <LeaveTicketCard item={item} showLoader={setIsLoading} getData={getData} />
+                        <OverTimeTicketCard item={item} showLoader={setIsLoading} getData={getData} />
                     )
                 }} />
             {isLoading && <AppLoader />}
@@ -123,4 +125,4 @@ const LeaveTicketScreen = (props) => {
     )
 }
 
-export default LeaveTicketScreen;
+export default OvertimeTicketScreen;

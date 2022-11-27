@@ -9,15 +9,12 @@ import { getDateString, getTimeString, HH_MM, MM_DD_YYYY, YYYY_MM_DD } from "../
 import AppLoader from "../../components/AppLoader";
 import apiUtls from "../../common/apiUtls";
 
-const LeaveRegisterScreen = (props) => {
+const OverTimeRegisterScreen = (props) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
     const [type, setType] = useState(null);
-    const [items, setItems] = useState([
-        { label: 'OFF', value: 0 },
-        { label: 'LATE', value: 1 }
-    ]);
+    const [items, setItems] = useState([]);
 
     const [isShowDatePicker, setIsShowDatePicker] = useState(false);
     const [date, setDate] = useState('');
@@ -29,6 +26,27 @@ const LeaveRegisterScreen = (props) => {
         setDate(new Date(selectedTime));
         onCancelDate();
     }
+
+    
+
+    async function getProject() {
+        const result = await apiUtls.getAllProject();
+        if (result.failed || result === -1) {
+            showErrorNetwork();
+            return;
+        } else {
+            const listProject = result?.map((item) => {
+                return { label: item.project_name, value: item.project_id }
+            })
+            setItems(listProject);
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            await getProject();
+        })()
+    }, [])
 
     const [isShowTimeFromPicker, setIsShowTimeFromPicker] = useState(false);
     const [timeFrom, setTimeFrom] = useState('');
@@ -77,8 +95,8 @@ const LeaveRegisterScreen = (props) => {
             return;
         }
         setIsLoading(true);
-        apiUtls.registerLeaveTicket({
-            type: type,
+        apiUtls.registerOverTimeTicket({
+            projectId: type,
             startDate: `${getDateString(date, YYYY_MM_DD)} ${getTimeString(timeFrom)}`,
             endDate: `${getDateString(date, YYYY_MM_DD)} ${getTimeString(timeTo)}`,
             reason: reason
@@ -122,9 +140,9 @@ const LeaveRegisterScreen = (props) => {
 
     return (
         <ScrollView>
-            <View style={styles.leaveRegisterContainer}>
+            <View style={styles.otRegisterContainer}>
                 <DropDown
-                    label='Leave Type'
+                    label="Name's project"
                     required={true}
                     items={items}
                     value={type}
@@ -192,4 +210,4 @@ const LeaveRegisterScreen = (props) => {
     )
 }
 
-export default LeaveRegisterScreen;
+export default OverTimeRegisterScreen;

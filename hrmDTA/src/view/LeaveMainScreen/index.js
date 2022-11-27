@@ -10,7 +10,7 @@ const LeaveMainScreen = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { marginTop: StatusBar.currentHeight }
+        // tabBarStyle: { marginTop: StatusBar.currentHeight }
       }}
     >
       <Tab.Screen name={LEAVE_REGISTER_TAB} options={{ tabBarLabel: "Leave Register" }} component={LeaveRegisterScreen} />

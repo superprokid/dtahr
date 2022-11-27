@@ -2,6 +2,7 @@ export const LIMIT_RECALL_API = 3;
 export const EXPRIED_COOKIE_DAYS = 10 * 365; // 10 years
 
 export const BASE_URL = "http://26.197.75.244:3000";
+export const FACE_API_URL = "http://26.74.195.215:5000";
 // export const BASE_URL = "http://127.0.0.1:3000";
 
 // user url api
@@ -97,6 +98,7 @@ export const ADMIN_EXPORT_LEAVE_CSV = BASE_API_ADMIN_URL + '/export/leave';
 export const ADMIN_EXPORT_OVERTIME_CSV = BASE_API_ADMIN_URL + '/export/overtime';
 export const ADMIN_EXPORT_SALARY_CSV = BASE_API_ADMIN_URL + '/export/salary';
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
+export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
 
 // constant
 export const TAB_TYPE = {

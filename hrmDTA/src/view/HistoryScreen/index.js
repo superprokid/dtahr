@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native"
 import Timeline from 'react-native-timeline-flatlist'
 import apiUtls from "../../common/apiUtls"
-import { groupArrayByKey } from "../../common/commonFunc"
-import { getDateString, getStartAndEndOfMonth, HH_MM, MMM_YYYY, MM_DD_YYYY } from "../../common/datetimeUtls"
+import { groupArrayByKey, showErrorNetwork, showLogout } from "../../common/commonFunc"
+import { getDateString, getStartAndEndOfMonth, getTimeString, HH_MM, MMM_YYYY, MM_DD_YYYY } from "../../common/datetimeUtls"
 import style from "./style"
 import AppLoader from "../../components/AppLoader";
+import { LOGIN_SCREEN } from "../../config/screen"
 
 export default HistoryScreen = (props) => {
+    const { navigation } = props;
     const [listHistory, setListHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [dateSelected, setDateSelected] = useState(new Date());
@@ -29,8 +31,18 @@ export default HistoryScreen = (props) => {
         (async () => {
             const { startDate, endDate } = getStartAndEndOfMonth(dateSelected);
             const result = await apiUtls.getWorkHistory(startDate, endDate);
+            if (!result) {
+                showLogout();
+                navigation.replace(LOGIN_SCREEN);
+                return;
+            }
+            if (result.failed) {
+                showErrorNetwork();
+                setIsLoading(false);
+                return;
+            }
             const arr = result.reverse().map((item) => {
-                return { ...item, title: item.workhistory_description, work_date: getDateString(item.work_date, MM_DD_YYYY), type: 'item', time: getDateString(item.create_at, HH_MM), circleColor: '#26a69a' }
+                return { ...item, title: item.workhistory_description, work_date: getDateString(item.work_date, MM_DD_YYYY), type: 'item', time: getTimeString(item.create_at, HH_MM), circleColor: '#26a69a' }
             })
             const obj = groupArrayByKey(arr, 'work_date');
             const list = [];
