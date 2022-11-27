@@ -121,12 +121,17 @@ Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.upd
 Router.post('/admin/project/create', adminAuthen, adminProjectController.createNewProject);
 Router.post('/admin/project/update', adminAuthen, adminProjectController.editProject);
 Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmployee);
+Router.get('/admin/project/getall', adminAuthen, adminProjectController.getAllProjects);
+Router.get('/admin/project/getstatus', adminAuthen, adminProjectController.getStatusOfProject);
+Router.get('/admin/project/getassignment', adminAuthen, adminProjectController.getAssignmentOfProject);
+Router.post('/admin/project/assignee', adminAuthen, adminProjectController.addAssignmentToProject);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);
-Router.get('/admin/export/leave', adminExportController.exportLeaveTicket);
-Router.get('/admin/export/salary', adminExportController.exportSalaryAll);
-Router.post('/admin/export/worklog', adminExportController.exportWorklogByListEmp);
+Router.get('/admin/export/leave', adminAuthen, adminExportController.exportLeaveTicket);
+Router.get('/admin/export/salary', adminAuthen, adminExportController.exportSalaryAll);
+Router.post('/admin/export/worklog', adminAuthen, adminExportController.exportWorklogByListEmp);
+Router.post('/admin/export/information', adminAuthen, adminExportController.exportInformationByListEmp);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

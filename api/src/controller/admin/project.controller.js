@@ -4,7 +4,9 @@ const { validateRequest, generateId } = require('../../common/utils');
 const { ROLE, MAX_PROJECT_ID_LENGTH } = require('../../config/constants');
 
 const LOG_CATEGORY = "[Project Controller]"
-const GET_CURRENT_PROJECT = "SELECT * FROM project";
+const GET_ALL_PROJECT = "SELECT p.*, e.avt as manager_avt, CONCAT(e.first_name, ' ',e.last_name) as manager_full_name "
+    + "                      FROM project p "
+    + "                          INNER JOIN employee e ON p.project_manager_id = e.employee_id ";
 const GET_PROJECT_DETAILS_BY_MANAGER = "SELECT a.employee_id, a.assigned_date, tb.*"
     + "                                 FROM assignment a "
     + "                                 	INNER JOIN (SELECT p.project_name, p.project_id, CONCAT(e.first_name, ' ', e.last_name) as project_manager_name, p.project_manager_id, p.client_id, p.project_manager_assigned_date, COUNT(a.employee_id) as number"
@@ -12,7 +14,15 @@ const GET_PROJECT_DETAILS_BY_MANAGER = "SELECT a.employee_id, a.assigned_date, t
     + "		                								LEFT JOIN assignment a ON p.project_id = a.project_id"
     + "										                INNER JOIN employee e ON p.project_manager_id = e.employee_id"
     + "								                    WHERE p.project_id = ?) tb on tb.project_id = a.project_id"
-    + "                                 WHERE a.employee_id = ?"
+    + "                                 WHERE a.employee_id = ?";
+const GET_STATUS_OF_PROJECT = "SELECT count(*) as total, count(IF(status=0, 1, NULL)) as `open`, count(IF(status=1, 1, NULL)) as `inprogress`, count(IF(status=2, 1, NULL)) as `resolved`, count(IF(status=3, 1, NULL)) as `closed` "
+    + "                         FROM `task`"
+    + "                         WHERE project_id = ?";
+const GET_ASSIGNMENT_OF_PROJECT = "SELECT e.employee_id, CONCAT(e.first_name,' ',e.last_name) as full_name, e.avt, a.assigned_date, e.main_skill, e.job_role, e.gender "
+    + "                             FROM assignment a "
+    + "                             	INNER JOIN project p ON a.project_id = p.project_id"
+    + "                                 INNER JOIN employee e ON a.employee_id = e.employee_id"
+    + "                             WHERE p.project_id = ? AND e.employee_id <> p.project_manager_id";
 
 const CHECK_EXIST_EMPLOYEE_ID = "SELECT employee_id FROM employee where employee_id = ?";
 const GET_NEWEST_PROJECT_ID = "SELECT project_id FROM `project` ORDER BY project_id DESC LIMIT 1";
@@ -47,17 +57,17 @@ async function getDetailsPojectByEmployee(req, res) {
         res.status(200).send(response.length ? response[0] : {});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
 async function getAllProjects(req, res) {
     try {
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] resonse `);
-        res.status(200).send(await exeQuery(GET_CURRENT_PROJECT));
+        res.status(200).send(await exeQuery(GET_ALL_PROJECT));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
 
     }
 }
@@ -124,7 +134,7 @@ async function createNewProject(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -202,7 +212,107 @@ async function editProject(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function getStatusOfProject(req, res) {
+    try {
+        const validateSchema = {
+            projectId: {
+                type: 'string',
+                required: true
+            }
+        }
+
+        const validResult = validateRequest(req.query, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            res.status(403).send({ message: validResult });
+            return;
+        }
+
+        const { projectId } = req.query;
+        let result = {
+            total: 0,
+            open: 0,
+            inprogress: 0,
+            resolved: 0,
+            closed: 0
+        };
+        const response = await exeQuery(GET_STATUS_OF_PROJECT, [projectId]);
+        if (response.length) {
+            result = response[0];
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] resonse `);
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function getAssignmentOfProject(req, res) {
+    try {
+        const validateSchema = {
+            projectId: {
+                type: 'string',
+                required: true
+            }
+        }
+        const validResult = validateRequest(req.query, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            res.status(403).send({ message: validResult });
+            return;
+        }
+
+        const { projectId } = req.query;
+        const response = await exeQuery(GET_ASSIGNMENT_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] resonse `);
+        res.status(200).send(response || []);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function addAssignmentToProject(req, res) {
+    const connection = await getConnection();
+    await beginTransaction(connection);
+    try {
+        const validateSchema = {
+            projectId: {
+                type: 'string',
+                required: true,
+            },
+            employeeId: {
+                type: 'string',
+                required: true,
+            },
+        }
+
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+
+        const { projectId, employeeId } = req.body;
+
+        await queryTransaction(connection, INSERT_ASSIGNMENT, [projectId, employeeId, new Date()]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] add assignee to project success, project_id = ${projectId}`);
+        await commitTransaction(connection);
+        releaseConnection(connection);
+        res.status(200).send({ message: "Add assignee success"});
+    } catch (error) {
+        await rollback(connection);
+        releaseConnection(connection);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -211,4 +321,7 @@ module.exports = {
     getDetailsPojectByEmployee,
     createNewProject,
     editProject,
+    getStatusOfProject,
+    getAssignmentOfProject,
+    addAssignmentToProject,
 }

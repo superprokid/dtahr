@@ -1,6 +1,6 @@
 const dbaccess = require('../../common/dbaccess');
 const Excel = require('../excel');
-const GET_SALARY = "SELECT CONCAT(first_name, ' ', last_name) as full_name, job_role, group_name, salary_basic, house_support, lunch_support, transport_support, internet_support, phone_support, insurance, tax, overtime_payment_total, salary_total, bank_name, bank_account"
+const GET_SALARY = "SELECT CONCAT(first_name, ' ', last_name) as full_name, job_role, group_name, FORMAT(salary_basic, 0),   FORMAT(house_support, 0),  FORMAT(lunch_support, 0),  FORMAT(transport_support, 0),  FORMAT(internet_support, 0),  FORMAT(phone_support, 0),  FORMAT(insurance, 0),  FORMAT(tax, 0),  FORMAT(overtime_payment_total, 0),  FORMAT(salary_total, 0), bank_name, bank_account"
     + "             FROM monthlyreport mr "
     + "             	INNER JOIN employee e on e.employee_id = mr.employee_id "
     + "             	INNER JOIN `group` g ON e.group_id = g.group_id"

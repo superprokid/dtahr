@@ -1,7 +1,7 @@
 const logger = require('../../common/logger');
 const dbaccess = require('../../common/dbaccess');
 const { sendMail } = require('../../common/mailer');
-const { validateRequest, randomString, generateEmployeeId, getDateTimeString, getDateString } = require('../../common/utils');
+const { validateRequest, randomString, generateEmployeeId, getDateTimeString, getDateString, isNullOrUndefinded } = require('../../common/utils');
 const { hash } = require('../../common/cryptcommon');
 const { ROLE } = require('../../config/constants');
 
@@ -332,12 +332,12 @@ async function editEmployee(req, res) {
         if (salary) setClauseArray.push(` salary = '${salary}' `);
         if (bankAccount) setClauseArray.push(` bank_account = '${bankAccount}' `);
         if (bankName) setClauseArray.push(` bank_name = '${bankName}' `);
-        if (role) setClauseArray.push(` role = '${role}' `);
+        if (!isNullOrUndefinded(role)) setClauseArray.push(` role = '${role}' `);
         if (firstName) setClauseArray.push(` first_name = '${firstName}' `);
         if (lastName) setClauseArray.push(` last_name = '${lastName}' `);
         if (dob) setClauseArray.push(` dob = '${getDateString(dob)}' `);
         if (address) setClauseArray.push(` address = '${address}' `);
-        if (gender) setClauseArray.push(` gender = '${gender}' `);
+        if (!isNullOrUndefinded(gender)) setClauseArray.push(` gender = '${gender}' `);
         if (phone) setClauseArray.push(` phone = '${phone}' `);
         if (mainSkill) setClauseArray.push(` main_skill = '${mainSkill}' `);
         if (subSkill) setClauseArray.push(` sub_skill = '${subSkill}' `);
