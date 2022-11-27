@@ -9,3 +9,4 @@ export const LEAVE_TICKET_TAB = "leaveticket";
 export const OVERTIME_SCREEN = "overtime";
 export const OVERTIME_REGISTER_TAB = "overtimeregister";
 export const OVERTIME_TICKET_TAB = "overtimeticket";
+export const MENU_SCREEN = "menu";

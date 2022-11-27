@@ -4,8 +4,8 @@ export const YYYY_MM_DD = 'YYYY-MM-DD';
 export const MM_DD_YYYY = 'MM/DD/YYYY';
 export const MMM_YYYY = 'MMM YYYY';
 export const HH_MM = "HH:MM";
-export const MM_DD_YYYY_HH_MM= 'MM/DD/YYYY hh:mm';
-export const DD_MMM_YYYY_HH_MM = 'DD MMM YYYY hh:mm';
+export const MM_DD_YYYY_HH_MM= 'MM/DD/YYYY HH:MM';
+export const DD_MMM_YYYY_HH_MM = 'DD MMM YYYY HH:MM';
 
 export function getDateString(date = new Date(), format) {
     return moment(date).format(format)

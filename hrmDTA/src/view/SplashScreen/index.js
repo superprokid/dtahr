@@ -13,6 +13,9 @@ export default Spash = (props) => {
         const refreshToken = await storageUtls.getString(storageUtls.refresh_token);
         if (refreshToken) {
             apiUtls.getStart().then(result => {
+                if (!result.failed && result !== -1) {
+                    storageUtls.setString(storageUtls.start_data, JSON.stringify(result));
+                }
                 navigation.replace(HOME_SCREEN);
             }).catch(err => {
                 navigation.replace(HOME_SCREEN);

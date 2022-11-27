@@ -4,7 +4,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    leaveRegisterContainer: {
+    otRegisterContainer: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center'
@@ -79,6 +79,49 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 80,
         height: 30
+    },
+    otRegisterContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    otTickerCard: {
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'gray',
+        width: '90%',
+        padding: 5,
+        flex: 1,
+        flexDirection: "row",
+        maxHeight: 130,
+        marginVertical: 5
+    },
+    otTicketInfo: {
+        flex: 0.65,
+        justifyContent: 'space-between'
+    },
+    otTicketAction: {
+        flex: 0.35,
+        justifyContent: 'space-around',
+        alignItems: 'flex-end'
+    },
+    otTickerTitle: {
+        fontSize: 17,
+        fontWeight: 'bold'
+    },
+    otTickerRegistedText: {
+        fontSize: 12,
+        fontWeight: '400'
+    },
+    otTicketStatus: {
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        color: 'white'
+    },
+    otPaymentText: {
+        color: '#C26041',
+        fontWeight: '500'
     }
 });
 

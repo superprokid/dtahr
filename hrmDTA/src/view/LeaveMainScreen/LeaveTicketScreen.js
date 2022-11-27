@@ -3,7 +3,7 @@ import { Alert, FlatList, Image, Text, TouchableOpacity, View } from "react-nati
 import apiUtls from "../../common/apiUtls";
 import { LEAVE_STATUS_ARRAY, LEAVE_TYPE_ARRAY } from "../../config/constants";
 import style from "./style";
-import { getDateString, MM_DD_YYYY_HH_MM } from "../../common/datetimeUtls";
+import { getDateString, MM_DD_YYYY, MM_DD_YYYY_HH_MM } from "../../common/datetimeUtls";
 import AppLoader from "../../components/AppLoader";
 import { showErrorNetwork, showLogout } from "../../common/commonFunc";
 
@@ -12,7 +12,7 @@ const LeaveTicketCard = ({ item, showLoader, getData }) => {
 
     const onDeleteItem = async () => {
         showLoader(true);
-        apiUtls.deleteLeaveTicker(item.leave_id).then(result => {
+        apiUtls.deleteLeaveTicket(item.leave_id).then(result => {
             if (result.failed || result === -1) {
                 Alert.alert('Error', 'Some thing went wrong, please try later', [
                     {
@@ -56,7 +56,7 @@ const LeaveTicketCard = ({ item, showLoader, getData }) => {
                         </View>
                     </View>
                     <View>
-                        <Text style={style.leaveTickerRegistedText}>Registed at: 20/3/2022</Text>
+                        <Text style={style.leaveTickerRegistedText}>Registed at: {getDateString(item.create_at, MM_DD_YYYY)}</Text>
                     </View>
                 </View>
                 <View style={style.leaveTicketAction}>

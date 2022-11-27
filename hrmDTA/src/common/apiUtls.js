@@ -64,7 +64,7 @@ const apiUtls = {
             return error;
         }
     },
-    registerLeaveTicker: async (data) => {
+    registerLeaveTicket: async (data) => {
         try {
             const result = await recallAPI(USER_REGISTER_ABSENT, HEADER, POST, data);
             return result;
@@ -80,7 +80,7 @@ const apiUtls = {
             return error;
         }
     },
-    deleteLeaveTicker: async (leaveId) => {
+    deleteLeaveTicket: async (leaveId) => {
         try {
             const result = await recallAPI(USER_DELETE_ABSENT, HEADER, POST, { leaveId });
             return result;
@@ -88,7 +88,7 @@ const apiUtls = {
             return error;
         }
     },
-    registerOverTimeTicker: async (data) => {
+    registerOverTimeTicket: async (data) => {
         try {
             const result = await recallAPI(USER_REGISTER_OVERTIME, HEADER, POST, data);
             return result;
@@ -96,7 +96,7 @@ const apiUtls = {
             return error;
         }
     },
-    getMyOverTimeTicker: async () => {
+    getMyOverTimeTicket: async () => {
         try {
             const result = await recallAPI(USER_OVERTIME_TICKET, HEADER, GET);
             return result;
@@ -104,7 +104,7 @@ const apiUtls = {
             return error;
         }
     },
-    deleteOverTimeTicker: async (overtimeId) => {
+    deleteOverTimeTicket: async (overtimeId) => {
         try {
             const result = await recallAPI(USER_DELETE_OVERTIME_TICKET, HEADER, POST, { overtimeId });
             return result;

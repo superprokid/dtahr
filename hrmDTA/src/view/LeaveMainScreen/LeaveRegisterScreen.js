@@ -77,7 +77,7 @@ const LeaveRegisterScreen = (props) => {
             return;
         }
         setIsLoading(true);
-        apiUtls.registerLeaveTicker({
+        apiUtls.registerLeaveTicket({
             type: type,
             startDate: `${getDateString(date, YYYY_MM_DD)} ${getTimeString(timeFrom)}`,
             endDate: `${getDateString(date, YYYY_MM_DD)} ${getTimeString(timeTo)}`,
@@ -157,7 +157,7 @@ const LeaveRegisterScreen = (props) => {
                     </View>
                 </View>
                 <View style={{ width: '85%', }}><Text style={mainStyle.input_label}>Reason*</Text></View>
-                <TextInput style={{ ...mainStyle.primary_input, height: 100, marginBottom: 30 }}
+                <TextInput style={{ ...mainStyle.primary_input, height: 100, marginBottom: 30, textAlignVertical: "top" }}
                     multiline={true}
                     placeholderTextColor='gray'
                     autoCapitalize='none'
