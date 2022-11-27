@@ -12,7 +12,7 @@ const OverTimeMainScreen = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { marginTop: StatusBar.currentHeight }
+        // tabBarStyle: { marginTop: StatusBar.currentHeight }
       }}
     >
       <Tab.Screen name={OVERTIME_REGISTER_TAB} options={{ tabBarLabel: "Overtime Register" }} component={OverTimeRegisterScreen} />

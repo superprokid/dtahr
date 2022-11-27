@@ -25,3 +25,8 @@ export function showLogout() {
         }
     ], { cancelable: true });
 }
+
+export function getVNDCurrency(number) {
+    const x = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return `${x} VND`;
+}

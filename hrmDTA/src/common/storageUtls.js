@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 const storageUtls = {
     access_token: 'accessToken',
     refresh_token: 'refreshToken',
+    start_data: 'startdata',
     
     getBoolean: async (key) => {
         try {
