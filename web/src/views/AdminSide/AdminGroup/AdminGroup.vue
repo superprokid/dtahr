@@ -70,6 +70,14 @@
                         <v-switch v-model="singleSelect" label="Single select" class="pa-3"></v-switch>
                         <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
                     </template>
+                    <template v-slot:item.manager_name="{ item }">
+                        <div class="assignee-container">
+                            <v-avatar left>
+                                <v-img :src="getAvatar(item.avt)" max-height="25" max-width="25"></v-img>
+                            </v-avatar>
+                            {{ item.manager_name }}
+                        </div>
+                    </template>
                 </v-data-table>
 
                 <p>Selected:</p>
@@ -109,7 +117,25 @@
                                 <v-icon style="margin-right: 10px">
                                     mdi-trash-can-outline
                                 </v-icon>
-                                Delete User
+                                Disable User
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-btn text @click="onClickChangeRoleUser"
+                                :disabled="AdminEmployeeManagementSelected.length >= 2 || AdminEmployeeManagementSelected.length == 0">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-account-arrow-up-outline
+                                </v-icon>
+                                Change Role
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-btn text @click="onClickChangeGroupUser"
+                                :disabled="AdminEmployeeManagementSelected.length >= 2 || AdminEmployeeManagementSelected.length == 0">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-account-cog-outline
+                                </v-icon>
+                                Change Group
                             </v-btn>
                         </v-list-item>
 
@@ -117,8 +143,8 @@
                 </v-menu>
                 <v-data-table v-model="AdminEmployeeManagementSelected" :headers="AdminEmployeeManagementHeaders"
                     :items="listUsersOfSpecificGroup" item-key="employee_id" :item-class="setItemRowCLass" show-select
-                    :single-select="singleSelectEmployeeManagement" class="elevation-1" :search="search" @click:row="onClickUserRow"
-                    :custom-filter="filterOnlyCapsText">
+                    :single-select="singleSelectEmployeeManagement" class="elevation-1" :search="search"
+                    @click:row="onClickUserRow" :custom-filter="filterOnlyCapsText">
                     <template v-slot:top>
                         <v-switch v-model="singleSelectEmployeeManagement" label="Single select" class="pa-3">
                         </v-switch>
@@ -130,6 +156,14 @@
                         </div>
                         <div class="green--text" v-else>
                             Active
+                        </div>
+                    </template>               
+                    <template v-slot:item.full_name="{ item }">
+                        <div class="assignee-container">
+                            <v-avatar left>
+                                <v-img :src="getAvatar(item.avt)" max-height="25" max-width="25"></v-img>
+                            </v-avatar>
+                            {{ item.full_name }}
                         </div>
                     </template>
                 </v-data-table>
@@ -212,6 +246,22 @@
             transition="dialog-top-transition">
             <v-card>
                 <EditGroupSuccessModal @on-close="onClose" :editGroupSuccessInfo="editGroupSuccessInfo" />
+            </v-card>
+        </v-dialog>
+
+        <!-- CHANGE USER ROLE DIALOG -->
+        <v-dialog v-model="ChangeUserRoleDialogShowed" v-if="ChangeUserRoleDialogShowed" persistent max-width="600px"
+            transition="dialog-top-transition">
+            <v-card>
+                <ChangeUserRoleModal @on-close="onClose" @on-change-user-role="onChangeUserRole" :changeUserRoleInfo="changeUserRoleInfo"/>
+            </v-card>
+        </v-dialog>
+
+        <!-- CHANGE USER GROUP DIALOG -->
+        <v-dialog v-model="ChangeUserGroupDialogShowed" v-if="ChangeUserGroupDialogShowed" persistent max-width="600px"
+            transition="dialog-top-transition">
+            <v-card>
+                <ChangeUserGroupModal @on-close="onClose" @on-change-user-group="onChangeUserGroup" :changeUserGroupInfo="changeUserGroupInfo"/>
             </v-card>
         </v-dialog>
 

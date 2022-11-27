@@ -122,9 +122,15 @@ export default {
             },
             {
                 title: 'CSV Export',
-                icon: 'mdi-file-document-multiple-outline',
+                icon: 'mdi-file-export-outline',
                 to: "/admin/csv", // name of router path
                 id: tabName.csvAdmin, // id of page
+            },
+            {
+                title: 'Projects',
+                icon: 'mdi-file-document-multiple-outline',
+                to: "/admin/project", // name of router path
+                id: tabName.projectAdmin, // id of page
             }
 
         ],
