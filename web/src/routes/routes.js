@@ -187,7 +187,7 @@ router.beforeEach((to, from, next) => {
     else {
         if (destination == "admin") {
             return next({
-                path: from.path
+                path: '/admin/login',
             })
         }
         if (accessToken || refreshToken) {
@@ -200,6 +200,7 @@ router.beforeEach((to, from, next) => {
             return next()
         }
         else {
+            // TODO: Update 404 page
             return next({
                 path: '/',
                 query: {returnUrl: to.path}
