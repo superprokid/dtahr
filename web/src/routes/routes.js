@@ -32,6 +32,7 @@ import AdminUserManagement from "@/views/AdminSide/AdminUserManagement/AdminUser
 import UserDetail from "../views/AdminSide/UserDetail/UserDetail.vue"
 import AdminCSVExport from "@/views/AdminSide/AdminCSVExport/AdminCSVExport.vue"
 import AdminProject from "../views/AdminSide/AdminProject/AdminProject.vue"
+import AdminProjectDetail from "../views/AdminSide/AdminProjectDetail/AdminProjectDetail.vue"
 
 Vue.use(Router);
 
@@ -75,7 +76,11 @@ const router = new Router({
                 {
                     path: 'project',
                     component: AdminProject
-                }
+                },
+                {
+                    path: 'projectdetail/:projectId',
+                    component: AdminProjectDetail
+                },
             ]
         },
         { 
