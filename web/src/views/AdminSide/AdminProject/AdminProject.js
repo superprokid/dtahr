@@ -119,6 +119,7 @@ export default {
 
         onClickProjectRow(row){
             console.log('row', row);
+            this.$router.push('/admin/projectdetail/'+ row.project_id);
         },
 
         async onCreateProject(params){
