@@ -3,6 +3,7 @@ import { getDateString, getAvatar } from "../../../services/utilities";
 
 import AdminUserManagementService from "../../../services/API/AdminUserManagement/AdminUserManagement.service";
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
+import AdminUserDetailServices from "../../../services/API/AdminUserDetailAPI/AdminUserDetailServices"
 
 //Test History
 import moment from 'moment';
@@ -15,16 +16,32 @@ import { REAL_TIME_TRACKING_SCREEN } from "../../../config/screenName";
 
 import {USER_GET_IMAGE} from '../../../config/constant'
 
+import CreateUserModal from "../../../components/CreateUserModal/CreateUserModal.vue"
+import CreateUserSuccessModal from "../../../components/CreateUserSuccessModal/CreateUserSuccessModal.vue"
+
+import ConfirmDeleteUserModal from "../../../components/ConfirmDeleteUserModal/ConfirmDeleteUserModal.vue"
+import AddNewUserModal from "../../../components/AddNewUserModal/AddNewUserModal.vue"
+
+
+import ChangeUserRoleModal from "../../../components/ChangeUserRoleModal/ChangeUserRoleModal.vue"
+import ChangeUserGroupModal from "../../../components/ChangeUserGroupModal/ChangeUserGroupModal.vue"
+
 export default {
     name: "AdminUserManagement",
     components: {
+        CreateUserModal,
+        CreateUserSuccessModal,
+        ConfirmDeleteUserModal,
+        AddNewUserModal,
+        ChangeUserRoleModal,
+        ChangeUserGroupModal,
 
     },
     data() {
         return {
             full_name:'',
             valid: true,
-            userSelected: undefined,
+            userSelected: [],
             search: '',
             listUsers: [],
 
@@ -61,7 +78,7 @@ export default {
                 }
             ],
 
-            expand: true,
+            expand: false,
 
             filters: {
                 full_name: '',
@@ -71,7 +88,24 @@ export default {
 
             genderArray:[
                 'Male', 'Female', 'Other'
-            ]
+            ],
+
+            singleSelectEmployeeManagement: false,
+
+            CreateUserDialogShowed: false,
+            groupRowSelectedProp: {},
+
+            CreateUserDialogSuccessShowed: false,
+            createUserSuccessInfo: {},
+
+            ConfirmDeleteUserDialogShowed: false,
+            confirmDeleteUserInfo: {},
+
+            changeUserRoleInfo: {},
+            ChangeUserRoleDialogShowed: false,
+
+            changeUserGroupInfo: {},
+            ChangeUserGroupDialogShowed: false,
         }
     },
     computed: {
@@ -231,6 +265,19 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        onClose(screen) {
+            if(screen == 7){
+                this.CreateUserDialogShowed = false;
+            }else if(screen == 8){
+                this.CreateUserDialogSuccessShowed = false;
+            }else if(screen == 9){
+                this.ConfirmDeleteUserDialogShowed = false;
+            }else if(screen == 10){
+                this.ChangeUserRoleDialogShowed = false;
+            }else if(screen == 11){
+                this.ChangeUserGroupDialogShowed = false;
+            }
+        },
         getAvatar,
         reset () {
             this.$refs.form.reset()
@@ -306,6 +353,142 @@ export default {
             console.log('params for search', params);
         },
 
+        onClickCreateUser(){
+            this.CreateUserDialogShowed = true
+        },
+
+        async onCreateUser(params, group_info){
+            const response = await AdminGroupServices.adminCreateUser(params)
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Create User Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Create User Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            await this._getListUser();
+            await this.getAllGroup()
+            this.CreateUserDialogShowed = false
+
+            // transfer props here
+            const allProps = Object.assign({}, group_info, params, response.data);
+            this.createUserSuccessInfo = allProps
+            this.CreateUserDialogSuccessShowed = true
+        },
+        onClickDeleteUser(){
+            
+            this.confirmDeleteUserInfo = this.userSelected[0]
+            this.ConfirmDeleteUserDialogShowed = true;
+        },
+        async onConfirmDeleteUser(param){
+            if(param == 'confirm'){
+                this.ConfirmDeleteUserDialogShowed = false;
+                const params = {
+                    employeeId: this.userSelected[0].employee_id
+                }
+                const response = await AdminGroupServices.adminDeleteUser(params);
+                if(!response){
+                    this.$router.push('/admin/login')
+                } else if(response == -1){
+                    this.$toast.open({
+                        message: "Delete User Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    this.userSelected = []
+                    return
+                }
+                else {
+                    await this._getListUser();
+                    await this.getAllGroup()
+                    this.userSelected = []
+                    this.$toast.open({
+                        message: "Delete User Success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                }
+            }
+        },
+
+        onClickChangeRoleUser(){
+            this.changeUserRoleInfo = this.userSelected[0]
+            this.ChangeUserRoleDialogShowed = true
+        },
+
+        async onChangeUserRole(params){
+            const response = await AdminUserDetailServices.adminUpdatePersonalUserInfo(params)
+            this.userSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Change User Role Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            await this._getListUser();
+            await this.getAllGroup()
+            this.$toast.open({
+                message: "Change User Role Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.ChangeUserRoleDialogShowed = false
+        },
+        onClickChangeGroupUser(){
+            this.changeUserGroupInfo = this.userSelected[0]
+            this.ChangeUserGroupDialogShowed = true
+        },
+
+        async onChangeUserGroup(params){
+            const response = await AdminUserDetailServices.adminUpdatePersonalUserInfo(params)
+            this.userSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Change User Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            await this._getListUser();
+            await this.getAllGroup()
+            this.$toast.open({
+                message: "Change User Group Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.ChangeUserGroupDialogShowed = false
+        }
     },
 
     beforeCreate() {
