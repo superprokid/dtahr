@@ -36,10 +36,12 @@ export default {
             currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
-    mounted() {
-        this._getAllTasks();
-        this._getAllCategory();
-        this._getAllUsers();
+    async mounted() {
+        this.$eventBus.$emit('show-spinner', true);
+        await this._getAllTasks();
+        await this._getAllCategory();
+        await this._getAllUsers();
+        this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
         async _getAllTasks() {
@@ -75,7 +77,7 @@ export default {
             this.listCategories = [...response.data];
         },
         async _getAllUsers() {
-            const response = await TasksServices.getAllUser();
+            const response = await TasksServices.getAllUser({ projectId: this.currentProjectId });
             if (!response) {
                 this.$router.push('/user/login');
                 return;

@@ -34,7 +34,7 @@ Vue.use(VueToast);
 Vue.use(VueFormulate)
 Vue.use(BootstrapVue);
 Vue.use(VueMaterial);
-Vue.use(MultiFiltersPlugin)
+Vue.use(MultiFiltersPlugin);
 // Vue.use(VueQuillEditor, /* { default global options } */)
 
 import router from './routes/routes';

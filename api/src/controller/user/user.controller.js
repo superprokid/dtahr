@@ -42,7 +42,7 @@ const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(fi
 const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 const UPDATE_PASSWORD = "UPDATE employee SET password = ? WHERE employee_id = ?";
 const AVT_PATH = "../../../public/avts/";
-const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, ' ', last_name) as full_name, avt "
+const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, ' ', last_name) as name, avt "
     + "                         FROM employee e "
     + "                         	LEFT JOIN (SELECT *"
     + "                    						FROM assignment a "
@@ -730,5 +730,6 @@ module.exports = {
     getEmployeeInfoById,
     changePassword,
     updateInformation,
-    checkInMobile
+    checkInMobile,
+    getAllUserOfProject,
 }

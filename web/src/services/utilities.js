@@ -27,3 +27,11 @@ export function getAvatar(avt) {
         return require('@/assets/user-default.png')
     }
 }
+
+export function addDays(date, number) {
+    return moment(date).add(number, 'day');
+}
+
+export function addMonths(date, number) {
+    return moment(date).add(number, 'month');
+}

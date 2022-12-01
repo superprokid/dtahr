@@ -1,5 +1,5 @@
 <template>
-  <div id="tasks-page">
+  <div id="tasks-page" class="px-3">
     <v-app style="background-color: whitesmoke !important">
       <v-container>
         <v-row>
