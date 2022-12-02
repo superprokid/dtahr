@@ -105,6 +105,13 @@ export const ADMIN_GET_LIST_PROJECT = BASE_API_ADMIN_URL + "/project/getall";
 export const ADMIN_CREATE_PROJECT = BASE_API_ADMIN_URL + "/project/create";
 export const ADMIN_UPDATE_PROJECT = BASE_API_ADMIN_URL + "/project/update";
 
+export const ADMIN_GET_STATUS_PROJECT = BASE_API_ADMIN_URL + "/project/getstatus";
+export const ADMIN_GET_PROJECT_DETAIL_INFO = BASE_API_ADMIN_URL + "/project/getdetails";
+
+export const ADMIN_ADD_EMPLOYEE_TO_PROJECT = BASE_API_ADMIN_URL + "/project/assignee";
+
+export const ADMIN_GET_ALL_EMPLOYEE_IN_PROJECT_EXCEPT_ASSIGNEE = BASE_API_ADMIN_URL + "/project/getemployeenotassign"
+export const ADMIN_DELETE_EMPLOYEE_OUT_PROJECT = BASE_API_ADMIN_URL + "/project/removeassignee"
 // constant
 export const TAB_TYPE = {
     USER: 'user',
