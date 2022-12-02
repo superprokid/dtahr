@@ -126,7 +126,10 @@ Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmpl
 Router.get('/admin/project/getall', adminAuthen, adminProjectController.getAllProjects);
 Router.get('/admin/project/getstatus', adminAuthen, adminProjectController.getStatusOfProject);
 Router.get('/admin/project/getassignment', adminAuthen, adminProjectController.getAssignmentOfProject);
+Router.get('/admin/project/getdetails', adminAuthen, adminProjectController.getProjectDetails);
 Router.post('/admin/project/assignee', adminAuthen, adminProjectController.addAssignmentToProject);
+Router.post('/admin/project/removeassignee', adminAuthen, adminProjectController.removeAssignmentInProject);
+Router.get('/admin/project/getemployeenotassign', adminAuthen, adminProjectController.getEmployeeNotAssign);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);

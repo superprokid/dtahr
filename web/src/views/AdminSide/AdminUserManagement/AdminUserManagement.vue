@@ -186,7 +186,7 @@
 
                         </v-list>
                     </v-menu>
-                    <v-data-table v-model="userSelected" :headers="AdminEmployeeManagementHeaders" :items="listUsers" item-key="employee_id"
+                    <v-data-table v-model="userSelected" :headers="AdminEmployeeManagementHeaders" :items="listFiltered" item-key="employee_id"
                         :item-class="setItemRowCLass" class="elevation-4 usermanagement-table" :search="search"
                         show-select :single-select="singleSelectEmployeeManagement" :custom-filter="filterOnlyCapsText"
                         @click:row="clickOnUser">
