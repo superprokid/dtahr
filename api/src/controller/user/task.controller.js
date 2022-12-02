@@ -7,7 +7,7 @@ const { TASK_STATUS, TASK_STATUS_TEXT, TASK_PRIORITY_TEXT } = require('../../con
 
 const LOG_CATEGORY = "Task Controller"
 const INSERT_NEW_CATEGORY = "INSERT INTO category (category_name, category_color) VALUES (?, ?)";
-const INSERT_NEW_TASK = "INSERT INTO task (task_title, task_number, project_id, task_description, employee_id, assignee_id, `status`, priority, category_id, start_date, end_date, estimated_hours, actual_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const INSERT_NEW_TASK = "INSERT INTO task (task_title, task_number, project_id, task_description, employee_id, assignee_id, `status`, priority, category_id, start_date, end_date, estimated_hours, actual_hours, parent_task_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const INSERT_NEW_COMMENT = "INSERT INTO taskcomment (task_id, employee_id, content, is_edit) VALUES (?, ?, ?, ?)";
 const EDIT_COMMENT = "UPDATE taskcomment SET content = ? WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?";
 const GET_TASK_BY_ID = "SELECT * FROM task WHERE task_id = ?";
@@ -33,6 +33,18 @@ const GET_ALL_COMMENT_OF_TASK = "SELECT tc.*, CONCAT(first_name, ' ', last_name)
     + "                         WHERE task_id = ?";
 const GET_ALL_ATTACHMENTS_OF_TASK = "SELECT * FROM taskattachment where task_id = ?";
 const GET_ALL_CATEGORY = "SELECT * FROM category";
+const GET_CHILD_TASK = "SELECT t.*, p.project_name, CONCAT(e.first_name, ' ', e.last_name) as creator, e.avt as creator_avt, category_name, category_color , CONCAT(a.first_name, ' ', a.last_name) as assignee, a.avt as assignee_avt"
++ "                         FROM task t "
++ "	                            INNER JOIN employee e on t.employee_id = e.employee_id"
++ "	                            INNER JOIN employee a ON t.assignee_id = a.employee_id"
++ "	                            INNER JOIN project p ON p.project_id = t.project_id"
++ "                             LEFT JOIN category c ON t.category_id = c.category_id"
++ "                         WHERE parent_task_id = ?";
+const GET_ALL_TASK_FOR_GANTT = "  SELECT t.*, CONCAT(first_name, ' ', last_name) as assignee, avt, category_name, category_color "
+    + "                 FROM task t INNER JOIN employee e on t.assignee_id = e.employee_id"
+    + "                 	LEFT JOIN category c ON t.category_id = c.category_id"
+    + "                 WHERE t.project_id = ? and ((? BETWEEN start_date and end_date) OR (start_date BETWEEN ? and ?) OR (end_date BETWEEN ? and ?))"
+    + "                 ORDER BY t.start_date ASC";
 const GET_FULL_NAME_OF_EMPLOYEE = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? LIMIT 1";
 const DELETE_COMMENT = "DELETE FROM taskcomment WHERE taskcomment_id = ? and is_edit = 1 and employee_id = ?";
 const INSERT_ATTACHMENT = "INSERT INTO taskattachment (task_id, path) VALUES (?, ?)";
@@ -132,6 +144,10 @@ async function addNewTask(req, res) {
             actualHours: {
                 type: 'number',
                 required: false,
+            },
+            parentTaskId: {
+                type: 'number',
+                required: false,
             }
         }
 
@@ -144,23 +160,41 @@ async function addNewTask(req, res) {
             return;
         }
 
-        const { taskTitle, projectId, taskDescription, assigneeId, priority, categoryId, startDate, endDate, estimatedHours, actualHours } = req.body;
+        let { taskTitle, projectId, taskDescription, assigneeId, priority, categoryId, startDate, endDate, estimatedHours, actualHours, parentTaskId } = req.body;
 
-        if (moment(startDate).isAfter(moment(startDate))) {
-            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate must be smaller or equal than endDate`);
-            await dbaccess.rollback(connection);
-            dbaccess.releaseConnection(connection);
-            res.status(403).send(validResult);
-            return;
+        if (startDate && endDate) {
+            // no implement
+        } else if (startDate) {
+            endDate = new Date(startDate);
+        } else if (endDate) {
+            startDate = new Date(endDate);
+        } else {
+            startDate = new Date();
+            endDate = new Date();
+        }
+        if (moment(startDate).isAfter(moment(endDate), 'date')) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate is > endDate, so set endDate = startDate`);
+            endDate = startDate;
         }
 
         const currentProject = await dbaccess.queryTransaction(connection, GET_CURRENT_PROECT, [projectId]);
         if (!currentProject.length) {
-            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate must be smaller or equal than endDate`);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] Project not exist`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(403).send(validResult);
+            res.status(403).send({ message: "The selected project is not exist" });
             return;
+        }
+
+        if (parentTaskId) {
+            const currentParentTask = await dbaccess.queryTransaction(connection, GET_TASK_BY_ID, [parentTaskId]);
+            if (!currentParentTask.length) {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] Parent task is not exist`);
+                await dbaccess.rollback(connection);
+                dbaccess.releaseConnection(connection);
+                res.status(403).send({ message: "The selected parent task is not exist" });
+                return;
+            }
         }
 
         const newestTask = await dbaccess.queryTransaction(connection, GET_NEWEST_TASK_NUMBER, [projectId]);
@@ -169,11 +203,11 @@ async function addNewTask(req, res) {
             taskNumber = Number(newestTask[0].task_number) + 1;
         }
 
-        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskNumber, projectId, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null]);
+        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskNumber, projectId, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null, parentTaskId || null]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
-        res.status(200).send('Create success');
+        res.status(200).send({message: "Create success"});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
         res.status(500).send({message: "SERVER ERROR"});
@@ -269,7 +303,7 @@ async function updateTask(req, res) {
             endDate = getDateString(targetTask.end_date);
             isEditDate = true;
         } else if (endDate) {
-            startDate = getDateString(targetTask.endDate);
+            startDate = getDateString(targetTask.start_date);
             isEditDate = true;
         }
 
@@ -311,6 +345,10 @@ async function updateTask(req, res) {
             commentContent = commentContent.concat(`<p>Estimated hours changed: ${Number(targetTask.actual_hours).toFixed(2)} → ${Number(actualHours).toFixed(2)}</p></br>`);
         }
         if (isEditDate) {
+            if (moment(startDate).isAfter(moment(endDate), 'date')) {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] startDate is > endDate, so set endDate = startDate`);
+                endDate = startDate;
+            }
             setClauseArray.push(` start_date = '${getDateString(startDate)}'`);
             setClauseArray.push(` end_date = '${getDateString(endDate)}'`);
             commentContent = commentContent.concat(`<p>Duration change: ${getDateString(startDate)} → ${getDateString(endDate)}</p></br>`);
@@ -493,6 +531,30 @@ async function getAllTask(req, res) {
     }
 }
 
+async function getAllTaskGanttChart(req, res) {
+    try {
+        let { projectId, startDate, endDate } = req.query;
+        if (!projectId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] projectId is required`);
+            res.status(200).send([]);
+            return;
+        }
+
+        if (!startDate) {
+            startDate = getDateString();
+        }
+        if (!endDate) {
+            endDate = moment(startDate).add(3, 'month').format('YYYY-MM-DD');
+        }
+        const listTask = await dbaccess.exeQuery(GET_ALL_TASK_FOR_GANTT, [projectId, startDate, startDate, endDate, startDate, endDate]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
+        res.status(200).send(listTask);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({message: "SERVER ERROR"});
+    }
+}
+
 async function getTaskByID(req, res) {
     try {
         const { taskId } = req.query;
@@ -510,6 +572,8 @@ async function getTaskByID(req, res) {
         task.comments = listComment
         const listAttachments = await dbaccess.exeQuery(GET_ALL_ATTACHMENTS_OF_TASK, [taskId]);
         task.attachments = listAttachments;
+        const listChildrentTask = await dbaccess.exeQuery(GET_CHILD_TASK, [taskId]);
+        task.childTasks = listChildrentTask;
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
         res.status(200).send(task);
     } catch (error) {
@@ -707,4 +771,5 @@ module.exports = {
     deleteComment,
     addAttachments,
     deleteTaskAttachments,
+    getAllTaskGanttChart,
 }

@@ -23,6 +23,7 @@ import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
 import EditTask from "../views/ClientSide/EditTask/EditTask.vue"
 import TaskSide from '../views/ClientSide/TaskSide/TaskSide.vue';
 import Project from '../views/ClientSide/Project/Project.vue';
+import GanttChart from '../views/ClientSide/GanttChart/GanttChart.vue';
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
@@ -151,6 +152,10 @@ const router = new Router({
                         {
                             path: 'taskboard/:projectId',
                             component: TaskBoard
+                        },
+                        {
+                            path: 'ganttchart/:projectId',
+                            component: GanttChart
                         },
                     ]
                 }

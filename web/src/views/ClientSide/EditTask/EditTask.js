@@ -11,7 +11,6 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 import TaskDetailServices from "../../../services/API/TaskDetailAPI/TaskDetailServices"
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
-import ReportServices from "../../../services/API/ReportAPI/ReportServices"
 import { getDateString, getTimeString} from "../../../services/utilities";
 
 import {USER_GET_IMAGE} from '../../../config/constant'
@@ -151,7 +150,7 @@ export default {
             return this.taskDetailData
         },
         async _getAllAssignees(){
-            const response = await ReportServices.getAllUser()
+            const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
             if (!response) {
                 this.$router.push('/user/login');
                 return;

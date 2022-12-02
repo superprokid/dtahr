@@ -128,7 +128,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(403).send(validResult);
+            res.status(400).send({ message: validResult });
             return;
         }
 
@@ -141,7 +141,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] email is already exist`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send('Email is already exist');
+            res.status(400).send({ message: 'Email is already exist' });
             return;
         }
 
@@ -150,7 +150,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] group_id not exist`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send('Group is not exist');
+            res.status(400).send({ message: 'Group is not exist' });
             return;
         }
 
@@ -174,7 +174,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] end mail failed`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send('Can not send your password to email, please check your email');
+            res.status(400).send({ message: 'Can not send your password to email, please check your email'});
             return;
         }
         res.status(200).send({
@@ -185,7 +185,7 @@ async function createNewEmployee(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -346,7 +346,7 @@ async function editEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] no columns update`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(200).send({message: "No columns need to update"});
+            res.status(200).send({ message: "No columns need to update" });
             return;
         }
 
@@ -364,7 +364,7 @@ async function editEmployee(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -380,7 +380,7 @@ async function getAllFreeManager(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -410,7 +410,7 @@ async function getEmployeeInfoById(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -441,7 +441,7 @@ async function deleteEmployee(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 

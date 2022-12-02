@@ -5,7 +5,7 @@ import { TAB_TYPE } from '@/config/constant';
 export default {
   name: 'TaskSide',
   mounted() {
-    console.log('abc');
+    console.log('TaskSide::render');
   },
   beforeMount() {
     SessionUtls.setItem(SessionUtls.tabTypeKey, TAB_TYPE.TASK);

@@ -34,12 +34,21 @@ export default {
             employeeSelected: '',
             keyword: '',
             currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
+
+            selectedStatus: 5,
         }
     },
-    mounted() {
-        this._getAllTasks();
-        this._getAllCategory();
-        this._getAllUsers();
+    watch: {
+        selectedStatus() {
+            this.searchTasks();
+        }
+    },
+    async mounted() {
+        this.$eventBus.$emit('show-spinner', true);
+        await this._getAllTasks();
+        await this._getAllCategory();
+        await this._getAllUsers();
+        this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
         async _getAllTasks() {
@@ -75,7 +84,7 @@ export default {
             this.listCategories = [...response.data];
         },
         async _getAllUsers() {
-            const response = await TasksServices.getAllUser();
+            const response = await TasksServices.getAllUser({ projectId: this.currentProjectId });
             if (!response) {
                 this.$router.push('/user/login');
                 return;
@@ -111,6 +120,27 @@ export default {
                     if (!String(task.task_id).includes(this.keyword) && !task.task_title.includes(this.keyword)) {
                         return false;
                     }
+                }
+                switch (this.selectedStatus) {
+                    case "0": // Open
+                    case "1": // In Progress
+                    case "2": // Resolved
+                    case "3": // Closed
+                        if (task.status == this.selectedStatus) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    case "4": // Not Closed
+                        if (task.status != 3) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    case "5":
+                        return true;
+                    default:
+                        break;
                 }
                 return true;
             });

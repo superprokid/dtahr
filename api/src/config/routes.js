@@ -32,6 +32,7 @@ Router.post('/user/refreshtoken', userController.refreshToken);
 // Router.get('/user/get', userController.get);
 Router.post('/user/app/checkin', authen, sendFile.any(), userController.checkInMobile);
 Router.get('/user/getalluser', authen, userController.getAllUser);
+Router.get('/user/getalluserofproject', authen, userController.getAllUserOfProject);
 Router.post('/user/checkin', authen, userController.checkin);
 Router.post('/user/checkout', authen, userController.checkout);
 Router.get('/user/workhistory', authen, worklogController.getWorkHistory);
@@ -70,6 +71,7 @@ Router.post('/user/comment/delete', authen, taskController.deleteComment);
 Router.get('/user/task/getbystatus', authen, taskController.getAllTaskWithStatus);
 Router.get('/user/task/getall', authen, taskController.getAllTask);
 Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
+Router.get('/user/task/getallforgantt', authen, taskController.getAllTaskGanttChart);
 Router.post('/user/task/attachment/upload', authen, attachment.array('file'), taskController.addAttachments);
 Router.post('/user/task/attachment/delete', authen, taskController.deleteTaskAttachments)
 Router.get('/user/category/getall', authen, taskController.getAllCategory);

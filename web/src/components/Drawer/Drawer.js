@@ -66,7 +66,13 @@ const listTaskItem = [
         icon: 'mdi-poll',
         to: "/taskboard", // name of router path
         id: tabName.taskBoardUser,
-    },   
+    },
+    {
+        title: 'Gantt Chart',
+        icon: 'mdi-chart-timeline',
+        to: "/ganttchart", // name of router path
+        id: tabName.ganttChartUser,
+    },
     {
         title: 'Project',
         icon: 'mdi-application-array-outline',
@@ -115,7 +121,7 @@ export default {
             if (this.tabType == TAB_TYPE.USER) {
                 this.$router.push('/user' + item.to);
             } else {
-                this.$router.push(item.toUser || `/user/taskside${item.to}/${SessionUtls.getItem(SessionUtls.projectSelectedKey)}`);
+                this.$router.push(item.toUser || `/user/taskside${item.to}/${SessionUtls.getItem(SessionUtls.projectSelectedKey)}`).catch(() => {});
             }
             this.currentTab = item.id;
         }

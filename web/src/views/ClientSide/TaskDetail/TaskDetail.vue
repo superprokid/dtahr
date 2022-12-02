@@ -8,7 +8,7 @@
                         <v-chip small :color="taskDetailData.category_color" dark class="mr-3">
                             {{ taskDetailData.category_name }}
                         </v-chip>
-                        {{taskDetailData.project_name}} - {{ taskDetailData.task_id }}
+                        {{taskDetailData.project_name}} - {{ taskDetailData.task_number }}
                     </v-col>
 
                     <v-col cols="12" md="9" class="d-flex justify-end align-center">

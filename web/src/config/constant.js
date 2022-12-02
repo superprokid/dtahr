@@ -50,9 +50,10 @@ export const USER_UPDATE_COMMENT = BASE_API_USER_URL + "/comment/update"
 export const USER_DELETE_COMMENT = BASE_API_USER_URL + "/comment/delete"
 export const USER_UPLOAD_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/upload"
 export const USER_DELETE_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/delete"
-
+export const USER_GET_ALL_TASK_FOR_GANTT_CHART = BASE_API_USER_URL + "/task/getallforgantt"
 export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
 export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
+export const USER_GET_USER_IN_PROJECT = BASE_URL + "/api/user/getalluserofproject";
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';

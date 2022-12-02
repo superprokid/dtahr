@@ -9,7 +9,6 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
-import ReportServices from "../../../services/API/ReportAPI/ReportServices"
 
 import {USER_GET_IMAGE} from '../../../config/constant'
 
@@ -156,7 +155,7 @@ export default {
             }
         },
         async _getAllAssignees(){
-            const response = await ReportServices.getAllUser()
+            const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
             if (!response) {
                 this.$router.push('/user/login');
                 return;
@@ -164,7 +163,7 @@ export default {
             if(response === -1){
                 alert("Call Fail")
             }
-            console.log('response',response.data);
+            console.log('responseeeee',response.data);
             this.employeeList = response.data.map((item) => {
                 return {...item, }
             })
