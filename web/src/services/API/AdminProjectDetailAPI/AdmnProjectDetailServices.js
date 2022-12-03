@@ -6,6 +6,10 @@ import {
 
     ADMIN_GET_ALL_EMPLOYEE_IN_PROJECT_EXCEPT_ASSIGNEE,
     ADMIN_DELETE_EMPLOYEE_OUT_PROJECT,
+    ADMIN_GET_ALL_TASK,
+    ADMIN_GET_ALL_USER_IN_PROJECT,
+    ADMIN_GET_ALL_TASK_CATEGORY,
+
 
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
@@ -63,6 +67,38 @@ const AdminProjectDetailServices = {
             return error;
         }
     },
+
+    adminGetAllTask: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.get(ADMIN_GET_ALL_TASK, {params})
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+    adminGetAllUserInProject: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.get(ADMIN_GET_ALL_USER_IN_PROJECT, {params})
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+    adminGetAllTaskCategory: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.get(ADMIN_GET_ALL_TASK_CATEGORY, {params})
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+    
 }
 
 export default AdminProjectDetailServices;

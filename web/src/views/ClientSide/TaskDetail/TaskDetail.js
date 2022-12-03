@@ -103,6 +103,24 @@ export default {
             imgDialog: false,
 
             currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
+
+            childTaskHeader: [
+                {
+                    text: 'Key',
+                    align: 'start',
+                    value: 'task_number',
+                    width: 100,
+                },
+                {
+                    text: 'Subject',
+                    value: 'task_title'
+                },
+                {
+                    text: 'Status',
+                    value: 'status',
+                    width: 100
+                },
+            ]
         }
     },
     watch: {
@@ -113,6 +131,9 @@ export default {
         // },
     },
     methods: {
+        setItemRowCLass(){
+            return 'item-row'
+        },
         onClickCloseComment(){
             this.reveal = false
             this.content = ''
@@ -475,7 +496,10 @@ export default {
         onClickAddAttachmentShortIcon(){
             this.AddAttachmentModalShowed = true
         },
-
+        openTaskDetails: function (task) {
+            const newRoute = this.$router.resolve(`/user/taskside/taskdetail/${this.currentProjectId}/${task.task_id}`);
+            window.open(newRoute.href, '_blank');
+        },
     },
     computed: {
         // editor() {

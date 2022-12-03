@@ -9,13 +9,15 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
+import AddParentTaskModal from "../../../components/AddParentTaskModal/AddParentTaskModal.vue"
 
 import {USER_GET_IMAGE} from '../../../config/constant'
 
 export default {
     components: {
         quillEditor,
-        AddCategoryTaskModal
+        AddCategoryTaskModal,
+        AddParentTaskModal
     },
     data() {
 
@@ -83,7 +85,12 @@ export default {
                 v => !!v || 'Category Task is required',
             ],
 
-            currentProjectId: SessionUtls.getItem(SessionUtls.projectSelectedKey),
+            currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
+
+
+            addParentTaskDialogShowed: false,
+
+            parentTask: {},
         }
     },
     watch: {
@@ -159,6 +166,8 @@ export default {
         onClose(params){
             if(params === 1){
                 this.addCategoryTaskDialogShowed = false
+            }else if(params === 2){
+                this.addParentTaskDialogShowed = false
             }
         },
         async _getAllAssignees(){
@@ -194,6 +203,7 @@ export default {
                     endDate: this.endDate,
                     estimatedHours: this.estimatedHours || null,
                     actualHours: this.actualHours || null,
+                    parentTaskId: this.parentTask.task_id || null
                 }
                 const response = await AddTaskServices.createTask(params)
                 if (!response) {
@@ -220,6 +230,16 @@ export default {
                 window.location.reload();
             }
         },
+
+        onClickAddParentTask(){
+            this.addParentTaskDialogShowed = true
+        },
+
+        onSelectParentTask(params){
+            this.parentTask = params
+
+            this.addParentTaskDialogShowed = false
+        }
 
     },
     computed: {

@@ -55,6 +55,9 @@ export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
 export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
 export const USER_GET_USER_IN_PROJECT = BASE_URL + "/api/user/getalluserofproject";
 
+export const USER_SEARCH_PARENT_TASK = BASE_API_USER_URL + "/task/search";
+
+
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";
@@ -123,6 +126,10 @@ export const ADMIN_ADD_EMPLOYEE_TO_PROJECT = BASE_API_ADMIN_URL + "/project/assi
 
 export const ADMIN_GET_ALL_EMPLOYEE_IN_PROJECT_EXCEPT_ASSIGNEE = BASE_API_ADMIN_URL + "/project/getemployeenotassign"
 export const ADMIN_DELETE_EMPLOYEE_OUT_PROJECT = BASE_API_ADMIN_URL + "/project/removeassignee"
+
+export const ADMIN_GET_ALL_TASK = BASE_API_ADMIN_URL + "/task/getall"
+export const ADMIN_GET_ALL_USER_IN_PROJECT = BASE_API_ADMIN_URL + "/project/getalluserofproject"
+export const ADMIN_GET_ALL_TASK_CATEGORY = BASE_API_ADMIN_URL + "/category/getall"
 // constant
 export const TAB_TYPE = {
     USER: 'user',
