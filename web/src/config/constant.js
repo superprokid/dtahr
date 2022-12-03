@@ -106,7 +106,10 @@ export const ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/w
 
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
-
+export const ADMIN_GET_ALL_WORKTIME = BASE_API_ADMIN_URL + '/worktime/get';
+export const ADMIN_UPDATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/update';
+export const ADMIN_CREATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/create';
+export const ADMIN_DELETE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/delete';
 export const ADMIN_GET_LIST_PROJECT = BASE_API_ADMIN_URL + "/project/getall";
 export const ADMIN_CREATE_PROJECT = BASE_API_ADMIN_URL + "/project/create";
 export const ADMIN_UPDATE_PROJECT = BASE_API_ADMIN_URL + "/project/update";

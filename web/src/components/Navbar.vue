@@ -131,6 +131,12 @@ export default {
                 icon: 'mdi-file-document-multiple-outline',
                 to: "/admin/project", // name of router path
                 id: tabName.projectAdmin, // id of page
+            },
+            {
+                title: 'Working Time',
+                icon: 'mdi-clock-outline',
+                to: "/admin/workingtime", // name of router path
+                id: tabName.workingtimeAdmin, // id of page
             }
 
         ],
