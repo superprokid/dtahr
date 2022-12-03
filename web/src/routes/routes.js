@@ -35,6 +35,7 @@ import AdminCSVExport from "@/views/AdminSide/AdminCSVExport/AdminCSVExport.vue"
 import AdminProject from "../views/AdminSide/AdminProject/AdminProject.vue"
 import AdminProjectDetail from "../views/AdminSide/AdminProjectDetail/AdminProjectDetail.vue"
 import AdminWorkingTime from "../views/AdminSide/AdminWorkingTime/AdminWorkingTime.vue"
+import AdminPolicy from "../views/AdminSide/AdminPolicy/AdminPolicy.vue"
 
 Vue.use(Router);
 
@@ -86,6 +87,10 @@ const router = new Router({
                 {
                     path: 'workingtime',
                     component: AdminWorkingTime
+                },
+                {
+                    path: 'policy',
+                    component: AdminPolicy
                 }
             ]
         },

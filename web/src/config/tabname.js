@@ -19,7 +19,8 @@ const tabName = {
     holidayAdmin: 'admin-holiday-001',
     csvAdmin: 'admin-csv-001',
     projectAdmin: 'admin-project-001',
-    workingTimeAdmin: 'admin-workingtime-001'
+    workingTimeAdmin: 'admin-workingtime-001',
+    policyAdmin: 'admin-policy-001'
 }
 
 export default tabName;

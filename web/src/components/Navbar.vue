@@ -137,8 +137,13 @@ export default {
                 icon: 'mdi-clock-outline',
                 to: "/admin/workingtime", // name of router path
                 id: tabName.workingtimeAdmin, // id of page
+            },
+            {
+                title: 'Policy',
+                icon: 'mdi-file-document-outline',
+                to: "/admin/policy", // name of router path
+                id: tabName.policyAdmin, // id of page
             }
-
         ],
         currentTab: '',
 
