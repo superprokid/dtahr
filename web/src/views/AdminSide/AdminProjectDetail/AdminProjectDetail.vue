@@ -101,29 +101,39 @@
                             <v-col cols="12" md="6">
                                 <v-card style="height: 100%">
                                     <v-card-text style="height: 100%" class="d-flex flex-column">
-
+                                        
                                         <div>
-                                            <div class="elevation-4" :style="`width: ${percentageOpen}%!important`"
-                                                v-if="(percentageOpen > 0)" style="display:inline-block">
+                                            <div class="elevation-4" v-if="(!percentageOpen && !percentageInProgress && !percentageResolved && !percentageClosed)"
+                                                :style="`width: ${100}%!important`"
+                                                style="display:inline-block">
+                                                <v-progress-linear height="15" value="100" color="grey" />
+                                            </div>
+                                            <div class="elevation-4" 
+                                                :style="`width: ${percentageOpen}%!important`"
+                                                style="display:inline-block">
                                                 <v-progress-linear height="15" value="100" color="#ed8077" />
                                             </div>
-                                            <div class="elevation-4" v-if="Number(percentageInProgress) > 0"
+                                            <div class="elevation-4"
                                                 :style="`width: ${percentageInProgress}%!important`"
                                                 style="display:inline-block">
                                                 <v-progress-linear height="15" value="100" color="#4488c5" />
                                             </div>
-                                            <div class="elevation-4" :style="`width: ${percentageResolved}%!important`"
-                                                v-if="(percentageResolved > 0)" style="display:inline-block">
+                                            <div class="elevation-4" 
+                                                :style="`width: ${percentageResolved}%!important`"
+                                                style="display:inline-block">
                                                 <v-progress-linear height="15" value="100" color="#5eb5a6" />
                                             </div>
-                                            <div class="elevation-4" :style="`width: ${percentageClosed}%!important`"
-                                                v-if="(percentageClosed > 0)" style="display:inline-block">
+                                            <div class="elevation-4" 
+                                                :style="`width: ${percentageClosed}%!important`"
+                                                style="display:inline-block">
                                                 <v-progress-linear height="15" value="100" color="#a1af2f" />
                                             </div>
                                         </div>
+
                                         <v-row no-gutters>
                                             <v-col cols="12" md="12" class="d-flex justify-end text-subtitle-2">
-                                                {{ percentageClosed }}% Closed
+                                                {{ isNaN(percentageClosed)? 0 : percentageClosed }}% Closed
+
                                             </v-col>
                                         </v-row>
                                         <v-row no-gutters :align="'end'">
@@ -171,13 +181,13 @@
                             </v-col>
                         </v-row>
 
-                        <!-- table project's employee -->
+                        <!-- project employee table title -->
                         <v-row>
                             <v-col cols="12" md="12" class="text-h6 font-weight-bold">
                                 Project Employee
                             </v-col>
                         </v-row>
-
+                        <!-- assignment employee project table -->
                         <v-row no-gutters class="mt-2">
                             <v-col cols="12">
                                 <v-menu offset-y>

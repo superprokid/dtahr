@@ -4,15 +4,18 @@ import tabName from '../../../config/tabname';
 import { getDateString, getTimeString, getAvatar } from "../../../services/utilities";
 
 import AdminProjectServices from "../../../services/API/AdminProjectAPI/AdminProjectServices"
+import AdminCSVServices from "../../../services/API/CSVExportAPI/CSVExport.services"
 
 import AddProjectModal from "../../../components/AddProjectModal/AddProjectModal.vue"
 import EditProjectModal from "../../../components/EditProjectModal/EditProjectModal.vue"
+import DeleteProjectModal from "../../../components/DeleteProjectModal/DeleteProjectModal.vue"
 
 export default {
 	name: 'AdminProject',
 	components:{
         AddProjectModal,
         EditProjectModal,
+        DeleteProjectModal,
 
 	},
 
@@ -27,6 +30,9 @@ export default {
             EditProjectDialogShowed: false,
 
             editProjectInfo: {},
+
+            deleteProjectInfo: {},
+            DeleteProjectDialogShowed: false,
 		};
 	},
     async mounted() {
@@ -83,6 +89,8 @@ export default {
                 this.AddProjectDialogShowed = false
             }else if(param == 2){
                 this.EditProjectDialogShowed = false
+            }else if(param == 3){
+                this.DeleteProjectDialogShowed = false
             }
         },
 		setItemRowCLass(){
@@ -179,6 +187,73 @@ export default {
             await this.getProjects()
             this.EditProjectDialogShowed = false
         },
+
+        onClickDeleteProject(){
+            this.deleteProjectInfo = this.selected[0]
+            this.DeleteProjectDialogShowed = true
+        },
+        async onDeleteProject(params){
+            this.$eventBus.$emit('show-spinner', true);
+            const response = await AdminProjectServices.adminDeleteProject(params)
+            this.selected = []
+            if (!response) {
+                this.$router.push('/admin/login');
+                return;
+            }else if(response == -1){
+                this.$toast.open({
+                    message: "Delete Project Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.DeleteProjectDialogShowed = false
+            this.$toast.open({
+                message: "Delete Project Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            await this.getProjects()
+            this.$eventBus.$emit('show-spinner', false);
+        },
+
+        async onClickExportProject(){
+            let listProjectTemp = this.selected.map((item)=> item.project_id)
+            const params = {
+                listProject: listProjectTemp
+            }
+            const response = await AdminCSVServices.exportProjectCSV(params)
+            this.selected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Project Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Project-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        }
+
 	},
 
 	beforeCreate() { 

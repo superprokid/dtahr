@@ -1,9 +1,10 @@
 /* eslint-disable */ 
-import { getDateString, getAvatar } from "../../../services/utilities";
+import { getDateString, getAvatar, getDateStringWithFormat } from "../../../services/utilities";
 
 import AdminUserManagementService from "../../../services/API/AdminUserManagement/AdminUserManagement.service";
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
 import AdminUserDetailServices from "../../../services/API/AdminUserDetailAPI/AdminUserDetailServices"
+import AdminCSVServices from "../../../services/API/CSVExportAPI/CSVExport.services"
 
 //Test History
 import moment from 'moment';
@@ -26,6 +27,9 @@ import AddNewUserModal from "../../../components/AddNewUserModal/AddNewUserModal
 import ChangeUserRoleModal from "../../../components/ChangeUserRoleModal/ChangeUserRoleModal.vue"
 import ChangeUserGroupModal from "../../../components/ChangeUserGroupModal/ChangeUserGroupModal.vue"
 
+import ExportEmployeeWorklogModal from "../../../components/ExportEmployeeWorklogModal/ExportEmployeeWorklogModal.vue"
+
+
 export default {
     name: "AdminUserManagement",
     components: {
@@ -35,7 +39,7 @@ export default {
         AddNewUserModal,
         ChangeUserRoleModal,
         ChangeUserGroupModal,
-
+        ExportEmployeeWorklogModal,
     },
     data() {
         return {
@@ -79,7 +83,7 @@ export default {
                 }
             ],
 
-            expand: false,
+            expand: true,
 
             filters: {
                 full_name: '',
@@ -107,6 +111,8 @@ export default {
 
             changeUserGroupInfo: {},
             ChangeUserGroupDialogShowed: false,
+
+            ExportWorklogDialogShowed: false,
         }
     },
     computed: {
@@ -211,7 +217,7 @@ export default {
                     width: 120,
                 },
                 {
-                    text: "Job Role",
+                    text: "Position",
                     value: 'job_role',
                     width: 120,
                 },
@@ -282,6 +288,8 @@ export default {
                 this.ChangeUserRoleDialogShowed = false;
             }else if(screen == 11){
                 this.ChangeUserGroupDialogShowed = false;
+            }else if(screen == 12){
+                this.ExportWorklogDialogShowed = false;
             }
         },
         getAvatar,
@@ -521,6 +529,76 @@ export default {
                 position: "top-right",
             })
             this.ChangeUserGroupDialogShowed = false
+        },
+
+        async onClickExportEmployee(){
+            let listEmployeeTemp = this.userSelected.map((item)=> item.employee_id)
+            const params = {
+                listEmployee: listEmployeeTemp
+            }
+            const response = await AdminCSVServices.exportEmployeeCSV(params)
+            this.userSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Employee Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Employee-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        onClickExportWorklog(){
+
+            this.ExportWorklogDialogShowed = true
+        },
+
+        async onExportWorklogEmployee(params){
+            let listEmployeeTemp = this.userSelected.map((item)=> item.employee_id)
+            params.listEmployee = listEmployeeTemp
+
+            const response = await AdminCSVServices.exportWorklogEmployeeCSV(params)
+            this.userSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Worklog Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Worklog ${getDateStringWithFormat(params.startDate, "YYYYMMDD")}-${getDateStringWithFormat(params.endDate, "YYYYMMDD")}.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
         }
     },
 

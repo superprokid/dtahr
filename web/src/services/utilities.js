@@ -8,6 +8,10 @@ export function getDateString(date) {
     return moment(date).format(YYYY_MM_DD);
 }
 
+export function getDateStringWithFormat(date, format) {
+    return moment(date).format(format);
+}
+
 export function getDateStringWithTask(date) {
     return moment(date).format('MMM DD, YYYY');
 }

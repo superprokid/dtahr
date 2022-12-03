@@ -23,103 +23,58 @@
                         <v-card outlined color="#eee" v-show="expand">
                             <v-card-text>
                                 <v-form ref="form" v-model="valid" lazy-validation>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex align-center justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Group Name
-                                            </span>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
+                                    <v-row no-gutters :align="'center'" justify="center">
+                                        <v-col cols="12" md="4">
                                             <v-autocomplete class="pt-4" v-model="selectGroup" :items="listGroups" dense
-                                                clearable solo item-text="group_full_name" item-value="group_id"
-                                                return-object @change="onChangeGroup">
+                                                label="Group Name" clearable item-text="group_full_name"
+                                                item-value="group_id" return-object @change="onChangeGroup">
                                             </v-autocomplete>
                                         </v-col>
-                                        <v-col cols="12" md="3">
 
+                                        <v-col cols="12" md="4" class="pt-4" offset-md="1">
+                                            <v-text-field dense v-model="emailSearch" clearable
+                                                label="Email"></v-text-field>
                                         </v-col>
                                     </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex  justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Email
-                                            </span>
+                                    <v-row no-gutters :align="'center'" justify="center">
+                                        <v-col cols="12" md="4">
+                                            <v-text-field dense v-model="fullnameSearch" clearable
+                                                label="Full Name"></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field solo dense v-model="emailSearch" clearable></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
 
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex  justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Full Name
-                                            </span>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field solo dense v-model="fullnameSearch" clearable></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
-
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Gender
-                                            </span>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-autocomplete class="" v-model="genderSearch" solo clearable
+                                        <v-col cols="12" md="4" offset-md="1">
+                                            <v-autocomplete class="" v-model="genderSearch" clearable label="Gender"
                                                 :items="genderItems" dense item-text="gender_text"
                                                 item-value="gender_value">
                                             </v-autocomplete>
                                         </v-col>
-                                        <v-col cols="12" md="3">
+                                    </v-row>
+
+                                    <v-row no-gutters :align="'center'" justify="center">
+                                        <v-col cols="12" md="4">
+                                            <v-text-field dense v-model="phoneSearch" clearable
+                                                label="Phone"></v-text-field>
+
+                                        </v-col>
+
+                                        <v-col cols="12" md="4" offset-md="1">
+                                            <v-text-field dense v-model="mainSkillSearch" clearable
+                                                label="Main Skill"></v-text-field>
 
                                         </v-col>
                                     </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Phone
-                                            </span>
+                                    <v-row no-gutters :align="'center'" justify="center">
+                                        <v-col cols="12" md="4">
+                                            <v-text-field dense v-model="jobRoleSearch" clearable
+                                                label="Position"></v-text-field>
+
                                         </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field solo dense v-model="phoneSearch" clearable></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
+
+                                        <v-col cols="12" md="4" offset-md="1">
 
                                         </v-col>
                                     </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Main Skill
-                                            </span>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field solo dense v-model="mainSkillSearch" clearable></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
-
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" md="3" class="d-flex justify-end">
-                                            <span class="text-overline blue--text text--lighten-1">
-                                                Job Role
-                                            </span>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field solo dense v-model="jobRoleSearch" clearable></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
-
-                                        </v-col>
-                                    </v-row>
+                                
                                     <v-row justify="center" class="mb-4">
                                         <v-btn :disabled="!valid" color="success" max-width="170px" dark class="mr-4"
                                             @click="onClickSearchEmployee">
@@ -183,13 +138,29 @@
                                     Change Group
                                 </v-btn>
                             </v-list-item>
+                            <v-list-item>
+                                <v-btn text @click="onClickExportEmployee" :disabled="userSelected.length == 0">
+                                    <v-icon style="margin-right: 10px">
+                                        mdi-file-export-outline
+                                    </v-icon>
+                                    Export Employee
+                                </v-btn>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-btn text @click="onClickExportWorklog" :disabled="userSelected.length == 0">
+                                    <v-icon style="margin-right: 10px">
+                                        mdi-file-export-outline
+                                    </v-icon>
+                                    Export Employee Worklog
+                                </v-btn>
+                            </v-list-item>
 
                         </v-list>
                     </v-menu>
-                    <v-data-table v-model="userSelected" :headers="AdminEmployeeManagementHeaders" :items="listFiltered" item-key="employee_id"
-                        :item-class="setItemRowCLass" class="elevation-4 usermanagement-table" :search="search"
-                        show-select :single-select="singleSelectEmployeeManagement" :custom-filter="filterOnlyCapsText"
-                        @click:row="clickOnUser">
+                    <v-data-table v-model="userSelected" :headers="AdminEmployeeManagementHeaders" :items="listFiltered"
+                        item-key="employee_id" :item-class="setItemRowCLass" class="elevation-4 usermanagement-table"
+                        :search="search" show-select :single-select="singleSelectEmployeeManagement"
+                        :custom-filter="filterOnlyCapsText" @click:row="clickOnUser">
                         <template v-slot:top>
                             <v-switch v-model="singleSelectEmployeeManagement" label="Single select" class="pa-3">
                             </v-switch>
@@ -246,7 +217,8 @@
         <v-dialog v-model="ChangeUserRoleDialogShowed" v-if="ChangeUserRoleDialogShowed" persistent max-width="600px"
             transition="dialog-top-transition">
             <v-card>
-                <ChangeUserRoleModal @on-close="onClose" @on-change-user-role="onChangeUserRole" :changeUserRoleInfo="changeUserRoleInfo"/>
+                <ChangeUserRoleModal @on-close="onClose" @on-change-user-role="onChangeUserRole"
+                    :changeUserRoleInfo="changeUserRoleInfo" />
             </v-card>
         </v-dialog>
 
@@ -254,7 +226,15 @@
         <v-dialog v-model="ChangeUserGroupDialogShowed" v-if="ChangeUserGroupDialogShowed" persistent max-width="600px"
             transition="dialog-top-transition">
             <v-card>
-                <ChangeUserGroupModal @on-close="onClose" @on-change-user-group="onChangeUserGroup" :changeUserGroupInfo="changeUserGroupInfo"/>
+                <ChangeUserGroupModal @on-close="onClose" @on-change-user-group="onChangeUserGroup"
+                    :changeUserGroupInfo="changeUserGroupInfo" />
+            </v-card>
+        </v-dialog>
+
+        <!-- EXPORT EMPLOYEE WORKLOG DIALOG -->
+        <v-dialog v-model="ExportWorklogDialogShowed" persistent max-width="600px" transition="dialog-top-transition">
+            <v-card>
+                <ExportEmployeeWorklogModal @on-close="onClose" @on-export-worklog-employee="onExportWorklogEmployee" />
             </v-card>
         </v-dialog>
     </div>

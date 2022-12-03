@@ -50,15 +50,15 @@
                                 Delete Group
                             </v-btn>
                         </v-list-item>
-                        <!-- <v-list-item>
-                            <v-btn @click="onClickCreateUser" text
-                                :disabled="selected.length == 0 || selected.length >= 2">
+                        <v-list-item>
+                            <v-btn @click="onClickExportGroup" text
+                                :disabled="selected.length == 0">
                                 <v-icon style="margin-right: 10px">
-                                    mdi-trash-can-outline
+                                    mdi-file-export-outline
                                 </v-icon>
-                                Delete Group
+                                Export Group
                             </v-btn>
-                        </v-list-item> -->
+                        </v-list-item>
                     </v-list>
                 </v-menu>
 
@@ -79,9 +79,9 @@
                         </div>
                     </template>
                 </v-data-table>
-
+<!-- 
                 <p>Selected:</p>
-                {{ selected }}
+                {{ selected }} -->
             </div>
         </div>
 
@@ -136,6 +136,24 @@
                                     mdi-account-cog-outline
                                 </v-icon>
                                 Change Group
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-btn text @click="onClickExportEmployee"
+                                :disabled="AdminEmployeeManagementSelected.length == 0">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-file-export-outline
+                                </v-icon>
+                                Export Employee
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-btn text @click="onClickExportWorklog"
+                                :disabled="AdminEmployeeManagementSelected.length == 0">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-file-export-outline
+                                </v-icon>
+                                Export Employee Worklog
                             </v-btn>
                         </v-list-item>
 
@@ -265,6 +283,13 @@
             </v-card>
         </v-dialog>
 
+        <!-- EXPORT EMPLOYEE WORKLOG DIALOG -->
+        <v-dialog v-model="ExportWorklogDialogShowed"  persistent max-width="600px"
+            transition="dialog-top-transition">
+            <v-card>
+                <ExportEmployeeWorklogModal @on-close="onClose" @on-export-worklog-employee="onExportWorklogEmployee"/>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 

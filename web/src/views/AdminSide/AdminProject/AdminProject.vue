@@ -30,15 +30,23 @@
                             Edit Project
                         </v-btn>
                     </v-list-item>
-                    <!-- <v-list-item>
-                        <v-btn @click="onClickDeleteGroup" text
+                    <v-list-item>
+                        <v-btn @click="onClickDeleteProject" text
                             :disabled="selected.length == 0 || selected.length >= 2">
                             <v-icon style="margin-right: 10px">
                                 mdi-trash-can-outline
                             </v-icon>
-                            Delete Group
+                            Delete Project
                         </v-btn>
-                    </v-list-item> -->
+                    </v-list-item>
+                    <v-list-item>
+                        <v-btn @click="onClickExportProject" text :disabled="selected.length == 0">
+                            <v-icon style="margin-right: 10px">
+                                mdi-file-export-outline
+                            </v-icon>
+                            Export Project
+                        </v-btn>
+                    </v-list-item>
                 </v-list>
             </v-menu>
 
@@ -61,8 +69,8 @@
                 </template>
             </v-data-table>
 
-            <p>Selected:</p>
-            {{ selected }}
+            <!-- <p>Selected:</p>
+            {{ selected }} -->
         </div>
 
         <!-- ADD PROJECT DIALOG -->
@@ -78,6 +86,14 @@
                     @on-edit-project="onEditProject" />
             </v-card>
         </v-dialog>
+        <!-- DELETE PROJECT DIALOG -->
+        <v-dialog v-model="DeleteProjectDialogShowed" v-if="DeleteProjectDialogShowed" persistent max-width="800px">
+            <v-card>
+                <DeleteProjectModal @on-close="onClose" :deleteProjectInfo="deleteProjectInfo"
+                    @on-delete-project="onDeleteProject" />
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
