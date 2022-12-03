@@ -6,6 +6,8 @@ const exportLeave = require('../../model/export/leave.export');
 const exportSalary = require('../../model/export/salary.export');
 const exportWorklog = require('../../model/export/worklog.export');
 const exportInformation = require('../../model/export/information.export');
+const exportGroup = require('../../model/export/group.export');
+const exportProject = require('../../model/export/project.export');
 const { exeQuery } = require('../../common/dbaccess');
 
 const LOG_CATEGORY = "[EXPORT EXCEL]";
@@ -178,10 +180,70 @@ async function exportInformationByListEmp(req, res) {
     }
 }
 
+async function exportGroupByList(req, res) {
+    try {
+        const validateSchema = {
+            listGroup: {
+                type: 'array',
+                required: true,
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            res.status(400).send({ message: "Something went wrong, please contact administrator to solve this problem!" });
+            return;
+        }
+        
+        const { listGroup } = req.body;
+        const excel = new Excel();
+        await exportGroup.run(excel, listGroup);
+        const buffer = await excel.getFile();
+        const filename = `Group-Information.xlsx`
+        res.set('Content-disposition', 'attachment; filename=' + filename);
+        res.set('Content-Type', 'text/plain');
+        res.status(200).send(buffer);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function exportProjectByList(req, res) {
+    try {
+        const validateSchema = {
+            listProject: {
+                type: 'array',
+                required: true,
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            res.status(400).send({ message: "Something went wrong, please contact administrator to solve this problem!" });
+            return;
+        }
+        
+        const { listProject } = req.body;
+        const excel = new Excel();
+        await exportProject.run(excel, listProject);
+        const buffer = await excel.getFile();
+        const filename = `Project-Information.xlsx`
+        res.set('Content-disposition', 'attachment; filename=' + filename);
+        res.set('Content-Type', 'text/plain');
+        res.status(200).send(buffer);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 module.exports = {
     exportOverTime,
     exportLeaveTicket,
     exportSalaryAll,
     exportWorklogByListEmp,
     exportInformationByListEmp,
+    exportGroupByList,
+    exportProjectByList,
 }

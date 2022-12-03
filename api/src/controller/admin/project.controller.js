@@ -1,5 +1,6 @@
 const { exeQuery, getConnection, beginTransaction, rollback, releaseConnection, queryTransaction, commitTransaction } = require('../../common/dbaccess');
 const logger = require('../../common/logger');
+const fs = require('fs');
 const { validateRequest, generateId } = require('../../common/utils');
 const { ROLE, MAX_PROJECT_ID_LENGTH } = require('../../config/constants');
 
@@ -38,6 +39,17 @@ const GET_EMPLOYEES_NOT_ASSIGN = "  SELECT e.*,  CONCAT(e.first_name, ' ', e.las
     + "                             FROM employee e INNER JOIN `group` g ON e.group_id = g.group_id "
     + "                                 LEFT JOIN employee er ON e.employer_id = er.employee_id"
     + "                             WHERE e.employee_id NOT IN (SELECT employee_id FROM assignment WHERE project_id = ?)"
+
+// DELETE PROJECT
+const GET_ATTACHMENTS_OF_PROJECT = "SELECT * "
+    + "                             FROM taskattachment "
+    + "                             WHERE task_id IN (SELECT task_id from task WHERE project_id = ?)";
+const DELETE_ATTACHMENT_OF_PROJECT = "DELETE FROM taskattachment "
+    + "                               WHERE task_id IN (SELECT task_id from task WHERE project_id = ?)";
+const DELETE_ASSIGNMENT_OF_PROJECT = "DELETE FROM assignment WHERE project_id = ?";
+const DELETE_COMMENTS_OF_TASK_IN_PROJECT = "DELETE FROM taskcomment WHERE task_id IN (SELECT task_id FROM task WHERE project_id = ?)";
+const DELETE_TASKS_IN_PROJECT = "DELETE FROM task WHERE project_id = ?";
+const DELETE_PROJECT = "DELETE FROM project WHERE project_id = ?";
 
 async function getDetailsPojectByEmployee(req, res) {
     try {
@@ -365,14 +377,14 @@ async function getEmployeeNotAssign(req, res) {
                 required: true
             }
         }
-    
+
         const validResult = validateRequest(req.query, validateSchema);
         if (validResult) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
             res.status(403).send({ message: validResult });
             return;
         }
-    
+
         const { projectId } = req.query;
         const response = await exeQuery(GET_EMPLOYEES_NOT_ASSIGN, [projectId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] resonse `);
@@ -422,6 +434,81 @@ async function removeAssignmentInProject(req, res) {
     }
 }
 
+async function deleteProject(req, res) {
+    const connection = await getConnection();
+    await beginTransaction(connection);
+    try {
+        const validateSchema = {
+            projectId: {
+                type: 'string',
+                required: true,
+            },
+        }
+
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await rollback(connection);
+            releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+
+        const { projectId } = req.body;
+        // Delete attachments
+        const listAttachment = await queryTransaction(connection, GET_ATTACHMENTS_OF_PROJECT, [projectId]);
+        for (let i = 0; i < listAttachment.length; i++) {
+            const attachment = listAttachment[i];
+            const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
+            const filepath = ATTACHMENTS_PATH + attachment.path;
+            deleteAttachments([{ path: filepath }]);
+        }
+        const deleteAttachmentResult = await queryTransaction(connection, DELETE_ATTACHMENT_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Done delete attachments - ${deleteAttachmentResult.affectedRows} record`);
+        // Delete comment of task in project
+        const deleteCommentResult = await queryTransaction(connection, DELETE_COMMENTS_OF_TASK_IN_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Done delete comments - ${deleteCommentResult.affectedRows} record`);
+        // Delete assignment
+        const deleteAssignmentResult = await queryTransaction(connection, DELETE_ASSIGNMENT_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Done delete assignments - ${deleteAssignmentResult.affectedRows} record`);
+        // Delete task
+        const deleteTaskResult = await queryTransaction(connection, DELETE_TASKS_IN_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Done delete tasks - ${deleteTaskResult.affectedRows} record`);
+        // Delete project
+        const deleteProjectResult = await queryTransaction(connection, DELETE_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Done delete project - ${deleteProjectResult.affectedRows} record`);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] Delete project success`);
+        await commitTransaction(connection);
+        releaseConnection(connection);
+        res.status(200).send({ message: "Delete project success" });
+    } catch (error) {
+        await rollback(connection);
+        releaseConnection(connection);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+function deleteAttachments(files) {
+    const ATTACHMENTS_PATH = __basedir + "/public/attachments/";
+    for (let i = 0; i < files?.length; i++) {
+        const element = files[i];
+        if (fs.existsSync(element.path)) {
+            fs.unlink(element.path, (err) => {
+                if (err) logger.warn('delete file failed - ' + err);
+                const filename = String(element.path).substring(ATTACHMENTS_PATH.length);
+                const dirArr = filename.split("\\");
+                const dirPath = ATTACHMENTS_PATH + dirArr[0];
+                if (fs.existsSync(dirPath)) {
+                    fs.rmdir(dirPath, (err) => {
+                        if (err) logger.warn('delete path failed - ' + err)
+                    });
+                }
+            });
+        }
+    }
+}
+
 module.exports = {
     getAllProjects,
     getDetailsPojectByEmployee,
@@ -433,4 +520,5 @@ module.exports = {
     getProjectDetails,
     getEmployeeNotAssign,
     removeAssignmentInProject,
+    deleteProject,
 }

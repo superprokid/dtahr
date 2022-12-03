@@ -130,6 +130,7 @@ Router.get('/admin/project/getdetails', adminAuthen, adminProjectController.getP
 Router.post('/admin/project/assignee', adminAuthen, adminProjectController.addAssignmentToProject);
 Router.post('/admin/project/removeassignee', adminAuthen, adminProjectController.removeAssignmentInProject);
 Router.get('/admin/project/getemployeenotassign', adminAuthen, adminProjectController.getEmployeeNotAssign);
+Router.post('/admin/project/delete', adminAuthen, adminProjectController.deleteProject);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);
@@ -137,6 +138,8 @@ Router.get('/admin/export/leave', adminAuthen, adminExportController.exportLeave
 Router.get('/admin/export/salary', adminAuthen, adminExportController.exportSalaryAll);
 Router.post('/admin/export/worklog', adminAuthen, adminExportController.exportWorklogByListEmp);
 Router.post('/admin/export/information', adminAuthen, adminExportController.exportInformationByListEmp);
+Router.post('/admin/export/group', adminAuthen, adminExportController.exportGroupByList);
+Router.post('/admin/export/project', adminAuthen, adminExportController.exportProjectByList);
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

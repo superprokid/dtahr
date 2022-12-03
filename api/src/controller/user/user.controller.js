@@ -9,6 +9,7 @@ const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseCon
 const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString, isValidDate, validateRequest } = require('../../common/utils');
 const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR, ROLE } = require('../../config/constants');
 const { log } = require('console');
+const { FACE_SERVE_URL } = require('../../config/env');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -153,7 +154,7 @@ async function checkInMobile(req, res) {
                 deleteFile(file.path)
             });
             form.append('employeeId', empId);
-            axiosBase.post('http://26.74.195.215:5000/check', form).then((result) => {
+            axiosBase.post(`${FACE_SERVE_URL}/check`, form).then((result) => {
                 console.log('faceid = ', result.data);
                 const empFaceId = result.data;
                 if (empFaceId && empFaceId.employeeId === empId) {
