@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
     <v-app id="task-detail">
         <v-main style="padding: 1.5%">
@@ -8,7 +9,7 @@
                         <v-chip small :color="taskDetailData.category_color" dark class="mr-3">
                             {{ taskDetailData.category_name }}
                         </v-chip>
-                        {{taskDetailData.project_name}} - {{ taskDetailData.task_number }}
+                        {{ taskDetailData.project_name }} - {{ taskDetailData.task_number }}
                     </v-col>
 
                     <v-col cols="12" md="9" class="d-flex justify-end align-center">
@@ -23,7 +24,9 @@
                                 mdi-fire
                             </v-icon>
                         </span>
-                        <span class="text-subtitle-2 mr-2 lighten-1" style="color: #E16304" v-else>{{ taskDetailData.end_date }}</span>
+                        <span class="text-subtitle-2 mr-2 lighten-1" style="color: #E16304" v-else>{{
+                                taskDetailData.end_date
+                        }}</span>
 
 
                         <v-chip small :color="getStatus(taskDetailData.status).color" dark>
@@ -159,7 +162,7 @@
                     <v-tabs background-color="transparent">
 
                         <v-tab key="attachment">
-                            Attachment({{numberOfAttachment}})
+                            Attachment({{ numberOfAttachment }})
                         </v-tab>
                         <v-tab-item key="attachment">
                             <v-card flat>
@@ -173,7 +176,7 @@
                                                 <a :href="item.href">
                                                     {{ item.file_name }}
                                                 </a>
-                                                <v-icon small  @click="onClickRemoveAttachment(item.attachment_id)">
+                                                <v-icon small @click="onClickRemoveAttachment(item.attachment_id)">
                                                     mdi-close-thick
                                                 </v-icon>
                                             </div>
@@ -197,12 +200,24 @@
                             </v-card>
                         </v-tab-item>
 
-                        <v-tab key="subtasking">
-                            Substasking
+                        <v-tab key="subtasking" v-if="(taskDetailData.childTasks?.length > 0)">
+                            Substasking({{ taskDetailData.childTasks?.length }})
                         </v-tab>
-                        <v-tab-item key="subtasking">
+                        <v-tab-item key="subtasking" v-if="(taskDetailData.childTasks?.length > 0)">
                             <v-card flat>
-                                <v-card-text>this is subtasking</v-card-text>
+                                <v-card-text>
+                                    <v-data-table :headers="childTaskHeader" :items="taskDetailData.childTasks" :item-class="setItemRowCLass" @click:row="openTaskDetails"
+                                        class="elevation-4" :hide-default-footer="true"
+                                        style="max-height: 400px; overflow:auto">
+                                        <template v-slot:item.status="{ item }">
+                                            <div>
+                                                <v-chip small :color="getStatus(item.status).color" dark>
+                                                    {{ getStatus(item.status).text }}
+                                                </v-chip>
+                                            </div>
+                                        </template>
+                                    </v-data-table>
+                                </v-card-text>
                             </v-card>
                         </v-tab-item>
                     </v-tabs>
@@ -490,7 +505,7 @@
         </v-dialog>
 
         <!-- ADD ATTACHMENT MODAL -->
-        <v-dialog v-model="AddAttachmentModalShowed"  persistent max-width="1000px" transition="dialog-top-transition">
+        <v-dialog v-model="AddAttachmentModalShowed" persistent max-width="1000px" transition="dialog-top-transition">
             <v-card>
                 <AddAttachmentModal @on-close="onClose" @on-confirm-upload-attachment="onClickUploadAttachment" />
             </v-card>
@@ -498,7 +513,7 @@
 
         <v-dialog v-model="imgDialog" width="700">
             <v-card>
-                <img :src="mySrc"/>
+                <img :src="mySrc" />
             </v-card>
         </v-dialog>
     </v-app>
@@ -564,6 +579,9 @@
 }
 
 #task-detail img:hover {
+    cursor: pointer;
+}
+.item-row{
     cursor: pointer;
 }
 </style>
