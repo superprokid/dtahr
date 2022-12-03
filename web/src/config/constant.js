@@ -95,15 +95,23 @@ export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
 export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
 export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
 export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
+
 export const ADMIN_EXPORT_LEAVE_CSV = BASE_API_ADMIN_URL + '/export/leave';
 export const ADMIN_EXPORT_OVERTIME_CSV = BASE_API_ADMIN_URL + '/export/overtime';
 export const ADMIN_EXPORT_SALARY_CSV = BASE_API_ADMIN_URL + '/export/salary';
+export const ADMIN_EXPORT_PROJECT_CSV = BASE_API_ADMIN_URL + "/export/project";
+export const ADMIN_EXPORT_GROUP_CSV = BASE_API_ADMIN_URL + "/export/group";
+export const ADMIN_EXPORT_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/information";
+export const ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/worklog";
+
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
 
 export const ADMIN_GET_LIST_PROJECT = BASE_API_ADMIN_URL + "/project/getall";
 export const ADMIN_CREATE_PROJECT = BASE_API_ADMIN_URL + "/project/create";
 export const ADMIN_UPDATE_PROJECT = BASE_API_ADMIN_URL + "/project/update";
+export const ADMIN_DELETE_PROJECT = BASE_API_ADMIN_URL + "/project/delete";
+
 
 export const ADMIN_GET_STATUS_PROJECT = BASE_API_ADMIN_URL + "/project/getstatus";
 export const ADMIN_GET_PROJECT_DETAIL_INFO = BASE_API_ADMIN_URL + "/project/getdetails";

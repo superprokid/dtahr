@@ -2,7 +2,8 @@
 import SessionUtls from '../../../services/SessionUtls';
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
 import AdminUserDetailServices from '../../../services/API/AdminUserDetailAPI/AdminUserDetailServices';
-import { getDateString, getAvatar } from "../../../services/utilities";
+import { getDateString, getAvatar, getDateStringWithFormat } from "../../../services/utilities";
+import AdminCSVServices from "../../../services/API/CSVExportAPI/CSVExport.services"
 
 import tabName from '../../../config/tabname';
 
@@ -26,6 +27,8 @@ import ConfirmDeleteUserModal from "../../../components/ConfirmDeleteUserModal/C
 import ChangeUserRoleModal from "../../../components/ChangeUserRoleModal/ChangeUserRoleModal.vue"
 import ChangeUserGroupModal from "../../../components/ChangeUserGroupModal/ChangeUserGroupModal.vue"
 
+import ExportEmployeeWorklogModal from "../../../components/ExportEmployeeWorklogModal/ExportEmployeeWorklogModal.vue"
+
 export default {
     name: "AdminGroup",
     components: {
@@ -42,7 +45,7 @@ export default {
         ConfirmDeleteUserModal,
         ChangeUserRoleModal,
         ChangeUserGroupModal,
-
+        ExportEmployeeWorklogModal,
         // views
         AdminEmployeeManagement,
     },
@@ -103,6 +106,7 @@ export default {
             ChangeUserGroupDialogShowed: false,
             changeUserGroupInfo: {},
 
+            ExportWorklogDialogShowed: false,
 
         }
     },
@@ -234,9 +238,9 @@ export default {
             ]
         },
     },
-     mounted() {
+    async mounted() {
         this.$eventBus.$emit('show-spinner', true);
-        this._getGroupCompany()
+        await this._getGroupCompany()
         this.$eventBus.$emit('show-spinner', false);
     },
     watch: {
@@ -276,14 +280,28 @@ export default {
                     groupId: this.selected[0].group_id
                 }
                 const response = await AdminGroupServices.deleteGroup(params);
+                this.selected = []
                 if(!response){
                     this.$router.push('/admin/login')
                 } else if(response == -1){
-                    alert('Some thing wrong! Call Fail')
+                    this.$toast.open({
+                        message: "Delete Group Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
                 else {
-                    this._getGroupCompany()
-                    this.selected = []
+                    this.$toast.open({
+                        message: "Delete Group Success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    await this._getGroupCompany()            
                     this.DeleteGroupSuccessDialogShowed = true;
                 }
             }
@@ -294,7 +312,14 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Get Groups Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.listGroup = response.data.map((item) => {
@@ -336,6 +361,8 @@ export default {
                 this.ChangeUserRoleDialogShowed = false;
             }else if(screen == 11){
                 this.ChangeUserGroupDialogShowed = false;
+            }else if(screen == 12){
+                this.ExportWorklogDialogShowed = false;
             }
             
         },
@@ -349,11 +376,25 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Create Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
-            else {
+            else {          
+                this.$toast.open({
+                    message: "Create Group Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 this.AddGroupDialogShowed = false;
-                this._getGroupCompany()
+                await this._getGroupCompany()
                 this.addGroupSuccessInfo = params
                 this.AddGroupSuccessDialogShowed = true;
             }
@@ -361,16 +402,30 @@ export default {
 
         async onEditGroup(params){
             const response = await AdminGroupServices.editGroup(params);
+            this.selected = []
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Edit Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.EditGroupDialogShowed = false;
                 this.selected = []
-                this._getGroupCompany()
-
+                await this._getGroupCompany()
+                this.$toast.open({
+                    message: "Edit Group Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 this.editGroupSuccessInfo = params;
                 this.EditGroupSuccessDialogShowed = true;
             }
@@ -401,7 +456,14 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Get Employee of Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.listUsersOfSpecificGroup = response.data.map((item) => {
@@ -549,6 +611,109 @@ export default {
                 position: "top-right",
             })
             this.ChangeUserGroupDialogShowed = false
+        },
+
+        async onClickExportGroup(){
+            let listGroupTemp = this.selected.map((item)=> item.group_id)
+            const params = {
+                listGroup: listGroupTemp
+            }
+            const response = await AdminCSVServices.exportGroupCSV(params)
+            this.selected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Group-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        async onClickExportEmployee(){
+            let listEmployeeTemp = this.AdminEmployeeManagementSelected.map((item)=> item.employee_id)
+            const params = {
+                listEmployee: listEmployeeTemp
+            }
+            const response = await AdminCSVServices.exportEmployeeCSV(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Employee Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Employee-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        onClickExportWorklog(){
+
+            this.ExportWorklogDialogShowed = true
+        },
+
+        async onExportWorklogEmployee(params){
+            let listEmployeeTemp = this.AdminEmployeeManagementSelected.map((item)=> item.employee_id)
+            params.listEmployee = listEmployeeTemp
+
+            const response = await AdminCSVServices.exportWorklogEmployeeCSV(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Worklog Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Worklog ${getDateStringWithFormat(params.startDate, "YYYYMMDD")}-${getDateStringWithFormat(params.endDate, "YYYYMMDD")}.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
         }
     },
 

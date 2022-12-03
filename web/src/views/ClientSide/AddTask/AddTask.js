@@ -137,7 +137,14 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Create Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.$toast.open({
                 message: "Create success",
@@ -161,9 +168,15 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something Went Wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
-            console.log('responseeeee',response.data);
             this.employeeList = response.data.map((item) => {
                 return {...item, }
             })
@@ -188,10 +201,23 @@ export default {
                     return;
                 }
                 if(response === -1){
-                    alert("Call Fail");
-                    return;
+                    this.$toast.open({
+                        message: "Add Task Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
-                alert("Create Task Success");
+                this.$toast.open({
+                    message: "Add Task Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                window.location.reload();
             }
         },
 

@@ -45,10 +45,10 @@ export default {
     async mounted() {
         this.$eventBus.$emit('show-spinner', true);
 		const projectStatus = await this.getProjectStatus()
-		this.percentageOpen = Math.ceil((projectStatus.open / projectStatus.total)*100)
-		this.percentageInprogress = Math.ceil((projectStatus.inprogress / projectStatus.total)*100)
-		this.percentageResolved = Math.ceil((projectStatus.resolved / projectStatus.total)*100)
-		this.percentageClosed = Math.ceil((projectStatus.closed / projectStatus.total)*100)
+		this.percentageOpen = Math.round((projectStatus.open / projectStatus.total)*100)
+		this.percentageInprogress = Math.round((projectStatus.inprogress / projectStatus.total)*100)
+		this.percentageResolved = Math.round((projectStatus.resolved / projectStatus.total)*100)
+		this.percentageClosed = Math.round((projectStatus.closed / projectStatus.total)*100)
 		const projectDetail = await this.getProjectDetail()
 		console.log('projectDetail', projectDetail);
 		

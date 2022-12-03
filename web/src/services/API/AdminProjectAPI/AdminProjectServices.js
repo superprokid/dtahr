@@ -3,7 +3,7 @@ import {
     ADMIN_GET_LIST_PROJECT,
     ADMIN_CREATE_PROJECT,
     ADMIN_UPDATE_PROJECT,
-
+    ADMIN_DELETE_PROJECT,
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
 
@@ -40,7 +40,16 @@ const AdminProjectServices = {
             return error;
         }
     },
-    
+    adminDeleteProject:async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_DELETE_PROJECT, params)
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
 }
 
 export default AdminProjectServices;
