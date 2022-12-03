@@ -44,6 +44,7 @@ export default {
             userSelected: [],
             search: '',
             listUsers: [],
+            listFiltered: [],
 
             employeeSearchShowed: true,
             employeeManagementShowed: false,
@@ -180,6 +181,11 @@ export default {
                     width: 200,
                 },
                 {
+                    text: 'Group',
+                    value: 'group_full_name',
+                    width: 150,
+                },
+                {
                     text: "Gender",
                     value: 'gender',
                     width: 100,
@@ -280,7 +286,8 @@ export default {
         },
         getAvatar,
         reset () {
-            this.$refs.form.reset()
+            this.$refs.form.reset();
+            this.onClickSearchEmployee();
         },
 
         setItemRowCLass(item) {
@@ -301,9 +308,11 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            this.listUsers = response.data.listEmployees.map(item => {
+            const listResposne = response.data.listEmployees.map(item => {
                 return {...item,  dob: getDateString(item.dob), gender: this.genderArray[item.gender], join_date: getDateString(item.join_date)}
             })
+            this.listUsers = [...listResposne];
+            this.listFiltered = [...listResposne];
         },
 
 
@@ -341,16 +350,40 @@ export default {
         },
         onClickSearchEmployee(){
             console.log('search employee');
-            const params = {
-                groupId : this.selectGroup.group_id,
-                email: this.emailSearch,
-                fullName: this.fullnameSearch,
-                gender: this.genderSearch,
-                phone: this.phoneSearch,
-                mainSkill: this.mainSkillSearch,
-                jobRole: this.jobRoleSearch
-            }
-            console.log('params for search', params);
+            this.listFiltered = this.listUsers.filter(item => {
+                if (this.selectGroup?.group_id && this.selectGroup?.group_id != item.group_id) {
+                    return false;
+                }
+                if (this.emailSearch) {
+                    if (!String(item.email).toLowerCase().includes(String(this.emailSearch).toLowerCase())) {
+                        return false;
+                    }
+                }
+                if (this.fullnameSearch) {
+                    if (!String(item.full_name).toLowerCase().includes(String(this.fullnameSearch).toLowerCase())) {
+                        return false;
+                    }
+                }
+                if (this.genderSearch && this.genderSearch != item.gender) {
+                    return false;
+                }
+                if (this.phoneSearch) {
+                    if (!String(item.phone).toLowerCase().includes(String(this.phoneSearch).toLowerCase())) {
+                        return false;
+                    }
+                }
+                if (this.mainSkillSearch) {
+                    if (!String(item.main_skill).toLowerCase().includes(String(this.mainSkillSearch).toLowerCase())) {
+                        return false;
+                    }
+                }
+                if (this.jobRoleSearch) {
+                    if (!String(item.job_role).toLowerCase().includes(String(this.jobRoleSearch).toLowerCase())) {
+                        return false;
+                    }
+                }
+                return true;
+            })
         },
 
         onClickCreateUser(){
