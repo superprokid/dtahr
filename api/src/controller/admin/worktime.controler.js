@@ -63,7 +63,7 @@ async function addNewWorktime(req, res) {
         }
         const { minStart, hourStart, minEnd, hourEnd, lunchMinStart, lunchHourStart, lunchMinEnd, lunchHourEnd, approveDate } = req.body;
 
-        if (moment().isSameOrAfter(moment(approveDate)), 'date') {
+        if (moment().isSameOrAfter(moment(approveDate), 'date')) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] approveDate must be future date`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);

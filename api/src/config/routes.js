@@ -25,6 +25,8 @@ const adminWorkTimeController = require('../controller/admin/worktime.controler'
 const adminWorkLogController = require('../controller/admin/worklog.controller');
 const adminProjectController = require('../controller/admin/project.controller');
 const adminExportController = require('../controller/admin/export.controller');
+const adminTaskController = require('../controller/admin/task.controller');
+const adminPolicyController = require('../controller/admin/policy.controller');
 
 // user
 Router.post('/user/login', userController.login);
@@ -73,7 +75,8 @@ Router.get('/user/task/getall', authen, taskController.getAllTask);
 Router.get('/user/task/getdetails', authen, taskController.getTaskByID);
 Router.get('/user/task/getallforgantt', authen, taskController.getAllTaskGanttChart);
 Router.post('/user/task/attachment/upload', authen, attachment.array('file'), taskController.addAttachments);
-Router.post('/user/task/attachment/delete', authen, taskController.deleteTaskAttachments)
+Router.post('/user/task/attachment/delete', authen, taskController.deleteTaskAttachments);
+Router.post('/user/task/search', authen, taskController.searchTasks)
 Router.get('/user/category/getall', authen, taskController.getAllCategory);
 Router.get('/public/download/:dirname/:filename', (req, res) => {
     res.download(path.join(__basedir, './public/attachments/', req.params.dirname, '/', req.params.filename))
@@ -123,6 +126,7 @@ Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.upd
 Router.post('/admin/project/create', adminAuthen, adminProjectController.createNewProject);
 Router.post('/admin/project/update', adminAuthen, adminProjectController.editProject);
 Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmployee);
+// Project Task
 Router.get('/admin/project/getall', adminAuthen, adminProjectController.getAllProjects);
 Router.get('/admin/project/getstatus', adminAuthen, adminProjectController.getStatusOfProject);
 Router.get('/admin/project/getassignment', adminAuthen, adminProjectController.getAssignmentOfProject);
@@ -131,6 +135,12 @@ Router.post('/admin/project/assignee', adminAuthen, adminProjectController.addAs
 Router.post('/admin/project/removeassignee', adminAuthen, adminProjectController.removeAssignmentInProject);
 Router.get('/admin/project/getemployeenotassign', adminAuthen, adminProjectController.getEmployeeNotAssign);
 Router.post('/admin/project/delete', adminAuthen, adminProjectController.deleteProject);
+Router.get('/admin/task/getall', adminAuthen, adminTaskController.getAllTask);
+Router.get('/admin/project/getalluserofproject', adminAuthen, adminProjectController.getAllUserOfProject);
+Router.get('/admin/category/getall', adminAuthen, adminTaskController.getAllCategory);
+// Policy
+Router.get('/admin/policy/get', adminAuthen, adminPolicyController.getAllPolicy);
+Router.post('/admin/policy/update', adminAuthen, adminPolicyController.updatePolicy);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);

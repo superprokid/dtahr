@@ -82,4 +82,18 @@ module.exports = {
         monthlyreport: 5,
         workLog: 6,
     },
+    ALLOWANCE_DEFAULT: {
+        lunch: 700000,
+        house: 3000000,
+        transport: 500000,
+        phone: 400000,
+        internet: 200000,
+        insurance: 0.1,
+        tax: 0.1
+    },
+    POLICY_TYPE: {
+        overtime: 1,
+        allowance: 2,
+        holidayIncrease: 3
+    }
 }
