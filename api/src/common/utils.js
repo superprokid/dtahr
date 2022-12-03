@@ -146,7 +146,7 @@ function validateType(value, type) {
         case 'time':
             return isValidTime(value);
         default:
-            return false;
+            return true;
     }
 }
 

@@ -28,6 +28,12 @@ const GET_ASSIGNMENT_OF_PROJECT = "SELECT e.employee_id, CONCAT(e.first_name,' '
     + "                             	INNER JOIN project p ON a.project_id = p.project_id"
     + "                                 INNER JOIN employee e ON a.employee_id = e.employee_id"
     + "                             WHERE p.project_id = ? AND e.employee_id <> p.project_manager_id";
+const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, ' ', last_name) as name, avt "
+    + "                         FROM employee e "
+    + "                         	LEFT JOIN (SELECT *"
+    + "                    						FROM assignment a "
+    + "	                    					WHERE project_id = ?) tb1 on e.employee_id = tb1.employee_id"
+    + "                         WHERE e.role = 1 OR tb1.assigned_date is not null"
 
 const CHECK_EXIST_EMPLOYEE_ID = "SELECT employee_id FROM employee where employee_id = ?";
 const GET_NEWEST_PROJECT_ID = "SELECT project_id FROM `project` ORDER BY project_id DESC LIMIT 1";
@@ -509,6 +515,18 @@ function deleteAttachments(files) {
     }
 }
 
+async function getAllUserOfProject(req, res) {
+    try {
+        const { projectId } = req.query;
+        const result = await exeQuery(GET_USERS_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result || [])
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 module.exports = {
     getAllProjects,
     getDetailsPojectByEmployee,
@@ -521,4 +539,5 @@ module.exports = {
     getEmployeeNotAssign,
     removeAssignmentInProject,
     deleteProject,
+    getAllUserOfProject,
 }

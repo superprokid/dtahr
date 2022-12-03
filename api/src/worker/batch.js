@@ -1,12 +1,14 @@
 const cron = require('node-cron');
 const logger = require('../common/logger');
-const { CHECKOUT_BATCH_CRON, MONTHLY_REPORT_BATCH_CRON } = require('../config/constants');
+const { CHECKOUT_BATCH_CRON, MONTHLY_REPORT_BATCH_CRON, UPDATE_HOLIDAY_AUTO_BATCH } = require('../config/constants');
 const autoCheckout = require('../batchs/autocheckout');
 const monthlyReport = require('../batchs/monthlyreport');
+const updateHoliday = require('../batchs/autoIncrePaidLeave');
 
 const LIMIT_BATCH = 1;
 let countAutoCheckout = 0;
 let countMonthlyReport = 0;
+let countUpdateHolidayTime = 0;
 
 function run() {
     cron.schedule(CHECKOUT_BATCH_CRON, () => {
@@ -26,6 +28,16 @@ function run() {
             monthlyReport.run(() => {
                 logger.info(`[Batch] Monthly report batch end`);
                 countMonthlyReport--;
+            })
+        }
+    })
+    cron.schedule(UPDATE_HOLIDAY_AUTO_BATCH, () => {
+        if (countUpdateHolidayTime < LIMIT_BATCH) {
+            countUpdateHolidayTime++;
+            logger.info(`[Batch] Monthly update holiday time start`);
+            updateHoliday.run(() => {
+                logger.info(`[Batch] Monthly update holiday time end`);
+                countUpdateHolidayTime--;
             })
         }
     })

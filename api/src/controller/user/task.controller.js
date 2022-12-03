@@ -34,12 +34,12 @@ const GET_ALL_COMMENT_OF_TASK = "SELECT tc.*, CONCAT(first_name, ' ', last_name)
 const GET_ALL_ATTACHMENTS_OF_TASK = "SELECT * FROM taskattachment where task_id = ?";
 const GET_ALL_CATEGORY = "SELECT * FROM category";
 const GET_CHILD_TASK = "SELECT t.*, p.project_name, CONCAT(e.first_name, ' ', e.last_name) as creator, e.avt as creator_avt, category_name, category_color , CONCAT(a.first_name, ' ', a.last_name) as assignee, a.avt as assignee_avt"
-+ "                         FROM task t "
-+ "	                            INNER JOIN employee e on t.employee_id = e.employee_id"
-+ "	                            INNER JOIN employee a ON t.assignee_id = a.employee_id"
-+ "	                            INNER JOIN project p ON p.project_id = t.project_id"
-+ "                             LEFT JOIN category c ON t.category_id = c.category_id"
-+ "                         WHERE parent_task_id = ?";
+    + "                         FROM task t "
+    + "	                            INNER JOIN employee e on t.employee_id = e.employee_id"
+    + "	                            INNER JOIN employee a ON t.assignee_id = a.employee_id"
+    + "	                            INNER JOIN project p ON p.project_id = t.project_id"
+    + "                             LEFT JOIN category c ON t.category_id = c.category_id"
+    + "                         WHERE parent_task_id = ?";
 const GET_ALL_TASK_FOR_GANTT = "  SELECT t.*, CONCAT(first_name, ' ', last_name) as assignee, avt, category_name, category_color "
     + "                 FROM task t INNER JOIN employee e on t.assignee_id = e.employee_id"
     + "                 	LEFT JOIN category c ON t.category_id = c.category_id"
@@ -52,6 +52,9 @@ const GET_ATTACHMENT_BY_ID = "SELECT * FROM taskattachment WHERE attachment_id =
 const DELETE_ATTACHMENT = "DELETE FROM taskattachment WHERE attachment_id = ?";
 const GET_CURRENT_PROECT = "SELECT project_id FROM project WHERE project_id = ? LIMIT 1";
 const GET_NEWEST_TASK_NUMBER = "SELECT * FROM task WHERE project_id = ? ORDER BY task_number DESC LIMIT 1";
+const SEARCH_TASK = "SELECT task_number, task_title, `status`, task_id"
+    + "                 FROM task"
+    + "                 WHERE project_id = ? and (task_title LIKE ? or task_number = ?)"
 
 async function addNewCategory(req, res) {
     const connection = await dbaccess.getConnection();
@@ -85,7 +88,7 @@ async function addNewCategory(req, res) {
         res.status(200).send('Create success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -207,10 +210,10 @@ async function addNewTask(req, res) {
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
-        res.status(200).send({message: "Create success"});
+        res.status(200).send({ message: "Create success" });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -376,7 +379,7 @@ async function updateTask(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -420,7 +423,7 @@ async function addNewComment(req, res) {
         res.status(200).send('Create success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -466,7 +469,7 @@ async function editComment(req, res) {
         res.status(200).send('Edit success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -510,7 +513,7 @@ async function getAllTaskWithStatus(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -527,7 +530,7 @@ async function getAllTask(req, res) {
         res.status(200).send(listTask);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -551,7 +554,7 @@ async function getAllTaskGanttChart(req, res) {
         res.status(200).send(listTask);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -578,7 +581,7 @@ async function getTaskByID(req, res) {
         res.status(200).send(task);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -589,7 +592,7 @@ async function getAllCategory(req, res) {
         res.status(200).send(listCategory);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -634,7 +637,7 @@ async function deleteComment(req, res) {
         res.status(200).send('Delete success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -682,7 +685,7 @@ async function addAttachments(req, res) {
     } catch (error) {
         deleteAttachments(req.files);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -732,7 +735,7 @@ async function deleteTaskAttachments(req, res) {
     } catch (error) {
         deleteAttachments(req.files);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({message: "SERVER ERROR"});
+        res.status(500).send({ message: "SERVER ERROR" });
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -758,6 +761,23 @@ function deleteAttachments(files) {
     }
 }
 
+async function searchTasks(req, res) {
+    try {
+        const { search, projectId } = req.body
+        if (!projectId) {
+            res.status(200).send([]);
+            return;
+        }
+
+        const listTask = await dbaccess.exeQuery(SEARCH_TASK, [projectId, `%${search}%`, search]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
+        res.status(200).send(listTask);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 module.exports = {
     addNewCategory,
     addNewComment,
@@ -772,4 +792,5 @@ module.exports = {
     addAttachments,
     deleteTaskAttachments,
     getAllTaskGanttChart,
+    searchTasks,
 }
