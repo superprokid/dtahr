@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { mapState } from 'vuex';
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
+import IPService from '../../../../services/API/ip.service';
 import { REAL_TIME_TRACKING_CHANNEL } from '../../../../config/channel';
 import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
@@ -145,7 +146,18 @@ export default {
           this.$eventBus.$emit('show-spinner', false);
           return;
         }
-        await TimeTrackingServices.checkIn();
+        let ip = await IPService.getIP();
+        let response = await TimeTrackingServices.checkIn({
+          ip: ip,
+        });
+        if (response.failed) {
+          this.notiTitle = `Cannot Clock In`;
+          this.notiBody = response.message;
+          this.notiType = 'danger';
+          this.isErrorModalShowed = true;
+          this.$eventBus.$emit('show-spinner', false);
+          return
+        }
         this.$eventBus.$emit('show-spinner', false);
         this.isClockInDisable = true;
         this.isClockOutDisable = false;
