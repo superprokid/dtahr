@@ -5,6 +5,8 @@ import SessionUtls from "../services/SessionUtls";
 import CookieUtls from "../services/CookieUtls";
 import AdminSide from "../views/AdminSide/AdminSide.vue";
 
+import NotFoundPage from "../views/CommonPage//NotFoundPage/NotFoundPage.vue";
+
 // UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
 import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
@@ -174,6 +176,10 @@ const router = new Router({
         {
             path: "/",
             redirect: '/user/login'
+        },
+        {
+            path: "*",
+            component: NotFoundPage
         }
     ]
 });
