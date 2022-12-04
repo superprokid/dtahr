@@ -27,6 +27,7 @@ import moment from 'moment';
 import AddHolidayModal from "../../../components/AddHolidayModal/AddHolidayModal.vue"
 import EditWorklogModal from "../../../components/EditWorklogModal/EditWorklogModal.vue"
 import UserSeeMoreModal from "../../../components/UserSeeMoreModal/UserSeeMoreModal.vue"
+// import AdminChangePasswordModal from "../../../components/AdminChangePasswordModal/AdminChangePasswordModal.vue"
 
 const WORKLOG_DEFAULT = {
     work_date: 'No work schedule today',
@@ -39,7 +40,8 @@ export default {
     components: {
         AddHolidayModal,
         EditWorklogModal,
-        UserSeeMoreModal
+        UserSeeMoreModal,
+        // AdminChangePasswordModal
     },
     data() {
         return { 
@@ -75,6 +77,11 @@ export default {
             listUserWorklogs: [],
 
             searchWorklog: '',
+            changePasswordDialogShowed: false,
+
+            newPasswrd: '',
+            confirmPasswrd: '',
+            valid: true,
         }
     },
     computed: {
@@ -123,6 +130,8 @@ export default {
                 this.userSeeMoreModalShowed = false
             } else if(param == 4){
                 this.faceRecognitionModalShowed = false
+            }else if(param == 5){
+                this.changePasswordDialogShowed = false
             }
         },
         filterOnlyCapsText(value, search, item) {
@@ -429,6 +438,50 @@ export default {
                                 work_status: item.work_status == 0 ? 'Đã Checkin' : 'Đã Checkout',}
             })
             return this.listUserWorklogs
+        },
+
+        onClickChangePassword(){
+            this.changePasswordDialogShowed = true
+        },
+
+        async onChangePassword() {
+            if(this.$refs.form.validate()){
+                if (this.newPasswrd !== this.confirmPasswrd) {
+                    this.$eventBus.$emit('show-toast', {
+                        type: 'error',
+                        message: 'Password does not match'
+                    });
+                    return;
+                } 
+                const params = {
+                    employeeId: this.$route.params.employeeId,
+                    password: this.newPasswrd,
+                }
+                let response = await AdminUserDetailServices.adminChangePassword(params);
+                if (!response) {
+                    this.$router.push('/admin/login')
+                    return;
+                }else if(response == -1){
+                    this.$toast.open({
+                        message: "Change Password Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
+                }
+                this.$toast.open({
+                    message: "Change Password Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                this.changePasswordDialogShowed = false;
+                this.newPasswrd = ''
+                this.confirmPasswrd = ''
+            }
         },
     },
     

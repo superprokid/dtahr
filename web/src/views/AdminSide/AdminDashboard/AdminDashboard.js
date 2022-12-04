@@ -3,26 +3,27 @@ import SessionUtls from '../../../services/SessionUtls';
 import tabName from '../../../config/tabname';
 
 export default {
-  name: 'AdminDashboard',
-  data() {
-    return {
-      
-    };
-  },
+	name: 'AdminDashboard',
+	data() {
+		return {
+			value: 60,
 
-  components: {
+		};
+	},
 
-  },
+	components: {
 
-  async created() {
+	},
 
-  },
+	async created() {
 
-  methods: {
-    
-  },
+	},
 
-  beforeCreate() {
-    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.homeAdmin);
-  },
+	methods: {
+
+	},
+
+	beforeCreate() {
+		SessionUtls.setItem(SessionUtls.tabNameKey, tabName.homeAdmin);
+	},
 };

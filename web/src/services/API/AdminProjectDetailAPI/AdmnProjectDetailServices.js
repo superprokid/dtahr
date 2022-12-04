@@ -10,6 +10,8 @@ import {
     ADMIN_GET_ALL_USER_IN_PROJECT,
     ADMIN_GET_ALL_TASK_CATEGORY,
 
+    ADMIN_DELETE_TASK,
+
 
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
@@ -92,6 +94,16 @@ const AdminProjectDetailServices = {
         try {
             const response =  await callAdminAPI(()=>{
                 return axiosAdmin.get(ADMIN_GET_ALL_TASK_CATEGORY, {params})
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+    adminDeleteTask:async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_DELETE_TASK, params)
             })
             return response
         } catch (error) {

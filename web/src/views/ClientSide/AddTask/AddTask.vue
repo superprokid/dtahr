@@ -93,10 +93,10 @@
                                         </v-col>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider" :align="'center'">
-                                                <v-col cols="12" md="5">
+                                                <v-col cols="12" md="4">
                                                     Assignee
                                                 </v-col>
-                                                <v-col cols="12" md="7" class="black--text font-weight-bold mt-8">
+                                                <v-col cols="12" md="8" class="black--text font-weight-bold mt-8">
                                                     <v-autocomplete v-model="assignee" :disabled="isUpdating"
                                                         :items="employeeList" dense filled color="blue-grey lighten-2"
                                                         item-text="name" item-value="employee_id" required

@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="ml-4 project-detail-title" v-if="isProjectDetailShowed">
-            PROJECT DETAIL {{ this.$route.params.projectId }}
+            PROJECT DETAIL 
+            <!-- {{ this.$route.params.projectId }} -->
         </div>
         <div class="ml-4 project-task-title" v-if="isProjectTaskShowed" @click="goBackProjectDetail">
             <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon>
@@ -103,7 +104,7 @@
                             </v-row>
 
                             <v-row no-gutters class="mt-2">
-                                <v-data-table :headers="headers" :items="listFiltered" class="elevation-1"
+                                <v-data-table :headers="headers" :items="listFiltered" class="elevation-1" item-key="task_id" @click:row="onClickTaskRow"
                                     style="min-width: 900px" :item-class="setItemRowCLass">
                                     <template v-slot:item.task_id="{ item }">
                                         <a class="task-key">{{ item.task_number }}</a>
@@ -386,7 +387,7 @@
                                     <v-data-table v-model="projectEmployeeSelected" :headers="projectEmployeeHeaders"
                                         :items="listProjectEmployee" item-key="employee_id"
                                         :item-class="setItemRowCLass" class="elevation-4" :search="employeeSearch"
-                                        show-select :single-select="singleSelectProjectEmployee"
+                                        show-select :single-select="singleSelectProjectEmployee" @click:row="onClickEmployeeRow"
                                         :custom-filter="filterOnlyCapsText">
                                         <template v-slot:top>
                                             <v-switch v-model="singleSelectProjectEmployee" label="Single select"
@@ -437,6 +438,15 @@
                 <DeleteEmployeeOutProjectModal @on-close="onClose"
                     @on-delete-employee-out-project="onDeleteEmployeeOutProject"
                     :confirmDeleteInfo="confirmDeleteEmployeeOutProjectInfo" />
+            </v-card>
+        </v-dialog>
+
+        <!-- TASK DETAIL DIALOG -->
+        <v-dialog v-model="TaskDetailModalShowed" v-if="TaskDetailModalShowed" persistent max-width="1000px"
+            transition="dialog-top-transition">
+            <v-card>
+                <TaskDetailModal @on-close="onClose"               
+                    :taskDetailPropInfo="taskDetailPropInfo" @on-delete-task="onDeleteTask"/>
             </v-card>
         </v-dialog>
     </div>
