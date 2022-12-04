@@ -95,5 +95,6 @@ module.exports = {
         overtime: 1,
         allowance: 2,
         holidayIncrease: 3
-    }
+    },
+    PUBLIC_IP_URL: 'https://api.ipify.org/?format=json',
 }
