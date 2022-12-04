@@ -9,11 +9,15 @@ import AdminProjectDetailServices from "../../../services/API/AdminProjectDetail
 import AddEmployeeToProjectModal from "../../../components/AddEmployeeToProjectModal/AddEmployeeToProjectModal.vue"
 import DeleteEmployeeOutProjectModal from "../../../components/DeleteEmployeeOutProjectModal/DeleteEmployeeOutProjectModal.vue"
 
+import TaskDetailModal from "../../../components/TaskDetailModal/TaskDetailModal.vue"
+
 export default {
 	name: 'AdminProjectDetail',
 	components:{
 		AddEmployeeToProjectModal,
 		DeleteEmployeeOutProjectModal,
+        TaskDetailModal,
+
 	},
 
 	data() {
@@ -72,6 +76,8 @@ export default {
             employeeSelected: '',
             keyword: '',
 
+            TaskDetailModalShowed: false,
+            taskDetailPropInfo: {},
 		};
 	},
     watch: {
@@ -82,10 +88,12 @@ export default {
     async mounted() {
         this.$eventBus.$emit('show-spinner', true);
 		const projectStatus = await this.getProjectStatus()
-		this.percentageOpen = Math.round((projectStatus.open / projectStatus.total)*100)
-		this.percentageInprogress = Math.round((projectStatus.inprogress / projectStatus.total)*100)
-		this.percentageResolved = Math.round((projectStatus.resolved / projectStatus.total)*100)
-		this.percentageClosed = Math.round((projectStatus.closed / projectStatus.total)*100)
+		this.percentageOpen = Math.floor((projectStatus.open / projectStatus.total)*100)
+		this.percentageInprogress = Math.floor((projectStatus.inprogress / projectStatus.total)*100)
+		this.percentageResolved = Math.floor((projectStatus.resolved / projectStatus.total)*100)
+		this.percentageClosed = Math.floor((projectStatus.closed / projectStatus.total)*100)
+
+        // console.log(this.percentageOpen, this.percentageInprogress,this.percentageResolved, this.percentageClosed);
 		const projectDetail = await this.getProjectDetail()
         await this.getAllTask()
         await this._getAllUsers();
@@ -147,6 +155,8 @@ export default {
                 this.AddEmployeeToProjectDialogShowed = false;
             }else if(screen == 2){
 				this.DeleteEmployeeOutProjectDialogShowed = false;
+			}else if(screen == 3){
+				this.TaskDetailModalShowed = false;
 			}
         },
 		filterOnlyCapsText(value, search, item) {
@@ -314,7 +324,6 @@ export default {
                 }
             })
             this.listFiltered = [...this.allTasks];
-            console.log(this.listFiltered);
         },
         getStatus(status) {
             return {
@@ -399,6 +408,44 @@ export default {
                 return true;
             });
         },
+
+        onClickEmployeeRow(userSelected){
+            this.$router.push('/admin/userdetail/'+ userSelected.employee_id);
+        },
+
+        onClickTaskRow(taskSelected){
+            this.taskDetailPropInfo = taskSelected
+
+            this.TaskDetailModalShowed =  true
+        },
+
+        async onDeleteTask(params){
+            const response = await AdminProjectDetailServices.adminDeleteTask(params);
+            if (!response) {
+                this.$router.push('/admin/login');
+                return;
+            }
+            else if(response == -1){
+                this.$toast.open({
+                    message: "Delete Task Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Delete Task Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.TaskDetailModalShowed = false
+            await this.getAllTask()
+        },
+
 	},
 
 

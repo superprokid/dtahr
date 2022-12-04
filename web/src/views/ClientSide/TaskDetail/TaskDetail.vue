@@ -52,11 +52,11 @@
                                 Edit
                             </span>
                         </v-chip>
-                        <v-btn class="mx-2" fab dark x-small outlined color="primary">
+                        <!-- <v-btn class="mx-2" fab dark x-small outlined color="primary">
                             <v-icon dark>
                                 mdi-format-list-bulleted-square
                             </v-icon>
-                        </v-btn>
+                        </v-btn> -->
                     </v-col>
                 </v-row>
                 <!-- TASK -->

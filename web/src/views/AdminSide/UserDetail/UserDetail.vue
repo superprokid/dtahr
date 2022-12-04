@@ -1,10 +1,15 @@
 <template>
     <div class="pa-4" style="height: 90vh; overflow-y: auto;">
         <div id="user-detail-feature" v-if="userDetailFeatureShowed">
-            <div class="user-detail-title-static">
+            <div class="user-detail-title-static d-flex justify-space-between">
                 <!-- <v-icon medium color="blue darken-2">mdi-keyboard-return</v-icon> -->
                 USER DETAIL
+
+                <v-btn color="primary" @click="onClickChangePassword">
+                    Change Password
+                </v-btn>
             </div>
+
             <div class="mt-5">
                 <v-row>
                     <!-- user information -->
@@ -221,7 +226,8 @@
                                             @click="onClickAddHoliday">
                                             Add Holiday
                                         </v-btn>
-                                        <v-btn class="ml-3" max-width="170px" color="primary" dark @click="onClickFaceRecognition">
+                                        <v-btn class="ml-3" max-width="170px" color="primary" dark
+                                            @click="onClickFaceRecognition">
                                             Register Face
                                         </v-btn>
                                     </v-row>
@@ -300,8 +306,8 @@
                         <v-menu v-model="startDateWorklogPicker" :close-on-content-click="false" :nudge-right="40"
                             transition="scale-transition" offset-y min-width="auto">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field v-model="startDateWorklog" label="From"
-                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                <v-text-field v-model="startDateWorklog" label="From" prepend-icon="mdi-calendar"
+                                    readonly v-bind="attrs" v-on="on">
                                 </v-text-field>
                             </template>
                             <v-date-picker v-model="startDateWorklog" @input="onSelectStartDateWorklog">
@@ -312,8 +318,8 @@
                         <v-menu v-model="endDateWorklogPicker" :close-on-content-click="false" :nudge-right="40"
                             transition="scale-transition" offset-y min-width="auto">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-text-field v-model="endDateWorklog" label="To" prepend-icon="mdi-calendar"
-                                    readonly v-bind="attrs" v-on="on">
+                                <v-text-field v-model="endDateWorklog" label="To" prepend-icon="mdi-calendar" readonly
+                                    v-bind="attrs" v-on="on">
                                 </v-text-field>
                             </template>
                             <v-date-picker v-model="endDateWorklog" @input="onSelectEndDateWorklog">
@@ -350,7 +356,8 @@
             </v-card>
         </v-dialog>
         <!-- USER INFO SEEMORE DIALOG -->
-        <v-dialog v-model="userSeeMoreModalShowed" persistent max-width="1200px" transition="dialog-top-transition">
+        <v-dialog v-model="userSeeMoreModalShowed" v-if="userSeeMoreModalShowed" persistent max-width="1200px"
+            transition="dialog-top-transition">
             <v-card color="#FFFBE6">
                 <UserSeeMoreModal @on-close="onClose" @on-save-user-see-more="onSaveUserSeeMore"
                     :userDetailInfo="userDetailInfoProp" />
@@ -360,6 +367,37 @@
         <v-dialog v-model="faceRecognitionModalShowed" persistent max-width="1200px" transition="dialog-top-transition">
             <v-card color="#FFFBE6">
                 <FaceRegister @on-close="onClose" />
+            </v-card>
+        </v-dialog>
+
+        <!-- CHANGE PASSWORD DIALOG -->
+        <v-dialog v-model="changePasswordDialogShowed" v-if="changePasswordDialogShowed" persistent max-width="800px"
+            transition="dialog-top-transition">
+            <v-card>
+                <v-toolbar class="text-h5" color="primary" dark>Change Password</v-toolbar>
+                <v-card-text>
+                    <v-form ref="form" v-model="valid" lazy-validation>
+
+                        <v-container>
+                            <v-text-field label="New Password *" :rules="[() => !!newPasswrd || 'This field is required',
+                            () => newPasswrd.length >= 6 || 'Password must be at least 6 characters']" v-model="newPasswrd"
+                                type="password" hint="Your new password">
+                            </v-text-field>
+                            <v-text-field label="Confirm Password *" :rules="[() => !!confirmPasswrd || 'This field is required',
+                            () => confirmPasswrd === newPasswrd || 'Password does not match']" v-model="confirmPasswrd"
+                                type="password" hint="Confirm your new password">
+                            </v-text-field>
+                        </v-container>
+                        <small>*indicates required field</small>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="()=>{changePasswordDialogShowed = false; newPasswrd = ''; confirmPasswrd = ''}">
+                        Close
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="onChangePassword"> Save </v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>

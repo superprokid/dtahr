@@ -501,11 +501,7 @@ export default {
             window.open(newRoute.href, '_blank');
         },
     },
-    computed: {
-        // editor() {
-        //   return this.$refs.myQuillEditor.quill
-        // }
-      },
+
     watch: {
         taskDetailData(newVal) {
             setTimeout(() => {

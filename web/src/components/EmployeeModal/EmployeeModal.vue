@@ -7,9 +7,9 @@
         <v-toolbar class="text-h5" color="#154C79" dark>
             Employee Information
             <v-spacer></v-spacer>
-            <v-btn dark text @click="openCamera">
+            <!-- <v-btn dark text @click="openCamera">
                 Change Face Recognition
-            </v-btn>
+            </v-btn> -->
             <v-btn dark text @click="close">
                 CLOSE
             </v-btn>
@@ -80,19 +80,21 @@
                                 </v-list-item>
                             </v-card>
                         </v-col>
-                        <v-col class="d-flex justify-center" cols="12" sm="6" md="6">
-                            <!-- <v-list-item-avatar class="rounded-circle" tile size="80" color="grey">
-                                <img src="@/assets/user-default.png" alt="">
-                            </v-list-item-avatar> -->
-                            <v-card class="mx-auto" max-width="45vw" outlined>
-
+                        <v-col class="d-flex justify-center align-center" cols="12" md="4" offset-md="1">
+                            <v-card class="mx-auto" outlined>
                                 <v-img contain height="100%" width="100%" :src="avtBaseUrl + '/' + propPackage.avt"
                                     v-if="propPackage.avt != null"></v-img>
                                 <v-img contain lazy-src="https://picsum.photos/id/11/10/6" height="100%" width="100%"
                                     src="https://www.bootdey.com/app/webroot/img/Content/avatar/avatar1.png" v-else></v-img>
                             </v-card>
-
                         </v-col>
+                        <!-- <v-col cols="12" md="4" class="d-flex align-center">
+                            <v-card flat color="#FFFBE6">
+                                <v-card-text>
+                                    <img :src="getAvatar()" alt="" style="width: 100%; height: 100%; object-fit: cover">
+                                </v-card-text>
+                            </v-card>
+                        </v-col> -->
 
                     </v-row>
                     <v-row>

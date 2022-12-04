@@ -132,6 +132,12 @@ export const ADMIN_DELETE_EMPLOYEE_OUT_PROJECT = BASE_API_ADMIN_URL + "/project/
 export const ADMIN_GET_ALL_TASK = BASE_API_ADMIN_URL + "/task/getall"
 export const ADMIN_GET_ALL_USER_IN_PROJECT = BASE_API_ADMIN_URL + "/project/getalluserofproject"
 export const ADMIN_GET_ALL_TASK_CATEGORY = BASE_API_ADMIN_URL + "/category/getall"
+
+export const ADMIN_GET_TASK_DETAIL_INFO = BASE_API_ADMIN_URL + "/task/getdetails"
+export const ADMIN_DELETE_TASK = BASE_API_ADMIN_URL + "/task/delete"
+export const ADMIN_CHANGE_USER_PASSWORD = BASE_API_ADMIN_URL + "/employee/changepassword"
+
+
 // constant
 export const TAB_TYPE = {
     USER: 'user',

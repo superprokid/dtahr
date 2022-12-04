@@ -1,4 +1,7 @@
+/* eslint-disable */
 import {USER_GET_IMAGE} from '../../config/constant'
+
+import { getDateString, getTimeString, getAvatar, getDateStringWithTask, isPastDate } from "../../services/utilities";
 
 export default{
     name: 'EmployeeModal',
@@ -22,6 +25,11 @@ export default{
         avtBaseUrl: USER_GET_IMAGE,
         cameraShow: false,
     }),  
+    mounted(){
+      this.propPackage.relative_dob = getDateString(this.propPackage.relative_dob)
+      // console.log('propPackage', this.propPackage);
+
+    },
     watch: {
         propPackage(val) {
           // Be sure to validate default values
