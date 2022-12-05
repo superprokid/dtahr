@@ -144,6 +144,11 @@ Router.get('/admin/category/getall', adminAuthen, adminTaskController.getAllCate
 // Policy
 Router.get('/admin/policy/get', adminAuthen, adminPolicyController.getAllPolicy);
 Router.post('/admin/policy/update', adminAuthen, adminPolicyController.updatePolicy);
+// Dashboard
+Router.get('/admin/dashboard/getworkingstatus', adminAuthen, adminController.workingStatus);
+Router.get('/admin/dashboard/checkinstatus', adminAuthen, adminController.getCheckinStatus);
+Router.get('/admin/dashboard/worktimeandholiday', adminAuthen, adminWorkTimeController.getCurrentWorkingTimeAndHoliday);
+Router.get('/admin/dashboard/projectstatus', adminAuthen, adminProjectController.getProjectStatus);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);

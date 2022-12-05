@@ -44,7 +44,16 @@ const DELETE_ASSIGNMENT = "DELETE FROM assignment WHERE project_id = ? and emplo
 const GET_EMPLOYEES_NOT_ASSIGN = "  SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name, g.group_name, g.group_full_name "
     + "                             FROM employee e INNER JOIN `group` g ON e.group_id = g.group_id "
     + "                                 LEFT JOIN employee er ON e.employer_id = er.employee_id"
-    + "                             WHERE e.employee_id NOT IN (SELECT employee_id FROM assignment WHERE project_id = ?)"
+    + "                             WHERE e.employee_id NOT IN (SELECT employee_id FROM assignment WHERE project_id = ?)";
+// Dashboard
+const GET_PROJECT_STATUS = "SELECT p.project_name, p.project_id, "
+    + "                         COUNT(IF(t.`status` = 0, 1, NULL)) as `open`,"
+    + "                         COUNT(IF(t.`status` = 1, 1, NULL)) as inProgress,"
+    + "                         COUNT(IF(t.`status` = 2, 1, NULL)) as resolved,"
+    + "                         COUNT(IF(t.`status` = 3, 1, NULL)) as closed,"
+    + "                     COUNT(*) as total"
+    + "                         FROM project p LEFT JOIN task t ON p.project_id = t.project_id"
+    + "                     GROUP BY p.project_id"
 
 // DELETE PROJECT
 const GET_ATTACHMENTS_OF_PROJECT = "SELECT * "
@@ -527,6 +536,17 @@ async function getAllUserOfProject(req, res) {
     }
 }
 
+async function getProjectStatus(req, res) {
+    try {
+        const result = await exeQuery(GET_PROJECT_STATUS);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result || []);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 module.exports = {
     getAllProjects,
     getDetailsPojectByEmployee,
@@ -540,4 +560,5 @@ module.exports = {
     removeAssignmentInProject,
     deleteProject,
     getAllUserOfProject,
+    getProjectStatus,
 }
