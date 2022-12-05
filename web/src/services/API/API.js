@@ -66,6 +66,9 @@ export function asyncRecallFunction(apiFunction) {
 			}
 			return await apiFunction();
 		} else {
+			if (error.response.data.failed) {
+				return error.response.data;
+			}
 			return -1;
 		}
 

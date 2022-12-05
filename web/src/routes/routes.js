@@ -5,6 +5,8 @@ import SessionUtls from "../services/SessionUtls";
 import CookieUtls from "../services/CookieUtls";
 import AdminSide from "../views/AdminSide/AdminSide.vue";
 
+import NotFoundPage from "../views/CommonPage//NotFoundPage/NotFoundPage.vue";
+
 // UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
 import ClientLoginPage from "@/views/ClientSide/LoginSite/LoginPage.vue"
@@ -34,6 +36,8 @@ import UserDetail from "../views/AdminSide/UserDetail/UserDetail.vue"
 import AdminCSVExport from "@/views/AdminSide/AdminCSVExport/AdminCSVExport.vue"
 import AdminProject from "../views/AdminSide/AdminProject/AdminProject.vue"
 import AdminProjectDetail from "../views/AdminSide/AdminProjectDetail/AdminProjectDetail.vue"
+import AdminWorkingTime from "../views/AdminSide/AdminWorkingTime/AdminWorkingTime.vue"
+import AdminPolicy from "../views/AdminSide/AdminPolicy/AdminPolicy.vue"
 
 Vue.use(Router);
 
@@ -82,6 +86,14 @@ const router = new Router({
                     path: 'projectdetail/:projectId',
                     component: AdminProjectDetail
                 },
+                {
+                    path: 'workingtime',
+                    component: AdminWorkingTime
+                },
+                {
+                    path: 'policy',
+                    component: AdminPolicy
+                }
             ]
         },
         { 
@@ -164,6 +176,10 @@ const router = new Router({
         {
             path: "/",
             redirect: '/user/login'
+        },
+        {
+            path: "*",
+            component: NotFoundPage
         }
     ]
 });

@@ -55,6 +55,9 @@ export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
 export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
 export const USER_GET_USER_IN_PROJECT = BASE_URL + "/api/user/getalluserofproject";
 
+export const USER_SEARCH_PARENT_TASK = BASE_API_USER_URL + "/task/search";
+
+
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
 export const USER_GET_CHECK_STATUS = BASE_API_USER_URL + "/manager/getalluser";
@@ -106,7 +109,12 @@ export const ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/w
 
 export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
 export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
-
+export const ADMIN_GET_ALL_WORKTIME = BASE_API_ADMIN_URL + '/worktime/get';
+export const ADMIN_UPDATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/update';
+export const ADMIN_CREATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/create';
+export const ADMIN_DELETE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/delete';
+export const ADMIN_GET_POLICY = BASE_API_ADMIN_URL + '/policy/get';
+export const ADMIN_UPDATE_POLICY = BASE_API_ADMIN_URL + '/policy/update';
 export const ADMIN_GET_LIST_PROJECT = BASE_API_ADMIN_URL + "/project/getall";
 export const ADMIN_CREATE_PROJECT = BASE_API_ADMIN_URL + "/project/create";
 export const ADMIN_UPDATE_PROJECT = BASE_API_ADMIN_URL + "/project/update";
@@ -120,6 +128,16 @@ export const ADMIN_ADD_EMPLOYEE_TO_PROJECT = BASE_API_ADMIN_URL + "/project/assi
 
 export const ADMIN_GET_ALL_EMPLOYEE_IN_PROJECT_EXCEPT_ASSIGNEE = BASE_API_ADMIN_URL + "/project/getemployeenotassign"
 export const ADMIN_DELETE_EMPLOYEE_OUT_PROJECT = BASE_API_ADMIN_URL + "/project/removeassignee"
+
+export const ADMIN_GET_ALL_TASK = BASE_API_ADMIN_URL + "/task/getall"
+export const ADMIN_GET_ALL_USER_IN_PROJECT = BASE_API_ADMIN_URL + "/project/getalluserofproject"
+export const ADMIN_GET_ALL_TASK_CATEGORY = BASE_API_ADMIN_URL + "/category/getall"
+
+export const ADMIN_GET_TASK_DETAIL_INFO = BASE_API_ADMIN_URL + "/task/getdetails"
+export const ADMIN_DELETE_TASK = BASE_API_ADMIN_URL + "/task/delete"
+export const ADMIN_CHANGE_USER_PASSWORD = BASE_API_ADMIN_URL + "/employee/changepassword"
+
+
 // constant
 export const TAB_TYPE = {
     USER: 'user',

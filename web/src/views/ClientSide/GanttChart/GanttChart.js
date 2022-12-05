@@ -247,7 +247,7 @@ export default {
                     return false;
                 }
                 if (this.keyword) {
-                    if (!String(task.task_id).includes(this.keyword) && !task.task_title.includes(this.keyword)) {
+                    if (!String(task.task_number).includes(this.keyword) && !task.task_title.includes(this.keyword)) {
                         return false;
                     }
                 }
