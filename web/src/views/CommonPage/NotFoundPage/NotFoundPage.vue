@@ -71,5 +71,5 @@ export default {
 };
 </script>
 
-<style src="./NotFoundPage.css">
+<style scoped src="./NotFoundPage.css">
 </style>
