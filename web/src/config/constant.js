@@ -137,6 +137,10 @@ export const ADMIN_GET_TASK_DETAIL_INFO = BASE_API_ADMIN_URL + "/task/getdetails
 export const ADMIN_DELETE_TASK = BASE_API_ADMIN_URL + "/task/delete"
 export const ADMIN_CHANGE_USER_PASSWORD = BASE_API_ADMIN_URL + "/employee/changepassword"
 
+export const ADMIN_GET_WORKING_STATUS = BASE_API_ADMIN_URL + "/dashboard/getworkingstatus"
+export const ADMIN_GET_WORKING_ACTIVITY = BASE_API_ADMIN_URL + "/dashboard/checkinstatus"
+export const ADMIN_GET_WORKING_TIME_AND_HOLIDAY = BASE_API_ADMIN_URL + "/dashboard/worktimeandholiday"
+export const ADMIN_GET_PROJECT_STATUS = BASE_API_ADMIN_URL + "/dashboard/projectstatus"
 
 // constant
 export const TAB_TYPE = {
