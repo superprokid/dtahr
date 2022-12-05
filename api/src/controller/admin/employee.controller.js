@@ -30,7 +30,9 @@ const GET_PROJECT_DETAILS_OF_USER = "SELECT a.employee_id, a.assigned_date, tb.*
     + "		                								LEFT JOIN assignment a ON p.project_id = a.project_id"
     + "										                INNER JOIN employee e ON p.project_manager_id = e.employee_id"
     + "								                    WHERE p.project_id = ?) tb on tb.project_id = a.project_id"
-    + "                                 WHERE a.employee_id = ?"
+    + "                                 WHERE a.employee_id = ?";
+const GET_EMAIL_BY_EMPLOYEE = "SELECT email FROM employee WHERE employee_id = ? LIMIT 1";
+const UPDATE_PASSWORD = "UPDATE employee SET password = ? WHERE employee_id = ?";
 
 async function createNewEmployee(req, res) {
     const connection = await dbaccess.getConnection();
@@ -174,7 +176,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] end mail failed`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send({ message: 'Can not send your password to email, please check your email'});
+            res.status(400).send({ message: 'Can not send your password to email, please check your email' });
             return;
         }
         res.status(200).send({
@@ -445,10 +447,74 @@ async function deleteEmployee(req, res) {
     }
 }
 
+async function changePassword(req, res) {
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const validateSchema = {
+            employeeId: {
+                type: 'string',
+                required: true,
+            },
+            password: {
+                type: 'string',
+                required: true,
+            }
+        }
+
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send({ message: validResult });
+            return;
+        }
+
+        const { employeeId, password } = req.body;
+
+        await dbaccess.queryTransaction(connection, UPDATE_PASSWORD, [hash(password), employeeId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update password success, employee_id = ${employeeId}`);
+
+        const currentEmail = dbaccess.queryTransaction(connection, GET_EMAIL_BY_EMPLOYEE, [employeeId]);
+        if (currentEmail.length) {
+            const email = currentEmail[0].email;
+            const sendMailResult = await sendMail(email, password);
+            if (!sendMailResult) {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] end mail failed`);
+                await dbaccess.rollback(connection);
+                dbaccess.releaseConnection(connection);
+                res.status(400).send({ message: 'Can not send your password to email, please check your email' });
+                return;
+            }
+        }
+
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+        res.status(200).send({ message: "Change password success" });
+    } catch (error) {
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function importEmployee(req, res) {
+    const file = req.files?.length ? req.files[0] : null;
+    if (!file) {
+        res.status(403).send({ message: "Import file not found" })
+    }
+    console.log(file);
+    res.status(200).send("OK");
+}
+
 module.exports = {
     createNewEmployee,
     editEmployee,
     getAllFreeManager,
     getEmployeeInfoById,
     deleteEmployee,
+    changePassword,
+    importEmployee,
 }

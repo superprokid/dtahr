@@ -45,13 +45,17 @@ let attachmentStorage = multer.diskStorage({
     }
 });
 
+let memoryStore = multer.memoryStorage();
+
 // let send = multer.
 
 const uploadFile = multer({ storage: storage });
 const sendFile = multer({storage: checkInStorage})
 const attachment = multer({storage: attachmentStorage})
+const uploadCSV = multer({ storage: memoryStore });
 module.exports = {
     uploadFile,
     sendFile,
     attachment,
+    uploadCSV
 };

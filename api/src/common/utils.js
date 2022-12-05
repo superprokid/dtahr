@@ -1,5 +1,6 @@
 const moment = require('moment')
-const { MAX_EMPLOYEE_ID_LENGTH } = require("../config/constants");
+const { MAX_EMPLOYEE_ID_LENGTH, PUBLIC_IP_URL } = require("../config/constants");
+const { axiosBase } = require('./axiosBase');
 const YYYY_MM_DD = 'YYYY-MM-DD';
 const YYYY_MM_DD_HH_MM_SS = "YYYY-MM-DD hh:mm:ss";
 
@@ -219,6 +220,17 @@ function getDateStringWithFormat(date, format) {
     return moment(new Date(date)).format(format);
 }
 
+async function getMyPublicIP() {
+    try {
+        let response = await axiosBase.get(`${PUBLIC_IP_URL}`);
+        return response.data.ip;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -237,4 +249,5 @@ module.exports = {
     getDateStartOfMonth,
     getDateEndOfMonth,
     getDateStringWithFormat,
+    getMyPublicIP,
 }

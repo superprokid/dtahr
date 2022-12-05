@@ -2,7 +2,7 @@ const express = require('express');
 const { authen } = require('../policy/user.authentication');
 const { adminAuthen } = require('../policy/admin.authentication');
 const { faceRecogAuthen } = require('../policy/facerecog.authentication');
-const { uploadFile, sendFile, attachment } = require('../common/uploadUtls');
+const { uploadFile, sendFile, attachment, uploadCSV } = require('../common/uploadUtls');
 const path = require('path')
 const Router = express.Router();
 // Import for user controller
@@ -110,6 +110,7 @@ Router.post('/admin/group/create', adminAuthen, adminGroupController.createGroup
 Router.post('/admin/group/update', adminAuthen, adminGroupController.updateGroup);
 Router.post('/admin/group/delete', adminAuthen, adminGroupController.deleteGroup);
 Router.post('/admin/employee/update', adminAuthen, adminEmpController.editEmployee);
+Router.post('/admin/employee/changepassword', adminAuthen, adminEmpController.changePassword);
 Router.post('/admin/holiday/create', adminAuthen, adminHolidayController.addNewHoliday);
 Router.post('/admin/holiday/delete', adminAuthen, adminHolidayController.deleteHoliday);
 Router.get('/admin/holiday/get', adminAuthen, adminHolidayController.getAllHoliday);
@@ -136,11 +137,18 @@ Router.post('/admin/project/removeassignee', adminAuthen, adminProjectController
 Router.get('/admin/project/getemployeenotassign', adminAuthen, adminProjectController.getEmployeeNotAssign);
 Router.post('/admin/project/delete', adminAuthen, adminProjectController.deleteProject);
 Router.get('/admin/task/getall', adminAuthen, adminTaskController.getAllTask);
+Router.get('/admin/task/getdetails', adminAuthen, adminTaskController.getTaskDetails);
+Router.post('/admin/task/delete', adminAuthen, adminTaskController.deleteTask);
 Router.get('/admin/project/getalluserofproject', adminAuthen, adminProjectController.getAllUserOfProject);
 Router.get('/admin/category/getall', adminAuthen, adminTaskController.getAllCategory);
 // Policy
 Router.get('/admin/policy/get', adminAuthen, adminPolicyController.getAllPolicy);
 Router.post('/admin/policy/update', adminAuthen, adminPolicyController.updatePolicy);
+// Dashboard
+Router.get('/admin/dashboard/getworkingstatus', adminAuthen, adminController.workingStatus);
+Router.get('/admin/dashboard/checkinstatus', adminAuthen, adminController.getCheckinStatus);
+Router.get('/admin/dashboard/worktimeandholiday', adminAuthen, adminWorkTimeController.getCurrentWorkingTimeAndHoliday);
+Router.get('/admin/dashboard/projectstatus', adminAuthen, adminProjectController.getProjectStatus);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);
@@ -150,6 +158,8 @@ Router.post('/admin/export/worklog', adminAuthen, adminExportController.exportWo
 Router.post('/admin/export/information', adminAuthen, adminExportController.exportInformationByListEmp);
 Router.post('/admin/export/group', adminAuthen, adminExportController.exportGroupByList);
 Router.post('/admin/export/project', adminAuthen, adminExportController.exportProjectByList);
+// Admin import
+Router.post('/admin/import/employee', uploadCSV.any(), adminEmpController.importEmployee)
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);

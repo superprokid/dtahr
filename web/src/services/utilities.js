@@ -39,3 +39,17 @@ export function addDays(date, number) {
 export function addMonths(date, number) {
     return moment(date).add(number, 'month');
 }
+
+export function compareTwoTimeGreaterOrEqual(hours1, min1, hours2, min2) {
+    if (hours1 > hours2) {
+        return true;
+    } else if (hours1 < hours2) {
+        return false;
+    } else {
+        if (min1 >= min2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

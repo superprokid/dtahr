@@ -6,9 +6,10 @@ const morgan = require('morgan');
 const logger = require('../common/logger')
 const { PORT } = require('../config/constants');
 const { Server } = require("socket.io");
+const { getMyPublicIP } = require('../common/utils');
 
 const app = express();
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 // app.use(cookieParser())
 app.use(express.urlencoded({
     extended: true
@@ -92,8 +93,16 @@ function run() {
 
     const usePort = process.env.PORT || PORT
 
-    server.listen(usePort, () => {
-        logger.info(`[Server] HTTP server running success, listening on port: ${usePort}`)
+    server.listen(usePort, async () => {
+        logger.info(`[Server] HTTP server running success, listening on port: ${usePort}`);
+        while (1) {
+            const myPublicIP = await getMyPublicIP();
+            if (myPublicIP) {
+                logger.info(`[Server] server's public IP address is ${myPublicIP}`);
+                global.__myPublicIP = myPublicIP;
+                break;
+            }
+        }
     })
 }
 

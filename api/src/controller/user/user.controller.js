@@ -134,6 +134,7 @@ async function login(req, res) {
 
 async function checkInFaceId(req, res) {
     req.employee_id = req.body.employeeId;
+    req.isFaceId = true;
     await checkin(req, res);
     return
 }
@@ -158,6 +159,7 @@ async function checkInMobile(req, res) {
                 console.log('faceid = ', result.data);
                 const empFaceId = result.data;
                 if (empFaceId && empFaceId.employeeId === empId) {
+                    req.isFaceId = true;
                     checkin(req, res);
                 } else {
                     logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - can request to face server`);
@@ -201,20 +203,29 @@ async function isAvalibleCheckinTime(connection) {
 }
 
 async function checkin(req, res) {
+    if (!req.isFaceId) {
+        const { ip } = req.body;
+        if (ip != __myPublicIP) {
+            console.log('__myPublicIP', __myPublicIP);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] You can't check in if you not in office`);
+            res.status(403).send({ message: "You can't check in if you not in office", failed: true })
+            return;
+        }
+    }
     const connection = await getConnection();
     await beginTransaction(connection);
     try {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send({ message: "Something went wrong, please try later!" });
+            res.status(403).send({ message: "Something went wrong, please try later!", failed: true });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
         }
         if (!(await isAvalibleCheckinTime(connection))) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] now is not work time`);
-            res.status(403).send({ message: "Today is not working day, can't checkin" });
+            res.status(403).send({ message: "Today is not working day, can't checkin", failed: true });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -249,7 +260,7 @@ async function checkin(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send({ message: "SERVER ERROR" });
+        res.status(500).send({ message: "SERVER ERROR", failed: true });
     }
 }
 
