@@ -447,6 +447,9 @@ export default {
         },
 
 	},
-
+    beforeCreate() {
+		SessionUtls.setItem(SessionUtls.tabNameKey, tabName.projectAdmin);
+        this.$root.$emit('drawer');
+	},
 
 };

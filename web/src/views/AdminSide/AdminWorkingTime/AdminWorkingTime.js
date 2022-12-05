@@ -1,4 +1,6 @@
 import Input from '@/components/Input/Input.vue';
+import SessionUtls from "../../../services/SessionUtls"
+import tabName from '../../../config/tabname';
 
 import AdminWorkTimeService from '../../../services/API/AdminWorkTimeAPI/worktime.service';
 
@@ -253,5 +255,9 @@ export default {
 	},
 	mounted() {
 		this.getAllWorkTime();
+	},
+
+	beforeCreate() {
+		SessionUtls.setItem(SessionUtls.tabNameKey, tabName.workingTimeAdmin);
 	},
 };

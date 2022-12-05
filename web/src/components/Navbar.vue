@@ -136,7 +136,7 @@ export default {
                 title: 'Working Time',
                 icon: 'mdi-clock-outline',
                 to: "/admin/workingtime", // name of router path
-                id: tabName.workingtimeAdmin, // id of page
+                id: tabName.workingTimeAdmin, // id of page
             },
             {
                 title: 'Policy',
@@ -148,8 +148,16 @@ export default {
         currentTab: '',
 
     }),
+    watch: {
+        currentTab(newVal){
+            console.log('this.currentTab',newVal);
+        }   
+    },
     mounted(){
         this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey)
+        this.$root.$on('drawer', () => {
+            this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+        })
     },
     computed: {
         ...mapState(["startDataAdmin"])
