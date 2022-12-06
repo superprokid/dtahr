@@ -77,6 +77,7 @@ export default {
                         position: "top-right",
                     })   
                     this.$mySocket.emit(WFH_CHANNEL, 0);
+                    this.reset();
                 }
             }
         }

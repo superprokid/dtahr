@@ -4,6 +4,7 @@ const { sendMail } = require('../../common/mailer');
 const { validateRequest, randomString, generateEmployeeId, getDateTimeString, getDateString, isNullOrUndefinded } = require('../../common/utils');
 const { hash } = require('../../common/cryptcommon');
 const { ROLE } = require('../../config/constants');
+const Excel = require('../../model/excel');
 
 const LOG_CATEGORY = "ADMIN EMPLOYEE CONTROLLER"
 const GET_NEWEST_EMPLPOYEE_ID = "SELECT employee_id FROM employee ORDER BY employee_id DESC LIMIT 1";
@@ -500,13 +501,225 @@ async function changePassword(req, res) {
     }
 }
 
+
+const IMPORT_HEADER = ["Email", "First Name", "Last Name", "Date Of Birth", "Address", "Gender", "Phone", "Position", "Main Skill", "Relative Name", "Relative Gender", "Relative Phone", "Relative Address", "Relationship", "Salary", "Bank Name", "Bank Account"]
+const EMAIL_INDEX = 1, FIRST_NAME_INDEX = 2, LAST_NAME_INDEX = 3, DOB_INDEX = 4, ADDRESS_INDEX = 5, GENDER_INDEX = 6, PHONE_INDEX = 7, POSITION_INDEX = 8, MAIN_SKILL_INDEX = 9,
+    RELATIVE_NAME_INDEX = 10, RELATIVE_GENDER = 11, RELATIVE_PHONE_INDEX = 12, RELATIVE_ADDRESS_INDEX = 13, RELATIONSHIP_INDEX = 14, SALARY_INDEX = 15, BACK_NAME_INDEX = 16, BANK_ACCOUNT_INDEX = 17;
 async function importEmployee(req, res) {
     const file = req.files?.length ? req.files[0] : null;
     if (!file) {
-        res.status(403).send({ message: "Import file not found" })
+        res.status(400).send({ message: "Import file not found", failed: true })
+        return;
     }
-    console.log(file);
-    res.status(200).send("OK");
+    const fileName = file.originalname;
+    const fileNameArr = String(fileName).split('.');
+    if (fileNameArr.length < 2 || (fileNameArr[1] != 'xlsx' && fileNameArr[1] != 'xls')) {
+        res.status(400).send({ message: "File type not allowed!", failed: true });
+        return;
+    }
+
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+
+    try {
+        const validateSchema = {
+            managerId: {
+                type: 'string',
+                required: true,
+            },
+            groupId: {
+                type: 'string',
+                required: true,
+            }
+        }
+
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            res.status(403).send({ message: validResult });
+            return;
+        }
+        const excel = new Excel();
+        await excel.openBuffer(file.buffer);
+        const workSheet = excel.getWorkSheet('Import');
+        const header = workSheet.getRow(1);
+        for (let i = 0; i < IMPORT_HEADER.length; i++) {
+            const cell = header.getCell(i + 1);
+            if (cell.value != IMPORT_HEADER[i]) {
+                await dbaccess.rollback(connection);
+                dbaccess.releaseConnection(connection);
+                res.status(400).send({ message: `Header is invalid`, failed: true });
+                return;
+            }
+        }
+
+        const { groupId, managerId } = req.body;
+
+        const currentGroup = await dbaccess.exeQuery(GET_CURRENT_GROUP, [groupId]);
+        if (!currentGroup.length) {
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(400).send({ message: 'Group is not exist', failed: true });
+            return;
+        }
+
+        let index = 2;
+        while (1) {
+            const row = workSheet.getRow(index);
+            if (!row.getCell(1).value) {
+                break;
+            }
+            const body = {
+                email: row.getCell(EMAIL_INDEX).value.text || row.getCell(EMAIL_INDEX).value,
+                firstName: row.getCell(FIRST_NAME_INDEX).value,
+                lastName: row.getCell(LAST_NAME_INDEX).value,
+                dob: row.getCell(DOB_INDEX).value,
+                address: row.getCell(ADDRESS_INDEX).value,
+                gender: String(row.getCell(GENDER_INDEX).value).toUpperCase() == "MALE" ? 0 : 1 ,
+                phone: row.getCell(PHONE_INDEX).value,
+                jobRole: row.getCell(POSITION_INDEX).value,
+                mainSkill: row.getCell(MAIN_SKILL_INDEX).value,
+                groupId: groupId,
+                employerId: managerId,
+                relativeName: row.getCell(RELATIVE_NAME_INDEX).value,
+                relativeGender: row.getCell(RELATIVE_GENDER).value,
+                relativePhone: row.getCell(RELATIVE_PHONE_INDEX).value,
+                relativeAddress: row.getCell(RELATIVE_ADDRESS_INDEX).value,
+                relationShip: row.getCell(RELATIONSHIP_INDEX).value,
+                salary: row.getCell(SALARY_INDEX).value,
+                bankAccount: row.getCell(BANK_ACCOUNT_INDEX).value,
+                bankName: row.getCell(BACK_NAME_INDEX).value,
+            }
+
+            const validateSchemaBody = {
+                email: {
+                    type: 'string',
+                    required: true,
+                },
+                firstName: {
+                    type: 'string',
+                    required: true,
+                },
+                lastName: {
+                    type: 'string',
+                    required: true,
+                },
+                dob: {
+                    type: 'datetime',
+                    required: true,
+                },
+                address: {
+                    type: 'string',
+                    required: false,
+                },
+                gender: {
+                    type: 'number',
+                    required: true,
+                },
+                groupId: {
+                    type: 'string',
+                    required: true,
+                },
+                joinDate: {
+                    type: 'string',
+                    required: false,
+                },
+                phone: {
+                    type: 'string',
+                    required: false,
+                },
+                mainSkill: {
+                    type: 'string',
+                    required: false
+                },
+                jobRole: {
+                    type: 'string',
+                    required: false
+                },
+                employerId: {
+                    type: 'string',
+                    required: true
+                },
+                relativeName: {
+                    type: 'string',
+                    required: false
+                },
+                relativeDob: {
+                    type: 'datetime',
+                    required: false
+                },
+                relativeGender: {
+                    type: 'string',
+                    required: false
+                },
+                relativePhone: {
+                    type: 'string',
+                    required: false
+                },
+                relativeAddress: {
+                    type: 'string',
+                    required: false
+                },
+                relationShip: {
+                    type: 'string',
+                    required: false
+                },
+                salary: {
+                    type: 'number',
+                    required: false
+                },
+                bankAccount: {
+                    type: 'string',
+                    required: false
+                },
+                bankName: {
+                    type: 'string',
+                    required: false
+                },
+            }
+            
+            const validateResultBody = validateRequest(body, validateSchemaBody);
+            if (validateResultBody) {
+                await dbaccess.rollback(connection);
+                dbaccess.releaseConnection(connection);
+                res.status(400).send({ message: `Employee in row ${index} is invalid - ${validateResultBody}`, failed: true });
+                return;
+            }
+
+            const currentEmail = await dbaccess.queryTransaction(connection, GET_CURRENT_EMAIL, [body.email]);
+            if (currentEmail.length) {
+                await dbaccess.rollback(connection);
+                dbaccess.releaseConnection(connection);
+                res.status(400).send({ message: `Employee in row ${index} is invalid - Email is already exist`, failed: true });
+                return;
+            }
+
+            const password = randomString(8);
+            const hashPassword = hash(password);
+            const now = new Date();
+            const currentEmpId = await dbaccess.queryTransaction(connection, GET_NEWEST_EMPLPOYEE_ID);
+            let empId = 1;
+            if (currentEmpId.length) {
+                empId = currentEmpId[0].employee_id;
+            }
+            const params = [generateEmployeeId(empId), body.firstName, body.lastName, new Date(body.dob), body.address, body.gender, body.email, hashPassword, groupId, 0, now, body.phone,
+                body.mainSkill, null, body.join, ROLE.employee, managerId, body.relativeName, body.relativeGender, body.relativePhone, body.relativeAddress, null, body.relationShip, null, body.salary, body.bankAccount, body.bankName, null];
+
+            await dbaccess.queryTransaction(connection, INSERT_NEW_EMPLOYEE, params);
+
+            sendMail(body.email, password);
+            index++;
+        }
+
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+        res.status(200).send({ message: "Import success" });
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
 }
 
 module.exports = {

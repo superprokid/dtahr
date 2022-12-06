@@ -69,7 +69,8 @@ export default {
       if (
         this.startDataUser.workTime?.isHoliday ||
         today.getDay() === 0 ||
-        today.getDay() === 6
+        today.getDay() === 6 ||
+        compareTwoTimeGreaterOrEqual(today.getHours(), today.getMinutes(), this.startDataUser.workTime.hour_end, this.startDataUser.workTime.min_end)
       ) {
         this.isClockInDisable = true;
         this.isClockOutDisable = true;

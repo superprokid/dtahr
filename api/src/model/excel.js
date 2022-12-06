@@ -59,6 +59,19 @@ class Excel {
     }
 
     /**
+     * Reading file with Buffer data
+     * @param {Buffer} data 
+     */
+    async openBuffer(data) {
+        try {
+            await this.workbook.xlsx.load(data);
+        } catch (error) {
+            logger.error('[server] open file excel with buffer error : ' + error);
+            throw error;
+        }
+    }
+
+    /**
      * Close and save file xlsx with exportPath for save if need test
      * Get stream of exported excel
      */
