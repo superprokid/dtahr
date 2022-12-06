@@ -59,6 +59,15 @@
                                 Export Group
                             </v-btn>
                         </v-list-item>
+                        <v-list-item>
+                            <v-btn @click="onClickImportEmployee" text
+                                :disabled="(selected.length == 0 || selected.length >= 2)">
+                                <v-icon style="margin-right: 10px">
+                                    mdi-file-import-outline
+                                </v-icon>
+                                Import Employee
+                            </v-btn>
+                        </v-list-item>
                     </v-list>
                 </v-menu>
 
@@ -290,6 +299,15 @@
                 <ExportEmployeeWorklogModal @on-close="onClose" @on-export-worklog-employee="onExportWorklogEmployee"/>
             </v-card>
         </v-dialog>
+
+        <!-- IMPORT EMPLOYEE DIALOG -->
+        <v-dialog v-model="importEmployeeDialogShowed" v-if="importEmployeeDialogShowed" persistent max-width="1000px"
+            transition="dialog-top-transition">
+            <v-card>
+                <ImportEmployeeModal @on-close="onClose" :groupPropInfo="groupPropInfo" :messageImportFail="messageImportFail" @on-import-employee="onImportEmployee"/>
+            </v-card>
+        </v-dialog>
+        
     </div>
 </template>
 

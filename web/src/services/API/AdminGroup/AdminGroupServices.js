@@ -7,6 +7,7 @@ import { ADMIN_GET_GROUP_URL,
 
     ADMIN_CREATE_USER,
     ADMIN_DELETE_USER,
+    ADMIN_IMPORT_EMPLOYEE,
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
 
@@ -89,6 +90,17 @@ const AdminGroupServices = {
         try {
             const response =  await callAdminAPI(()=>{
                 return axiosAdmin.post(ADMIN_DELETE_USER, params)
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+
+    adminImportEmployee: async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_IMPORT_EMPLOYEE, params)
             })
             return response
         } catch (error) {

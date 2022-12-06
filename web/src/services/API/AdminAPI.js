@@ -15,7 +15,10 @@ export function callAdminAPI(apiFuction){
         if(error.response.status === 401){
 			SessionUtls.clearItem(SessionUtls.adminSession)
             return false; // unauthorized
-        }else{
+        }else {
+			if(error.response.data.failed){
+				return error.response.data
+			}
             return -1; // call fail
         }
     })

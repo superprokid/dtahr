@@ -28,6 +28,7 @@ import ChangeUserRoleModal from "../../../components/ChangeUserRoleModal/ChangeU
 import ChangeUserGroupModal from "../../../components/ChangeUserGroupModal/ChangeUserGroupModal.vue"
 
 import ExportEmployeeWorklogModal from "../../../components/ExportEmployeeWorklogModal/ExportEmployeeWorklogModal.vue"
+import ImportEmployeeModal from "../../../components/ImportEmployeeModal/ImportEmployeeModal.vue"
 
 export default {
     name: "AdminGroup",
@@ -46,6 +47,7 @@ export default {
         ChangeUserRoleModal,
         ChangeUserGroupModal,
         ExportEmployeeWorklogModal,
+        ImportEmployeeModal,
         // views
         AdminEmployeeManagement,
     },
@@ -108,6 +110,9 @@ export default {
 
             ExportWorklogDialogShowed: false,
 
+            importEmployeeDialogShowed: false,
+            groupPropInfo: {},
+            messageImportFail: '',
         }
     },
     computed: {
@@ -363,6 +368,8 @@ export default {
                 this.ChangeUserGroupDialogShowed = false;
             }else if(screen == 12){
                 this.ExportWorklogDialogShowed = false;
+            }else if(screen == 13){
+                this.importEmployeeDialogShowed = false;
             }
             
         },
@@ -714,6 +721,49 @@ export default {
                 a.target = '_blank';
                 a.click();
             }
+        },
+
+        onClickImportEmployee(){
+            this.groupPropInfo = this.selected[0]
+            this.importEmployeeDialogShowed = true
+
+        },
+
+        async onImportEmployee(form){
+            console.log('form', form);
+            const response = await AdminGroupServices.adminImportEmployee(form)
+            this.selected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Import Employee Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            if(response.failed){
+                this.$toast.open({
+                    message: response.message,
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                this.messageImportFail = response.message
+                return
+            }
+            this.$toast.open({
+                message: "Import Employee Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.importEmployeeDialogShowed = false
         }
     },
 

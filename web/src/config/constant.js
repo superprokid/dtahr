@@ -142,6 +142,10 @@ export const ADMIN_GET_WORKING_ACTIVITY = BASE_API_ADMIN_URL + "/dashboard/check
 export const ADMIN_GET_WORKING_TIME_AND_HOLIDAY = BASE_API_ADMIN_URL + "/dashboard/worktimeandholiday"
 export const ADMIN_GET_PROJECT_STATUS = BASE_API_ADMIN_URL + "/dashboard/projectstatus"
 
+export const ADMIN_DOWNLOAD_IMPORT_EMPLOYEE_SAMPLE = BASE_API_ADMIN_URL + "/template/download/import_employee_template.xlsx"
+
+export const ADMIN_IMPORT_EMPLOYEE = BASE_API_ADMIN_URL + "/import/employee"
+
 // constant
 export const TAB_TYPE = {
     USER: 'user',
