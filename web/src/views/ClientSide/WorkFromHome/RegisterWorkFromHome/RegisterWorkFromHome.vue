@@ -20,7 +20,7 @@
                                                 min-width="auto">
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-combobox v-model="dates" multiple chips small-chips clearable :rules="[requiredDate]"
-                                                        label="Multiple picker Date" prepend-icon="mdi-calendar"
+                                                        label="Select Date WFH" prepend-icon="mdi-calendar"
                                                         readonly v-bind="attrs" v-on="on"></v-combobox>
                                                     
                                                 </template>
@@ -36,7 +36,7 @@
                                                         prepend-icon="mdi-clock-time-four-outline" readonly
                                                         v-bind="attrs" v-on="on"></v-text-field>
                                                 </template>
-                                                <v-time-picker v-if="startTimeMenu" v-model="startTime" full-width
+                                                <v-time-picker v-if="startTimeMenu" v-model="startTime" full-width format="24hr"
                                                     @click:minute="$refs.menuStartTime.save(startTime)"></v-time-picker>
                                             </v-menu>
                                         </v-col>
@@ -50,7 +50,7 @@
                                                         prepend-icon="mdi-clock-time-four-outline" readonly
                                                         v-bind="attrs" v-on="on"></v-text-field>
                                                 </template>
-                                                <v-time-picker v-if="endTimeMenu" v-model="endTime" full-width
+                                                <v-time-picker v-if="endTimeMenu" v-model="endTime" full-width format="24hr"
                                                     @click:minute="$refs.menuEndTime.save(endTime)"></v-time-picker>
                                             </v-menu>
                                         </v-col>

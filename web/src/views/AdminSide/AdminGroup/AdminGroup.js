@@ -172,7 +172,7 @@ export default {
                 {
                     text: 'Full Name',
                     value: 'full_name',
-                    width: 200,
+                    width: 300,
                 },
                 {
                     text: "Gender",
@@ -370,6 +370,7 @@ export default {
                 this.ExportWorklogDialogShowed = false;
             }else if(screen == 13){
                 this.importEmployeeDialogShowed = false;
+                this.messageImportFail = '';
             }
             
         },
@@ -746,13 +747,6 @@ export default {
                 return
             }
             if(response.failed){
-                this.$toast.open({
-                    message: response.message,
-                    type: "error",
-                    duration: 2000,
-                    dismissible: true,
-                    position: "top-right",
-                })
                 this.messageImportFail = response.message
                 return
             }
@@ -763,7 +757,10 @@ export default {
                 dismissible: true,
                 position: "top-right",
             })
-            this.importEmployeeDialogShowed = false
+            this.importEmployeeDialogShowed = false;
+            this.$eventBus.$emit('show-spinner', true);
+            await this._getGroupCompany()
+            this.$eventBus.$emit('show-spinner', false);
         }
     },
 

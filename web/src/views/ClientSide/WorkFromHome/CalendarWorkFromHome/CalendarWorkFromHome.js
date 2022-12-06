@@ -72,6 +72,10 @@ export default {
         this._getYourSelfWfhTicket()
         this.$refs.calendar.checkChange()
         this.$eventBus.$emit('show-spinner', false);
+
+        this.$root.$on(MANAGER_WORK_FROM_HOME_TICKET_SCREEN, () => {
+            this._getYourSelfWfhTicket()
+        })
         
     },
     watch:{

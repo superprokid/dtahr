@@ -159,7 +159,10 @@ Router.post('/admin/export/information', adminAuthen, adminExportController.expo
 Router.post('/admin/export/group', adminAuthen, adminExportController.exportGroupByList);
 Router.post('/admin/export/project', adminAuthen, adminExportController.exportProjectByList);
 // Admin import
-Router.post('/admin/import/employee', uploadCSV.any(), adminEmpController.importEmployee)
+Router.post('/admin/import/employee', uploadCSV.any(), adminEmpController.importEmployee);
+Router.get('/admin/template/download/:filename', (req, res) => {
+    res.download(path.join(__basedir, './src/template/', req.params.filename))
+});
 
 // face python system
 Router.post('/face/checkin', faceRecogAuthen, userController.checkInFaceId);
