@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue';
 import Router from 'vue-router';
 import AdminLoginPage from '../views/AdminSide/LoginSite/LoginPage.vue'
@@ -70,10 +71,10 @@ const router = new Router({
                     path: 'holiday',
                     component: AdminHoliday
                 },
-                {
-                    path: 'csv',
-                    component: AdminCSVExport
-                },
+                // {
+                //     path: 'csv',
+                //     component: AdminCSVExport
+                // },
                 {
                     path: 'userdetail/:employeeId',
                     component: UserDetail

@@ -77,7 +77,7 @@
 </template>
 <script>
 //  import Popup from './Popup.vue'
-
+/* eslint-disable */
 import SessionUtls from '../services/SessionUtls';
 import { mapState } from "vuex";
 
@@ -120,12 +120,12 @@ export default {
                 to: "/admin/holiday", // name of router path
                 id: tabName.holidayAdmin, // id of page
             },
-            {
-                title: 'CSV Export',
-                icon: 'mdi-file-export-outline',
-                to: "/admin/csv", // name of router path
-                id: tabName.csvAdmin, // id of page
-            },
+            // {
+            //     title: 'CSV Export',
+            //     icon: 'mdi-file-export-outline',
+            //     to: "/admin/csv", // name of router path
+            //     id: tabName.csvAdmin, // id of page
+            // },
             {
                 title: 'Projects',
                 icon: 'mdi-file-document-multiple-outline',

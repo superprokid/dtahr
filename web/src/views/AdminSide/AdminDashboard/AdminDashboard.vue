@@ -103,7 +103,7 @@
                 <v-row no-gutters class="mt-4">
 
                     <v-col cols="12" md="8">
-                        <v-row no-gutters>
+                        <v-row no-gutters class="mr-4">
                             <v-col cols="6">
                                 <v-card class="mr-6">
                                     <v-card-text>
@@ -152,12 +152,12 @@
                                 </v-card>
                             </v-col>
                             <v-col cols="6">
-                                <v-card>
+                                <v-card style="height: 100%">
                                     <v-card-text>
                                         <v-row no-gutters class="dashboard-title">
                                             UPCOMING HOLIDAY
                                         </v-row>
-                                        <v-row v-for="(item, index) in holiday ">
+                                        <v-row v-for="(item, index) in holiday " :key="index">
                                             <v-col cols="5">
                                                 <span class="font-weight-bold blue--text text--lighten-1">{{
                                                         item.description
@@ -173,7 +173,7 @@
                                 </v-card>
                             </v-col>
                         </v-row>
-                        <v-row no-gutters class="mt-5">
+                        <v-row no-gutters class="mt-5 mr-5">
                             <v-card>
                                 <v-card-text>
                                     <v-row no-gutters class="dashboard-title">
@@ -182,7 +182,8 @@
                                     <v-row>
                                         <v-list flat style="height: 350px; overflow: auto">
                                             <v-list-item-group color="primary">
-                                                <v-list-item v-for="(item, i) in projectStatus" :key="i" @click="onClickProjectStatus(item)">
+                                                <v-list-item v-for="(item, i) in projectStatus" :key="i"
+                                                    @click="onClickProjectStatus(item)">
                                                     <v-row>
                                                         <v-col cols="2" class="black--text" style="font-weight: 600">
                                                             {{ item.project_name }}
@@ -225,7 +226,9 @@
                                                             <v-row no-gutters>
                                                                 <v-col cols="12" md="12"
                                                                     class="d-flex justify-end text-subtitle-2">
-                                                                    {{isNaN(item.closedPercentage) ? 0 : item.closedPercentage}}% Closed
+                                                                    {{ isNaN(item.closedPercentage) ? 0 :
+                                                                            item.closedPercentage
+                                                                    }}% Closed
 
                                                                 </v-col>
                                                             </v-row>
@@ -240,7 +243,40 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12" md="4">
-                        export
+                        <v-card style="height: 100%">
+                            <v-card-text>
+                                <v-row no-gutters>
+                                    <v-row no-gutters class="dashboard-title">
+                                        EXPORT CSV
+                                    </v-row>
+                                    <v-row no-gutters>
+                                        <v-col cols="12" class="d-flex justify-center">
+                                            <v-radio-group v-model="csvSelect" row>
+                                                <v-radio v-for="option in csvOption" :key="option.value"
+                                                    :label="option.name" :value="option.value"></v-radio>
+                                            </v-radio-group>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row no-gutters>
+                                        <v-col cols="12" class="d-flex justify-center">
+                                            <v-date-picker v-model="monthSelect" type="month" elevation="5"
+                                                :allowed-dates="allowedMonths">
+                                            </v-date-picker>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row no-gutters class="mt-5">
+                                        <v-col cols="12" class="d-flex justify-center">
+                                            <v-btn :loading="loading" :disabled="loading || !isDateValid" color="blue"
+                                                class="ma-2 white--text" @click="exportCSV">
+                                                Download
+                                                <v-icon right dark> mdi-download-circle-outline </v-icon>
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-row>
+
+                            </v-card-text>
+                        </v-card>
                     </v-col>
                 </v-row>
             </v-card-text>
