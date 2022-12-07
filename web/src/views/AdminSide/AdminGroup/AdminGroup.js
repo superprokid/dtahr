@@ -1,7 +1,9 @@
 /* eslint-disable */
 import SessionUtls from '../../../services/SessionUtls';
 import AdminGroupServices from "../../../services/API/AdminGroup/AdminGroupServices"
-import { getDateString } from "../../../services/utilities";
+import AdminUserDetailServices from '../../../services/API/AdminUserDetailAPI/AdminUserDetailServices';
+import { getDateString, getAvatar, getDateStringWithFormat } from "../../../services/utilities";
+import AdminCSVServices from "../../../services/API/CSVExportAPI/CSVExport.services"
 
 import tabName from '../../../config/tabname';
 
@@ -17,6 +19,17 @@ import EditGroupSuccessModal from "../../../components/EditGroupSuccessModal/Edi
 import DeleteGroupSuccessModal from "../../../components/DeleteGroupSuccessModal/DeleteGroupSuccessModal.vue"
 import ConfirmDeleteGroupModal from "../../../components/ConfirmDeleteGroupModal/ConfirmDeleteGroupModal.vue"
 
+import CreateUserModal from "../../../components/CreateUserModal/CreateUserModal.vue"
+import CreateUserSuccessModal from "../../../components/CreateUserSuccessModal/CreateUserSuccessModal.vue"
+
+import ConfirmDeleteUserModal from "../../../components/ConfirmDeleteUserModal/ConfirmDeleteUserModal.vue"
+
+import ChangeUserRoleModal from "../../../components/ChangeUserRoleModal/ChangeUserRoleModal.vue"
+import ChangeUserGroupModal from "../../../components/ChangeUserGroupModal/ChangeUserGroupModal.vue"
+
+import ExportEmployeeWorklogModal from "../../../components/ExportEmployeeWorklogModal/ExportEmployeeWorklogModal.vue"
+import ImportEmployeeModal from "../../../components/ImportEmployeeModal/ImportEmployeeModal.vue"
+
 export default {
     name: "AdminGroup",
     components: {
@@ -28,7 +41,13 @@ export default {
         DeleteGroupSuccessModal,
         ConfirmDeleteGroupModal,
         EditGroupSuccessModal,
-
+        CreateUserModal,
+        CreateUserSuccessModal,
+        ConfirmDeleteUserModal,
+        ChangeUserRoleModal,
+        ChangeUserGroupModal,
+        ExportEmployeeWorklogModal,
+        ImportEmployeeModal,
         // views
         AdminEmployeeManagement,
     },
@@ -70,6 +89,30 @@ export default {
 
             ConfirmDeleteGroupDialogShowed: false,
 
+            // Admin employee management
+            searchAdminEmployeeManagement: '',
+            listUsersOfSpecificGroup: [],
+            singleSelectEmployeeManagement: false,
+            AdminEmployeeManagementSelected: [],
+
+            CreateUserDialogShowed: false,
+            CreateUserDialogSuccessShowed: false,
+
+            createUserSuccessInfo: {},
+            confirmDeleteUserInfo: {},
+            ConfirmDeleteUserDialogShowed: false,
+
+            ChangeUserRoleDialogShowed: false,
+            changeUserRoleInfo: {},
+
+            ChangeUserGroupDialogShowed: false,
+            changeUserGroupInfo: {},
+
+            ExportWorklogDialogShowed: false,
+
+            importEmployeeDialogShowed: false,
+            groupPropInfo: {},
+            messageImportFail: '',
         }
     },
     computed: {
@@ -113,14 +156,114 @@ export default {
                 },
             ]   
         },
+        AdminEmployeeManagementHeaders(){
+            return [
+                {
+                    text: 'Employee ID',
+                    align: 'start',
+                    value: 'employee_id',
+                    width: 120,
+                },
+                {
+                    text: 'Status',
+                    value: 'is_deleted',
+                    width: 120,
+                },
+                {
+                    text: 'Full Name',
+                    value: 'full_name',
+                    width: 300,
+                },
+                {
+                    text: "Gender",
+                    value: 'gender',
+                    width: 100,
+                },
+                {
+                    text: 'Employer ID',
+                    value: 'employer_id',
+                    width: 120,
+                },
+                {
+                    text: 'Employer Full Name',
+                    value: 'employer_full_name',
+                    width: 200,
+                },
+                {
+                    text: "Main Skill",
+                    value: 'main_skill',
+                    width: 120,
+                },
+                {
+                    text: "Sub Skill",
+                    value: 'sub_skill',
+                    width: 120,
+                },
+                {
+                    text: "Job Role",
+                    value: 'job_role',
+                    width: 120,
+                },
+                {
+                    text: "DOB",
+                    value: 'dob',
+                    width: 150,
+                },
+                {
+                    text: "Phone",
+                    value: 'phone',
+                    width: 120,
+                },
+                {
+                    text: 'Email',
+                    value: 'email',
+                    width: 200,
+                },
+                {
+                    text: 'Address',
+                    value: 'address',
+                    width: 200,
+                },
+                {
+                    text: "Join Date",
+                    value: 'join_date',
+                    width: 150,
+                },
+                {
+                    text: "Bank Name",
+                    value: 'bank_name',
+                    width: 150,
+                },
+                {
+                    text: "Bank Account",
+                    value: 'bank_account',
+                    width: 200,
+                },
+
+            ]
+        },
     },
-     mounted() {
+    async mounted() {
         this.$eventBus.$emit('show-spinner', true);
-        this._getGroupCompany()
+        await this._getGroupCompany()
         this.$eventBus.$emit('show-spinner', false);
     },
-
+    watch: {
+        loader () {
+          const l = this.loader
+          this[l] = !this[l]
+  
+          setTimeout(() => (this[l] = false), 3000)
+  
+          this.loader = null
+        },
+    },
     methods: {
+        getAvatar,
+        testmethod(data){
+            console.log(data);
+            // call api here
+        },
         setItemRowCLass(){
             return 'item-row'
         },
@@ -133,21 +276,6 @@ export default {
             this.confirmDeleteInfo = this.selected[0]
 
             this.ConfirmDeleteGroupDialogShowed = true;
-            // const params = {
-            //     groupId: this.selected[0].group_id
-            // }
-            // const response = await AdminGroupServices.deleteGroup(params);
-            // if(!response){
-            //     this.$router.push('/admin/login')
-            // } else if(response == -1){
-            //     alert('Some thing wrong! Call Fail')
-            // }
-            // else {
-            //     console.log('delete Group Successfully');
-            //     this._getGroupCompany()
-            //     this.selected = []
-            //     this.DeleteGroupSuccessDialogShowed = true;
-            // }
         },
 
         async onConfirmDeleteGroup(param){
@@ -157,14 +285,28 @@ export default {
                     groupId: this.selected[0].group_id
                 }
                 const response = await AdminGroupServices.deleteGroup(params);
+                this.selected = []
                 if(!response){
                     this.$router.push('/admin/login')
                 } else if(response == -1){
-                    alert('Some thing wrong! Call Fail')
+                    this.$toast.open({
+                        message: "Delete Group Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
                 else {
-                    this._getGroupCompany()
-                    this.selected = []
+                    this.$toast.open({
+                        message: "Delete Group Success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    await this._getGroupCompany()            
                     this.DeleteGroupSuccessDialogShowed = true;
                 }
             }
@@ -175,12 +317,20 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Get Groups Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.listGroup = response.data.map((item) => {
                     return {...item, manager_start_date: getDateString(item.manager_start_date)}
                 })
+                console.log(this.listGroup);
             }
         },
 
@@ -206,7 +356,23 @@ export default {
                 this.ConfirmDeleteGroupDialogShowed = false;
             }else if(screen == 6){
                 this.EditGroupSuccessDialogShowed = false;
+            }else if(screen == 7){
+                this.CreateUserDialogShowed = false;
+            }else if(screen == 8){
+                this.CreateUserDialogSuccessShowed = false;
+            }else if(screen == 9){
+                this.ConfirmDeleteUserDialogShowed = false;
+            }else if(screen == 10){
+                this.ChangeUserRoleDialogShowed = false;
+            }else if(screen == 11){
+                this.ChangeUserGroupDialogShowed = false;
+            }else if(screen == 12){
+                this.ExportWorklogDialogShowed = false;
+            }else if(screen == 13){
+                this.importEmployeeDialogShowed = false;
+                this.messageImportFail = '';
             }
+            
         },
 
         openAddGroupModal(){
@@ -218,11 +384,25 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Create Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
-            else {
+            else {          
+                this.$toast.open({
+                    message: "Create Group Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 this.AddGroupDialogShowed = false;
-                this._getGroupCompany()
+                await this._getGroupCompany()
                 this.addGroupSuccessInfo = params
                 this.AddGroupSuccessDialogShowed = true;
             }
@@ -230,16 +410,30 @@ export default {
 
         async onEditGroup(params){
             const response = await AdminGroupServices.editGroup(params);
+            this.selected = []
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Edit Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.EditGroupDialogShowed = false;
                 this.selected = []
-                this._getGroupCompany()
-
+                await this._getGroupCompany()
+                this.$toast.open({
+                    message: "Edit Group Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
                 this.editGroupSuccessInfo = params;
                 this.EditGroupSuccessDialogShowed = true;
             }
@@ -249,16 +443,325 @@ export default {
         onClickGroupRow(groupRowSelected){
             this.isAdminEmployeeManagementShowed = true;
             this.groupRowSelectedProp = groupRowSelected
+            this._getEmployeeOfSpecificGroup()
             this.isAdminGroupManagementShowed = false;
         },
         goBackGroupManagementLayout(){
             this.isAdminEmployeeManagementShowed = false;
             this.isAdminGroupManagementShowed = true;
+            this._getGroupCompany()
         },
 
         onClickTestNotiModal(){
             this.AddGroupSuccessDialogShowed = true;
         },
+
+        async _getEmployeeOfSpecificGroup(){
+            const params = {
+                groupId: this.groupRowSelectedProp.group_id
+            }
+            const response = await AdminGroupServices.getAllUserOfSpecificGroup(params);
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Get Employee of Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            else {
+                this.listUsersOfSpecificGroup = response.data.map((item) => {
+                    return {...item, dob: getDateString(item.dob), gender: item.gender == 0 ? 'Male' : item.gender == 1 ? 'Female' : 'Other', join_date: getDateString(item.join_date)}
+                })
+            }
+        },
+
+        onClickCreateUser(){
+            this.CreateUserDialogShowed = true
+        },
+
+        async onCreateUser(params){
+            const response = await AdminGroupServices.adminCreateUser(params)
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Create User Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
+            this.$toast.open({
+                message: "Create User Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this._getEmployeeOfSpecificGroup()
+            this.CreateUserDialogShowed = false
+
+            // transfer props here
+            const allProps = Object.assign({}, this.groupRowSelectedProp, params, response.data);
+            this.createUserSuccessInfo = allProps
+            this.CreateUserDialogSuccessShowed = true
+        },
+
+        onClickDeleteUser(){
+            
+            this.confirmDeleteUserInfo = this.AdminEmployeeManagementSelected[0]
+            this.ConfirmDeleteUserDialogShowed = true;
+        },
+
+        async onConfirmDeleteUser(param){
+            if(param == 'confirm'){
+                this.ConfirmDeleteUserDialogShowed = false;
+                const params = {
+                    employeeId: this.AdminEmployeeManagementSelected[0].employee_id
+                }
+                const response = await AdminGroupServices.adminDeleteUser(params);
+                if(!response){
+                    this.$router.push('/admin/login')
+                } else if(response == -1){
+                    this.$toast.open({
+                        message: "Delete User Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    this.AdminEmployeeManagementSelected = []
+                    return
+                }
+                else {
+                    this._getEmployeeOfSpecificGroup()
+                    this.AdminEmployeeManagementSelected = []
+                    this.$toast.open({
+                        message: "Delete User Success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                }
+            }
+        },
+
+        onClickUserRow(userRowSelected){
+            console.log('userRowSelected', userRowSelected);
+            this.$router.push('/admin/userdetail/'+userRowSelected.employee_id);
+        },
+
+        onClickChangeRoleUser(){
+            this.changeUserRoleInfo = this.AdminEmployeeManagementSelected[0]
+            this.ChangeUserRoleDialogShowed = true
+        },
+
+        async onChangeUserRole(params){
+            const response = await AdminUserDetailServices.adminUpdatePersonalUserInfo(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Change User Role Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            await this._getEmployeeOfSpecificGroup()
+            this.$toast.open({
+                message: "Change User Role Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.ChangeUserRoleDialogShowed = false
+        },
+
+        onClickChangeGroupUser(){
+            this.changeUserGroupInfo = this.AdminEmployeeManagementSelected[0]
+            this.ChangeUserGroupDialogShowed = true
+        },
+
+        async onChangeUserGroup(params){
+            const response = await AdminUserDetailServices.adminUpdatePersonalUserInfo(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Change User Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            await this._getEmployeeOfSpecificGroup()
+            this.$toast.open({
+                message: "Change User Group Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.ChangeUserGroupDialogShowed = false
+        },
+
+        async onClickExportGroup(){
+            let listGroupTemp = this.selected.map((item)=> item.group_id)
+            const params = {
+                listGroup: listGroupTemp
+            }
+            const response = await AdminCSVServices.exportGroupCSV(params)
+            this.selected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Group Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Group-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        async onClickExportEmployee(){
+            let listEmployeeTemp = this.AdminEmployeeManagementSelected.map((item)=> item.employee_id)
+            const params = {
+                listEmployee: listEmployeeTemp
+            }
+            const response = await AdminCSVServices.exportEmployeeCSV(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Employee Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Employee-Information.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        onClickExportWorklog(){
+
+            this.ExportWorklogDialogShowed = true
+        },
+
+        async onExportWorklogEmployee(params){
+            let listEmployeeTemp = this.AdminEmployeeManagementSelected.map((item)=> item.employee_id)
+            params.listEmployee = listEmployeeTemp
+
+            const response = await AdminCSVServices.exportWorklogEmployeeCSV(params)
+            this.AdminEmployeeManagementSelected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Export Worklog Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            // success
+            let name = `Worklog ${getDateStringWithFormat(params.startDate, "YYYYMMDD")}-${getDateStringWithFormat(params.endDate, "YYYYMMDD")}.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
+        },
+
+        onClickImportEmployee(){
+            this.groupPropInfo = this.selected[0]
+            this.importEmployeeDialogShowed = true
+
+        },
+
+        async onImportEmployee(form){
+            console.log('form', form);
+            const response = await AdminGroupServices.adminImportEmployee(form)
+            this.selected = []
+            if(!response){
+                this.$router.push('/admin/login')
+            } else if(response == -1){
+                this.$toast.open({
+                    message: "Import Employee Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })             
+                return
+            }
+            if(response.failed){
+                this.messageImportFail = response.message
+                return
+            }
+            this.$toast.open({
+                message: "Import Employee Success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.importEmployeeDialogShowed = false;
+            this.$eventBus.$emit('show-spinner', true);
+            await this._getGroupCompany()
+            this.$eventBus.$emit('show-spinner', false);
+        }
     },
 
     beforeCreate() {

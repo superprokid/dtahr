@@ -38,7 +38,7 @@ async function addNewHoliday(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
     await dbaccess.commitTransaction(connection);
     dbaccess.releaseConnection(connection);
@@ -67,14 +67,14 @@ async function deleteHoliday(req, res) {
         await dbaccess.queryTransaction(connection, DELETE_HOLIDAY, [holidayId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete success`);
         res.status(200).send('Delete success');
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
     } catch (error) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
-    await dbaccess.commitTransaction(connection);
-    dbaccess.releaseConnection(connection);
 }
 
 async function getAllHoliday(req, res) {
@@ -84,7 +84,7 @@ async function getAllHoliday(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 

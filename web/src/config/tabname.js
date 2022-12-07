@@ -10,10 +10,17 @@ const tabName = {
     addTaskUser: 'user-add-task-001',
     taskBoardUser: 'user-task-board-001',
     taskUser: 'user-tasks-001',
+    ganttChartUser: 'user-gantt-chart-001',
+    projectUser: 'user-project-001',
 
     homeAdmin: 'admin-home-001',
     groupAdmin: 'admin-group-001',
+    userAdmin: 'admin-user-001',
     holidayAdmin: 'admin-holiday-001',
+    csvAdmin: 'admin-csv-001',
+    projectAdmin: 'admin-project-001',
+    workingTimeAdmin: 'admin-workingtime-001',
+    policyAdmin: 'admin-policy-001'
 }
 
 export default tabName;

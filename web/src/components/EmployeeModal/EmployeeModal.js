@@ -1,4 +1,7 @@
+/* eslint-disable */
 import {USER_GET_IMAGE} from '../../config/constant'
+
+import { getDateString, getTimeString, getAvatar, getDateStringWithTask, isPastDate } from "../../services/utilities";
 
 export default{
     name: 'EmployeeModal',
@@ -10,15 +13,23 @@ export default{
           required: true,
           default: {}
         },
-      },
+      isAdminEdit: {
+        type: Boolean,
+      }
+    },
     data: () => ({
         // Instead of trying to access the prop value on the data block
         // Set up a watcher for this prop, and do the value assignment there
         // selectPackage: this.propPackage,
         selectPackage: '',
         avtBaseUrl: USER_GET_IMAGE,
-        
+        cameraShow: false,
     }),  
+    mounted(){
+      this.propPackage.relative_dob = getDateString(this.propPackage.relative_dob)
+      // console.log('propPackage', this.propPackage);
+
+    },
     watch: {
         propPackage(val) {
           // Be sure to validate default values
@@ -53,6 +64,17 @@ export default{
           // as the v-model of the component it also gets updated
           // on the parent component
           this.show = false
-        },
+      },
+      openCamera() {
+        this.cameraShow = true
+        let video = document.getElementById('camera')
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then((stream) => {
+            video.srcObject = stream;
+          }).catch((err) => {
+            console.log(err)
+          })
+      }
     },
 }

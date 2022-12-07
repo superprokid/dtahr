@@ -9,7 +9,7 @@ async function getAllHoliday(req, res) {
         res.status(200).send(await exeQuery(GET_ALL_HOLIDAY));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 

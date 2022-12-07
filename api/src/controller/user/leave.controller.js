@@ -69,12 +69,12 @@ async function registerLeaveTicket(req, res) {
         await dbaccess.queryTransaction(connection, INSERT_LEAVE, [empId, type, startDate, endDate, reason, LEAVE_TICKET_STATUS.pending]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert into leave`);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        res.status(200).send("Create success");
+        res.status(200).send({ message: "Create success" });
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -92,7 +92,7 @@ async function getLeaveTicketByUser(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_LEAVE_BY_USER, [empId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -109,7 +109,7 @@ async function getAllLeaveTicket(req, res) {
         res.status(200).send(await dbaccess.exeQuery(GET_ALL_LEAVE_OF_GROUP, [groupId]));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -162,7 +162,7 @@ async function updateStatusLeaveTicket(req, res) {
         return res.status(200).send('Update leave ticket success');
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }
@@ -218,10 +218,10 @@ async function deleteLeaveTicket(req, res) {
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
-        return res.status(200).send('Delete leave ticket success');
+        return res.status(200).send({ message: 'Delete leave ticket success' });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
     }

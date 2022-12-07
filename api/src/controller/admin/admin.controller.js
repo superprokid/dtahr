@@ -12,10 +12,20 @@ const UPDATE_LOGIN_STATUS = "   UPDATE administrator "
 const UPDATE_LOGIN_FAILED_STATUS = "   UPDATE administrator "
     + "                         SET login_failed_date = now()"
     + "                         WHERE username = ? "
-const GET_ALL_USER = "  SELECT employee_id, CONCAT(first_name, ' ', last_name) as full_name, dob, address, gender, email, avt, group_name "
-    + "                 FROM employee e INNER JOIN `group` g WHERE e.group_id = g.group_id "
-    + "                      INNER JOIN employee er WHERE e.employer_id = er.employee_id";
-const GET_START_ADMIN = " SELECT username, login_date, login_failed_date, password_expired, create_at, update_at FROM administrator WHERE username = ? "
+const GET_ALL_USER = "  SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name, g.group_name, g.group_full_name "
+    + "                 FROM employee e INNER JOIN `group` g ON e.group_id = g.group_id "
+    + "                      LEFT JOIN employee er ON e.employer_id = er.employee_id";
+const GET_START_ADMIN = " SELECT username, login_date, login_failed_date, password_expired, create_at, update_at FROM administrator WHERE username = ? ";
+const GET_WORKING_STATUS = "SELECT COUNT(IF(work_status = 0 AND is_not_working = 0, 1, NULL)) as checkin, "
+    + "                         COUNT(IF(work_status = 1 AND is_not_working = 0, 1, NULL)) as checkout,"
+    + "                         COUNT(IF(worklog_id is NULL OR is_not_working = 1, 1, NULL)) as notWorking,"
+    + "                         COUNT(*) as total"
+    + "                     FROM employee e LEFT JOIN "
+    + "                         (SELECT * FROM worklog WHERE work_date = CAST(now() as DATE)) w ON e.employee_id = w.employee_id"
+    + "                     WHERE e.is_deleted <> 1";
+const GET_CHECKIN_STATUS = "SELECT CONCAT(first_name, ' ', last_name) as full_name, avt, job_role, work_status, w.update_at"
+    + "                     FROM worklog w INNER JOIN employee e ON w.employee_id = e.employee_id"
+    + "                     WHERE work_date = CAST(now() as DATE) and is_not_working <> 1 ORDER BY w.update_at DESC"
 
 /**
  * login for admin
@@ -30,7 +40,7 @@ async function login(req, res) {
         const { username, password } = req.body;
         if (!username || !password) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] username or password is undefinded`);
-            res.status(400).send("Username or Password is invalid"); 
+            res.status(400).send({ message: "Username or Password is invalid" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -38,7 +48,7 @@ async function login(req, res) {
         const result = await exeQuery(GET_ADMIN_BY_USERNAME, [username]);
         if (!result.length) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] username is not exist in database`);
-            res.status(400).send("Username or Password is invalid");
+            res.status(400).send({ message: "Username or Password is invalid" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -52,7 +62,7 @@ async function login(req, res) {
             // commit query and release
             await commitTransaction(connection);
             releaseConnection(connection)
-            res.status(400).send("Username or Password is invalid");
+            res.status(400).send({ message: "Username or Password is invalid" });
             return;
         }
         delete admin.password;
@@ -73,7 +83,7 @@ async function login(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -90,7 +100,7 @@ async function getAllUser(req, res) {
         })
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -102,7 +112,7 @@ async function getStartAdmin(req, res) {
         res.status(200).send(result.length ? result[0] : {});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -110,9 +120,33 @@ async function createNewEmployee(req, res) {
     sendMail("ldthang2201@gmail.com");
 }
 
+async function workingStatus(req, res) {
+    try {
+        const result = await exeQuery(GET_WORKING_STATUS);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] - response`);
+        res.status(200).send(result.length ? result[0] : {});
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" })
+    }
+}
+
+async function getCheckinStatus(req, res) {
+    try {
+        const result = await exeQuery(GET_CHECKIN_STATUS);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] - response`);
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" })
+    }
+}
+
 module.exports = {
     login,
     getAllUser,
     createNewEmployee,
     getStartAdmin,
+    workingStatus,
+    getCheckinStatus,
 }

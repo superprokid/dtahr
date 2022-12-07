@@ -1,5 +1,6 @@
 const moment = require('moment')
-const { MAX_EMPLOYEE_ID_LENGTH } = require("../config/constants");
+const { MAX_EMPLOYEE_ID_LENGTH, PUBLIC_IP_URL } = require("../config/constants");
+const { axiosBase } = require('./axiosBase');
 const YYYY_MM_DD = 'YYYY-MM-DD';
 const YYYY_MM_DD_HH_MM_SS = "YYYY-MM-DD hh:mm:ss";
 
@@ -90,7 +91,7 @@ function calWorkingTime(startTime, endTime, lunchStart, lunchEnd) {
     } else if (startTime > lunchStart && endTime < lunchEnd) {
         return 0;
     } else {
-        return minDiff(startTime, endTime);
+        return minDiff(startTime, endTime) + 1;
     }
 }
 
@@ -146,7 +147,7 @@ function validateType(value, type) {
         case 'time':
             return isValidTime(value);
         default:
-            return false;
+            return true;
     }
 }
 
@@ -215,6 +216,21 @@ function getDateEndOfMonth(date) {
     return moment(date).endOf('month').format(YYYY_MM_DD);
 }
 
+function getDateStringWithFormat(date, format) {
+    return moment(new Date(date)).format(format);
+}
+
+async function getMyPublicIP() {
+    try {
+        let response = await axiosBase.get(`${PUBLIC_IP_URL}`);
+        return response.data.ip;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 module.exports = {
     randomString,
     convertSQLResultToJSON,
@@ -232,4 +248,6 @@ module.exports = {
     getDateTimeString,
     getDateStartOfMonth,
     getDateEndOfMonth,
+    getDateStringWithFormat,
+    getMyPublicIP,
 }

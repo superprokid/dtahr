@@ -1,12 +1,15 @@
-export const BASE_URL = "http://26.197.75.244:3000";
-// export const BASE_URL = "http://127.0.0.1:3000";
+import storageUtls from "./storageUtls";
+
+// export const BASE_URL = "http://26.197.75.244:3000";
+export const BASE_URL = "http://192.168.1.5:3000";
 
 // user url api
 export const BASE_API_USER_URL = BASE_URL + '/api/user';
 export const USER_LOGIN_URL = BASE_API_USER_URL + '/login';
 export const USER_REFRESH_TOKEN_URL = BASE_API_USER_URL + '/refreshtoken';
-const USER_GET_TRACKING_HISTORY_URL = BASE_API_USER_URL + '/workhistory';
+const USER_GET_WORK_HISTORY = BASE_API_USER_URL + '/workhistory';
 const USER_GET_START_URL = BASE_API_USER_URL + '/getstart';
+export const USER_CHECKIN = BASE_API_USER_URL + '/app/checkin'
 const USER_CHECK_IN_URL = BASE_API_USER_URL + '/checkin';
 const USER_CHECK_OUT_URL = BASE_API_USER_URL + '/checkout';
 const USER_GET_HOLIDAYS = BASE_API_USER_URL + '/getholidays';
@@ -42,26 +45,148 @@ const GET = 'GET';
 
 const apiUtls = {
     login: async (data) => {
-        const result = await callAPI(USER_LOGIN_URL, POST, data)
+        const result = await callAPI(USER_LOGIN_URL, HEADER, POST, data);
         return result;
+    },
+    getStart: async () => {
+        try {
+            const result = await recallAPI(USER_GET_START_URL, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    getWorkHistory: async (startDate, endDate) => {
+        try {
+            const result = await recallAPI(`${USER_GET_WORK_HISTORY}?startDate=${startDate}&endDate=${endDate}`, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    registerLeaveTicket: async (data) => {
+        try {
+            const result = await recallAPI(USER_REGISTER_ABSENT, HEADER, POST, data);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    getMyLeaveTicket: async () => {
+        try {
+            const result = await recallAPI(USER_GET_ABSENT, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    deleteLeaveTicket: async (leaveId) => {
+        try {
+            const result = await recallAPI(USER_DELETE_ABSENT, HEADER, POST, { leaveId });
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    registerOverTimeTicket: async (data) => {
+        try {
+            const result = await recallAPI(USER_REGISTER_OVERTIME, HEADER, POST, data);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    getMyOverTimeTicket: async () => {
+        try {
+            const result = await recallAPI(USER_OVERTIME_TICKET, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    deleteOverTimeTicket: async (overtimeId) => {
+        try {
+            const result = await recallAPI(USER_DELETE_OVERTIME_TICKET, HEADER, POST, { overtimeId });
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    callCheckIn: async (formData) => {
+        try {
+            const accessToken = await storageUtls.getString(storageUtls.access_token);
+            const result = await fetch(USER_CHECKIN, {
+                headers: { Authorization: 'Bearer ' + accessToken },
+                method: 'POST',
+                body: formData
+            })
+            if (result.status === 200) {
+                return await result.json()
+            } else {
+                return {
+                    status: result.status,
+                    failed: true,
+                    data: await result.json(),
+                }
+            }
+        } catch (error) {
+            return error;
+        }
+    },
+    callCheckOut: async () => {
+        try {
+            const result = await recallAPI(USER_CHECK_OUT_URL, HEADER, POST);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    getAllProject: async () => {
+        try {
+            const result = await recallAPI(USER_GET_PROJECTS, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
     }
+
 }
 
-const callAPI = (url, method, data) => {
+const refreshToken = async () => {
+    const refreshToken = await storageUtls.getString(storageUtls.refresh_token);
+    const result = await callAPI(USER_REFRESH_TOKEN_URL, HEADER, POST, {
+        refreshToken
+    });
+    if (result.failed) {
+        storageUtls.clearLoginSession()
+        return false;
+    } else {
+        storageUtls.setString(storageUtls.access_token, result.accessToken);
+        return true;
+    }
+
+}
+
+const callAPI = (url, header, method, data = {}) => {
     return new Promise((resolve, reject) => {
         fetch(url, {
             method: method,
-            headers: HEADER,
-            body: JSON.stringify(data)
+            headers: header,
+            body: method == GET ? null : JSON.stringify(data)
         }).then(result => {
             if (result.status === 200) {
-                resolve(result.json())
+                resolve(result.json());
             } else {
                 resolve({
+                    status: result.status,
                     failed: true,
                 });
             }
-        }).catch(error => reject(error))
+        }).catch(error => reject({
+            failed: true,
+            error: true,
+            errorMsg: error
+        }))
 
         setTimeout(() => {
             reject({
@@ -70,6 +195,33 @@ const callAPI = (url, method, data) => {
             })
         }, 10000)
     })
+}
+
+const callAPIWithToken = async (url, header, method, data) => {
+    const accessToken = await storageUtls.getString(storageUtls.access_token);
+    header['Authorization'] = 'Bearer ' + accessToken;
+    const response = await callAPI(url, header, method, data);
+    return response;
+}
+
+const recallAPI = async (url, header, method, data) => {
+    const response = await callAPIWithToken(url, header, method, data);
+    if (response.error) {
+        return -1;
+    }
+    if (response.failed) {
+        if (response.status === 401) {
+            const refresh = await refreshToken();
+            if (!refresh) {
+                storageUtls.clearLoginSession();
+                return refresh;
+            } else {
+                return await callAPIWithToken(url, header, method, data);
+            }
+        }
+        return -1;
+    }
+    return response;
 }
 
 export default apiUtls;

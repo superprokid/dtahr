@@ -1,4 +1,6 @@
 const multer = require("multer");
+const fs = require('fs');
+const logger = require("../common/logger");
 
 let storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -28,11 +30,32 @@ let checkInStorage = multer.diskStorage({
     }
 });
 
+let attachmentStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        const dirPath = __basedir + "/public/attachments/" + Date.now().toString();
+        if (!fs.existsSync(dirPath)){
+            fs.mkdirSync(dirPath);
+        }
+        req.dirPath = dirPath;
+        callback(null, dirPath);
+    },
+    filename: (req, file, callback) => {
+        let filename = file.originalname;
+        callback(null, filename);
+    }
+});
+
+let memoryStore = multer.memoryStorage();
+
 // let send = multer.
 
 const uploadFile = multer({ storage: storage });
 const sendFile = multer({storage: checkInStorage})
+const attachment = multer({storage: attachmentStorage})
+const uploadCSV = multer({ storage: memoryStore });
 module.exports = {
     uploadFile,
-    sendFile
+    sendFile,
+    attachment,
+    uploadCSV
 };

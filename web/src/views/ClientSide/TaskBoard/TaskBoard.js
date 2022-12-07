@@ -5,6 +5,8 @@ import TaskBoardServices from "../../../services/API/TaskBoard/TaskBoardService"
 import ReportService from "../../../services/API/ReportAPI/ReportServices";
 
 import { USER_GET_IMAGE } from "../../../config/constant"; 
+import SessionUtls from "../../../services/SessionUtls";
+import tabName from "../../../config/tabname";
 export default {
   name: 'TaskBoard',
   components: {
@@ -30,6 +32,8 @@ export default {
       filteredData: [],
 
       avtBaseUrl: USER_GET_IMAGE,
+
+      currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
     };
   },
   watch: {
@@ -124,7 +128,7 @@ export default {
   },
   methods: {
     async getAllTask() {
-      const response = await TaskBoardServices.getAllTask();
+      const response = await TaskBoardServices.getAllTask({ projectId: this.currentProjectId });
       if (!response) {
         this.$router.push("/user/login");
       }
@@ -160,7 +164,7 @@ export default {
     },
 
     onClickTask(task) {
-      this.$router.push('/user/taskdetail/'+task.task_id);
+      this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${task.task_id}`);
     },
 
     async onChangeColumn(event, column_id) {
@@ -179,5 +183,8 @@ export default {
     this.getAllUser();
     this.getAllCategory()
     this.getAllTask();
-  }
+  },
+  beforeCreate() {
+    SessionUtls.setItem(SessionUtls.tabNameKey, tabName.taskBoardUser);
+  },
 };

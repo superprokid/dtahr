@@ -9,9 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { mapState } from 'vuex';
 
 import TimeTrackingServices from '@/services/API/MyPageAPI/TimeTrackingService';
+import IPService from '../../../../services/API/ip.service';
 import { REAL_TIME_TRACKING_CHANNEL } from '../../../../config/channel';
 import { TIME_TRACKING_SCREEN } from '../../../../config/screenName';
 import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
+import { compareTwoTimeGreaterOrEqual } from '../../../../services/utilities';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 const TIME_FORMAT = 'HH:mm:ss';
@@ -67,7 +69,8 @@ export default {
       if (
         this.startDataUser.workTime?.isHoliday ||
         today.getDay() === 0 ||
-        today.getDay() === 6
+        today.getDay() === 6 ||
+        compareTwoTimeGreaterOrEqual(today.getHours(), today.getMinutes(), this.startDataUser.workTime.hour_end, this.startDataUser.workTime.min_end)
       ) {
         this.isClockInDisable = true;
         this.isClockOutDisable = true;
@@ -133,8 +136,7 @@ export default {
         this.$eventBus.$emit('show-spinner', true);
         let curr = new Date();
         if (
-          `${this.startDataUser.workTime.hour_end}:${this.startDataUser.workTime.min_end}:00` <
-            `${curr.getHours()}:${curr.getMinutes()}:${curr.getSeconds()}` ||
+          compareTwoTimeGreaterOrEqual(curr.getHours(), curr.getMinutes(), this.startDataUser.workTime.hour_end, this.startDataUser.workTime.min_end) ||
           this.startDataUser.workTime.isHoliday == true
         ) {
           this.$eventBus.$emit('show-spinner', false);
@@ -145,7 +147,18 @@ export default {
           this.$eventBus.$emit('show-spinner', false);
           return;
         }
-        await TimeTrackingServices.checkIn();
+        let ip = await IPService.getIP();
+        let response = await TimeTrackingServices.checkIn({
+          ip: ip,
+        });
+        if (response.failed) {
+          this.notiTitle = `Cannot Clock In`;
+          this.notiBody = response.message;
+          this.notiType = 'danger';
+          this.isErrorModalShowed = true;
+          this.$eventBus.$emit('show-spinner', false);
+          return
+        }
         this.$eventBus.$emit('show-spinner', false);
         this.isClockInDisable = true;
         this.isClockOutDisable = false;

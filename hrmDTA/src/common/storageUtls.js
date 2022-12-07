@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 const storageUtls = {
     access_token: 'accessToken',
     refresh_token: 'refreshToken',
+    start_data: 'startdata',
     
     getBoolean: async (key) => {
         try {
@@ -54,6 +55,17 @@ const storageUtls = {
             return false;
         }
     },
+    clearItem: async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+        } catch (error) {
+            return false;
+        }
+    },
+    clearLoginSession: async () => {
+        storageUtls.clearItem(storageUtls.access_token);
+        storageUtls.clearItem(storageUtls.refresh_token);
+    }
 }
 
 export default storageUtls;

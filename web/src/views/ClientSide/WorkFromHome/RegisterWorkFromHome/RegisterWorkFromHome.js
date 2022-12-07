@@ -61,10 +61,23 @@ export default {
                 this.$router.push('/user/login');
             } else {
                 if (response == -1) {
-                    alert("register failed");
+                    this.$toast.open({
+                        message: "Something went wrong, please try later",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
                 } else {
-                    alert("register success");    
+                    this.$toast.open({
+                        message: "Register success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })   
                     this.$mySocket.emit(WFH_CHANNEL, 0);
+                    this.reset();
                 }
             }
         }

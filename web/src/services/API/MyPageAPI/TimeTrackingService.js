@@ -2,10 +2,10 @@ import {USER_CHECK_IN_URL, USER_CHECK_OUT_URL} from '@/config/constant';
 import axiosClient, { asyncRecallFunction } from "../API"
 const TimeTrackingServices = {
 
-    checkIn: async () => {
+    checkIn: async (data) => {
         try {
             const response = await asyncRecallFunction(() => {
-                return axiosClient.post(USER_CHECK_IN_URL)
+                return axiosClient.post(USER_CHECK_IN_URL, data)
             });
             return response;
         } catch (error) {

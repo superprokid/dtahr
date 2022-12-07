@@ -1,6 +1,8 @@
 const logger = require('../../common/logger');
 const dbaccess = require('../../common/dbaccess');
+const moment = require('moment');
 const { validateRequest } = require('../../common/utils');
+const { WORKTIME_DEFAULT } = require('../../config/constants');
 
 const LOG_CATEGORY = "ADMIN WORKTIME CONTROLLER"
 const INSERT_NEW_WORK_TIME = "INSERT worktime (min_start, hour_start, min_end, hour_end, lunch_min_start, lunch_hour_start, lunch_min_end, lunch_hour_end, approve_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -8,6 +10,8 @@ const DELETE_WORK_TIME = "DELETE FROM worktime WHERE worktime_id = ?";
 const UPDATE_WORK_TIME = "UPDATE worktime SET min_start = ?, hour_start = ?, min_end = ?, hour_end = ?, lunch_min_start = ?, lunch_hour_start = ?, lunch_min_end = ?, lunch_hour_end = ?, approve_date = ? WHERE worktime_id = ?"
 const GET_WORK_TIME_BY_ID = "SELECT * FROM worktime WHERE worktime_id = ?";
 const GET_ALL_WORK_TIME = "SELECT * FROM worktime ORDER BY approve_date DESC";
+const GET_CURRENT_WORKTIME = "SELECT * FROM worktime WHERE approve_date <= now() ORDER BY approve_date DESC LIMIT 1";
+const GET_UPCOMING_HOLIDAY = "SELECT * FROM holiday WHERE date >= now() ORDER BY date ASC LIMIT 3";
 
 async function addNewWorktime(req, res) {
     const connection = await dbaccess.getConnection();
@@ -62,7 +66,7 @@ async function addNewWorktime(req, res) {
         }
         const { minStart, hourStart, minEnd, hourEnd, lunchMinStart, lunchHourStart, lunchMinEnd, lunchHourEnd, approveDate } = req.body;
 
-        if (moment().isSameOrAfter(moment(approveDate)), 'date') {
+        if (moment().isSameOrAfter(moment(approveDate), 'date')) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] approveDate must be future date`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
@@ -77,7 +81,7 @@ async function addNewWorktime(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
     
     await dbaccess.commitTransaction(connection);
@@ -174,7 +178,7 @@ async function updateWorkTime(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
     await dbaccess.commitTransaction(connection);
     dbaccess.releaseConnection(connection);
@@ -226,7 +230,7 @@ async function deleteWorkTime(req, res) {
         await dbaccess.rollback(connection);
         dbaccess.releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
     await dbaccess.commitTransaction(connection);
     dbaccess.releaseConnection(connection);
@@ -239,7 +243,29 @@ async function getAllWorkTime(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
+    }
+}
+
+async function getCurrentWorkingTimeAndHoliday(req, res) {
+    try {
+        const result = {
+            workingTime: WORKTIME_DEFAULT,
+            holiday: [],
+        }
+        const workingTimeResult = await dbaccess.exeQuery(GET_CURRENT_WORKTIME);
+        if (workingTimeResult.length) {
+            result.workingTime = workingTimeResult[0];
+        }
+        const upcomingHoliday = await dbaccess.exeQuery(GET_UPCOMING_HOLIDAY);
+        if (upcomingHoliday.length) {
+            result.holiday = upcomingHoliday;
+        }
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] - response`);
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -248,4 +274,5 @@ module.exports = {
     updateWorkTime,
     deleteWorkTime,
     getAllWorkTime,
+    getCurrentWorkingTimeAndHoliday
 }

@@ -1,3 +1,4 @@
+global.__basedir = __dirname;
 const cluster = require('cluster');
 const app = require('./src/worker/server');
 const logger = require('./src/common/logger');
@@ -6,8 +7,6 @@ const { WORKER_MAX, PORT } = require('./src/config/constants');
 
 const HTTP_WORKER_INDEX = 0;
 const BATCH_WORKER_INDEX = 1;
-
-global.__basedir = __dirname;
 
 // const Excel = require('./src/model/excel');
 // const exportOT = require('./src/model/export/overtime.export');

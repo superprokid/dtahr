@@ -1,7 +1,7 @@
-const { exeQuery } = require('../../common/dbaccess');
+const { exeQuery, getConnection, beginTransaction, releaseConnection, queryTransaction, rollback } = require('../../common/dbaccess');
 const logger = require('../../common/logger');
-const { validateRequest } = require('../../common/utils');
-const { ROLE } = require('../../config/constants');
+const { validateRequest, generateId } = require('../../common/utils');
+const { ROLE, MAX_PROJECT_ID_LENGTH } = require('../../config/constants');
 
 const LOG_CATEGORY = "[Project Controller]"
 const GET_CURRENT_PROJECT = "SELECT * FROM project";
@@ -12,7 +12,17 @@ const GET_PROJECT_DETAILS_BY_MANAGER = "SELECT a.employee_id, a.assigned_date, t
     + "		                								LEFT JOIN assignment a ON p.project_id = a.project_id"
     + "										                INNER JOIN employee e ON p.project_manager_id = e.employee_id"
     + "								                    WHERE p.project_id = ?) tb on tb.project_id = a.project_id"
-    + "                                 WHERE a.employee_id = ?"
+    + "                                 WHERE a.employee_id = ?";
+
+const GET_LIST_PROJECT_BY_USER = "SELECT p.* "
+    + "                           FROM `assignment` a "
+    + "                               INNER JOIN project p ON a.project_id = p.project_id"
+    + "                               INNER JOIN employee e ON p.project_manager_id = e.employee_id"
+    + "                           WHERE a.employee_id = ?";
+
+const GET_LIST_PROJECT_BY_MANAGER = "SELECT p.*, e.avt, CONCAT(e.first_name, ' ',e.last_name) as full_name "
+    + "                             FROM project p "
+    + "                                 INNER JOIN employee e ON p.project_manager_id = e.employee_id ";
 
 async function getDetailsPojectByManager(req, res) {
     try {
@@ -59,7 +69,7 @@ async function getDetailsPojectByManager(req, res) {
         res.status(200).send(response.length ? response[0] : {});
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -69,12 +79,41 @@ async function getAllProjects(req, res) {
         res.status(200).send(await exeQuery(GET_CURRENT_PROJECT));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
 
     }
 }
 
+async function getAllProjectByUser(req, res) {
+    try {
+        const empId = req.employee_id;
+        const role = req.role;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
+            res.status(403).send("Update failed");
+            await rollback(connection);
+            releaseConnection(connection);
+            return;
+        }
+
+        let response = [];
+        if (role == ROLE.employer) {
+            response = await exeQuery(GET_LIST_PROJECT_BY_MANAGER);
+        } else {
+            response = await exeQuery(GET_LIST_PROJECT_BY_USER, [empId]);
+        }
+
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] resonse `);
+        res.status(200).send(response);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({message: "SERVER ERROR"});
+    }
+}
+
+
 module.exports = {
     getAllProjects,
-    getDetailsPojectByManager
+    getDetailsPojectByManager,
+    getAllProjectByUser,
 }

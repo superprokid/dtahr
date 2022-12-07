@@ -3,7 +3,7 @@ const dbaccess = require('../../common/dbaccess');
 const moment = require('moment');
 const Excel = require('../excel');
 const header = ['No', 'Name', 'Position', 'Group', 'Manager', 'Time start', 'Time end', 'Project', 'Payment', 'Note']
-const GET_OVERTIME_TICKET = "SELECT CONCAT(e.first_name, ' ', e.last_name) as full_name, e.job_role, g.group_name, CONCAT(er.first_name, ' ', er.last_name) as manager_full_name, DATE_FORMAT(ot.start_date, '%M %d %Y %H:%i:%s') as start_date, DATE_FORMAT(ot.end_date, '%M %d %Y %H:%i:%s') as end_date, p.project_name, ot.payment, ot.reason "
+const GET_OVERTIME_TICKET = "SELECT CONCAT(e.first_name, ' ', e.last_name) as full_name, e.job_role, g.group_name, CONCAT(er.first_name, ' ', er.last_name) as manager_full_name, DATE_FORMAT(ot.start_date, '%M %d %Y %H:%i:%s') as start_date, DATE_FORMAT(ot.end_date, '%M %d %Y %H:%i:%s') as end_date, p.project_name, FORMAT(ot.payment, 0), ot.reason "
     + "                     FROM overtime ot "
     + "                     	INNER JOIN project p ON ot.project_id = p.project_id"
     + "                     	INNER JOIN employee e ON ot.employee_id = e.employee_id	"

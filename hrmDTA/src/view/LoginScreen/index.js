@@ -8,11 +8,13 @@ import AppLoader from "../../components/AppLoader";
 import { useState } from "react";
 import apiUtls from "../../common/apiUtls";
 import storageUtls from "../../common/storageUtls";
+import { HOME_SCREEN } from "../../config/screen";
 
-export default LoginScreen = () => {
+export default LoginScreen = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const { navigation } = props;
 
     const onLogin = () => {
         Keyboard.dismiss();
@@ -41,6 +43,7 @@ export default LoginScreen = () => {
                     } else {
                         storageUtls.setString(storageUtls.access_token, result.accessToken || null);
                         storageUtls.setString(storageUtls.refresh_token, result.refreshToken || null);
+                        navigation.replace(HOME_SCREEN);
                     }
                 }).catch((err) => {
                     Alert.alert('Error', 'Something went wrong, please try later', [

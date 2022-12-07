@@ -11,30 +11,59 @@
                         <!-- Add Button -->
                         <v-row class="mb-2">
 
-                            <v-col cols="12" md="4" offset-md="8" class="d-flex justify-end">
+                            <v-col cols="12" md="12" class="d-flex justify-end">
                                 <v-btn color="primary" width="150px" :disabled="!valid" @click="onClickAddTask">
                                     Add
                                 </v-btn>
                             </v-col>
 
                         </v-row>
+                        <v-row no-gutters class="mb-2">
+                            <v-col cols="12" md="12" v-if="(parentTask.task_id == null)">
+                                <v-icon>
+                                    mdi-file-tree
+                                </v-icon>
+                                <v-btn text color="#3C836E" @click="onClickAddParentTask">
+                                    Add Parent Task
+                                </v-btn>
+                            </v-col>
+                            <v-row no-gutters v-else :align="'center'">
+                                <v-col cols="8">
+                                    <span class="text-subtitle-2">
+                                        Parent Task:
+                                    </span>
+                                    <span style="color: #3C836E">
+                                        {{ parentTask.task_number }} - {{ parentTask.task_title }}
+                                    </span>
+                                </v-col>
+                                <v-col cols="4" class="d-flex justify-end">
+                                    <v-btn color="error" width="150px" class="mr-3" outlined @click="() => {parentTask = {}}">
+                                        Remove
+                                    </v-btn>
+                                    <v-btn color="success" width="150px" outlined @click="addParentTaskDialogShowed = true">
+                                        Browse
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-row>
                         <!-- Subject -->
                         <v-row no-gutters>
                             <v-col cols="12">
-                                <v-text-field label="Subject" placeholder="Subject" solo v-model="taskTitle" :rules="taskTitleRules" required></v-text-field>
+                                <v-text-field label="Subject" placeholder="Subject" solo v-model="taskTitle"
+                                    :rules="taskTitleRules" required></v-text-field>
                             </v-col>
                         </v-row>
                         <div class="add-task-title">
                             Task Description
                         </div>
                         <!-- Task Description -->
-                        <v-row no-gutters class="mb-5" >
-                            <v-card elevation="2" max-width="100%" >
-                                <v-card-text >
+                        <v-row no-gutters class="mb-5">
+                            <v-card elevation="2" max-width="100%">
+                                <v-card-text>
                                     <v-row style="min-height: 500px">
-                                        <quill-editor ref="myQuillEditor" v-model="content" :options="editorOption" 
+                                        <quill-editor ref="myQuillEditor" v-model="content" :options="editorOption"
                                             style="margin-bottom: 60px" @blur="onEditorBlur($event)"
-                                            @focus="onEditorFocus($event)" @ready="onEditorReady($event)"  />
+                                            @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
 
                                     </v-row>
 
@@ -46,6 +75,7 @@
                             <v-card elevation="2" max-width="100%">
 
                                 <v-card-text>
+                                    <!-- status/assignee -->
                                     <v-row>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider ">
@@ -63,13 +93,14 @@
                                         </v-col>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider" :align="'center'">
-                                                <v-col cols="12" md="5">
+                                                <v-col cols="12" md="4">
                                                     Assignee
                                                 </v-col>
-                                                <v-col cols="12" md="7" class="black--text font-weight-bold mt-8">
+                                                <v-col cols="12" md="8" class="black--text font-weight-bold mt-8">
                                                     <v-autocomplete v-model="assignee" :disabled="isUpdating"
                                                         :items="employeeList" dense filled color="blue-grey lighten-2"
-                                                        item-text="name" item-value="employee_id" required :rules="assigneeRules">
+                                                        item-text="name" item-value="employee_id" required
+                                                        :rules="assigneeRules">
                                                         <template v-slot:selection="data">
                                                             <div v-bind="data.attrs" :input-value="data.selected" close
                                                                 @click="data.select" @click:close="remove(data.item)">
@@ -114,6 +145,7 @@
                                             </v-row>
                                         </v-col>
                                     </v-row>
+                                    <!-- priority/category -->
                                     <v-row>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider" :align="'center'">
@@ -139,7 +171,8 @@
                                                 <v-col cols="12" md="5" class=" mt-8">
                                                     <v-autocomplete v-model="categorySelectValue"
                                                         :items="categoryTaskList" dense outlined
-                                                        item-text="category_name" item-value="category_id" :rules="categoryTaskRules">
+                                                        item-text="category_name" item-value="category_id"
+                                                        :rules="categoryTaskRules">
                                                     </v-autocomplete>
                                                 </v-col>
                                                 <v-col cols="12" md="2">
@@ -156,6 +189,7 @@
                                             </v-row>
                                         </v-col>
                                     </v-row>
+                                    <!-- startdate/end/date -->
                                     <v-row>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider " :align="'center'">
@@ -217,6 +251,7 @@
                                             </v-row>
                                         </v-col>
                                     </v-row>
+                                    <!-- estimated/actual hours -->
                                     <v-row>
                                         <v-col cols=12 md="5">
                                             <v-row class="container-top-divider " :align="'center'">
@@ -224,7 +259,8 @@
                                                     Estimated Hours
                                                 </v-col>
                                                 <v-col cols="12" md="7" class="mt-4">
-                                                    <v-text-field outlined dense placeholder="Placeholder" v-model="estimatedHours" type="number">
+                                                    <v-text-field outlined dense placeholder="Placeholder"
+                                                        v-model="estimatedHours" type="number">
                                                     </v-text-field>
                                                     <p class="text-caption mb-0">Estimated Hours for this issue</p>
                                                     <p class="text-caption mb-0">E.g 1, 0.25, 36</p>
@@ -240,7 +276,8 @@
                                                     Actual Hours
                                                 </v-col>
                                                 <v-col cols="12" md="7" class="mt-4 ">
-                                                    <v-text-field outlined dense placeholder="Placeholder" v-model="actualHours" type="number">
+                                                    <v-text-field outlined dense placeholder="Placeholder"
+                                                        v-model="actualHours" type="number">
                                                     </v-text-field>
                                                     <p class="text-caption mb-0">Actual Hours for this issue</p>
                                                     <p class="text-caption mb-0">E.g 1, 0.25, 36</p>
@@ -261,6 +298,14 @@
                 max-width="600px">
                 <v-card>
                     <AddCategoryTaskModal @on-close="onClose" @on-create-category-task="onCreateCategoryTask" />
+                </v-card>
+            </v-dialog>
+            <!-- ADD PARENT TASK DIALOG -->
+            <v-dialog v-model="addParentTaskDialogShowed" v-if="addParentTaskDialogShowed" persistent max-width="800px"
+                transition="dialog-top-transition">
+                <v-card>
+                    <AddParentTaskModal @on-close="onClose" @on-select-parent-task="onSelectParentTask"
+                        :projectIdProp="currentProjectId" />
                 </v-card>
             </v-dialog>
 

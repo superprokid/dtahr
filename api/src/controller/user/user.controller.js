@@ -9,6 +9,7 @@ const { exeQuery, getConnection, beginTransaction, commitTransaction, releaseCon
 const { minDiff, compareTwoTimeGreaterOrEqual, calWorkingTime, getStartOfDate, getDateString, isValidDate, validateRequest } = require('../../common/utils');
 const { WORKLOG_STATUS, WORKHISTORY_STATUS, WORKTIME_DEFAULT, VALID_HOUR, ROLE } = require('../../config/constants');
 const { log } = require('console');
+const { FACE_SERVE_URL } = require('../../config/env');
 
 const LOG_CATEGORY = "UserController"
 const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_deleted <> 1 LIMIT 1";
@@ -42,6 +43,12 @@ const GET_REALTIME_STATUS_BY_MANAGER = "SELECT DISTINCT e.employee_id, CONCAT(fi
 const GET_USER_INFO_BY_ID = "SELECT *, CONCAT(first_name, ' ', last_name) as full_name FROM employee WHERE employee_id = ? and is_deleted <> 1";
 const UPDATE_PASSWORD = "UPDATE employee SET password = ? WHERE employee_id = ?";
 const AVT_PATH = "../../../public/avts/";
+const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, ' ', last_name) as name, avt "
+    + "                         FROM employee e "
+    + "                         	LEFT JOIN (SELECT *"
+    + "                    						FROM assignment a "
+    + "	                    					WHERE project_id = ?) tb1 on e.employee_id = tb1.employee_id"
+    + "                         WHERE e.role = 1 OR tb1.assigned_date is not null"
 
 async function verifyUser(data) {
     try {
@@ -84,7 +91,7 @@ async function refreshToken(req, res) {
         });
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 }
 
@@ -120,42 +127,56 @@ async function login(req, res) {
         })
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({ message: "SERVER ERROR" })
     }
 
 }
 
 async function checkInFaceId(req, res) {
     req.employee_id = req.body.employeeId;
+    req.isFaceId = true;
     await checkin(req, res);
     return
 }
 
 async function checkInMobile(req, res) {
-    const file = req.files?.length ? req.files[0] : null;
-    if (file) {
-        const form = new FormData();
-        const fileStream = fs.createReadStream(file.path);
-        form.append('file', fileStream);
-        fileStream.on('close', () => {
-            deleteFile(file.path)
-        });
-        fileStream.on('error', () => {
-            deleteFile(file.path)
-        });
-        form.append('employeeId', '0000001');
-        axiosBase.post('http://26.74.195.215:5000/check', form).then((result) => {
-            console.log(result.data);
-            res.status(200).send('success')
-        }).catch((err) => {
-            console.log("failed")
-            console.log(err)
-            res.status(400).send('success')
-        }).finally(() => {
-            deleteAvt(file.path);
-        })
-    } else {
-        res.status(400).send('failed')
+    try {
+        const file = req.files?.length ? req.files[0] : null;
+        if (file) {
+            const empId = req.employee_id;
+            console.log('empId', empId);
+            const form = new FormData();
+            const fileStream = fs.createReadStream(file.path);
+            form.append('file', fileStream);
+            fileStream.on('close', () => {
+                deleteFile(file.path)
+            });
+            fileStream.on('error', () => {
+                deleteFile(file.path)
+            });
+            form.append('employeeId', empId);
+            axiosBase.post(`${FACE_SERVE_URL}/check`, form).then((result) => {
+                console.log('faceid = ', result.data);
+                const empFaceId = result.data;
+                if (empFaceId && empFaceId.employeeId === empId) {
+                    req.isFaceId = true;
+                    checkin(req, res);
+                } else {
+                    logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - can request to face server`);
+                    res.status(400).send({ message: 'Can not recognize your face, please try again!' })
+                }
+            }).catch((err) => {
+                res.status(400).send({ message: 'Request failed, please try again' })
+            }).finally(() => {
+                deleteFile(file.path)
+            })
+        } else {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - file not exist`);
+            res.status(400).send({ message: 'Request failed, please try again' })
+        }
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 
 }
@@ -182,20 +203,29 @@ async function isAvalibleCheckinTime(connection) {
 }
 
 async function checkin(req, res) {
+    if (!req.isFaceId) {
+        const { ip } = req.body;
+        if (ip != __myPublicIP) {
+            console.log('__myPublicIP', __myPublicIP);
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] You can't check in if you not in office`);
+            res.status(403).send({ message: "You can't check in if you not in office", failed: true })
+            return;
+        }
+    }
     const connection = await getConnection();
     await beginTransaction(connection);
     try {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send("Check in failed");
+            res.status(403).send({ message: "Something went wrong, please try later!", failed: true });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
         }
         if (!(await isAvalibleCheckinTime(connection))) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] now is not work time`);
-            res.status(403).send("Check in failed");
+            res.status(403).send({ message: "Today is not working day, can't checkin", failed: true });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -225,12 +255,12 @@ async function checkin(req, res) {
         }
         await commitTransaction(connection);
         releaseConnection(connection);
-        res.status(200).send("Check in success");
+        res.status(200).send({ message: "Check in success" });
     } catch (error) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR", failed: true });
     }
 }
 
@@ -241,7 +271,7 @@ async function checkout(req, res) {
         const empId = req.employee_id;
         if (!empId) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id not exist`);
-            res.status(403).send("Check out failed");
+            res.status(403).send({ message: "Something went wrong, please try later!" });
             await commitTransaction(connection);
             releaseConnection(connection);
             return;
@@ -252,7 +282,7 @@ async function checkout(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] today worklog not exist - can not check out`);
             await commitTransaction(connection);
             releaseConnection(connection);
-            res.status(403).send("Check out failed");
+            res.status(403).send({ message: "Something went wrong, please try later!" });
             return;
         }
         const workTimeList = await queryTransaction(connection, GET_WORKTIME);
@@ -266,7 +296,7 @@ async function checkout(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] Working time is finished - can not check out`);
             await commitTransaction(connection);
             releaseConnection(connection);
-            res.status(403).send("You are out of working time");
+            res.status(403).send({ message: "You are out of working time" });
             return;
         }
         const currentWorkLog = curWorkLogList[0];
@@ -297,12 +327,12 @@ async function checkout(req, res) {
         }
         await commitTransaction(connection);
         releaseConnection(connection);
-        res.status(200).send("Check out success");
+        res.status(200).send({ message: 'Check out success'});
     } catch (error) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -375,7 +405,7 @@ async function changePassword(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -418,7 +448,7 @@ async function getStart(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -435,7 +465,7 @@ async function getAllUser(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -459,7 +489,7 @@ async function getAllUserByManager(req, res) {
         res.status(200).send(result)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -509,7 +539,7 @@ async function getRealTimeStatusByManager(req, res) {
         res.status(200).send(respone)
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -548,7 +578,7 @@ async function getEmployeeInfoById(req, res) {
         res.status(200).send(result);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
@@ -656,21 +686,40 @@ async function updateInformation(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
+async function getAllUserOfProject(req, res) {
+    try {
+        const empId = req.employee_id;
+        if (!empId) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee_id is not exist`);
+            res.status(403).send({ message: "Get Failed" });
+            return;
+        }
+        const { projectId } = req.query;
+
+        const result = await exeQuery(GET_USERS_OF_PROJECT, [projectId]);
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
+        res.status(200).send(result)
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
     }
 }
 
 function deleteAvt(filename) {
     const newPath = path.join(__basedir, "/public/avts", filename);
     if (fs.existsSync(newPath)) {
-        fs.unlink(newPath, (err) => {});
+        fs.unlink(newPath, (err) => { });
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete old avt success`);
     }
 }
 
 function deleteFile(filePath) {
     if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => { 
+        fs.unlink(filePath, (err) => {
             if (err) {
                 logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] delete file failed ${err.stack}`)
             } else {
@@ -693,5 +742,6 @@ module.exports = {
     getEmployeeInfoById,
     changePassword,
     updateInformation,
-    checkInMobile
+    checkInMobile,
+    getAllUserOfProject,
 }

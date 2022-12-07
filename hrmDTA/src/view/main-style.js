@@ -5,7 +5,7 @@ import dimen from '../assets/dimen'
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const primaryButtonWidth = screenWidth * 0.85;
-const weightInputWidth = screenWidth * 0.3;
+const weightInputWidth = screenWidth * 0.35;
 
 export default StyleSheet.create({
   container: {
@@ -103,6 +103,23 @@ export default StyleSheet.create({
     paddingStart: 15,
     paddingEnd: 15,
     color: 'black'
+  },
+
+  dropdown_container: {
+    backgroundColor: "white",
+    width: primaryButtonWidth,
+    zIndex: 1
+  },
+
+  dropdown: {
+    height: dimen.primaryButtonHeight,
+    width: primaryButtonWidth,
+    fontSize: 17,
+    padding: 10,
+    paddingStart: 15,
+    paddingEnd: 15,
+    color: 'black',
+    zIndex: 10
   },
 
   // input style for weight and height

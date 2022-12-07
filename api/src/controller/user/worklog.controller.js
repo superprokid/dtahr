@@ -7,7 +7,7 @@ const LOG_CATEGORY = "WorkLogController"
 
 const GET_WORK_HISTORY = "SELECT * FROM workhistory WHERE employee_id = ? and work_date between ? and ? ORDER BY work_date ASC";
 const GET_WORK_LOG_OF_USER_BY_MANAGER = "SELECT * FROM worklog WHERE employee_id = ? and work_date between ? and ? ORDER BY work_date ASC";
-
+const GET_WORKLOG_OF_USER = "SELECT * FROM worklog WHERE employee_id = ? and work_date = ? LIMIT 1";
 const GET_CURRENT_WORKLOG_BY_MANAGER = "SELECT worklog_id FROM worklog WHERE employee_id = ? and CAST(work_date as date) = ? LIMIT 1";
 const INSERT_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total) VALUES (?, ?, ?, ?)";
 const UPDATE_WORKLOG_BY_MANAGER = "UPDATE worklog SET work_total = work_total + ? WHERE worklog_id = ?";
@@ -54,7 +54,7 @@ async function getWorkHistory(req, res) {
         res.status(200).send(listWorkHistories);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -79,7 +79,7 @@ async function getWorkLogByUser(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -136,7 +136,7 @@ async function getWorkLogOfUserByManager(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -224,7 +224,7 @@ async function updateWorklogByManager(req, res) {
         releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -293,7 +293,7 @@ async function updateHolidayTimeByManager(req, res) {
         releaseConnection(connection);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
         await rollback(connection);
         releaseConnection(connection);
     }
@@ -349,7 +349,7 @@ async function getWorkHistoryByManager(req, res) {
         res.status(200).send(listWorkHistories);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 

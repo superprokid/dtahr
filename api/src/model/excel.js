@@ -21,13 +21,19 @@ class Excel {
     //font
     static FONT_RED = {
         name: 'Meiryo UI',
-        color: { argb: 'FF000000' },
-        size: 10,
+        color: { argb: 'FFFF0000' },
+        size: 11,
     }
     static FONT_BLACK = {
         name: 'Meiryo UI',
         color: { argb: 'FF000000' },
-        size: 10,
+        size: 11,
+    }
+    static FONT_HEADER = {
+        name: 'Meiryo UI',
+        size: 11,
+        bold: true,
+
     }
 
     /**
@@ -50,6 +56,19 @@ class Excel {
             throw error;
         }
         
+    }
+
+    /**
+     * Reading file with Buffer data
+     * @param {Buffer} data 
+     */
+    async openBuffer(data) {
+        try {
+            await this.workbook.xlsx.load(data);
+        } catch (error) {
+            logger.error('[server] open file excel with buffer error : ' + error);
+            throw error;
+        }
     }
 
     /**

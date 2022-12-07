@@ -7,7 +7,7 @@
                 </v-btn>
             </template>
             <v-card>
-                <EditWorklog :username="username" :id="id" @on-close="onClose" @on-save="onSaveEditWorklog"/>
+                <EditWorklog :isAdminEdit="isAdminEdit" :username="username" :id="id" @on-close="onClose" @on-save="onSaveEditWorklog"/>
             </v-card>
         </v-dialog>
         <v-dialog v-model="AddHolidayDialog" persistent max-width="800px">
@@ -17,7 +17,7 @@
                 </v-btn>
             </template>
             <v-card>
-                <AddHoliday :username="username" :id="id" @on-close="onClose" @on-save="onSaveAddHoliday"/>
+                <AddHoliday :isAdminEdit="isAdminEdit" :username="username" :id="id" @on-close="onClose" @on-save="onSaveAddHoliday"/>
             </v-card>
         </v-dialog>
     </v-row>

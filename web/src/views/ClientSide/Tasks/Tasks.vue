@@ -1,12 +1,31 @@
 <template>
-  <div id="tasks-page">
+  <div id="tasks-page" class="px-3">
     <v-app style="background-color: whitesmoke !important">
       <v-container>
         <v-row>
           <div class="tasks-title">Search tasks</div>
         </v-row>
         <v-row>
-          <v-col cols="12" md="6" lg="5" xl="3" class="pr-10">
+          <v-col cols="12">
+            <span class="mt-3 ml-3 mr-3">Status: </span>
+            <v-radio-group row class="my-radio-group-container">
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status5" name="jeff" value="5">
+              <label class="my-radio-label" for="status5">All</label>
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status0" name="jeff" value="0">
+              <label class="my-radio-label" for="status0">Open</label>
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status1" name="jeff" value="1">
+              <label class="my-radio-label" for="status1">In Progress</label>
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status2" name="jeff" value="2">
+              <label class="my-radio-label" for="status2">Resolve</label>
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status3" name="jeff" value="3">
+              <label class="my-radio-label" for="status3">Closed</label>
+              <input v-model="selectedStatus" class="my-radio-input" type="radio" id="status4" name="jeff" value="4">
+              <label class="my-radio-label" for="status4">Not Closed</label>
+            </v-radio-group>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="6" lg="5" xl="3" class="pr-10 pt-0">
             <v-row>
               Category
             </v-row>
@@ -16,7 +35,7 @@
               </v-autocomplete>
             </v-row>
           </v-col>
-          <v-col cols="12" md="6" lg="5" xl="3" class="pr-10">
+          <v-col cols="12" md="6" lg="5" xl="3" class="pr-10 pt-0">
             <v-row>
               Assignee
             </v-row>
@@ -49,7 +68,7 @@
               </v-autocomplete>
             </v-row>
           </v-col>
-          <v-col cols="10" md="6" lg="5" xl="3" class="pr-10">
+          <v-col cols="10" md="6" lg="5" xl="3" class="pr-10 pt-0">
             <v-row>
               Keyword
             </v-row>
@@ -68,7 +87,7 @@
         <v-row>
           <v-data-table :headers="headers" :items="listFiltered" class="elevation-1" style="min-width: 900px" :item-class="setItemRowCLass" @click:row="openTaskDetails">
             <template v-slot:item.task_id="{ item }">
-              <a class="task-key">{{ item.task_id }}</a>
+              <a class="task-key">{{ item.task_number }}</a>
             </template>
             <template v-slot:item.category_name="{ item }">
               <v-chip small :color="item.category_color" dark>
@@ -148,5 +167,30 @@
 
 .item-row {
   cursor: pointer;
+}
+
+.my-radio-group-container {
+  margin-top: 0px;
+  color: 'red'
+}
+
+.my-radio-label {
+  display: inline-block;
+  border: solid 2px none;
+  padding: 3px 10px;
+}
+
+.my-radio-label:hover {
+  cursor: pointer;
+}
+
+.my-radio-input[type="radio"] {
+  display: none;
+}
+
+.my-radio-input[type="radio"]:checked+label {
+  background: #154c79;
+  border-radius: 20px;
+  color: white
 }
 </style>

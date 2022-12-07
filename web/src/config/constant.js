@@ -2,6 +2,7 @@ export const LIMIT_RECALL_API = 3;
 export const EXPRIED_COOKIE_DAYS = 10 * 365; // 10 years
 
 export const BASE_URL = "http://26.197.75.244:3000";
+export const FACE_API_URL = "http://26.74.195.215:5000";
 // export const BASE_URL = "http://127.0.0.1:3000";
 
 // user url api
@@ -44,6 +45,18 @@ export const USER_GET_ALL_TASK = BASE_API_USER_URL + "/task/getbystatus"
 export const USER_UPDATE_TASK = BASE_API_USER_URL + "/task/update"
 export const USER_GET_TASK_DETAIL = BASE_API_USER_URL + "/task/getdetails"
 export const USER_GET_ALL_TASK_LIST = BASE_API_USER_URL + "/task/getall"
+export const USER_CREATE_COMMENT = BASE_API_USER_URL + "/comment/create"
+export const USER_UPDATE_COMMENT = BASE_API_USER_URL + "/comment/update"
+export const USER_DELETE_COMMENT = BASE_API_USER_URL + "/comment/delete"
+export const USER_UPLOAD_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/upload"
+export const USER_DELETE_ATTACHMENT = BASE_API_USER_URL + "/task/attachment/delete"
+export const USER_GET_ALL_TASK_FOR_GANTT_CHART = BASE_API_USER_URL + "/task/getallforgantt"
+export const USER_DOWN_ATTACHMENT = BASE_URL + "/api/public/download";
+export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
+export const USER_GET_USER_IN_PROJECT = BASE_URL + "/api/user/getalluserofproject";
+
+export const USER_SEARCH_PARENT_TASK = BASE_API_USER_URL + "/task/search";
+
 
 //manager url api
 export const MANAGER_GET_USER_ASSIGNED = BASE_API_USER_URL + '/manager/getusers';
@@ -74,3 +87,67 @@ export const ADMIN_GET_ALL_EMPLOYEE_OF_GROUP_URL = BASE_API_ADMIN_URL + '/group/
 export const ADMIN_GET_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/get';
 export const ADMIN_CREATE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/create';
 export const ADMIN_DELETE_HOLIDAY = BASE_API_ADMIN_URL + '/holiday/delete';
+export const ADMIN_GET_ALL_USER = BASE_API_ADMIN_URL + '/getalluser';
+// export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/get';
+export const ADMIN_GET_USER_PROJECT_JOINED = BASE_API_ADMIN_URL + '/employee/getproject';
+export const ADMIN_ADD_USER = BASE_API_ADMIN_URL + '/create/employee';
+export const ADMIN_UPDATE_USER = BASE_API_ADMIN_URL + '/update/employee';
+export const ADMIN_DELETE_USER = BASE_API_ADMIN_URL + '/delete/employee';
+export const ADMIN_GET_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/get';
+export const ADMIN_UPDATE_WORKLOG_USER = BASE_API_ADMIN_URL + '/worklog/update';
+export const ADMIN_UPDATE_HOLIDAY_USER = BASE_API_ADMIN_URL + '/holidaytime/update';
+export const ADMIN_GET_WORK_HISTORY_USER = BASE_API_ADMIN_URL + '/workhistory/get';
+export const ADMIN_CREATE_USER = BASE_API_ADMIN_URL + '/create/employee';
+
+export const ADMIN_EXPORT_LEAVE_CSV = BASE_API_ADMIN_URL + '/export/leave';
+export const ADMIN_EXPORT_OVERTIME_CSV = BASE_API_ADMIN_URL + '/export/overtime';
+export const ADMIN_EXPORT_SALARY_CSV = BASE_API_ADMIN_URL + '/export/salary';
+export const ADMIN_EXPORT_PROJECT_CSV = BASE_API_ADMIN_URL + "/export/project";
+export const ADMIN_EXPORT_GROUP_CSV = BASE_API_ADMIN_URL + "/export/group";
+export const ADMIN_EXPORT_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/information";
+export const ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV = BASE_API_ADMIN_URL + "/export/worklog";
+
+export const ADMIN_GET_USER_INFO = BASE_API_ADMIN_URL + '/employee/getinfo';
+export const ADMIN_UPDATE_PERSONAL_USER_INFORMATION = BASE_API_ADMIN_URL + '/employee/update';
+export const ADMIN_GET_ALL_WORKTIME = BASE_API_ADMIN_URL + '/worktime/get';
+export const ADMIN_UPDATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/update';
+export const ADMIN_CREATE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/create';
+export const ADMIN_DELETE_WORKTIME = BASE_API_ADMIN_URL + '/worktime/delete';
+export const ADMIN_GET_POLICY = BASE_API_ADMIN_URL + '/policy/get';
+export const ADMIN_UPDATE_POLICY = BASE_API_ADMIN_URL + '/policy/update';
+export const ADMIN_GET_LIST_PROJECT = BASE_API_ADMIN_URL + "/project/getall";
+export const ADMIN_CREATE_PROJECT = BASE_API_ADMIN_URL + "/project/create";
+export const ADMIN_UPDATE_PROJECT = BASE_API_ADMIN_URL + "/project/update";
+export const ADMIN_DELETE_PROJECT = BASE_API_ADMIN_URL + "/project/delete";
+
+
+export const ADMIN_GET_STATUS_PROJECT = BASE_API_ADMIN_URL + "/project/getstatus";
+export const ADMIN_GET_PROJECT_DETAIL_INFO = BASE_API_ADMIN_URL + "/project/getdetails";
+
+export const ADMIN_ADD_EMPLOYEE_TO_PROJECT = BASE_API_ADMIN_URL + "/project/assignee";
+
+export const ADMIN_GET_ALL_EMPLOYEE_IN_PROJECT_EXCEPT_ASSIGNEE = BASE_API_ADMIN_URL + "/project/getemployeenotassign"
+export const ADMIN_DELETE_EMPLOYEE_OUT_PROJECT = BASE_API_ADMIN_URL + "/project/removeassignee"
+
+export const ADMIN_GET_ALL_TASK = BASE_API_ADMIN_URL + "/task/getall"
+export const ADMIN_GET_ALL_USER_IN_PROJECT = BASE_API_ADMIN_URL + "/project/getalluserofproject"
+export const ADMIN_GET_ALL_TASK_CATEGORY = BASE_API_ADMIN_URL + "/category/getall"
+
+export const ADMIN_GET_TASK_DETAIL_INFO = BASE_API_ADMIN_URL + "/task/getdetails"
+export const ADMIN_DELETE_TASK = BASE_API_ADMIN_URL + "/task/delete"
+export const ADMIN_CHANGE_USER_PASSWORD = BASE_API_ADMIN_URL + "/employee/changepassword"
+
+export const ADMIN_GET_WORKING_STATUS = BASE_API_ADMIN_URL + "/dashboard/getworkingstatus"
+export const ADMIN_GET_WORKING_ACTIVITY = BASE_API_ADMIN_URL + "/dashboard/checkinstatus"
+export const ADMIN_GET_WORKING_TIME_AND_HOLIDAY = BASE_API_ADMIN_URL + "/dashboard/worktimeandholiday"
+export const ADMIN_GET_PROJECT_STATUS = BASE_API_ADMIN_URL + "/dashboard/projectstatus"
+
+export const ADMIN_DOWNLOAD_IMPORT_EMPLOYEE_SAMPLE = BASE_API_ADMIN_URL + "/template/download/import_employee_template.xlsx"
+
+export const ADMIN_IMPORT_EMPLOYEE = BASE_API_ADMIN_URL + "/import/employee"
+
+// constant
+export const TAB_TYPE = {
+    USER: 'user',
+    TASK: 'task'
+}

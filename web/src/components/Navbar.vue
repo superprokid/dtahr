@@ -77,7 +77,7 @@
 </template>
 <script>
 //  import Popup from './Popup.vue'
-
+/* eslint-disable */
 import SessionUtls from '../services/SessionUtls';
 import { mapState } from "vuex";
 
@@ -99,27 +99,65 @@ export default {
             {
                 title: 'Dashboard',
                 icon: 'mdi-view-dashboard',
-                to: "home", // name of router path
+                to: "/admin/home", // name of router path
                 id: tabName.homeAdmin, // id of page
             },
             {
                 title: 'Group',
-                icon: 'mdi-view-dashboard',
-                to: "group", // name of router path
+                icon: 'mdi-scoreboard',
+                to: "/admin/group", // name of router path
                 id: tabName.groupAdmin, // id of page
             },
             {
+                title: 'Employee',
+                icon: 'mdi-account-group',
+                to: "/admin/user", // name of router path
+                id: tabName.userAdmin, // id of page
+            },
+            {
                 title: 'Holiday',
-                icon: 'mdi-view-dashboard',
-                to: "holiday", // name of router path
+                icon: 'mdi-airplane-clock',
+                to: "/admin/holiday", // name of router path
                 id: tabName.holidayAdmin, // id of page
+            },
+            // {
+            //     title: 'CSV Export',
+            //     icon: 'mdi-file-export-outline',
+            //     to: "/admin/csv", // name of router path
+            //     id: tabName.csvAdmin, // id of page
+            // },
+            {
+                title: 'Projects',
+                icon: 'mdi-file-document-multiple-outline',
+                to: "/admin/project", // name of router path
+                id: tabName.projectAdmin, // id of page
+            },
+            {
+                title: 'Working Time',
+                icon: 'mdi-clock-outline',
+                to: "/admin/workingtime", // name of router path
+                id: tabName.workingTimeAdmin, // id of page
+            },
+            {
+                title: 'Policy',
+                icon: 'mdi-file-document-outline',
+                to: "/admin/policy", // name of router path
+                id: tabName.policyAdmin, // id of page
             }
         ],
         currentTab: '',
 
     }),
+    watch: {
+        currentTab(newVal){
+            console.log('this.currentTab',newVal);
+        }   
+    },
     mounted(){
         this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey)
+        this.$root.$on('drawer', () => {
+            this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
+        })
     },
     computed: {
         ...mapState(["startDataAdmin"])

@@ -9,14 +9,15 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
-import ReportServices from "../../../services/API/ReportAPI/ReportServices"
+import AddParentTaskModal from "../../../components/AddParentTaskModal/AddParentTaskModal.vue"
 
 import {USER_GET_IMAGE} from '../../../config/constant'
 
 export default {
     components: {
         quillEditor,
-        AddCategoryTaskModal
+        AddCategoryTaskModal,
+        AddParentTaskModal
     },
     data() {
 
@@ -84,6 +85,12 @@ export default {
                 v => !!v || 'Category Task is required',
             ],
 
+            currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
+
+
+            addParentTaskDialogShowed: false,
+
+            parentTask: {},
         }
     },
     watch: {
@@ -137,57 +144,102 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Create Fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
-            alert('Create Category Successfully')
+            this.$toast.open({
+                message: "Create success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+              })
             this._getAllCategoryTask()
             this.addCategoryTaskDialogShowed = false
         },
         onClose(params){
             if(params === 1){
                 this.addCategoryTaskDialogShowed = false
+            }else if(params === 2){
+                this.addParentTaskDialogShowed = false
             }
         },
         async _getAllAssignees(){
-            const response = await ReportServices.getAllUser()
+            const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
             if (!response) {
                 this.$router.push('/user/login');
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something Went Wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
-            console.log('response',response.data);
             this.employeeList = response.data.map((item) => {
                 return {...item, }
             })
         },
         async onClickAddTask(){
             if(this.$refs.form.validate()){
-                console.log('ok can add task');
                 const params = {
                     taskTitle: this.taskTitle,
                     taskDescription: this.content,
                     assigneeId: this.assignee,
+                    projectId: this.currentProjectId,
                     priority: this.prioritySelectValue,
                     categoryId: this.categorySelectValue,
                     startDate: this.startDate,
                     endDate: this.endDate,
                     estimatedHours: this.estimatedHours || null,
                     actualHours: this.actualHours || null,
+                    parentTaskId: this.parentTask.task_id || null
                 }
                 const response = await AddTaskServices.createTask(params)
-                console.log('paramsparams',params);
                 if (!response) {
                     this.$router.push('/user/login');
                     return;
                 }
                 if(response === -1){
-                    alert("Call Fail")
+                    this.$toast.open({
+                        message: "Add Task Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
-                alert("Create Task Success")
+                this.$toast.open({
+                    message: "Add Task Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                window.location.reload();
             }
         },
+
+        onClickAddParentTask(){
+            this.addParentTaskDialogShowed = true
+        },
+
+        onSelectParentTask(params){
+            this.parentTask = params
+
+            this.addParentTaskDialogShowed = false
+        }
 
     },
     computed: {
@@ -196,6 +248,7 @@ export default {
         }
       },
     mounted() {
+        this.currentProjectId = this.$route.params.projectId ?? this.currentProjectId;
         console.log('this is current quill instance object', this.editor)
         this.$eventBus.$emit('show-spinner', true);
         this._getAllCategoryTask()

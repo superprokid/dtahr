@@ -1,9 +1,12 @@
+/* eslint-disable */
 import Vue from 'vue';
 import Router from 'vue-router';
 import AdminLoginPage from '../views/AdminSide/LoginSite/LoginPage.vue'
 import SessionUtls from "../services/SessionUtls";
 import CookieUtls from "../services/CookieUtls";
 import AdminSide from "../views/AdminSide/AdminSide.vue";
+
+import NotFoundPage from "../views/CommonPage//NotFoundPage/NotFoundPage.vue";
 
 // UserSide
 import ClientSide from "@/views/ClientSide/ClientSide.vue";
@@ -20,11 +23,22 @@ import AddTask from "../views/ClientSide/AddTask/AddTask.vue"
 import Tasks from "../views/ClientSide/Tasks/Tasks.vue";
 import TaskBoard from '../views/ClientSide/TaskBoard/TaskBoard.vue';
 import TaskDetail from "../views/ClientSide/TaskDetail/TaskDetail.vue"
+import EditTask from "../views/ClientSide/EditTask/EditTask.vue"
+import TaskSide from '../views/ClientSide/TaskSide/TaskSide.vue';
+import Project from '../views/ClientSide/Project/Project.vue';
+import GanttChart from '../views/ClientSide/GanttChart/GanttChart.vue';
 
 // Admin Side
 import AdminDashboard from "@/views/AdminSide/AdminDashboard/AdminDashboard.vue"
 import AdminGroup from "@/views/AdminSide/AdminGroup/AdminGroup.vue"
 import AdminHoliday from "@/views/AdminSide/AdminHoliday/AdminHoliday.vue"
+import AdminUserManagement from "@/views/AdminSide/AdminUserManagement/AdminUserManagement.vue"
+import UserDetail from "../views/AdminSide/UserDetail/UserDetail.vue"
+import AdminCSVExport from "@/views/AdminSide/AdminCSVExport/AdminCSVExport.vue"
+import AdminProject from "../views/AdminSide/AdminProject/AdminProject.vue"
+import AdminProjectDetail from "../views/AdminSide/AdminProjectDetail/AdminProjectDetail.vue"
+import AdminWorkingTime from "../views/AdminSide/AdminWorkingTime/AdminWorkingTime.vue"
+import AdminPolicy from "../views/AdminSide/AdminPolicy/AdminPolicy.vue"
 
 Vue.use(Router);
 
@@ -50,8 +64,36 @@ const router = new Router({
                     component: AdminGroup
                 },
                 {
+                    path: 'user',
+                    component: AdminUserManagement
+                },
+                {
                     path: 'holiday',
                     component: AdminHoliday
+                },
+                // {
+                //     path: 'csv',
+                //     component: AdminCSVExport
+                // },
+                {
+                    path: 'userdetail/:employeeId',
+                    component: UserDetail
+                },
+                {
+                    path: 'project',
+                    component: AdminProject
+                },
+                {
+                    path: 'projectdetail/:projectId',
+                    component: AdminProjectDetail
+                },
+                {
+                    path: 'workingtime',
+                    component: AdminWorkingTime
+                },
+                {
+                    path: 'policy',
+                    component: AdminPolicy
                 }
             ]
         },
@@ -81,10 +123,6 @@ const router = new Router({
                     component: MyOvertime
                 },
                 {
-                    path: 'taskboard',
-                    component: TaskBoard
-                },
-                {
                     path: 'dailyreport',
                     component: DailyReport,
                 },
@@ -101,22 +139,48 @@ const router = new Router({
                     component: WorkFromHome,
                 },
                 {
-                    path: 'tasks',
-                    component: Tasks
+                    path: 'project',
+                    component: Project,
                 },
                 {
-                    path: 'addtask',
-                    component: AddTask,
-                },
-                {
-                    path: 'taskdetail/:taskId',
-                    component: TaskDetail,
+                    path: 'taskside',
+                    component: TaskSide,
+                    children: [
+                        {
+                            path: 'tasks/:projectId',
+                            component: Tasks
+                        },
+                        {
+                            path: 'addtask/:projectId',
+                            component: AddTask,
+                        },
+                        {
+                            path: 'taskdetail/:projectId/:taskId',
+                            component: TaskDetail,
+                        },
+                        {
+                            path: 'edittask/:projectId/:taskId',
+                            component: EditTask
+                        },
+                        {
+                            path: 'taskboard/:projectId',
+                            component: TaskBoard
+                        },
+                        {
+                            path: 'ganttchart/:projectId',
+                            component: GanttChart
+                        },
+                    ]
                 }
             ]
         },
         {
             path: "/",
             redirect: '/user/login'
+        },
+        {
+            path: "*",
+            component: NotFoundPage
         }
     ]
 });
@@ -125,6 +189,13 @@ router.beforeEach((to, from, next) => {
     let accessToken = CookieUtls.getAccessToken()
     let refreshToken = CookieUtls.getRefreshToken()
     let role = CookieUtls.getCookie(CookieUtls.role);
+    
+    // set current projectId if exist
+    const {projectId} = to.params;
+    if (projectId) {
+        SessionUtls.setItem(SessionUtls.projectSelectedKey, projectId);
+    }
+
     const publicPages = ['/user/login','/admin/login']
     const destination = to.path.split("/")[1]
     if (publicPages.includes(to.path)) {
@@ -143,7 +214,7 @@ router.beforeEach((to, from, next) => {
     else {
         if (destination == "admin") {
             return next({
-                path: from.path
+                path: '/admin/login',
             })
         }
         if (accessToken || refreshToken) {
@@ -156,6 +227,7 @@ router.beforeEach((to, from, next) => {
             return next()
         }
         else {
+            // TODO: Update 404 page
             return next({
                 path: '/',
                 query: {returnUrl: to.path}

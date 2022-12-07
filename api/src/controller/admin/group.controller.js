@@ -4,15 +4,16 @@ const { validateRequest, generateId, getDateTimeString } = require('../../common
 const { MAX_GROUP_ID_LENGTH } = require('../../config/constants');
 
 const LOG_CATEGORY = "AdminGroupController";
-const GET_ALL_GROUP = "SELECT g.*, CONCAT(e.first_name, ' ', e.last_name) as manager_name, COUNT(ee.employee_id) as number"
+const GET_ALL_GROUP = "SELECT g.*, CONCAT(e.first_name, ' ', e.last_name) as manager_name, e.avt, COUNT(ee.employee_id) as number"
     + "                 FROM `group` g "
     + "	                    INNER JOIN employee e ON g.manager_id = e.employee_id"
     + "                     LEFT JOIN employee ee ON ee.group_id = g.group_id"
     + "                 GROUP BY g.group_id";
-const GET_ALL_USER_BY_GROUP = "SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name "
+const GET_ALL_USER_BY_GROUP = "SELECT e.*,  CONCAT(e.first_name, ' ', e.last_name) as full_name, CONCAT(er.first_name, ' ', er.last_name) as employer_full_name, g.group_name "
     + "                         FROM employee e "
     + "                              LEFT JOIN employee er ON e.employer_id = er.employee_id "
-    + "                         WHERE e.group_id = ? ";
+    + "                              INNER JOIN `group` g ON g.group_id = e.group_id"
+    + "                         WHERE e.group_id = ? and e.employee_id <> g.manager_id";
 const GET_NEWEST_GROUP_ID = "SELECT group_id FROM `group` ORDER BY group_id DESC LIMIT 1";
 const CHECK_EXIST_EMPLOYEE_ID = "SELECT employee_id FROM employee where employee_id = ?";
 const INSERT_NEW_GROUP = "INSERT INTO `group` (group_id, group_name, group_full_name, manager_id, manager_start_date) VALUES (?, ?, ?, ?, ?) ";
@@ -26,7 +27,7 @@ async function getAllGroup(req, res) {
         res.status(200).send(await exeQuery(GET_ALL_GROUP));
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({message: "SERVER ERROR"})
     }
 }
 
@@ -48,7 +49,7 @@ async function getAllEmployeeInGroup(req, res) {
         res.status(200).send(response);
     } catch (error) {
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR")
+        res.status(500).send({message: "SERVER ERROR"})
     }
 }
 
@@ -110,7 +111,7 @@ async function createGroup(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -194,7 +195,7 @@ async function updateGroup(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
@@ -238,7 +239,7 @@ async function deleteGroup(req, res) {
         await rollback(connection);
         releaseConnection(connection);
         logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
-        res.status(500).send("SERVER ERROR");
+        res.status(500).send({message: "SERVER ERROR"});
     }
 }
 
