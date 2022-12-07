@@ -102,6 +102,7 @@ async function processForWorking(connection, employee, worklog) {
         if (compareTwoTimeGreaterOrEqual(workTime.hour_start, workTime.min_start, workLogUpdateDate.getHours(), workLogUpdateDate.getMinutes())) {
             workLogUpdateDate.setHours(workTime.hour_start);
             workLogUpdateDate.setMinutes(workTime.min_start);
+            workLogUpdateDate.setSeconds(0);
         }
         // Set time for calculate working time
         const startTime = workLogUpdateDate;
