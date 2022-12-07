@@ -100,18 +100,21 @@ export default {
         startDataUser: {
             handler(newVal) {
                 if (this.tabType == TAB_TYPE.USER && newVal.role == 1 && this.items.length < 8) {
-                    this.items.push({
-                        title: 'Employee Management',
-                        icon: 'mdi-account-cog',
-                        to: "/usermanagement",
-                        id: tabName.userManagement,
-                    },
+                    this.items.push(
+                        {
+                            title: 'Employee Management',
+                            icon: 'mdi-account-cog',
+                            to: "/usermanagement",
+                            id: tabName.userManagement,
+                        },
                         {
                             title: 'Realtime Check',
                             icon: 'mdi-calendar-clock-outline',
                             to: "/realtimecheck",
                             id: tabName.realtimeCheck,
                         })
+                } else if (this.tabType == TAB_TYPE.USER && newVal.role == 0) {
+                    this.items = [...listUserItem];
                 }
             }
         },
@@ -131,9 +134,9 @@ export default {
         const currentTabType = SessionUtls.getItem(SessionUtls.tabTypeKey);
         this.tabType = currentTabType;
         if (currentTabType == TAB_TYPE.USER) {
-            this.items = listUserItem;
+            this.items = [...listUserItem];
         } else {
-            this.items = listTaskItem;
+            this.items = [...listTaskItem];
         }
         this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
         this.$root.$on('drawer', () => {
@@ -141,9 +144,9 @@ export default {
             const currentTabType = SessionUtls.getItem(SessionUtls.tabTypeKey);
             this.tabType = currentTabType;
             if (currentTabType == TAB_TYPE.USER) {
-                this.items = listUserItem;
+                this.items = [...listUserItem];
             } else {
-                this.items = listTaskItem;
+                this.items = [...listTaskItem];
             }
         })
     },
