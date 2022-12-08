@@ -5,6 +5,7 @@ import tabName from '../../../config/tabname';
 import { getDateString, getTimeString, getAvatar, getDateStringWithTask, isPastDate } from "../../../services/utilities";
 import AdminDashboardServices from "../../../services/API/AdminDashboardAPI/AdminDashboardServices"
 import AdminCSVServices from '../../../services/API/CSVExportAPI/CSVExport.services';
+import { ADMIN_DASHBOARD_SCREEN } from '../../../config/screenName';
 
 export default {
 	name: 'AdminDashboard',
@@ -101,6 +102,16 @@ export default {
 		await this.getWorkingTimeAndHoliday()
 		await this.getProjectStatus()
 		this.$eventBus.$emit('show-spinner', false);
+
+		this.$root.$on(ADMIN_DASHBOARD_SCREEN, async () => {
+			this.$eventBus.$emit('show-spinner', true);
+			const workingStatus = await this.getWorkingStatus();
+			this.checkinPercentage = Math.floor((workingStatus?.checkin / workingStatus?.total) * 100)
+			this.checkoutPercentage = Math.floor((workingStatus?.checkout / workingStatus?.total) * 100)
+			this.notworkingPercentage = Math.floor((workingStatus?.notWorking / workingStatus?.total) * 100)
+			await this.getWorkingActivity()
+			this.$eventBus.$emit('show-spinner', false);
+        })
 	},
 
 	methods: {

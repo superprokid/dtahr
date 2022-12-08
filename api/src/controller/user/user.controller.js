@@ -307,6 +307,7 @@ async function checkout(req, res) {
             if (compareTwoTimeGreaterOrEqual(workTime.hour_start, workTime.min_start, workLogUpdateDate.getHours(), workLogUpdateDate.getMinutes())) {
                 workLogUpdateDate.setHours(workTime.hour_start);
                 workLogUpdateDate.setMinutes(workTime.min_start);
+                workLogUpdateDate.setSeconds(0);
             }
             // Set time for calculate working time
             const startTime = workLogUpdateDate;
@@ -317,8 +318,8 @@ async function checkout(req, res) {
             lunchEnd.setHours(workTime.lunch_hour_end, workTime.lunch_min_end, 0);
             // Calculate work total
             const workTotal = currentWorkLog.work_total + calWorkingTime(startTime, endTime, lunchStart, lunchEnd);
-            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update today worklog - check out, work total: ${workTotal} minutes`);
-            await queryTransaction(connection, UPDATE_WORKLOG_STATUS, [WORKLOG_STATUS.checkout, workTotal, currentWorkLog.worklog_id]);
+            logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update today worklog - check out, work total: ${workTotal < 0 ? 0 : workTotal} minutes`);
+            await queryTransaction(connection, UPDATE_WORKLOG_STATUS, [WORKLOG_STATUS.checkout, workTotal < 0 ? 0 : workTotal, currentWorkLog.worklog_id]);
 
             // add work history
             const now = moment().format('YYYY-MM-DD, hh:mm:ss a');

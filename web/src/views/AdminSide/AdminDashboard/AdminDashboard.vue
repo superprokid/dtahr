@@ -100,9 +100,9 @@
                 </v-row>
 
                 <!-- WOKING TIME / UPCOMMING HOLIDAY / EXPORT EXCEL -->
-                <v-row no-gutters class="mt-4">
+                <v-row no-gutters>
 
-                    <v-col cols="12" md="8">
+                    <v-col cols="12 mt-4" md="12" lg="8">
                         <v-row no-gutters class="mr-4">
                             <v-col cols="6">
                                 <v-card class="mr-6">
@@ -242,7 +242,7 @@
                             </v-card>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12 mt-4" md="12" lg="4">
                         <v-card style="height: 100%">
                             <v-card-text>
                                 <v-row no-gutters>

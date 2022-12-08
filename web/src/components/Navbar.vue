@@ -82,6 +82,8 @@ import SessionUtls from '../services/SessionUtls';
 import { mapState } from "vuex";
 
 import tabName from "../config/tabname";
+import { REAL_TIME_TRACKING_CHANNEL } from '../config/channel';
+import { ADMIN_DASHBOARD_SCREEN } from '../config/screenName';
 
 export default {
     name: 'Navbar',
@@ -158,6 +160,10 @@ export default {
         this.$root.$on('drawer', () => {
             this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
         })
+
+        this.$mySocket.on(REAL_TIME_TRACKING_CHANNEL, (msg) => {
+            this.$root.$emit(ADMIN_DASHBOARD_SCREEN, msg);
+        });
     },
     computed: {
         ...mapState(["startDataAdmin"])

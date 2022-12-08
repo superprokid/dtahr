@@ -91,7 +91,7 @@ function calWorkingTime(startTime, endTime, lunchStart, lunchEnd) {
     } else if (startTime > lunchStart && endTime < lunchEnd) {
         return 0;
     } else {
-        return minDiff(startTime, endTime) + 1;
+        return minDiff(startTime, endTime);
     }
 }
 

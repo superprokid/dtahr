@@ -11,4 +11,5 @@ export const REPORT_MAIN_SCREEN = "ReportMain";
 export const REPORT_HISTORY_SCREEN = "ReportHISTORY";
 export const REPORT_RECEIVER_SCREEN = "ReportReceiver";
 export const REAL_TIME_TRACKING_SCREEN = "RealTimeTracking";
-export const MANAGER_WORK_FROM_HOME_TICKET_SCREEN = "ManagerWfhScreen"
+export const MANAGER_WORK_FROM_HOME_TICKET_SCREEN = "ManagerWfhScreen";
+export const ADMIN_DASHBOARD_SCREEN = "AdminDashboard"
