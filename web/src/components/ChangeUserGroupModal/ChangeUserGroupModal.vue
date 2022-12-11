@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <v-toolbar class="text-h5" color="primary" dark>Change User Role</v-toolbar>
+        <v-toolbar class="text-h5" color="primary" dark>Change User Group</v-toolbar>
 
         <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>

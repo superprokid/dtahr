@@ -82,6 +82,13 @@ export default {
             newPasswrd: '',
             confirmPasswrd: '',
             valid: true,
+
+            activeAccountDialogShowed: false,
+            checkboxActiveAccount: false,
+            validActiveAccount: true,
+            genderArray:[
+                'Male', 'Female', 'Other'
+            ],
         }
     },
     computed: {
@@ -483,6 +490,41 @@ export default {
                 this.confirmPasswrd = ''
             }
         },
+
+        onClickActiveUser(){
+            this.activeAccountDialogShowed = true
+        },
+
+        async onActiveAccount(){
+            if(this.$refs.formActiveAccount.validate()){
+                const params = {
+                    employeeId: this.userDetailInfo.employee_id
+                }
+                const response = await AdminUserDetailServices.adminActiveAccount(params)
+                if (!response) {
+                    this.$router.push('/admin/login');
+                    return;
+                }else if(response == -1){
+                    this.$toast.open({
+                        message: "Active User Fail",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
+                }
+                this.$toast.open({
+                    message: "Active User Success",
+                    type: "success",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                this.activeAccountDialogShowed = false
+                await this.getUserDetailById()
+            }
+        }
     },
     
     async mounted() {

@@ -20,7 +20,9 @@ const tabName = {
     csvAdmin: 'admin-csv-001',
     projectAdmin: 'admin-project-001',
     workingTimeAdmin: 'admin-workingtime-001',
-    policyAdmin: 'admin-policy-001'
+    policyAdmin: 'admin-policy-001',
+
+    salaryAdmin: 'admin-salary-001',
 }
 
 export default tabName;

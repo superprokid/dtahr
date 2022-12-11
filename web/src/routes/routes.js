@@ -39,6 +39,7 @@ import AdminProject from "../views/AdminSide/AdminProject/AdminProject.vue"
 import AdminProjectDetail from "../views/AdminSide/AdminProjectDetail/AdminProjectDetail.vue"
 import AdminWorkingTime from "../views/AdminSide/AdminWorkingTime/AdminWorkingTime.vue"
 import AdminPolicy from "../views/AdminSide/AdminPolicy/AdminPolicy.vue"
+import AdminSalary from "../views/AdminSide/AdminSalary/AdminSalary.vue"
 
 Vue.use(Router);
 
@@ -94,6 +95,10 @@ const router = new Router({
                 {
                     path: 'policy',
                     component: AdminPolicy
+                },
+                {
+                    path: 'salary',
+                    component: AdminSalary
                 }
             ]
         },
