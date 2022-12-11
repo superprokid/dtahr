@@ -132,10 +132,6 @@
   display: none !important;
 }
 
-.v-input__slot {
-  height: 40px;
-  min-height: 40px;
-}
 </style>
 <script src="./GanttChart.js"></script>
 <style scoped>
