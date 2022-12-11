@@ -16,6 +16,7 @@ const GET_ALL_MANAGER_FREE = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.
     + "                           WHERE e.role = 1 and e.is_deleted <> 1 and g.group_id is null";
 const INSERT_NEW_EMPLOYEE = "INSERT INTO `employee` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, now(), now())";
 const SOFT_DELETE_EMPLOYEE = "UPDATE employee SET is_deleted = 1 WHERE employee_id = ?";
+const ACTIVE_EMPLOYEE = "UPDATE employee SET is_deleted = 0 WHERE employee_id = ?";
 const GET_USER_INFO = "SELECT DISTINCT e.*, CONCAT(e.first_name, ' ' ,e.last_name) as full_name, p.project_name, p.project_id "
     + "                         FROM employee e "
     + "                             LEFT JOIN (SELECT a.project_id, a.employee_id, a.assigned_date "
@@ -448,6 +449,37 @@ async function deleteEmployee(req, res) {
     }
 }
 
+async function activeEmployee(req, res) {
+    const connection = await dbaccess.getConnection();
+    await dbaccess.beginTransaction(connection);
+    try {
+        const validateSchema = {
+            employeeId: {
+                type: 'string',
+                required: true,
+            },
+        }
+        const validResult = validateRequest(req.body, validateSchema);
+        if (validResult) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] ${validResult}`);
+            await dbaccess.rollback(connection);
+            dbaccess.releaseConnection(connection);
+            res.status(403).send(validResult);
+            return;
+        }
+        const { employeeId } = req.body
+        await dbaccess.queryTransaction(connection, ACTIVE_EMPLOYEE, [employeeId]);
+        res.status(200).send({ message: 'Active success' });
+        await dbaccess.commitTransaction(connection);
+        dbaccess.releaseConnection(connection);
+    } catch (error) {
+        await dbaccess.rollback(connection);
+        dbaccess.releaseConnection(connection);
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 async function changePassword(req, res) {
     const connection = await dbaccess.getConnection();
     await dbaccess.beginTransaction(connection);
@@ -730,4 +762,5 @@ module.exports = {
     deleteEmployee,
     changePassword,
     importEmployee,
+    activeEmployee,
 }

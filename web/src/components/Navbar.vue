@@ -148,7 +148,7 @@ export default {
             },
             {
                 title: 'Salary',
-                icon: 'mdi-account-cash-outline',
+                icon: 'mdi-cash-100',
                 to: "/admin/salary", // name of router path
                 id: tabName.salaryAdmin, // id of page
             }

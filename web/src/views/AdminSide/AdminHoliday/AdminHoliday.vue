@@ -22,7 +22,7 @@
                   <v-icon style="margin-right: 10px">
                       mdi-receipt-text-plus-outline
                   </v-icon>
-                  Export CSV
+                  Export Excel
               </v-btn>
           </v-list-item>
       </v-list>

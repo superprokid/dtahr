@@ -5,7 +5,7 @@ import tabName from '../../../config/tabname';
 import { getDateString, getTimeString, getAvatar, getDateStringWithTask, isPastDate, getDateStringWithFormat, getMoneyFromString } from "../../../services/utilities";
 import SalaryAdminServices from "../../../services/API/SalaryAdminAPI/SalaryAdminServices"
 import AdminUserDetailServices from "../../../services/API/AdminUserDetailAPI/AdminUserDetailServices"
-
+import AdminCSVServices from '../../../services/API/CSVExportAPI/CSVExport.services';
 import { ADMIN_DASHBOARD_SCREEN } from '../../../config/screenName';
 
 import moment from 'moment';
@@ -13,10 +13,10 @@ import moment from 'moment';
 const TODAY = new Date()
 
 export default {
-	name: 'AdminSalary',
-	components: {
-	},
-	data() { 
+    name: 'AdminSalary',
+    components: {
+    },
+    data() {
         return {
             monthPicker: false,
             monthSelect: getDateStringWithFormat(moment().add(-1, 'M'), 'YYYY-MM'),
@@ -136,20 +136,20 @@ export default {
             salaryPerHour: 0,
 
 
-		};
-	},
-	computed: {
+        };
+    },
+    computed: {
 
-	},
-	async mounted() {
-		this.$eventBus.$emit('show-spinner', true);
-		await this.getSalary()
-		this.$eventBus.$emit('show-spinner', false);
-	},
+    },
+    async mounted() {
+        this.$eventBus.$emit('show-spinner', true);
+        await this.getSalary()
+        this.$eventBus.$emit('show-spinner', false);
+    },
 
-	methods: {
+    methods: {
         getAvatar,
-        setItemRowCLass(){
+        setItemRowCLass() {
             return 'item-row'
         },
         filterOnlyCapsText(value, search, item) {
@@ -160,27 +160,27 @@ export default {
                 value.toString().toLocaleUpperCase().indexOf(search.toLocaleUpperCase()) !== -1
         },
         allowedMonths(value) {
-			let date = new Date(value);
-			date = date.setMonth(date.getMonth() + 1);
-			return date <= new Date();
-		},
+            let date = new Date(value);
+            date = date.setMonth(date.getMonth() + 1);
+            return date <= new Date();
+        },
 
-        async onSelectMonth(value){
+        async onSelectMonth(value) {
             console.log('value month', value);
             await this.getSalary()
         },
-        
-        async getSalary(){
+
+        async getSalary() {
             const arrays = this.monthSelect.split("-")
             const params = {
                 month: arrays[1],
                 year: arrays[0]
             }
             const response = await SalaryAdminServices.adminGetSalaryByMonth(params)
-            if(!response){
+            if (!response) {
                 this.$router.push('/admin/login')
                 return
-            } else if(response == -1){
+            } else if (response == -1) {
                 this.$toast.open({
                     message: "Get Salary Fail",
                     type: "error",
@@ -198,14 +198,14 @@ export default {
             return this.listUser
         },
 
-        onClickEditSalary(){
+        onClickEditSalary() {
             this.overtimePayment = getMoneyFromString(this.userSelected[0].overtime_payment_total)
             this.bonusReward = getMoneyFromString(this.userSelected[0].bonus_reward)
             this.salaryDialogShowed = true
         },
 
-        async onChangeSalary(){
-            if(this.$refs.formSalary.validate()){
+        async onChangeSalary() {
+            if (this.$refs.formSalary.validate()) {
                 const monthArray = this.monthSelect.split("-")
                 const params = {
                     employeeId: this.userSelected[0].employee_id,
@@ -219,7 +219,7 @@ export default {
                 if (!response) {
                     this.$router.push('/admin/login');
                     return;
-                }else if(response == -1){
+                } else if (response == -1) {
                     this.$toast.open({
                         message: "Change Salary Fail",
                         type: "error",
@@ -241,15 +241,14 @@ export default {
             }
         },
 
-        onClickSalaryInfo(){
+        onClickSalaryInfo() {
             this.bankName = this.userSelected[0].bank_name
             this.bankAccount = this.userSelected[0].bank_account
             this.salaryPerHour = getMoneyFromString(this.userSelected[0].current_salary)
             this.salaryInfoDialogShowed = true
         },
 
-        async onChangeSalaryInfo(){
-            console.log('changeeee');
+        async onChangeSalaryInfo() {
             const params = {
                 employeeId: this.userSelected[0].employee_id,
                 salary: this.salaryPerHour,
@@ -261,7 +260,7 @@ export default {
             if (!response) {
                 this.$router.push('/admin/login');
                 return;
-            }else if(response == -1){
+            } else if (response == -1) {
                 this.$toast.open({
                     message: "Change Salary Fail",
                     type: "error",
@@ -280,11 +279,43 @@ export default {
             })
             await this.getSalary()
             this.salaryInfoDialogShowed = false
+        },
+
+        async downloadSalary() {
+            this.$eventBus.$emit('show-spinner', true);
+            const monthArray = this.monthSelect.split("-")
+            const response = await AdminCSVServices.exportSalaryCSV({
+                month: monthArray[1],
+                year: monthArray[0],
+            });
+            this.$eventBus.$emit('show-spinner', false);
+            if (response == -1) {
+                this.$toast.open({
+                    message: 'No salary in this month',
+                    type: 'error',
+                    duration: 2000,
+                    dismissible: true,
+                    position: 'top-right',
+                });
+                this.loading = false;
+                return
+            };
+            let name = `Salary-${this.monthSelect}.xlsx`;
+            if (window.navigator.msSaveBlob) {
+                window.navigator.msSaveBlob(response.data, name);
+            } else {
+                let url = window.URL.createObjectURL(response.data);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.click();
+            }
         }
 
-	},
+    },
 
-	beforeCreate() {
-		SessionUtls.setItem(SessionUtls.tabNameKey, tabName.salaryAdmin);
-	},
+    beforeCreate() {
+        SessionUtls.setItem(SessionUtls.tabNameKey, tabName.salaryAdmin);
+    },
 };

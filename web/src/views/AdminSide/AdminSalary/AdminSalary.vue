@@ -19,8 +19,7 @@
                         </v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col cols="3" offset-md="6" class="d-flex justify-end">
-
+                <v-col cols="6" offset-md="3" class="d-flex justify-end">
                     <v-menu offset-y>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn color="primary" dark v-bind="attrs" v-on="on">
@@ -51,6 +50,10 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
+                    <v-btn color="success" class="ml-3" dark v-bind="attrs" v-on="on" @click="downloadSalary">
+                        Download
+                        <v-icon>mdi-download</v-icon>
+                    </v-btn>
                 </v-col>
             </v-row>
 
