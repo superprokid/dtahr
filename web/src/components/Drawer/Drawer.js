@@ -2,6 +2,7 @@ import tabName from "../../config/tabname";
 import SessionUtls from "../../services/SessionUtls";
 import { mapState } from "vuex";
 import { TAB_TYPE } from "../../config/constant";
+import CookieUtls from "../../services/CookieUtls";
 
 const listUserItem = [
     {
@@ -47,6 +48,22 @@ const listUserItem = [
         id: tabName.workFromHome,
     },
 ];
+
+const listManagerItem = [
+    ...listUserItem,
+    {
+        title: 'Employee Management',
+        icon: 'mdi-account-cog',
+        to: "/usermanagement",
+        id: tabName.userManagement,
+    },
+    {
+        title: 'Realtime Check',
+        icon: 'mdi-calendar-clock-outline',
+        to: "/realtimecheck",
+        id: tabName.realtimeCheck,
+    }
+]
 
 const listTaskItem = [
     {
@@ -100,19 +117,7 @@ export default {
         startDataUser: {
             handler(newVal) {
                 if (this.tabType == TAB_TYPE.USER && newVal.role == 1 && this.items.length < 8) {
-                    this.items.push(
-                        {
-                            title: 'Employee Management',
-                            icon: 'mdi-account-cog',
-                            to: "/usermanagement",
-                            id: tabName.userManagement,
-                        },
-                        {
-                            title: 'Realtime Check',
-                            icon: 'mdi-calendar-clock-outline',
-                            to: "/realtimecheck",
-                            id: tabName.realtimeCheck,
-                        })
+                    this.item = [...listManagerItem];
                 } else if (this.tabType == TAB_TYPE.USER && newVal.role == 0) {
                     this.items = [...listUserItem];
                 }
@@ -124,7 +129,7 @@ export default {
             if (this.tabType == TAB_TYPE.USER) {
                 this.$router.push('/user' + item.to);
             } else {
-                this.$router.push(item.toUser || `/user/taskside${item.to}/${SessionUtls.getItem(SessionUtls.projectSelectedKey)}`).catch(() => {});
+                this.$router.push(item.toUser || `/user/taskside${item.to}/${SessionUtls.getItem(SessionUtls.projectSelectedKey)}`).catch(() => { });
             }
             this.currentTab = item.id;
         }
@@ -132,9 +137,10 @@ export default {
 
     mounted() {
         const currentTabType = SessionUtls.getItem(SessionUtls.tabTypeKey);
+        const role = CookieUtls.getCookie(CookieUtls.role);
         this.tabType = currentTabType;
         if (currentTabType == TAB_TYPE.USER) {
-            this.items = [...listUserItem];
+            this.items = role == 1 ? [...listManagerItem] : [...listUserItem];
         } else {
             this.items = [...listTaskItem];
         }
@@ -142,9 +148,10 @@ export default {
         this.$root.$on('drawer', () => {
             this.currentTab = SessionUtls.getItem(SessionUtls.tabNameKey);
             const currentTabType = SessionUtls.getItem(SessionUtls.tabTypeKey);
+            const role = CookieUtls.getCookie(CookieUtls.role);
             this.tabType = currentTabType;
             if (currentTabType == TAB_TYPE.USER) {
-                this.items = [...listUserItem];
+                this.items = role == 1 ? [...listManagerItem] : [...listUserItem];
             } else {
                 this.items = [...listTaskItem];
             }
