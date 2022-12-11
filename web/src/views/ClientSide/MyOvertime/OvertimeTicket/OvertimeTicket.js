@@ -22,7 +22,7 @@ export default {
                         text: 'Name',
                         align: 'start',
                         value: 'name',
-                        width: 250,
+                        width: 200,
                     },
                     {
                         text: 'Payment',
@@ -35,6 +35,7 @@ export default {
                     {
                         text: 'OT Time',
                         value: 'ottime',
+                        width: 225
                     },
                     {
                         text: 'Created At',

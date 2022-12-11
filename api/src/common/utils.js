@@ -226,7 +226,6 @@ async function getMyPublicIP() {
         return response.data.ip;
     }
     catch (error) {
-        console.log(error);
         return null;
     }
 }

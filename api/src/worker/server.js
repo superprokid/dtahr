@@ -101,6 +101,8 @@ function run() {
                 logger.info(`[Server] server's public IP address is ${myPublicIP}`);
                 global.__myPublicIP = myPublicIP;
                 break;
+            } else {
+                logger.warn(`[Server] server's get public IP failed, retry... ${myPublicIP}`);
             }
         }
     })

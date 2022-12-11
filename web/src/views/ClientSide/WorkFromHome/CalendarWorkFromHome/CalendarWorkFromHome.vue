@@ -8,7 +8,7 @@
                         <v-sheet height="64">
                             <!-- <v-toolbar flat> -->
                             <v-row>
-                                <v-col cols="12" md="6">
+                                <v-col cols="12" md="7">
                                     <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
                                         Today
                                     </v-btn>
@@ -25,10 +25,6 @@
                                     <span v-if="$refs.calendar">
                                         {{ $refs.calendar.title }}
                                     </span>
-                                </v-col>
-
-                                <v-col cols="12" md="1">
-
                                 </v-col>
                                 <v-col cols="12" md="3">
                                     <v-autocomplete v-model="employeeSelected" :items="listEmployee"

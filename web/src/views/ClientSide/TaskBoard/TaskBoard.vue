@@ -63,8 +63,8 @@
         </v-col>
       </v-row>
     </v-app>
-    <div class="d-flex justify-center" style="height: 85%">
-      <div class="d-flex overflow-auto">
+    <div class="d-flex justify-center" style="height: 85vh">
+      <div class="d-flex overflow-auto" style="width: 80vw; height: 70vh;">
         <div
           v-for="(column, idx) in filteredData"
           :key="column.title"

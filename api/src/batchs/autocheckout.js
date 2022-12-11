@@ -11,6 +11,8 @@ const GET_VALID_WORKLOG_TODAY = "SELECT * FROM worklog WHERE work_date = CAST(no
 const GET_VALID_EMPLOYEES = "SELECT employee_id, holiday_time FROM employee WHERE is_deleted <> 1";
 const GET_WORKTIME = "SELECT * FROM worktime WHERE approve_date <= now() ORDER BY approve_date DESC LIMIT 1";
 
+const GET_CURRENT_HOLIDAY = "SELECT * FROM holiday WHERE date = CAST(now() as DATE)";
+
 const INSERT_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total, is_not_working) VALUES (?, ?, ?, ?, 1)";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, now())";
 const UPDATE_WORKLOG = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
@@ -26,6 +28,11 @@ module.exports = {
 
 async function run(callback) {
     logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] AUTO CHECKOUT BATCH start `);
+    if (await checkIsHoliday()) {
+        logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] AUTO CHECKOUT BATCH end - today is holiday`);
+        callback();
+        return;
+    }
     const connection = await dbaccess.getConnection();
     await dbaccess.queryTransaction(connection, SET_ISOLATION_SQL);
     await dbaccess.beginTransaction(connection);
@@ -126,4 +133,18 @@ async function processForWorking(connection, employee, worklog) {
         }
     }
     logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] employee: ${employee.employee_id} working today - end`);
+}
+
+async function checkIsHoliday() {
+    try {
+        const currentHoliday = await dbaccess.exeQuery(GET_CURRENT_HOLIDAY);
+        if (currentHoliday.length) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        return true;
+    }
 }

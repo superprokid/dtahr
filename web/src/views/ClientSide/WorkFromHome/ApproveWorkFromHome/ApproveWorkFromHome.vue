@@ -46,8 +46,6 @@
                                 
                             </v-data-table>
 
-                            <p>Selected:</p>
-                            {{ selected }}
                         </v-container>
                     </v-form>
 

@@ -87,7 +87,7 @@
                 <span class="daily-report-error-label" v-if="isProcessStatusEmpty && isShowError">
                     Process status is required!
                 </span>
-                <v-row class="justify-end">
+                <v-row class="justify-end pb-5">
                     <v-col cols="2">
                         <Button :buttonClass="'md-raised md-primary button-layout'" :buttonTitle="'Register'"
                             @on-click="onClickRegisterButton" style="width:100%" />
