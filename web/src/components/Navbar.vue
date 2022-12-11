@@ -145,6 +145,12 @@ export default {
                 icon: 'mdi-file-document-outline',
                 to: "/admin/policy", // name of router path
                 id: tabName.policyAdmin, // id of page
+            },
+            {
+                title: 'Salary',
+                icon: 'mdi-cash-100',
+                to: "/admin/salary", // name of router path
+                id: tabName.salaryAdmin, // id of page
             }
         ],
         currentTab: '',

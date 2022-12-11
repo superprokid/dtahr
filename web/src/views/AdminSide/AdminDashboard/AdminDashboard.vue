@@ -247,7 +247,7 @@
                             <v-card-text>
                                 <v-row no-gutters>
                                     <v-row no-gutters class="dashboard-title">
-                                        EXPORT CSV
+                                        EXPORT EXCEL
                                     </v-row>
                                     <v-row no-gutters>
                                         <v-col cols="12" class="d-flex justify-center">

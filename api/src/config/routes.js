@@ -27,6 +27,7 @@ const adminProjectController = require('../controller/admin/project.controller')
 const adminExportController = require('../controller/admin/export.controller');
 const adminTaskController = require('../controller/admin/task.controller');
 const adminPolicyController = require('../controller/admin/policy.controller');
+const adminSalaryController = require('../controller/admin/salary.controler');
 
 // user
 Router.post('/user/login', userController.login);
@@ -127,6 +128,7 @@ Router.post('/admin/holidaytime/update', adminAuthen, adminWorkLogController.upd
 Router.post('/admin/project/create', adminAuthen, adminProjectController.createNewProject);
 Router.post('/admin/project/update', adminAuthen, adminProjectController.editProject);
 Router.post('/admin/delete/employee', adminAuthen, adminEmpController.deleteEmployee);
+Router.post('/admin/active/employee', adminAuthen, adminEmpController.activeEmployee);
 // Project Task
 Router.get('/admin/project/getall', adminAuthen, adminProjectController.getAllProjects);
 Router.get('/admin/project/getstatus', adminAuthen, adminProjectController.getStatusOfProject);
@@ -149,6 +151,9 @@ Router.get('/admin/dashboard/getworkingstatus', adminAuthen, adminController.wor
 Router.get('/admin/dashboard/checkinstatus', adminAuthen, adminController.getCheckinStatus);
 Router.get('/admin/dashboard/worktimeandholiday', adminAuthen, adminWorkTimeController.getCurrentWorkingTimeAndHoliday);
 Router.get('/admin/dashboard/projectstatus', adminAuthen, adminProjectController.getProjectStatus);
+//Salary
+Router.get('/admin/salary/get', adminAuthen, adminSalaryController.getSalaryByMonth);
+Router.post('/admin/salary/update', adminAuthen, adminSalaryController.updateSalary);
 
 // Admin export
 Router.get('/admin/export/overtime', adminExportController.exportOverTime);

@@ -97,7 +97,7 @@ async function exportSalaryAll(req, res) {
         const checkExist = await exeQuery(GET_NUMBER_MONTHLYREPORT, [month, year]);
         if (checkExist[0]?.number <= 0) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}]: not exist data to export`);
-            res.status(400).send({ message: "There are no data of salary to export in this month" });
+            res.status(400).send({ message: "There are no data of salary to export in this month", failed: true });
             return;
         }
 

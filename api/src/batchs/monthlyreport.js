@@ -9,9 +9,9 @@ const GET_VALID_EMPLOYEE = "SELECT employee_id FROM employee WHERE is_deleted <>
 const GET_WORK_TOTAL_BY_ID = "SELECT count(*) as totalDays, sum(work_total) as totalMins FROM worklog WHERE employee_id = ? and work_date BETWEEN ? and ?";
 const GET_ANNUAL_HOLIDAY_AND_SALARY = "SELECT holiday_time, salary FROM employee WHERE employee_id = ?";
 const GET_OT_PAYMENT = "SELECT SUM(payment) as payment FROM overtime WHERE employee_id = ? and status = 1 and CAST(start_date as DATE) BETWEEN ? and ?";
-const INSERT_MONTHLY_REPORT = "INSERT INTO monthlyreport (employee_id, month, year, work_total_hours, work_total_days, annual_holiday, overtime_payment_total, salary_basic, salary_total, transport_support, house_support, internet_support, phone_support, lunch_support, insurance, tax)"
-    + "                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?) "
-    + "                         ON DUPLICATE KEY UPDATE `work_total_hours`=VALUES(`work_total_hours`), `work_total_days`=VALUES(`work_total_days`), `annual_holiday`=VALUES(`annual_holiday`),"
+const INSERT_MONTHLY_REPORT = "INSERT INTO monthlyreport (employee_id, month, year, work_total_hours, work_total_days, annual_holiday, overtime_payment_total, salary_basic, salary_total, salary_hour, transport_support, house_support, internet_support, phone_support, lunch_support, insurance, tax)"
+    + "                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?) "
+    + "                         ON DUPLICATE KEY UPDATE `work_total_hours`=VALUES(`work_total_hours`), `work_total_days`=VALUES(`work_total_days`), `annual_holiday`=VALUES(`annual_holiday`), `salary_hour`=VALUES(`salary_hour`),"
     + "                         						`overtime_payment_total`=VALUES(`overtime_payment_total`), `salary_basic`=VALUES(`salary_basic`), `salary_total`=VALUES(`salary_total`), "
     + "                                                 `transport_support`=VALUES(`transport_support`), `house_support`=VALUES(`house_support`), `internet_support`=VALUES(`internet_support`), "
     + "                                                 `phone_support`=VALUES(`phone_support`), `lunch_support`=VALUES(`lunch_support`), `insurance`=VALUES(`insurance`), `tax`=VALUES(`tax`)";
@@ -105,7 +105,7 @@ async function processEmployee(connection, data) {
     const taxPayment = salaryBasic * tax;
     const salaryTotal = salaryBasic + otPayment + lunch + house + transport + phone + internet - insurancePayment - taxPayment;
 
-    const params = [data.employeeId, data.month, data.year, workTotalHours, workTotalDays, holidayTime, otPayment, salaryBasic, salaryTotal, transport, house, internet, phone, lunch, insurancePayment, taxPayment];
+    const params = [data.employeeId, data.month, data.year, workTotalHours, workTotalDays, holidayTime, otPayment, salaryBasic, salaryTotal, salary, transport, house, internet, phone, lunch, insurancePayment, taxPayment];
     await insertMontlyReport(connection, params);
     logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] end process for employee ${data.employeeId}`);
 }

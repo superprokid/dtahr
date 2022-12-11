@@ -8,7 +8,9 @@ import {
     ADMIN_UPDATE_WORKLOG_USER,
 
     ADMIN_UPDATE_PERSONAL_USER_INFORMATION,
-    ADMIN_CHANGE_USER_PASSWORD
+    ADMIN_CHANGE_USER_PASSWORD,
+
+    ADMIN_ACTIVE_ACCOUNT
 } from "@/config/constant";
 import axiosAdmin, {callAdminAPI} from "../AdminAPI"
 
@@ -93,6 +95,17 @@ const AdminUserDetailServices = {
         try {
             const response =  await callAdminAPI(()=>{
                 return axiosAdmin.post(ADMIN_CHANGE_USER_PASSWORD, params)
+            })
+            return response
+        } catch (error) {
+            return error;
+        }
+    },
+
+    adminActiveAccount:async (params) => {
+        try {
+            const response =  await callAdminAPI(()=>{
+                return axiosAdmin.post(ADMIN_ACTIVE_ACCOUNT, params)
             })
             return response
         } catch (error) {
