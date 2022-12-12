@@ -163,7 +163,14 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.taskDetailData = response.data
             this.taskDetailData.start_date = getDateString(response.data.start_date)
@@ -193,7 +200,14 @@ export default {
               this.$router.push("/user/login");
             }
             if(response === -1){
-                alert("Call Failed")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.userList = [...response.data];
             return response.data
@@ -214,7 +228,14 @@ export default {
                         return;
                     }
                     if(updateCommentResponse === -1){
-                        alert("Call Fail")
+                        this.$toast.open({
+                            message: "Something went wrong",
+                            type: "error",
+                            duration: 2000,
+                            dismissible: true,
+                            position: "top-right",
+                        })
+                        return
                     }
                     this.isUpdateComment = false
                     this.content = ''
@@ -233,7 +254,14 @@ export default {
                         return;
                     }
                     if(createCommentResponse === -1){
-                        alert("Call Fail")
+                        this.$toast.open({
+                            message: "Something went wrong",
+                            type: "error",
+                            duration: 2000,
+                            dismissible: true,
+                            position: "top-right",
+                        })
+                        return
                     }
                     this.content = ''
                 }
@@ -261,7 +289,14 @@ export default {
                     return;
                 }
                 if(updateTaskStatusResponse === -1){
-                    alert("Call Fail")
+                    this.$toast.open({
+                        message: "Something went wrong",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
             }
                     
@@ -325,7 +360,14 @@ export default {
                 return;
             }
             if(deleteCommentResponse === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
 
             this._getTaskDetailById().then((result)=>{

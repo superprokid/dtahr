@@ -314,7 +314,7 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12" md="9">
-                        <v-text-field placeholder="Write a comment, use @mention to notify a colleague..." outlined
+                        <v-text-field placeholder="Write a comment..." outlined
                             @click="reveal = true"></v-text-field>
                     </v-col>
                     <v-col cols="12" md="2" class="d-flex justify-center mt-2">

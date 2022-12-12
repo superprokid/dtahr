@@ -220,7 +220,14 @@ export default {
                 return;
             }
             if (response === -1) {
-                alert("Call Fail");
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.listCategories = [...response.data];
         },
@@ -232,7 +239,14 @@ export default {
                 return;
             }
             if (response === -1) {
-                alert("Call Fail");
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.listUsers = [...response.data];
         },
