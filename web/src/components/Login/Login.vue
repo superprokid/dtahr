@@ -5,7 +5,7 @@
   <div class="login-container">
     <DTALogo />
     <md-field md-clearable>
-      <label>Username</label>
+      <label>Email</label>
       <md-input id="username" v-model="userName"></md-input>
     </md-field>
 

@@ -140,7 +140,14 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             console.log('response', response.data);
             this.taskDetailData = response.data
@@ -156,7 +163,14 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             console.log('response',response.data);
             this.employeeList = response.data.map((item) => {
@@ -171,7 +185,14 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.categoryTaskList = response.data.map(item => {
                 return {...item, }

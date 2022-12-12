@@ -16,12 +16,12 @@
                     </template>
 
                     <v-list>
-                        <v-list-item @click="() => {}">
+                        <!-- <v-list-item @click="() => {}">
                             <v-list-item-title>Setting Profile</v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="() => {}">
                             <v-list-item-title>Change Password</v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                         <v-list-item @click="logout">
                             <v-list-item-title>Logout</v-list-item-title>
                         </v-list-item>
