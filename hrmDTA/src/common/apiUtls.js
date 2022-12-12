@@ -1,7 +1,7 @@
 import storageUtls from "./storageUtls";
 
 // export const BASE_URL = "http://26.197.75.244:3000";
-export const BASE_URL = "http://192.168.1.5:3000";
+export const BASE_URL = "http://192.168.1.4:3000";
 
 // user url api
 export const BASE_API_USER_URL = BASE_URL + '/api/user';
@@ -9,7 +9,8 @@ export const USER_LOGIN_URL = BASE_API_USER_URL + '/login';
 export const USER_REFRESH_TOKEN_URL = BASE_API_USER_URL + '/refreshtoken';
 const USER_GET_WORK_HISTORY = BASE_API_USER_URL + '/workhistory';
 const USER_GET_START_URL = BASE_API_USER_URL + '/getstart';
-export const USER_CHECKIN = BASE_API_USER_URL + '/app/checkin'
+export const USER_CHECKIN = BASE_API_USER_URL + '/app/checkin';
+export const USER_GET_CURRENT_WORKLOG = BASE_API_USER_URL + '/worklog'
 const USER_CHECK_IN_URL = BASE_API_USER_URL + '/checkin';
 const USER_CHECK_OUT_URL = BASE_API_USER_URL + '/checkout';
 const USER_GET_HOLIDAYS = BASE_API_USER_URL + '/getholidays';
@@ -51,6 +52,14 @@ const apiUtls = {
     getStart: async () => {
         try {
             const result = await recallAPI(USER_GET_START_URL, HEADER, GET);
+            return result;
+        } catch (error) {
+            return error;
+        }
+    },
+    getCurrentWorklog: async () => {
+        try {
+            const result = await recallAPI(USER_GET_CURRENT_WORKLOG, HEADER, GET);
             return result;
         } catch (error) {
             return error;

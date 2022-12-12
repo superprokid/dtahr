@@ -14,6 +14,14 @@ export default HistoryScreen = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [dateSelected, setDateSelected] = useState(new Date());
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getData();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     const onNextMonth = () => {
         const newDate = new Date(dateSelected);
         newDate.setMonth(dateSelected.getMonth() + 1);
@@ -26,51 +34,53 @@ export default HistoryScreen = (props) => {
         setDateSelected(newDate);
     }
 
-    useEffect(() => {
+    const getData = async () => {
         setIsLoading(true);
-        (async () => {
-            const { startDate, endDate } = getStartAndEndOfMonth(dateSelected);
-            const result = await apiUtls.getWorkHistory(startDate, endDate);
-            if (!result) {
-                showLogout();
-                navigation.replace(LOGIN_SCREEN);
-                return;
-            }
-            if (result.failed) {
-                showErrorNetwork();
-                setIsLoading(false);
-                return;
-            }
-            const arr = result.reverse().map((item) => {
-                return { ...item, title: item.workhistory_description, work_date: getDateString(item.work_date, MM_DD_YYYY), type: 'item', time: getTimeString(item.create_at, HH_MM), circleColor: '#26a69a' }
-            })
-            const obj = groupArrayByKey(arr, 'work_date');
-            const list = [];
-            for (const [key, value] of Object.entries(obj)) {
-                let newObj = {};
-                newObj.date = key;
-                newObj.listWorkHistory = [
-                    {
-                        title: `End Activity ${key}`,
-                        circleColor: 'red',
-                        circleSize: 25,
-                        type: 'end',
-                        icon: require('../../assets/icons/double-check.png')
-                    },
-                    ...value,
-                    {
-                        title: `Start Activity ${key}`,
-                        circleSize: 25,
-                        circleColor: '#ff9800',
-                        type: 'start',
-                        icon: require('../../assets/icons/tick.png')
-                    }
-                ];
-                list.push(newObj);
-            }
-            setListHistory(list);
+        const { startDate, endDate } = getStartAndEndOfMonth(dateSelected);
+        const result = await apiUtls.getWorkHistory(startDate, endDate);
+        if (!result) {
+            showLogout();
+            navigation.replace(LOGIN_SCREEN);
+            return;
+        }
+        if (result.failed) {
+            showErrorNetwork();
             setIsLoading(false);
-        })();
+            return;
+        }
+        const arr = result.reverse().map((item) => {
+            return { ...item, title: item.workhistory_description, work_date: getDateString(item.work_date, MM_DD_YYYY), type: 'item', time: getTimeString(item.create_at, HH_MM), circleColor: '#26a69a' }
+        })
+        const obj = groupArrayByKey(arr, 'work_date');
+        const list = [];
+        for (const [key, value] of Object.entries(obj)) {
+            let newObj = {};
+            newObj.date = key;
+            newObj.listWorkHistory = [
+                {
+                    title: `End Activity ${key}`,
+                    circleColor: 'red',
+                    circleSize: 25,
+                    type: 'end',
+                    icon: require('../../assets/icons/double-check.png')
+                },
+                ...value,
+                {
+                    title: `Start Activity ${key}`,
+                    circleSize: 25,
+                    circleColor: '#ff9800',
+                    type: 'start',
+                    icon: require('../../assets/icons/tick.png')
+                }
+            ];
+            list.push(newObj);
+        }
+        setListHistory(list);
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        getData();
     }, [dateSelected])
 
     return (
