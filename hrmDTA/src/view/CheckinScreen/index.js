@@ -9,6 +9,7 @@ import AppLoader from '../../components/AppLoader';
 import apiUtls, { USER_CHECKIN } from '../../common/apiUtls';
 import { showErrorNetwork } from '../../common/commonFunc';
 import { compareTwoTimeGreaterOrEqual } from '../../common/datetimeUtls';
+import storageUtls from '../../common/storageUtls';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -38,23 +39,17 @@ export default CheckinScreen = (props) => {
     const [allowCheckIn, setAllowCheckin] = useState(false);
     const [statusWorklog, setStatusWorklog] = useState(null);
     const cameraRef = useRef(null);
-
-    props.navigation.addListener('focus', () => {
-        setLoaded(true);
-    });
-    props.navigation.addListener('blur', () => {
-        setLoaded(false);
-    });
+    
+    const navigation = props.navigation;
 
     async function getStartData () {
-        const result = await apiUtls.getStart();
-        console.log(result);
+        const result = await apiUtls.getCurrentWorklog();
+        const startData = await apiUtls.getStart();
         if (result.failed || result == -1) {
             showErrorNetwork();
         } else {
-            if (result.workLog) {
-                console.log('status', result.workLog.work_status);
-                if (result.workLog.work_status == WORKLOG_STATUS.CHECK_IN) {
+            if (result) {
+                if (result.work_status == WORKLOG_STATUS.CHECK_IN) {
                     setStatusWorklog(WORKLOG_STATUS.CHECK_OUT)
                 } else {
                     setStatusWorklog(WORKLOG_STATUS.CHECK_IN);
@@ -66,11 +61,11 @@ export default CheckinScreen = (props) => {
             if (now.getDay() === 0 || now.getDay() === 6) {
                 setStatusWorklog(WORKLOG_STATUS.NOT_WORKKING);
             }
-            if (result.workTime) {
-                if (compareTwoTimeGreaterOrEqual(now.getHours(), now.getMinutes(), result.workTime.hour_end, result.workTime.min_end)) {
+            if (startData.workTime) {
+                if (compareTwoTimeGreaterOrEqual(now.getHours(), now.getMinutes(), startData.workTime.hour_end, startData.workTime.min_end)) {
                     setStatusWorklog(WORKLOG_STATUS.NOT_WORKKING);
                 }
-                if (result.workTime.isHoliday) {
+                if (startData.workTime.isHoliday) {
                     setStatusWorklog(WORKLOG_STATUS.NOT_WORKKING);
                 }
             }
@@ -82,8 +77,21 @@ export default CheckinScreen = (props) => {
             const { status } = await Camera.requestCameraPermissionsAsync();
             setPermission(status === 'granted');
         })();
-        getStartData()
+        
     }, [])
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setLoaded(true);
+            getStartData();
+            console.log('focus');
+        });
+        navigation.addListener('blur', () => {
+            setLoaded(false);
+        });
+
+        return unsubscribe;
+    }, [navigation])
 
     if (hasPermisstion === false) {
         return <Text>No access to camera</Text>
