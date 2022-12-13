@@ -162,6 +162,13 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
+            this.$toast.open({
+                message: "Approve success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
             this.$mySocket.emit(WFH_CHANNEL, 0);
         },
 
@@ -185,7 +192,14 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
-            this.$mySocket.emit(OVERTIME_CHANNEL, 0);
+            this.$toast.open({
+                message: "Reject success",
+                type: "success",
+                duration: 2000,
+                dismissible: true,
+                position: "top-right",
+            })
+            this.$mySocket.emit(WFH_CHANNEL, 0);
         },
     },
 
