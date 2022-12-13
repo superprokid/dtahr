@@ -184,12 +184,12 @@ export default {
                 {
                     text: 'Full Name',
                     value: 'full_name',
-                    width: 200,
+                    width: 250,
                 },
                 {
                     text: 'Group',
-                    value: 'group_full_name',
-                    width: 150,
+                    value: 'group_name',
+                    width: 120,
                 },
                 {
                     text: "Gender",

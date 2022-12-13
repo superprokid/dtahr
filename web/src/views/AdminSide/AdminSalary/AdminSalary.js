@@ -166,7 +166,6 @@ export default {
         },
 
         async onSelectMonth(value) {
-            console.log('value month', value);
             await this.getSalary()
         },
 
@@ -191,7 +190,6 @@ export default {
                 return
             }
 
-            console.log('this.response.data', response.data);
             this.listUser = response.data.map((item) => {
                 return item
             })

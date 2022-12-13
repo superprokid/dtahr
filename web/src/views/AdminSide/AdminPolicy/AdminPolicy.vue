@@ -58,7 +58,7 @@
     </v-row>
     <hr>
     <div class="admin-project-title-static">
-        Number of days leave
+        Paid leave monthly increase
     </div>
     <v-row v-if="policy" no-gutters align="center" justify="center">
       <v-col cols="12" md="4">

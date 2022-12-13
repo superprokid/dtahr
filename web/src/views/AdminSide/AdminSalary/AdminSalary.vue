@@ -50,7 +50,7 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
-                    <v-btn color="success" class="ml-3" dark v-bind="attrs" v-on="on" @click="downloadSalary">
+                    <v-btn color="success" class="ml-3" dark @click="downloadSalary">
                         Download
                         <v-icon>mdi-download</v-icon>
                     </v-btn>
