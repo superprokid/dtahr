@@ -41,6 +41,9 @@ export function addMonths(date, number) {
 }
 
 export function getMoneyFromString(money){
+    if (!money) {
+        return 0;
+    }
     return parseFloat(money.replace(/,/g, ''));
 }
 
