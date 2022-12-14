@@ -20,6 +20,34 @@
                             </v-col>
 
                         </v-row>
+                        <v-row no-gutters class="mb-2">
+                            <v-col cols="12" md="12" v-if="(parentTask.task_id == null)">
+                                <v-icon>
+                                    mdi-file-tree
+                                </v-icon>
+                                <v-btn text color="#3C836E" @click="onClickAddParentTask">
+                                    Add Parent Task
+                                </v-btn>
+                            </v-col>
+                            <v-row no-gutters v-else :align="'center'">
+                                <v-col cols="8">
+                                    <span class="text-subtitle-2">
+                                        Parent Task:
+                                    </span>
+                                    <span style="color: #3C836E">
+                                        {{ parentTask.task_number }} - {{ parentTask.task_title }}
+                                    </span>
+                                </v-col>
+                                <v-col cols="4" class="d-flex justify-end">
+                                    <v-btn color="error" width="150px" class="mr-3" outlined @click="() => {parentTask = {}}">
+                                        Remove
+                                    </v-btn>
+                                    <v-btn color="success" width="150px" outlined @click="addParentTaskDialogShowed = true">
+                                        Browse
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-row>
                         <!-- Subject -->
                         <v-row no-gutters>
                             <v-col cols="12">
@@ -264,6 +292,14 @@
                 max-width="600px">
                 <v-card>
                     <AddCategoryTaskModal @on-close="onClose" @on-create-category-task="onCreateCategoryTask" />
+                </v-card>
+            </v-dialog>
+            <!-- ADD PARENT TASK DIALOG -->
+            <v-dialog v-model="addParentTaskDialogShowed" v-if="addParentTaskDialogShowed" persistent max-width="800px"
+                transition="dialog-top-transition">
+                <v-card>
+                    <AddParentTaskModal @on-close="onClose" @on-select-parent-task="onSelectParentTask"
+                        :projectIdProp="currentProjectId" />
                 </v-card>
             </v-dialog>
         </v-app>

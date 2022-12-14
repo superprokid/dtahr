@@ -12,7 +12,7 @@ import AddTaskServices from "../../../services/API/AddTaskAPI/AddTaskServices"
 import TaskDetailServices from "../../../services/API/TaskDetailAPI/TaskDetailServices"
 import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCategoryTaskModal.vue"
 import { getDateString, getTimeString} from "../../../services/utilities";
-
+import AddParentTaskModal from "../../../components/AddParentTaskModal/AddParentTaskModal.vue"
 import {USER_GET_IMAGE} from '../../../config/constant'
 
 import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentModal/ConfirmDeleteCommentModal.vue"
@@ -23,7 +23,8 @@ export default {
     components: {
         quillEditor,
         AddCategoryTaskModal,
-        ConfirmDeleteCommentModal
+        ConfirmDeleteCommentModal,
+        AddParentTaskModal
     },
     data() {
 
@@ -108,6 +109,9 @@ export default {
             estimatedHours: undefined,
             actualHours: undefined,
 
+            addParentTaskDialogShowed: false,
+            parentTask: {},
+
             currentProjectId: this.$route.params.projectId ?? SessionUtls.getItem(SessionUtls.projectSelectedKey),
         }
     },
@@ -155,6 +159,24 @@ export default {
             this.taskDetailData.end_date = getDateString(response.data.end_date)      
             this.taskDetailData.create_at = getDateString(response.data.create_at) + ' ' +getTimeString(response.data.create_at)
             return this.taskDetailData
+        },
+        async _getTaskParentTask(id){
+            const params = {
+                taskId: id
+            }
+            const response = await TaskDetailServices.getTaskDetailById(params)
+            if (!response || response === -1) {
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return null;
+            }
+            
+            return response.data || {}
         },
         async _getAllAssignees(){
             const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
@@ -255,6 +277,7 @@ export default {
 
                 if(this.estimatedHours != this.taskDetailData.estimated_hours) updateTaskParams.estimatedHours = this.estimatedHours
                 if(this.actualHours != this.taskDetailData.actual_hours) updateTaskParams.actualHours = this.actualHours
+                if(this.parentTask.task_id) updateTaskParams.parentTaskId = this.parentTask.task_id
 
                 const response = await TaskDetailServices.userUpdateTask(updateTaskParams)
                 if (!response) {
@@ -275,6 +298,24 @@ export default {
                 this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${this.taskDetailData.task_id}`);      
             }
         },
+
+        onSelectParentTask(params){
+            this.parentTask = params
+
+            this.addParentTaskDialogShowed = false
+        },
+
+        onClickAddParentTask(){
+            this.addParentTaskDialogShowed = true
+        },
+
+        onClose(params){
+            if(params === 1){
+                this.addCategoryTaskDialogShowed = false
+            }else if(params === 2){
+                this.addParentTaskDialogShowed = false
+            }
+        },
     },
 
     async mounted() {
@@ -287,11 +328,10 @@ export default {
         const allAssignees = await this._getAllAssignees()
         const allCategory = await this._getAllCategoryTask()
 
-        console.log('taskDetail', taskDetail);
         this.taskTitle = taskDetail.task_title
         this.content = taskDetail.task_description
         this.statusSelected = Number(taskDetail.status)
-
+        this.parentTask = taskDetail.parent_task_id ? await this._getTaskParentTask(taskDetail.parent_task_id) : {};
         this.employeeList = allAssignees
         for (let index = 0; index < allAssignees.length; index++) {
             const element = allAssignees[index];
