@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 13/12/2022 18:32:34
+ Date: 14/12/2022 11:17:32
 */
 
 SET NAMES utf8mb4;
@@ -37,7 +37,7 @@ CREATE TABLE `administrator`  (
 -- ----------------------------
 -- Records of administrator
 -- ----------------------------
-INSERT INTO `administrator` VALUES ('admin', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-13 08:38:46', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX19kSbRRNl6IdVIBthjAC3P27ebvGNRkVde6g/xRk5ag7UtAnAL01vU8CjNh2Yl+fge7erI1nl5jv4bbW3TgoJWpk+PEv5bXUfSeJQ91fvUgNw22SJMyu3WAFVIXUeNPTtX4wCSqpoAAkJasCoX9nwa0KUGBnsvHfImxndGvXtKFdAknNco+RVRiWlGL9nPqyItUgO28fCPYVAjov3qAXSTIlmL5xuEokaf1OCQg4F5/xo5284HGQDSC72z1KBsbkKiNHd1WCCpwPrfNr82iRAwdJpuWl+laznmoPjScacSEUrL5ozC0A7z6TFK1c9+2rkqbUu5lSSPtWqGgGRxKLwcW96JieoRDXQsx5C/aQypegfqyVqTHh/gIKcs2v9fq22LkmoTwBL/Plw==', '2022-12-13 10:21:45', '2022-11-20 16:53:49', '2022-12-13 09:21:45');
+INSERT INTO `administrator` VALUES ('admin', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-15 08:45:51', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX1/Jvf7c53eMP+ElV8FHlCjLsdiMCpLTMK3K6x4RBtgnSDgF1C9iIpqgZMqS3PzA1umj8mFHmR9RovklyJegBEAvcso67/PCKDjOL/HoY74nnav1PLySXfy/ophqXwitDWanOQ6K1nmFon46xTqn2+g5DUWgzwXIzdZ7F/dz1yB/Cer9IBLIbQrOWgJEPKWWo5y+HFiuvk1NzXvlchTD4n8hvjwBCG9K8NBjzNtx/FEps6Nv+s4Xa33JBHi0Hmd0lHVTZNYv+TaDAmu2vt7NJvleNtBrIoVvReD4McR93/er7o7tQs4y6zAJr1w+pcS3BPhqLV46/HWmBXOQqKawjIdGCS+VEBWLVLpc8pbDviwL7zKaS4IZ0SHb2lC6IgtN3mffaAbe4id7Cw==', '2022-12-14 10:50:49', '2022-11-20 16:53:49', '2022-12-14 09:50:49');
 INSERT INTO `administrator` VALUES ('duywjbu', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-13 21:35:16', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX1/v9YVhk8R61Ajo1xZOl3chqDFRfWasZUe2inwjUEceWgEAUdED0598RsWepw+x5aB2srekGbebdI4lVYEWI3RRbSAeATbmjpG6tiGSgFSOv49q68X9DKTphUxP5pYim7otRJasyFlXKiv3RtkcayD1If4VzKM/Kx+xgej2hwQUhA14zw2shoOI1UtYj6xBj70HwTCY7NVrZaqiaCCwljHSO3u65+b1CH5P5PSNR7+y5O2ZbjO4jDHH9NFmlmNRM9Zp1Q4XRe/wFdAlen6Ym8vhJo+VBiS/Mi+ANlYk5MCcMC2CE4fhxZDXhI879LtFPRhDXgb4ihtPpOgua79TFJjpILQgQZ7tGGtYXHkvMKeeMBf4ZebpuhlK/Gst+aHT/m/AlAGyjeHlrQ==', '2022-12-13 23:07:04', '2022-11-03 20:10:07', '2022-12-13 22:07:04');
 INSERT INTO `administrator` VALUES ('thangld', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-13 19:58:57', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX19vHNrdqR/JVvYwBreLQ1SZK4RayEwikLBN9DR8qsdzszxhylgpJRGsCb2P2FFgRr1x4UGYjsK7F7a+Rr+H9xTdrdGtwzB/vTxZzINV4DFQQXO0TPKsV1luuE/AD5vrqKDH0b19++j8SvkTngU6EjyHNU1cfDzkJILvRb3wqJoJQFgVYf9SdTD2NqhlmhDF9hO5izQaBfmOOxNTrvD7sX57TKBt10tNHrQF5BKVq6p9PPh1hljz2X4ACnw30F8Q3uFfwp+WObG5pkxfRl/hpbefAgb0tvfmPilB5GPpY/CcMyEKDX7ecQN41uSGgDdgi6DQJ/UkBWYf8N28TqQm54HxoDIIdHm7bdPe2KqpknCwKqfQgL1kXyCqcaRPg6c33FmyGvKv+TYcVA==', '2022-12-13 22:36:07', '2022-09-17 15:54:06', '2022-12-13 21:36:07');
 
@@ -204,6 +204,7 @@ INSERT INTO `employee` VALUES ('0000013', 'Nguyen Van', 'A', '2000-01-10', 'aa T
 INSERT INTO `employee` VALUES ('0000014', 'Thang Import', 'Test', '2000-03-15', 'Thu Do Ha Noi', 0, 'nguyenvanaa123ss@gmail.com', '$2b$12$ewWGYFOwCkOhqtcC.AiNQeClSxRsLh0y7IC9ioLK0aV7io/M94Umi', '000002', -5, '2022-12-06', '0125469935', 'NodeJS', NULL, NULL, 1, '0000004', 'Nguyen Van B', 0, 'xxxxxxxxx', 'aa Thu Duc, HCM', NULL, 'father and son', NULL, 100000.00, '747488889653', 'Sacombank', NULL, 0, '2022-12-06 22:06:45', '2022-12-13 18:30:00');
 INSERT INTO `employee` VALUES ('0000015', 'Nguyen Duc', 'Hao', '2000-03-30', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', 0, '18110104@student.hcmute.edu.vn', '$2b$12$HEGCRfXDjjMN1YdqFDl0a.QD3zEFqC9b257qp32/y/2xMS0hnm5Z.', '000005', -1, '2022-12-13', '0353564521', 'AI -Python', NULL, NULL, 0, '0000014', 'Nguyen Van B', 0, '0121454854', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775848453365', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-13 18:30:00');
 INSERT INTO `employee` VALUES ('0000016', 'Dinh Tuan ', 'An 1', '2000-03-30', 'Dien Bien Phu, Quan 3, Ho Chi Minh', 0, '18110072@student.hcmute.edu.vn', '$2b$12$a7ZVOQjW0Hr7JBLtbd4fZuZc9Iond5tsPZNa91LhSLfSEVLedcPB.', '000005', -0.10208333333333333, '2022-12-13', '035477853636', 'VueJS', NULL, NULL, 0, '0000014', 'Tran Thi Lang', 0, '0122525356', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775844444396', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-13 18:30:00');
+INSERT INTO `employee` VALUES ('0000017', 'Bui Viet', 'Danh', '1989-06-08', '123 Vo Van Ngan, Thủ Đức, Hồ Chí Minh', 0, 'racaya5807@areosur.com', '$2b$12$h0kWBpTTKCTFlF/0FOtUnuAhA6oLdTCL.fbqeJ2nLrdVqxWGInGTK', '000002', 0, '2022-12-14', '05996535531', NULL, NULL, NULL, 0, '0000004', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-12-14 09:27:06', '2022-12-14 09:27:06');
 
 -- ----------------------------
 -- Table structure for group
