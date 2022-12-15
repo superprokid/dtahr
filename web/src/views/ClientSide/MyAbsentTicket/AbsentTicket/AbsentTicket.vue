@@ -25,7 +25,7 @@
           <template v-slot:item.information="{ item }">
             <div class="py-2">
               {{ item.name }} registered a
-              {{ item.type == 0 ? "Off" : "Leave" }} application
+              {{ item.type == 0 ? "Off" : "Late" }} application
             </div>
             <div>{{ item.absentTime }}</div>
           </template>

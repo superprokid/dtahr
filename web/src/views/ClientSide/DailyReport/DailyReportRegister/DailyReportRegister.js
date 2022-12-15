@@ -197,6 +197,7 @@ export default {
                     })
                     this.onClickResetButton();
                     this.$root.$emit(REPORT_HISTORY_SCREEN);
+                    this.$root.$emit(MY_REPORT_SCREEN);
                     this.$mySocket.emit(REPORT_CHANNEL, 0);
 
                 }
