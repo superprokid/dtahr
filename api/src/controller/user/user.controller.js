@@ -167,6 +167,7 @@ async function checkInMobile(req, res) {
                     res.status(400).send({ message: 'Can not recognize your face, please try again!' })
                 }
             }).catch((err) => {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - can request to face server`);
                 res.status(400).send({ message: 'Request failed, please try again' })
             }).finally(() => {
                 deleteFile(file.path)

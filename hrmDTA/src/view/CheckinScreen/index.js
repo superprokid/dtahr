@@ -43,9 +43,10 @@ export default CheckinScreen = (props) => {
     const navigation = props.navigation;
 
     async function getStartData () {
-        const result = await apiUtls.getCurrentWorklog();
-        const startData = await apiUtls.getStart();
-        if (result.failed || result == -1) {
+        const result = await apiUtls.getCurrentWorklog().catch((err) => console.log('Call api getCurrentWorklog failed', err));
+        const startData = await apiUtls.getStart().catch((err) => console.log('Call api getStart failed', err));
+        storageUtls.setString(storageUtls.start_data, JSON.stringify(startData || {}));
+        if (!result || result.failed || result == -1) {
             showErrorNetwork();
         } else {
             if (result) {
@@ -61,7 +62,7 @@ export default CheckinScreen = (props) => {
             if (now.getDay() === 0 || now.getDay() === 6) {
                 setStatusWorklog(WORKLOG_STATUS.NOT_WORKKING);
             }
-            if (startData.workTime) {
+            if (startData && startData.workTime) {
                 if (compareTwoTimeGreaterOrEqual(now.getHours(), now.getMinutes(), startData.workTime.hour_end, startData.workTime.min_end)) {
                     setStatusWorklog(WORKLOG_STATUS.NOT_WORKKING);
                 }
