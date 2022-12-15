@@ -74,7 +74,11 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
 
         this.$root.$on(MANAGER_WORK_FROM_HOME_TICKET_SCREEN, () => {
-            this._getYourSelfWfhTicket()
+            if(CookieUtls.getCookie(CookieUtls.role) == 0){
+                this._getYourSelfWfhTicket()
+            }else{
+                this.onChangeEmployeeToSeeSchedule()
+            }
         })
         
     },
@@ -226,9 +230,22 @@ export default {
                 return;
             }else{
                 if(response == -1){
-                    alert("Call Fail!")
+                    this.$toast.open({
+                        message: "Something went wrong, please try later",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }else{
-                    alert("Delete Success!")
+                    this.$toast.open({
+                        message: "Delete success",
+                        type: "success",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })  
                     this.selectedOpen = false
                     this._getYourSelfWfhTicket()
                     

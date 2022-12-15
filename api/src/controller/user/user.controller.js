@@ -16,6 +16,7 @@ const QUERY_VERIFY_USER = "SELECT * FROM employee WHERE employee_id = ? and is_d
 const GET_USER_BY_EMAIL = "SELECT * FROM employee WHERE email = ? and is_deleted <> 1 ORDER BY update_at DESC  LIMIT 1";
 const GET_WORKLOG_OF_USER = "SELECT * FROM worklog WHERE employee_id = ? and work_date = ? LIMIT 1";
 const GET_HOLYDAY = "SELECT * FROM holiday WHERE date = ?";
+const GET_CURRENT_HOLIDAY = "SELECT * FROM holiday WHERE date = CAST(now() as DATE)";
 const INSERT_NEW_WORKLOG = "INSERT INTO worklog (employee_id, work_status, work_date, work_total) VALUES (?, 0, ?, 0)";
 const UPDATE_WORKLOG_STATUS = "UPDATE worklog SET work_status = ?, work_total = ? WHERE worklog_id = ?";
 const INSERT_NEW_WORKHISTORY = "INSERT INTO workhistory (employee_id, workhistory_status, workhistory_description, work_date) VALUES (?, ?, ?, now())";
@@ -166,6 +167,7 @@ async function checkInMobile(req, res) {
                     res.status(400).send({ message: 'Can not recognize your face, please try again!' })
                 }
             }).catch((err) => {
+                logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] - can request to face server`);
                 res.status(400).send({ message: 'Request failed, please try again' })
             }).finally(() => {
                 deleteFile(file.path)
@@ -182,6 +184,10 @@ async function checkInMobile(req, res) {
 }
 
 async function isAvalibleCheckinTime(connection) {
+    const currentHoliday = await queryTransaction(connection, GET_CURRENT_HOLIDAY);
+    if (currentHoliday.length) {
+        return false;
+    }
     const workTimeList = await queryTransaction(connection, GET_WORKTIME);
     let workTime = WORKTIME_DEFAULT
     if (workTimeList.length) {

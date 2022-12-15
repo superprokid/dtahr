@@ -154,7 +154,14 @@ export default {
             if(!response){
                 this.$router.push('/admin/login')
             } else if(response == -1){
-                alert('Some thing wrong! Call Fail')
+                this.$toast.open({
+                    message: "Something went wrong, call fail",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             else {
                 this.listFreeManager = response.data.map((item) => {

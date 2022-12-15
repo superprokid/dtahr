@@ -36,6 +36,18 @@
 
                     </v-col>
                 </v-row>
+                <v-row no-gutters class="mb-2">
+                    <v-row no-gutters  v-if="(taskDetailData.parent_task_id != null)" :align="'center'">
+                        <v-col cols="12">
+                            <div class="btn" @click="openTaskDetails(parentTask)"><span class="text-subtitle-2">
+                                Parent Task: 
+                            </span>
+                            <span style="color: #3C836E">
+                                {{ parentTask.task_number }} - {{ parentTask.task_title }}
+                            </span></div>
+                        </v-col>
+                    </v-row>
+                </v-row>
                 <!-- Edit button -->
                 <v-row :align="'center'">
                     <v-col cols="12" md="6">
@@ -314,7 +326,7 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="12" md="9">
-                        <v-text-field placeholder="Write a comment, use @mention to notify a colleague..." outlined
+                        <v-text-field placeholder="Write a comment..." outlined
                             @click="reveal = true"></v-text-field>
                     </v-col>
                     <v-col cols="12" md="2" class="d-flex justify-center mt-2">

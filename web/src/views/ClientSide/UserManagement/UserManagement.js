@@ -194,6 +194,7 @@ export default {
         this.$root.$on(REAL_TIME_TRACKING_SCREEN, (msg) => {
             if (msg == this.userSelected.employee_id) {
                 this.onUpdateWorklog()
+                
             }
         })
     },
@@ -208,6 +209,7 @@ export default {
                 employeeId: this.userSelected.employee_id,
             }
             this._getHistoryActivityOfSpecificUser(params)
+            this._getSpecificEmployeeInfo(params)
         },
         toggleIsManagementFeature(){
             this.isUserWorklogSeeMoreShowed = !this.isUserWorklogSeeMoreShowed
@@ -245,8 +247,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.listUserWorklogs = response.data.map(item => {
                 return {...item, full_name: this.userSelected.full_name, work_date: moment(item.work_date).format('YYYY-MM-DD'), create_at: this._formatDateTime(item.create_at)
@@ -262,8 +270,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             const formatWorklog = response.data.length? response.data[0] : WORKLOG_DEFAULT;
 
@@ -283,8 +297,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.specificHistoryOfUser = this._groupArrayByDateKey(response.data.reverse(), "work_date")
             console.log('this.specificHistoryOfUser',this.specificHistoryOfUser);
@@ -307,8 +327,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.informationOfUserClicked = response.data;
         },
@@ -320,8 +346,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.projectUserJoined = response.data;
             console.log('this.projectUserJoined',this.projectUserJoined);
@@ -464,8 +496,14 @@ export default {
                 return;
             }
             if(response == -1){
-                alert("Something wrong, please try again!")
-                return;
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             // this.propPackage = response.data;
             

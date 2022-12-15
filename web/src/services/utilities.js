@@ -40,6 +40,13 @@ export function addMonths(date, number) {
     return moment(date).add(number, 'month');
 }
 
+export function getMoneyFromString(money){
+    if (!money) {
+        return 0;
+    }
+    return parseFloat(money.replace(/,/g, ''));
+}
+
 export function compareTwoTimeGreaterOrEqual(hours1, min1, hours2, min2) {
     if (hours1 > hours2) {
         return true;

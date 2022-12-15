@@ -116,8 +116,8 @@ export default {
     watch: {
         startDataUser: {
             handler(newVal) {
-                if (this.tabType == TAB_TYPE.USER && newVal.role == 1 && this.items.length < 8) {
-                    this.item = [...listManagerItem];
+                if (this.tabType == TAB_TYPE.USER && newVal.role == 1) {
+                    this.items = [...listManagerItem];
                 } else if (this.tabType == TAB_TYPE.USER && newVal.role == 0) {
                     this.items = [...listUserItem];
                 }

@@ -120,7 +120,8 @@ export default {
                     value: 'status',
                     width: 100
                 },
-            ]
+            ],
+            parentTask: {}
         }
     },
     watch: {
@@ -163,14 +164,41 @@ export default {
                 return;
             }
             if(response === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.taskDetailData = response.data
             this.taskDetailData.start_date = getDateString(response.data.start_date)
             this.taskDetailData.end_date = getDateString(response.data.end_date)      
             this.taskDetailData.create_at = getDateString(response.data.create_at) + ' ' +getTimeString(response.data.create_at)
             this.taskDetailData.isLate = isPastDate(response.data.end_date) && response.data.status != 3
+            this.parentTask = response.data.parent_task_id ? await this._getTaskParentTask(response.data.parent_task_id) : {}
             return this.taskDetailData
+        },
+
+        async _getTaskParentTask(id){
+            const params = {
+                taskId: id
+            }
+            const response = await TaskDetailServices.getTaskDetailById(params)
+            if (!response || response === -1) {
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return null;
+            }
+            
+            return response.data || {}
         },
 
         getStatus(status) {
@@ -188,12 +216,19 @@ export default {
         },
 
         async getAllUser() {
-            const response = await ReportServices.getAllUser();
+            const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
             if (!response) {
               this.$router.push("/user/login");
             }
             if(response === -1){
-                alert("Call Failed")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.userList = [...response.data];
             return response.data
@@ -214,7 +249,14 @@ export default {
                         return;
                     }
                     if(updateCommentResponse === -1){
-                        alert("Call Fail")
+                        this.$toast.open({
+                            message: "Something went wrong",
+                            type: "error",
+                            duration: 2000,
+                            dismissible: true,
+                            position: "top-right",
+                        })
+                        return
                     }
                     this.isUpdateComment = false
                     this.content = ''
@@ -233,7 +275,14 @@ export default {
                         return;
                     }
                     if(createCommentResponse === -1){
-                        alert("Call Fail")
+                        this.$toast.open({
+                            message: "Something went wrong",
+                            type: "error",
+                            duration: 2000,
+                            dismissible: true,
+                            position: "top-right",
+                        })
+                        return
                     }
                     this.content = ''
                 }
@@ -261,7 +310,14 @@ export default {
                     return;
                 }
                 if(updateTaskStatusResponse === -1){
-                    alert("Call Fail")
+                    this.$toast.open({
+                        message: "Something went wrong",
+                        type: "error",
+                        duration: 2000,
+                        dismissible: true,
+                        position: "top-right",
+                    })
+                    return
                 }
             }
                     
@@ -325,7 +381,14 @@ export default {
                 return;
             }
             if(deleteCommentResponse === -1){
-                alert("Call Fail")
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
 
             this._getTaskDetailById().then((result)=>{

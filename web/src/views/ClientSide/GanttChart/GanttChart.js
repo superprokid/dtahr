@@ -220,7 +220,14 @@ export default {
                 return;
             }
             if (response === -1) {
-                alert("Call Fail");
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.listCategories = [...response.data];
         },
@@ -232,7 +239,14 @@ export default {
                 return;
             }
             if (response === -1) {
-                alert("Call Fail");
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
             }
             this.listUsers = [...response.data];
         },
@@ -247,7 +261,7 @@ export default {
                     return false;
                 }
                 if (this.keyword) {
-                    if (!String(task.task_number).includes(this.keyword) && !task.task_title.includes(this.keyword)) {
+                    if (!String(task.task_number).includes(this.keyword) && !String(task.task_title).toLowerCase().includes(String(this.keyword).toLowerCase())) {
                         return false;
                     }
                 }

@@ -275,10 +275,6 @@
                         </v-tab-item>
                     </v-tabs>
 
-
-
-                    {{ groupRowSelected }}
-
                     <!-- <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item"
                         required>
                     </v-select> -->
