@@ -120,7 +120,8 @@ export default {
                     value: 'status',
                     width: 100
                 },
-            ]
+            ],
+            parentTask: {}
         }
     },
     watch: {
@@ -177,7 +178,27 @@ export default {
             this.taskDetailData.end_date = getDateString(response.data.end_date)      
             this.taskDetailData.create_at = getDateString(response.data.create_at) + ' ' +getTimeString(response.data.create_at)
             this.taskDetailData.isLate = isPastDate(response.data.end_date) && response.data.status != 3
+            this.parentTask = response.data.parent_task_id ? await this._getTaskParentTask(response.data.parent_task_id) : {}
             return this.taskDetailData
+        },
+
+        async _getTaskParentTask(id){
+            const params = {
+                taskId: id
+            }
+            const response = await TaskDetailServices.getTaskDetailById(params)
+            if (!response || response === -1) {
+                this.$toast.open({
+                    message: "Something went wrong",
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return null;
+            }
+            
+            return response.data || {}
         },
 
         getStatus(status) {

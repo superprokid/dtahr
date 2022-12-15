@@ -276,6 +276,10 @@ async function updateTask(req, res) {
             actualHours: {
                 type: 'number',
                 required: false,
+            }, 
+            parentTaskId: {
+                type: 'number',
+                required: false,
             }
         }
 
@@ -288,7 +292,7 @@ async function updateTask(req, res) {
             return;
         }
 
-        let { taskId, taskTitle, taskDescription, assigneeId, status, priority, categoryId, startDate, endDate, estimatedHours, actualHours } = req.body;
+        let { taskId, taskTitle, taskDescription, assigneeId, status, priority, categoryId, startDate, endDate, estimatedHours, actualHours, parentTaskId } = req.body;
 
         const targetTaskList = await dbaccess.queryTransaction(connection, GET_TASK_BY_ID, [taskId]);
         if (!targetTaskList.length) {
@@ -346,6 +350,10 @@ async function updateTask(req, res) {
         if (!isNullOrUndefinded(actualHours)) {
             setClauseArray.push(` actual_hours = '${actualHours}'`);
             commentContent = commentContent.concat(`<p>Estimated hours changed: ${Number(targetTask.actual_hours).toFixed(2)} → ${Number(actualHours).toFixed(2)}</p></br>`);
+        }
+        if (parentTaskId) {
+            setClauseArray.push(` parent_task_id = '${parentTaskId}'`);
+            commentContent = commentContent.concat(`<p>Parent task changed: ${targetTask.parent_task_id} → ${parentTaskId}</p></br>`);
         }
         if (isEditDate) {
             if (moment(startDate).isAfter(moment(endDate), 'date')) {
