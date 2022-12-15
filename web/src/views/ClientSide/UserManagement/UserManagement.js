@@ -194,6 +194,7 @@ export default {
         this.$root.$on(REAL_TIME_TRACKING_SCREEN, (msg) => {
             if (msg == this.userSelected.employee_id) {
                 this.onUpdateWorklog()
+                
             }
         })
     },
@@ -208,6 +209,7 @@ export default {
                 employeeId: this.userSelected.employee_id,
             }
             this._getHistoryActivityOfSpecificUser(params)
+            this._getSpecificEmployeeInfo(params)
         },
         toggleIsManagementFeature(){
             this.isUserWorklogSeeMoreShowed = !this.isUserWorklogSeeMoreShowed

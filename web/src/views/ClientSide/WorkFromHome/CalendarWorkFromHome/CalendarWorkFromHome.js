@@ -74,7 +74,11 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
 
         this.$root.$on(MANAGER_WORK_FROM_HOME_TICKET_SCREEN, () => {
-            this._getYourSelfWfhTicket()
+            if(CookieUtls.getCookie(CookieUtls.role) == 0){
+                this._getYourSelfWfhTicket()
+            }else{
+                this.onChangeEmployeeToSeeSchedule()
+            }
         })
         
     },

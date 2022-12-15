@@ -158,6 +158,7 @@ export default {
             this.$eventBus.$emit("show-spinner", true);
             const response = await WorkFromHomeServices.managerUpdateWfhTicket(params)
             this.$eventBus.$emit("show-spinner", false);
+            this.selected = []
             if (!response) {
                 this.$router.push('/user/login');
                 return;
@@ -188,6 +189,7 @@ export default {
             this.$eventBus.$emit("show-spinner", true);
             const response = await WorkFromHomeServices.managerUpdateWfhTicket(params)
             this.$eventBus.$emit("show-spinner", false);
+            this.selected = []
             if (!response) {
                 this.$router.push('/user/login');
                 return;
