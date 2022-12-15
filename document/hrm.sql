@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 14/12/2022 11:17:32
+ Date: 15/12/2022 15:40:48
 */
 
 SET NAMES utf8mb4;
@@ -37,7 +37,7 @@ CREATE TABLE `administrator`  (
 -- ----------------------------
 -- Records of administrator
 -- ----------------------------
-INSERT INTO `administrator` VALUES ('admin', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-15 08:45:51', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX1/Jvf7c53eMP+ElV8FHlCjLsdiMCpLTMK3K6x4RBtgnSDgF1C9iIpqgZMqS3PzA1umj8mFHmR9RovklyJegBEAvcso67/PCKDjOL/HoY74nnav1PLySXfy/ophqXwitDWanOQ6K1nmFon46xTqn2+g5DUWgzwXIzdZ7F/dz1yB/Cer9IBLIbQrOWgJEPKWWo5y+HFiuvk1NzXvlchTD4n8hvjwBCG9K8NBjzNtx/FEps6Nv+s4Xa33JBHi0Hmd0lHVTZNYv+TaDAmu2vt7NJvleNtBrIoVvReD4McR93/er7o7tQs4y6zAJr1w+pcS3BPhqLV46/HWmBXOQqKawjIdGCS+VEBWLVLpc8pbDviwL7zKaS4IZ0SHb2lC6IgtN3mffaAbe4id7Cw==', '2022-12-14 10:50:49', '2022-11-20 16:53:49', '2022-12-14 09:50:49');
+INSERT INTO `administrator` VALUES ('admin', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-14 18:33:20', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX1/V6gKnxSMa48C7KvyWdB2rHSgc5xk3/qAU49aiBMjNo7buqZf7k/0nhuISJIygmHLlsM4n06G8JWKojcT3s5qSdriMFn3hvhWeCyu0L7GI7+BrWYhy5hYDroaJUALw5JZGVXIAUDUwTYPr0uaBXbGKruuuWU3sGyWJLBBfmXjebuXxXxbdyOzqGI/cokBGo8CPwISRcfPzUOSgZyZiSq6+mj03wzL5Ox1EtynQeTD9StLDU+KRwrvOOSXi3AkekAhu9hEoaAYWZlyIFEz3M9QPEdEACJJrTF+cM4syw2KwDKF9XrTv5PSLA2OU3dLOU8ak4iREWDjiAS8FpQpTH6YNWyIUodB+pUlcjdb66G1bGZJqmR9DjnpvD9PoTND19oWDEmyZbf/zCg==', '2022-12-14 19:44:23', '2022-11-20 16:53:49', '2022-12-14 18:44:23');
 INSERT INTO `administrator` VALUES ('duywjbu', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-13 21:35:16', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX1/v9YVhk8R61Ajo1xZOl3chqDFRfWasZUe2inwjUEceWgEAUdED0598RsWepw+x5aB2srekGbebdI4lVYEWI3RRbSAeATbmjpG6tiGSgFSOv49q68X9DKTphUxP5pYim7otRJasyFlXKiv3RtkcayD1If4VzKM/Kx+xgej2hwQUhA14zw2shoOI1UtYj6xBj70HwTCY7NVrZaqiaCCwljHSO3u65+b1CH5P5PSNR7+y5O2ZbjO4jDHH9NFmlmNRM9Zp1Q4XRe/wFdAlen6Ym8vhJo+VBiS/Mi+ANlYk5MCcMC2CE4fhxZDXhI879LtFPRhDXgb4ihtPpOgua79TFJjpILQgQZ7tGGtYXHkvMKeeMBf4ZebpuhlK/Gst+aHT/m/AlAGyjeHlrQ==', '2022-12-13 23:07:04', '2022-11-03 20:10:07', '2022-12-13 22:07:04');
 INSERT INTO `administrator` VALUES ('thangld', '$2b$12$UkRKm.cjbVgDmaMNO7L1du1kr9kVTWKvBm/mplvFFF5qurOM8Nb4i', '2022-12-13 19:58:57', NULL, '2022-12-17 15:53:48', 'U2FsdGVkX19vHNrdqR/JVvYwBreLQ1SZK4RayEwikLBN9DR8qsdzszxhylgpJRGsCb2P2FFgRr1x4UGYjsK7F7a+Rr+H9xTdrdGtwzB/vTxZzINV4DFQQXO0TPKsV1luuE/AD5vrqKDH0b19++j8SvkTngU6EjyHNU1cfDzkJILvRb3wqJoJQFgVYf9SdTD2NqhlmhDF9hO5izQaBfmOOxNTrvD7sX57TKBt10tNHrQF5BKVq6p9PPh1hljz2X4ACnw30F8Q3uFfwp+WObG5pkxfRl/hpbefAgb0tvfmPilB5GPpY/CcMyEKDX7ecQN41uSGgDdgi6DQJ/UkBWYf8N28TqQm54HxoDIIdHm7bdPe2KqpknCwKqfQgL1kXyCqcaRPg6c33FmyGvKv+TYcVA==', '2022-12-13 22:36:07', '2022-09-17 15:54:06', '2022-12-13 21:36:07');
 
@@ -188,23 +188,23 @@ CREATE TABLE `employee`  (
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('0000001', 'Le Duc', 'Thang', '2000-01-01', '123 CND - SG', 0, 'thangld@gmail.com', '$2b$12$yPE/mcCEEr1hUMvnFc1F6eB0wI4E8HkalN8pUrb.7./9OvKsncpwG', '000001', 4.364583333333332, '2000-01-01', '10xasdzxs', 'NodeJSs', 'VueJSs', 'Developer', 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, '1668855135709_activate deactivate conda.png', 150000.00, '67910000000', 'BIDV', NULL, 0, '2022-09-28 14:41:19', '2022-12-13 18:30:00');
+INSERT INTO `employee` VALUES ('0000001', 'Le Duc', 'Thang', '2000-01-01', '123 CND - SG', 0, 'thangld@gmail.com', '$2b$12$yPE/mcCEEr1hUMvnFc1F6eB0wI4E8HkalN8pUrb.7./9OvKsncpwG', '000001', 4.258333333333332, '2000-01-01', '10xasdzxs', 'NodeJSs', 'VueJSs', 'Developer', 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, '1668855135709_activate deactivate conda.png', 150000.00, '67910000000', 'BIDV', NULL, 0, '2022-09-28 14:41:19', '2022-12-14 18:30:00');
 INSERT INTO `employee` VALUES ('0000002', 'An', 'Dinh Tuan', '2000-01-01', '1 VVN', 0, 'andt@gmail.com', '$2b$12$yPE/mcCEEr1hUMvnFc1F6eB0wI4E8HkalN8pUrb.7./9OvKsncpwG', '000001', 11.014583333333215, '2000-01-01', '0896563253a', 'VueJS', 'AI', 'BPM', 0, '0000001', 'Duy Bùi Việt', 1, '0906854315', '1 Võ Văn Ngân, Thủ Đức, Hồ Chí Minh', '1980-01-01', 'Cha Con Guộc', '1666510092157_bdmt.jpg', 80000.00, '123456789', 'ACB - SaiGon', NULL, 0, '2022-09-28 14:43:07', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Wjbu', '2000-07-05', '204/6 Linh Dong', 0, 'duybv@gmail.com', '$2b$12$SXTyIOpmrMmP3jfBwdTcneW69dFVJ6EiY4ZzBHyoN3dLG6Ilj1.4i', '000001', 3.0213333333333594, '2022-09-28', '0253263120', 'Prozjp', 'Dep trai', NULL, 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, '1666517499759_288020.jpg', 80000.00, '008963635515', 'BIDV', NULL, 0, '2022-09-28 14:43:26', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000004', 'Nguyen Dinh', 'Long', '2000-10-10', NULL, 0, 'ldthang2201@gmail.com', '$2b$12$G3DVMLIjLTfc7ep3t7BnmutTbheR9.K8y9LgqquXdzi7T3T5GcaRa', '000001', -6, '2000-10-10', '2121212121', NULL, NULL, 'Tester', 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 85000.00, '77458965', 'ACB', NULL, 0, '2022-09-28 17:50:26', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000005', 'Hao', 'Duc (Manager)', '2000-10-10', NULL, 2, 'haond@gmail.com', '$2b$12$SXTyIOpmrMmP3jfBwdTcneW69dFVJ6EiY4ZzBHyoN3dLG6Ilj1.4i', '000002', -6, '2022-09-28', NULL, NULL, NULL, NULL, 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 90000.00, '885845852210', 'Vietcombank', NULL, 0, '2022-10-23 16:28:34', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000006', 'Tran Tuan', 'Hao', '2020-08-19', 'thanh 3 phu tho', 0, 'anga@gmail.com', '$2b$12$iNqzQEEoyKk4K7cUkeZbde.JULT3QLPkV1aCKIbec72saJZZqVGAK', '000001', -6, '2020-08-19', '0123456789', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70000.00, '0015215349', 'BIDV', NULL, 0, '2022-11-19 12:14:35', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000007', 'Vo Ngoc', 'Long', '2022-11-29', 'fdsafdsa', 0, 'aaa@gmail.com', '$2b$12$c0laiCNpPOMpAPLVBCaQ/eS/wh5.cEbm3Y.RNV8YH2gI8KE/6hZ06', '000001', -6, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70000.00, '00745896', 'BIDV', NULL, 0, '2022-11-29 20:10:30', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000008', 'Dang Duy', 'Khuong', '2022-11-29', NULL, 0, 'aaaa@gmail.com', '$2b$12$U4fydVoTXrZQv./c/U/E8.ddMgRyPc1cAXdryx9Rlq49DiwpR7eH.', '000001', -6, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50000.00, '77865423', 'ACB', NULL, 0, '2022-11-29 20:13:29', '2022-12-13 18:30:00');
+INSERT INTO `employee` VALUES ('0000003', 'Duy', 'Wjbu', '2000-07-05', '204/6 Linh Dong', 0, 'duybv@gmail.com', '$2b$12$SXTyIOpmrMmP3jfBwdTcneW69dFVJ6EiY4ZzBHyoN3dLG6Ilj1.4i', '000001', 2.0213333333333594, '2022-09-28', '0253263120', 'Prozjp', 'Dep trai', NULL, 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, '1666517499759_288020.jpg', 80000.00, '008963635515', 'BIDV', NULL, 0, '2022-09-28 14:43:26', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000004', 'Nguyen Dinh', 'Long', '2000-10-10', NULL, 0, 'ldthang2201@gmail.com', '$2b$12$G3DVMLIjLTfc7ep3t7BnmutTbheR9.K8y9LgqquXdzi7T3T5GcaRa', '000001', -7, '2000-10-10', '2121212121', NULL, NULL, 'Tester', 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 85000.00, '77458965', 'ACB', NULL, 0, '2022-09-28 17:50:26', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000005', 'Hao', 'Duc (Manager)', '2000-10-10', NULL, 2, 'haond@gmail.com', '$2b$12$SXTyIOpmrMmP3jfBwdTcneW69dFVJ6EiY4ZzBHyoN3dLG6Ilj1.4i', '000002', -7, '2022-09-28', NULL, NULL, NULL, NULL, 1, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 90000.00, '885845852210', 'Vietcombank', NULL, 0, '2022-10-23 16:28:34', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000006', 'Tran Tuan', 'Hao', '2020-08-19', 'thanh 3 phu tho', 0, 'anga@gmail.com', '$2b$12$iNqzQEEoyKk4K7cUkeZbde.JULT3QLPkV1aCKIbec72saJZZqVGAK', '000001', -7, '2020-08-19', '0123456789', NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70000.00, '0015215349', 'BIDV', NULL, 0, '2022-11-19 12:14:35', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000007', 'Vo Ngoc', 'Long', '2022-11-29', 'fdsafdsa', 0, 'aaa@gmail.com', '$2b$12$c0laiCNpPOMpAPLVBCaQ/eS/wh5.cEbm3Y.RNV8YH2gI8KE/6hZ06', '000001', -7, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70000.00, '00745896', 'BIDV', NULL, 0, '2022-11-29 20:10:30', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000008', 'Dang Duy', 'Khuong', '2022-11-29', NULL, 0, 'aaaa@gmail.com', '$2b$12$U4fydVoTXrZQv./c/U/E8.ddMgRyPc1cAXdryx9Rlq49DiwpR7eH.', '000001', -7, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50000.00, '77865423', 'ACB', NULL, 0, '2022-11-29 20:13:29', '2022-12-14 18:30:00');
 INSERT INTO `employee` VALUES ('0000009', 'adam', 'da den', '2022-11-29', NULL, 0, 'xenic63755@xegge.com', '$2b$12$lNCNIep9OfAK8.IP8TL0K.jZSZwPfCpRFsDjefHKCj0xcrRdZhAlq', '000003', 0, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000005', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2022-11-29 20:25:01', '2022-11-29 20:50:48');
-INSERT INTO `employee` VALUES ('0000010', 'Le Hoang', 'Hai', '2022-11-29', NULL, 0, 'temptemp@gmail.com', '123', '000001', -2, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80000.00, '1253551547896', 'Sacombank', NULL, 0, '2022-11-29 20:31:24', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000011', 'black', 'adam', '2022-12-14', NULL, 0, 'yojecih489@edinel.com', '$2b$12$Sq.JZccE7mbiIsgovrFpj.Q7zvYgqRHCgRHk8aECv.WljDFk4AH7G', '000003', -7, '2022-12-04', NULL, NULL, NULL, NULL, 0, '0000005', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 65000.00, '996854541120', 'Sacombank', NULL, 0, '2022-12-04 16:38:09', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000012', 'superman', 'man', '2022-12-05', NULL, 0, 'jfdsioj@gmail.com', '$2b$12$MQAKknx3HxuLSGzRgWdXbuKM0PWIi6obt50ZmHP0xtI752MznRvZe', '000003', -6, '2022-12-05', NULL, NULL, NULL, NULL, 0, '0000005', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 78000.00, '421125444432', 'BIDV', NULL, 0, '2022-12-05 18:40:09', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000013', 'Nguyen Van', 'A', '2000-01-10', 'aa Thu Duc, HCM', 0, 'thangg123@gmail.com', '$2b$12$LhI1iu6O519S3ltJcTQZ9OrGARgiXPy/iJm.yKSWUwsYOMvfeZGHG', '000002', -5, '2022-12-06', 'xxxxxxxxx', 'NodeJS', NULL, NULL, 0, '0000004', 'Nguyen Van B', 0, 'xxxxxxxxx', 'aa Thu Duc, HCM', NULL, 'father and son', NULL, 100000.00, '00125365', 'ACB', NULL, 0, '2022-12-06 22:06:45', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000014', 'Thang Import', 'Test', '2000-03-15', 'Thu Do Ha Noi', 0, 'nguyenvanaa123ss@gmail.com', '$2b$12$ewWGYFOwCkOhqtcC.AiNQeClSxRsLh0y7IC9ioLK0aV7io/M94Umi', '000002', -5, '2022-12-06', '0125469935', 'NodeJS', NULL, NULL, 1, '0000004', 'Nguyen Van B', 0, 'xxxxxxxxx', 'aa Thu Duc, HCM', NULL, 'father and son', NULL, 100000.00, '747488889653', 'Sacombank', NULL, 0, '2022-12-06 22:06:45', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000015', 'Nguyen Duc', 'Hao', '2000-03-30', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', 0, '18110104@student.hcmute.edu.vn', '$2b$12$HEGCRfXDjjMN1YdqFDl0a.QD3zEFqC9b257qp32/y/2xMS0hnm5Z.', '000005', -1, '2022-12-13', '0353564521', 'AI -Python', NULL, NULL, 0, '0000014', 'Nguyen Van B', 0, '0121454854', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775848453365', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000016', 'Dinh Tuan ', 'An 1', '2000-03-30', 'Dien Bien Phu, Quan 3, Ho Chi Minh', 0, '18110072@student.hcmute.edu.vn', '$2b$12$a7ZVOQjW0Hr7JBLtbd4fZuZc9Iond5tsPZNa91LhSLfSEVLedcPB.', '000005', -0.10208333333333333, '2022-12-13', '035477853636', 'VueJS', NULL, NULL, 0, '0000014', 'Tran Thi Lang', 0, '0122525356', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775844444396', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-13 18:30:00');
-INSERT INTO `employee` VALUES ('0000017', 'Bui Viet', 'Danh', '1989-06-08', '123 Vo Van Ngan, Thủ Đức, Hồ Chí Minh', 0, 'racaya5807@areosur.com', '$2b$12$h0kWBpTTKCTFlF/0FOtUnuAhA6oLdTCL.fbqeJ2nLrdVqxWGInGTK', '000002', 0, '2022-12-14', '05996535531', NULL, NULL, NULL, 0, '0000004', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-12-14 09:27:06', '2022-12-14 09:27:06');
+INSERT INTO `employee` VALUES ('0000010', 'Le Hoang', 'Hai', '2022-11-29', NULL, 0, 'temptemp@gmail.com', '123', '000001', -3, '2022-11-29', NULL, NULL, NULL, NULL, 0, '0000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80000.00, '1253551547896', 'Sacombank', NULL, 0, '2022-11-29 20:31:24', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000011', 'black', 'adam', '2022-12-14', NULL, 0, 'yojecih489@edinel.com', '$2b$12$Sq.JZccE7mbiIsgovrFpj.Q7zvYgqRHCgRHk8aECv.WljDFk4AH7G', '000003', -8, '2022-12-04', NULL, NULL, NULL, NULL, 0, '0000005', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 65000.00, '996854541120', 'Sacombank', NULL, 0, '2022-12-04 16:38:09', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000012', 'superman', 'man', '2022-12-05', NULL, 0, 'jfdsioj@gmail.com', '$2b$12$MQAKknx3HxuLSGzRgWdXbuKM0PWIi6obt50ZmHP0xtI752MznRvZe', '000003', -7, '2022-12-05', NULL, NULL, NULL, NULL, 0, '0000005', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 78000.00, '421125444432', 'BIDV', NULL, 0, '2022-12-05 18:40:09', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000013', 'Nguyen Van', 'A', '2000-01-10', 'aa Thu Duc, HCM', 0, 'thangg123@gmail.com', '$2b$12$LhI1iu6O519S3ltJcTQZ9OrGARgiXPy/iJm.yKSWUwsYOMvfeZGHG', '000002', -6, '2022-12-06', 'xxxxxxxxx', 'NodeJS', NULL, NULL, 0, '0000004', 'Nguyen Van B', 0, 'xxxxxxxxx', 'aa Thu Duc, HCM', NULL, 'father and son', NULL, 100000.00, '00125365', 'ACB', NULL, 0, '2022-12-06 22:06:45', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000014', 'Thang Import', 'Test', '2000-03-15', 'Thu Do Ha Noi', 0, 'nguyenvanaa123ss@gmail.com', '$2b$12$ewWGYFOwCkOhqtcC.AiNQeClSxRsLh0y7IC9ioLK0aV7io/M94Umi', '000002', -6, '2022-12-06', '0125469935', 'NodeJS', NULL, NULL, 1, '0000004', 'Nguyen Van B', 0, 'xxxxxxxxx', 'aa Thu Duc, HCM', NULL, 'father and son', NULL, 100000.00, '747488889653', 'Sacombank', NULL, 0, '2022-12-06 22:06:45', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000015', 'Nguyen Duc', 'Hao', '2000-03-30', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', 0, '18110104@student.hcmute.edu.vn', '$2b$12$HEGCRfXDjjMN1YdqFDl0a.QD3zEFqC9b257qp32/y/2xMS0hnm5Z.', '000005', -2, '2022-12-13', '0353564521', 'AI -Python', NULL, NULL, 0, '0000014', 'Nguyen Van B', 0, '0121454854', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775848453365', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000016', 'Dinh Tuan ', 'An 1', '2000-03-30', 'Dien Bien Phu, Quan 3, Ho Chi Minh', 0, '18110072@student.hcmute.edu.vn', '$2b$12$a7ZVOQjW0Hr7JBLtbd4fZuZc9Iond5tsPZNa91LhSLfSEVLedcPB.', '000005', -1.1020833333333333, '2022-12-13', '035477853636', 'VueJS', NULL, NULL, 0, '0000014', 'Tran Thi Lang', 0, '0122525356', 'Vo Van Ngan, Thu Duc, Ho Chi Minh', NULL, 'Mother', NULL, 80000.00, '775844444396', 'BIDV', NULL, 0, '2022-12-13 09:16:36', '2022-12-14 18:30:00');
+INSERT INTO `employee` VALUES ('0000017', 'Bui Viet', 'Danh', '1989-06-08', '123 Vo Van Ngan, Thủ Đức, Hồ Chí Minh', 0, 'racaya5807@areosur.com', '$2b$12$h0kWBpTTKCTFlF/0FOtUnuAhA6oLdTCL.fbqeJ2nLrdVqxWGInGTK', '000002', -1, '2022-12-14', '05996535531', NULL, NULL, NULL, 0, '0000004', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2022-12-14 09:27:06', '2022-12-14 18:30:00');
 
 -- ----------------------------
 -- Table structure for group
@@ -241,7 +241,7 @@ CREATE TABLE `holiday`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`holiday_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of holiday
@@ -256,6 +256,7 @@ INSERT INTO `holiday` VALUES (11, '2023-01-26', 'Tet Am Lich', '2022-12-05 20:00
 INSERT INTO `holiday` VALUES (13, '2023-01-27', 'Tet Am Lich', '2022-12-05 20:00:48', '2022-12-05 20:00:48');
 INSERT INTO `holiday` VALUES (14, '2023-01-25', 'Tet Am Lich', '2022-12-05 20:00:59', '2022-12-05 20:00:59');
 INSERT INTO `holiday` VALUES (17, '2023-01-23', 'Tết Âm Lịch', '2022-12-13 20:25:35', '2022-12-13 20:25:35');
+INSERT INTO `holiday` VALUES (19, '2023-02-13', 'Hung Vuong King ', '2022-12-14 18:36:44', '2022-12-14 18:36:44');
 
 -- ----------------------------
 -- Table structure for keyvalue
@@ -768,7 +769,7 @@ CREATE TABLE `workhistory`  (
   `create_at` datetime NOT NULL DEFAULT current_timestamp,
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`workhistory_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 631 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 657 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of workhistory
@@ -1179,6 +1180,32 @@ INSERT INTO `workhistory` VALUES (627, '0000014', 3, '2022-12-13 18:30:00', 'AUT
 INSERT INTO `workhistory` VALUES (628, '0000015', 3, '2022-12-13 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 0.000 to -1.000', '2022-12-13 18:30:00', '2022-12-13 18:30:00');
 INSERT INTO `workhistory` VALUES (629, '0000016', 2, '2022-12-13 18:30:00', 'CHECK OUT - Auto check out by BOT', '2022-12-13 18:30:00', '2022-12-13 18:30:00');
 INSERT INTO `workhistory` VALUES (630, '0000016', 3, '2022-12-13 18:30:00', 'AUTO DETECTED - Worked not enough 8 hours - duration: 49 mins', '2022-12-13 18:30:00', '2022-12-13 18:30:00');
+INSERT INTO `workhistory` VALUES (631, '0000001', 0, '2022-12-14 08:27:07', 'Check in at 2022-12-14, 08:27:07 am', '2022-12-14 08:27:07', '2022-12-14 08:27:07');
+INSERT INTO `workhistory` VALUES (632, '0000002', 0, '2022-12-14 08:27:19', 'Check in at 2022-12-14, 08:27:19 am', '2022-12-14 08:27:19', '2022-12-14 08:27:19');
+INSERT INTO `workhistory` VALUES (633, '0000001', 1, '2022-12-14 08:32:56', 'Check out at 2022-12-14, 08:32:56 am', '2022-12-14 08:32:56', '2022-12-14 08:32:56');
+INSERT INTO `workhistory` VALUES (634, '0000001', 0, '2022-12-14 09:23:54', 'Check in at 2022-12-14, 09:23:54 am', '2022-12-14 09:23:54', '2022-12-14 09:23:54');
+INSERT INTO `workhistory` VALUES (635, '0000001', 2, '2022-12-14 18:30:00', 'CHECK OUT - Auto check out by BOT', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (636, '0000001', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - Worked not enough 8 hours - duration: 51 mins', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (637, '0000002', 2, '2022-12-14 18:30:00', 'CHECK OUT - Auto check out by BOT', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (638, '0000003', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 3.021 to 2.021', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (639, '0000004', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (640, '0000005', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (641, '0000006', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (642, '0000007', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (643, '0000008', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (644, '0000010', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -2.000 to -3.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (645, '0000011', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -7.000 to -8.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (646, '0000012', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -6.000 to -7.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (647, '0000013', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -5.000 to -6.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (648, '0000014', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -5.000 to -6.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (649, '0000015', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -1.000 to -2.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (650, '0000016', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from -0.102 to -1.102', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (651, '0000017', 3, '2022-12-14 18:30:00', 'AUTO DETECTED - You didn\'t come to work, your annual holiday is from 0.000 to -1.000', '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `workhistory` VALUES (652, '0000001', 0, '2022-12-15 08:27:22', 'Check in at 2022-12-15, 08:27:22 am', '2022-12-15 08:27:22', '2022-12-15 08:27:22');
+INSERT INTO `workhistory` VALUES (653, '0000001', 1, '2022-12-15 08:36:38', 'Check out at 2022-12-15, 08:36:38 am', '2022-12-15 08:36:38', '2022-12-15 08:36:38');
+INSERT INTO `workhistory` VALUES (654, '0000001', 0, '2022-12-15 08:36:53', 'Check in at 2022-12-15, 08:36:53 am', '2022-12-15 08:36:53', '2022-12-15 08:36:53');
+INSERT INTO `workhistory` VALUES (655, '0000002', 0, '2022-12-15 08:42:14', 'Check in at 2022-12-15, 08:42:14 am', '2022-12-15 08:42:14', '2022-12-15 08:42:14');
+INSERT INTO `workhistory` VALUES (656, '0000002', 1, '2022-12-15 08:47:33', 'Check out at 2022-12-15, 08:47:33 am', '2022-12-15 08:47:33', '2022-12-15 08:47:33');
 
 -- ----------------------------
 -- Table structure for worklog
@@ -1195,7 +1222,7 @@ CREATE TABLE `worklog`  (
   `update_at` datetime NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`worklog_id`) USING BTREE,
   INDEX `employee_id`(`employee_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 273 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 291 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of worklog
@@ -1355,6 +1382,24 @@ INSERT INTO `worklog` VALUES (269, '0000012', 1, '2022-12-13', 0.0, 1, '2022-12-
 INSERT INTO `worklog` VALUES (270, '0000013', 1, '2022-12-13', 0.0, 1, '2022-12-13 18:30:00', '2022-12-13 18:30:00');
 INSERT INTO `worklog` VALUES (271, '0000014', 1, '2022-12-13', 0.0, 1, '2022-12-13 18:30:00', '2022-12-13 18:30:00');
 INSERT INTO `worklog` VALUES (272, '0000015', 1, '2022-12-13', 0.0, 1, '2022-12-13 18:30:00', '2022-12-13 18:30:00');
+INSERT INTO `worklog` VALUES (273, '0000001', 1, '2022-12-14', 429.0, 0, '2022-12-14 08:27:07', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (274, '0000002', 1, '2022-12-14', 480.0, 0, '2022-12-14 08:27:19', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (275, '0000003', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (276, '0000004', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (277, '0000005', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (278, '0000006', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (279, '0000007', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (280, '0000008', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (281, '0000010', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (282, '0000011', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (283, '0000012', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (284, '0000013', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (285, '0000014', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (286, '0000015', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (287, '0000016', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (288, '0000017', 1, '2022-12-14', 0.0, 1, '2022-12-14 18:30:00', '2022-12-14 18:30:00');
+INSERT INTO `worklog` VALUES (289, '0000001', 0, '2022-12-15', 7.0, 0, '2022-12-15 08:27:22', '2022-12-15 08:36:53');
+INSERT INTO `worklog` VALUES (290, '0000002', 1, '2022-12-15', 5.0, 0, '2022-12-15 08:42:14', '2022-12-15 08:47:33');
 
 -- ----------------------------
 -- Table structure for worktime
