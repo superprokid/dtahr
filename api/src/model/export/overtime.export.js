@@ -9,7 +9,7 @@ const GET_OVERTIME_TICKET = "SELECT CONCAT(e.first_name, ' ', e.last_name) as fu
     + "                     	INNER JOIN employee e ON ot.employee_id = e.employee_id	"
     + "                     	INNER JOIN `group` g ON g.group_id = e.group_id	"
     + "                     	LEFT JOIN employee er ON e.employer_id = er.employee_id	"
-    + "                     WHERE CAST(start_date as DATE) BETWEEN ? and ? and `status` = 1";
+    + "                     WHERE CAST(ot.start_date as DATE) BETWEEN ? and ? and `status` = 1";
 
 /**
  * Export Overtime of all staff from startDate to endDate

@@ -216,7 +216,7 @@ export default {
         },
 
         async getAllUser() {
-            const response = await ReportServices.getAllUser();
+            const response = await AddTaskServices.getAllUserOfProject({ projectId: this.currentProjectId })
             if (!response) {
               this.$router.push("/user/login");
             }
