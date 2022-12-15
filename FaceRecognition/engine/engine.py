@@ -111,7 +111,9 @@ class FaceRecognitionLib(object):
         :return:
         """
         face_locations = face_recognition.face_locations(image)
-        return face_locations[0]
+        if(len(face_locations) > 0):
+            return face_locations[0]
+        return []
     def update_id_list(self):
         file_name = [(sub_dir.split(".")[0]) for sub_dir in os.listdir(npz_dir)]
         self.__id = [(name.split("_")[1]) for name in file_name]

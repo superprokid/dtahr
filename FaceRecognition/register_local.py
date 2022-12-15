@@ -7,6 +7,7 @@ from PIL import Image
 import cv2
 import tkinter
 from tkinter import messagebox
+import numpy
 # Internal libraries
 from engine.engine_register import FaceRecognitionLib
 
@@ -37,11 +38,14 @@ else:
       if len(face_position) > 0:
         image_name = os.listdir(user_recognition_dir)[0].split(".")[0]
         image_path = os.path.join(image_dir, f"{image_name}.jpg")
-        Image.fromarray(frame).crop((face_position[3],face_position[0],face_position[1],face_position[2]))\
-          .resize((800,800)).save(image_path)
-        os.remove(os.path.join(user_recognition_dir, f"{image_name}.txt"))
-        register_complete = True
-        messagebox.showinfo("Info", "Register Complete")
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = Image.fromarray(frame).crop((face_position[3],face_position[0],face_position[1],face_position[2]))\
+          .resize((800,800))
+        if face_engine.make_face_encoding(numpy.array(frame)):
+          frame.save(image_path)
+          os.remove(os.path.join(user_recognition_dir, f"{image_name}.txt"))
+          register_complete = True
+          messagebox.showinfo("Info", "Register Complete")
 
       key = cv2.waitKey(1)
       if key == 27:
