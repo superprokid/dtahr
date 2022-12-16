@@ -153,7 +153,7 @@
                                 <v-icon style="margin-right: 10px">
                                     mdi-file-export-outline
                                 </v-icon>
-                                Export Employee
+                                Export Employee Infor
                             </v-btn>
                         </v-list-item>
                         <v-list-item>

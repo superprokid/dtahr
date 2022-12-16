@@ -101,7 +101,7 @@
                                             <!-- EMPLOYEE / ER ID -->
                                             <v-row no-gutters>
                                                 <v-col cols="12" sm="6" class="pa-2">
-                                                    <v-text-field label="Employee Id" type="text"
+                                                    <v-text-field label="Employee Id" type="text" readonly
                                                         v-model="userDetailInfo.employee_id">
                                                     </v-text-field>
                                                 </v-col>
@@ -144,14 +144,15 @@
                                                 </v-col>
                                                 <v-col cols="12" sm="6" class="pa-2">
                                                     <v-text-field label="Join Date" type="text"
-                                                        v-model="userDetailInfo.join_date">
+                                                        v-model="joinDate">
                                                     </v-text-field>
                                                 </v-col>
-                                                <v-col cols="12" sm="6" class="pa-2">
+                                                <!-- 16/12/2022 -->
+                                                <!-- <v-col cols="12" sm="6" class="pa-2">
                                                     <v-text-field label="Holiday Time" type="text"
                                                         v-model="userDetailInfo.holiday_time">
                                                     </v-text-field>
-                                                </v-col>
+                                                </v-col> -->
 
                                             </v-row>
                                         </v-card-text>

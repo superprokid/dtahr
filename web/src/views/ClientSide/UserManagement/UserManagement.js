@@ -125,10 +125,11 @@ export default {
                     text: "Main Skill",
                     value: 'main_skill',
                 },
-                {
-                    text: "Job Role",
-                    value: 'job_role',
-                },
+                // 16/12/2022
+                // {
+                //     text: "Job Role",
+                //     value: 'job_role',
+                // },
                 {
                     text: "Join Date",
                     value: 'join_date',
