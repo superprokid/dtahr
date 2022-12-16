@@ -360,7 +360,7 @@ export default {
         },
 
         onClickUserInfoSeeMore(){
-            this.userDetailInfoProp = this.userDetailInfo
+            this.userDetailInfoProp = { ...this.userDetailInfo }
             this.userSeeMoreModalShowed = true
         },
 
@@ -387,6 +387,7 @@ export default {
                 dismissible: true,
                 position: "top-right",
             })
+            await this.getUserDetailById();
             this.userSeeMoreModalShowed = false
         },
 
@@ -530,7 +531,7 @@ export default {
     async mounted() {
         this.$eventBus.$emit('show-spinner', true); 
         const userDetailInfo = await this.getUserDetailById()
-        console.log('userDetailInfo', userDetailInfo);
+        // console.log('userDetailInfo', userDetailInfo);
         const todayWorklog = await this.getUserWorklog()
         const trackingHistory = await this.getUserHistoryTracking()
 

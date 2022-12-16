@@ -49,18 +49,21 @@ export default {
             dob: moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format("YYYY-MM-DD"),
             dobPicker: false,
 
+            joinDate: '',
+
             relativeDob: moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format("YYYY-MM-DD"),
             relativeDobPicker: false
         };
     },
     async mounted(){
         this.userDetailInfo.dob = getDateString(this.userDetailInfo.dob)
-        this.userDetailInfo.join_date = getDateString(this.userDetailInfo.dob)
+        // this.userDetailInfo.join_date = getDateString(this.userDetailInfo.dob) // 12/16/2022
         this.selectGroup = {group_id: this.userDetailInfo.group_id}
         this.emailEdit = this.userDetailInfo.email
         this.dob = getDateString(this.userDetailInfo.dob)
         this.userDetailInfo.relative_dob = this.userDetailInfo.relative_dob? getDateString(this.userDetailInfo.relative_dob) : null
         this.relativeDob = this.userDetailInfo.relative_dob
+        this.joinDate = getDateString(this.userDetailInfo.join_date);
 
         const temp = await this.getAllGroup()
         let employerName = ''
@@ -142,7 +145,7 @@ export default {
                 mainSkill: this.userDetailInfo.main_skill,
                 subSkill: this.userDetailInfo.sub_skill,
                 groupId: this.userDetailInfo.group_id,
-                joinDate: this.userDetailInfo.join_date,
+                joinDate: this.joinDate,
                 jobRole: this.userDetailInfo.job_role,
                 employerId: this.userDetailInfo.employer_id,
                 relativeName: this.userDetailInfo.relative_name,
