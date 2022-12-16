@@ -351,7 +351,7 @@ async function updateTask(req, res) {
             setClauseArray.push(` actual_hours = '${actualHours}'`);
             commentContent = commentContent.concat(`<p>Estimated hours changed: ${Number(targetTask.actual_hours).toFixed(2)} → ${Number(actualHours).toFixed(2)}</p></br>`);
         }
-        if (parentTaskId) {
+        if (parentTaskId && parentTaskId != targetTask.parent_task_id) {
             setClauseArray.push(` parent_task_id = '${parentTaskId}'`);
             commentContent = commentContent.concat(`<p>Parent task changed: ${targetTask.parent_task_id} → ${parentTaskId}</p></br>`);
         }

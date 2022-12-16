@@ -1,7 +1,7 @@
 import storageUtls from "./storageUtls";
 
 // export const BASE_URL = "http://26.197.75.244:3000";
-export const BASE_URL = "http://192.168.1.4:3000";
+export const BASE_URL = "http://192.168.1.5:3000";
 
 // user url api
 export const BASE_API_USER_URL = BASE_URL + '/api/user';
