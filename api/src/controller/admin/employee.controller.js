@@ -145,7 +145,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] email is already exist`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send({ message: 'Email is already exist' });
+            res.status(400).send({ message: 'Email is already exist', failed: true });
             return;
         }
 
@@ -154,7 +154,7 @@ async function createNewEmployee(req, res) {
             logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}] group_id not exist`);
             await dbaccess.rollback(connection);
             dbaccess.releaseConnection(connection);
-            res.status(400).send({ message: 'Group is not exist' });
+            res.status(400).send({ message: 'Group is not exist', failed: true });
             return;
         }
 
