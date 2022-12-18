@@ -45,9 +45,9 @@
                                         </template>
                                     </v-autocomplete>
                                 </v-col>
-                                <v-col cols="12">
+                                <v-col cols="12" v-if="isShowInfo">
                                     <div>
-                                        <span class="text-overline blue--text text--lighten-1 mr-2">Full Name:</span>
+                                        <span class="text-overline blue--text text--lighten-1 mr-2" >Full Name:</span>
                                         <span class="subtitle-2">{{ employeeSelectEventInfo.full_name }}
                                         </span>
                                     </div>

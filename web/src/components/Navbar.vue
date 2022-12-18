@@ -185,7 +185,7 @@ export default {
             this.$router.push(component);
         },
         redirect(item) {
-            this.$router.push(item.to);
+            this.$router.push(item.to).catch((err) => {});
             this.currentTab = item.id;
         }
     }

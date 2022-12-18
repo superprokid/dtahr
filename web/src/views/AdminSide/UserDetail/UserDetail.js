@@ -391,10 +391,16 @@ export default {
             this.userSeeMoreModalShowed = false
         },
 
-        onClickWorklogSeeMore(){
+        async onClickWorklogSeeMore(){
             console.log('worklog');
             this.userDetailFeatureShowed = false
             this.userDetailWorklogShowed = true
+            const params = {
+                startDate: this.startDateWorklog,
+                endDate: this.endDateWorklog,
+                employeeId: this.$route.params.employeeId
+            }
+            await this.getListWorklogsOfUser(params)
         },
 
         goBackUserDetailFeature(){

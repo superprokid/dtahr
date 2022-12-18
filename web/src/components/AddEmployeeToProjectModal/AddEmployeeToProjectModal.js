@@ -61,6 +61,7 @@ export default {
             employeeList: [],
 
             employeeSelectEventInfo: {},
+            isShowInfo: false,
         };
     },
     watch: {
@@ -78,10 +79,13 @@ export default {
     methods: {
         getAvatar,
         onClose() {
+            this.isShowInfo = false
+            this.employeeSelectEventInfo = {}
             this.$emit('on-close',1);
         },
         reset () {
             this.$refs.form.reset()
+            this.isShowInfo = false
         },
         resetValidation () {
             this.$refs.form.resetValidation()
@@ -123,6 +127,7 @@ export default {
 
         onSelectEmployee(value){
             console.log('value', value);
+            this.isShowInfo = true
             this.employeeSelectEventInfo = value
         }
 

@@ -249,10 +249,10 @@
                                 <v-col cols="12" md="6">
                                     <v-card style="height: 100%">
                                         <v-card-text style="height: 100%" class="d-flex flex-column">
-
+                                            
                                             <div>
                                                 <div class="elevation-4"
-                                                    v-if="(!percentageOpen && !percentageInProgress && !percentageResolved && !percentageClosed)"
+                                                    v-if="(!percentageOpen && !percentageInprogress && !percentageResolved && !percentageClosed)"
                                                     :style="`width: ${100}%!important`" style="display:inline-block">
                                                     <v-progress-linear height="15" value="100" color="grey" />
                                                 </div>
@@ -261,7 +261,7 @@
                                                     <v-progress-linear height="15" value="100" color="#ed8077" />
                                                 </div>
                                                 <div class="elevation-4"
-                                                    :style="`width: ${percentageInProgress}%!important`"
+                                                    :style="`width: ${percentageInprogress}%!important`"
                                                     style="display:inline-block">
                                                     <v-progress-linear height="15" value="100" color="#4488c5" />
                                                 </div>
@@ -280,7 +280,6 @@
                                             <v-row no-gutters>
                                                 <v-col cols="12" md="12" class="d-flex justify-end text-subtitle-2">
                                                     {{ isNaN(percentageClosed) ? 0 : percentageClosed }}% Closed
-
                                                 </v-col>
                                             </v-row>
                                             <v-row no-gutters :align="'end'">
