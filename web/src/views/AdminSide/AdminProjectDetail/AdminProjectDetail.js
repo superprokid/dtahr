@@ -26,7 +26,7 @@ export default {
 			projectStatusInfo: {},
 
 			percentageOpen: 0,
-			percentageInProgress: 0,
+			percentageInprogress: 0,
 			percentageResolved: 0,
 			percentageClosed: 0,
 

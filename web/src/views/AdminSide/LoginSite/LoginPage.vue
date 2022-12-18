@@ -19,6 +19,7 @@
         :logoPath="logoPath"
         @login="login"
         :isLoginDataEmpty="isLoginDataEmpty"
+        :usernameText="'username'"
       />
     </div>
   </div>

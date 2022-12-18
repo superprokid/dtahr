@@ -23,6 +23,10 @@ export default {
     isUserNotInGroup: {
       type: Boolean,
       default: false
+    },
+    usernameText: {
+      type: String,
+      default: ''
     }
   },
 

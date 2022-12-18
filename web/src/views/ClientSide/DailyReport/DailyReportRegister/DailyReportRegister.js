@@ -6,7 +6,7 @@ import { USER_GET_IMAGE } from '../../../../config/constant';
 import OvertimeRegisterServices from '@/services/API/MyOvertimeAPI/OvertimeRegisterServices';
 import ReportServices from '../../../../services/API/ReportAPI/ReportServices';
 import moment from 'moment';
-import { REPORT_HISTORY_SCREEN, REPORT_MAIN_SCREEN, REPORT_RECEIVER_SCREEN } from '../../../../config/screenName';
+import { REPORT_HISTORY_SCREEN, MY_REPORT_SCREEN } from '../../../../config/screenName';
 import { REPORT_CHANNEL } from '../../../../config/channel';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD hh:mm:ss'

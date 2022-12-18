@@ -159,7 +159,7 @@ export default {
                 bankName: this.userDetailInfo.bank_name,
                 role: this.userDetailInfo.role
             }
-            if(this.emailEdit != this.userDetailInfo.email) params.email = this.userDetailInfo.email
+            if(this.emailEdit != this.userDetailInfo.email) params.email = this.emailEdit
             this.$emit('on-save-user-see-more', params);
         },
 

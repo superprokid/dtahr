@@ -4,7 +4,11 @@
 <template>
   <div class="login-container">
     <DTALogo />
-    <md-field md-clearable>
+    <md-field md-clearable v-if="usernameText">
+      <label>Username</label>
+      <md-input id="username" v-model="userName"></md-input>
+    </md-field>
+    <md-field md-clearable v-else>
       <label>Email</label>
       <md-input id="username" v-model="userName"></md-input>
     </md-field>
