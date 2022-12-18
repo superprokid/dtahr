@@ -98,7 +98,7 @@ async function createNewEmployee(req, res) {
                 required: false
             },
             relativeGender: {
-                type: 'string',
+                type: 'number',
                 required: false
             },
             relativePhone: {
