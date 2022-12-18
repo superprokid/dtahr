@@ -174,9 +174,7 @@ class FaceRecognitionLib(object):
             if True in results:
                 result_index = results.index(True)
                 id = self.encoded_image_name[result_index]
-                if(self.id != id):
-                    self.id = id
-                    checkin(id)
+                checkin(id)
                 return face_location.astype(int)[0], id
 
             elif len(face_location) > 0:
