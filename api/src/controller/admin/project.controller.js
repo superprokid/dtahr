@@ -230,6 +230,13 @@ async function editProject(req, res) {
         if (client) setClauseArray.push(` client_id = '${client}'`);
         if (projectManagerStartDate) setClauseArray.push(` project_manager_assigned_date = '${projectManagerStartDate}'`);
 
+        if (!setClauseArray.length) {
+            await commitTransaction(connection);
+            releaseConnection(connection);
+            res.status(200).send("Update project success");
+            return;
+        }
+
         const setClause = " SET " + setClauseArray.join(',');
         const query = `UPDATE project ${setClause} WHERE project_id = '${projectId}'`;
 
