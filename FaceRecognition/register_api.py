@@ -7,10 +7,13 @@ import os
 from PIL import Image
 import ssl
 from threading import Thread
+
 # External libraries
 import cv2
 from flask import Flask, request, jsonify
 from flask_cors import cross_origin
+from apscheduler.schedulers.background import BackgroundScheduler
+
 # Internal libraries
 from engine.engine import FaceRecognitionLib
 
@@ -34,6 +37,10 @@ app = Flask(
 # Instance
 face_engine = FaceRecognitionLib()
 
+# Update encoded image every 5m
+scheduler = BackgroundScheduler()
+scheduler.add_job(face_engine.encode_all_face, 'interval', minutes=5)
+scheduler.start()
 
 def register(name, image):
     #:param name:
@@ -43,7 +50,6 @@ def register(name, image):
     if face_position:
         image_path = os.path.join(image_dir, name + ".jpg")
         Image.fromarray(image).crop((face_position[3],face_position[0],face_position[1],face_position[2])).save(image_path)
-        Thread(target=face_engine.update_new_face, args=(image_path,)).start()
         # npz_path = os.path.join(npz_dir, file_name)
         # numpy.savez_compressed(npz_path, face_encode)
         return True
