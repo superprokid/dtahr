@@ -547,7 +547,7 @@ export default {
                 this.endDate = getDateString(result.end_date)
             })
             this.$toast.open({
-                message: "Test message from Vue",
+                message: "Delete attachment success",
                 type: "success",
                 duration: 2000,
                 dismissible: true,

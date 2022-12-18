@@ -103,8 +103,10 @@ async function createGroup(req, res) {
         if (currentGroupId.length) {
             groupId = currentGroupId[0].group_id;
         }
-
-        await queryTransaction(connection, INSERT_NEW_GROUP, [generateId(groupId, MAX_GROUP_ID_LENGTH), groupName, groupFullName, managerId, new Date(managerStartDate)]);
+        const newId = generateId(groupId, MAX_GROUP_ID_LENGTH);
+        await queryTransaction(connection, INSERT_NEW_GROUP, [newId, groupName, groupFullName, managerId, new Date(managerStartDate)]);
+        
+        await queryTransaction(connection, UPDATE_EMPLOYER_AND_GROUP_OF_USER, [managerId, newId, managerId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new group success`);
         await commitTransaction(connection);
         releaseConnection(connection);

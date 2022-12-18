@@ -498,6 +498,16 @@ export default {
                 })
                 return
             }
+            if (response.failed) {
+                this.$toast.open({
+                    message: response.message,
+                    type: "error",
+                    duration: 2000,
+                    dismissible: true,
+                    position: "top-right",
+                })
+                return
+            }
             this.$toast.open({
                 message: "Create User Success",
                 type: "success",
