@@ -56,6 +56,8 @@ export const USER_GET_LIST_PROJECT = BASE_URL + "/api/user/project/getlist";
 export const USER_GET_USER_IN_PROJECT = BASE_URL + "/api/user/getalluserofproject";
 
 export const USER_SEARCH_PARENT_TASK = BASE_API_USER_URL + "/task/search";
+export const USER_GET_NOTIFY = BASE_API_USER_URL + "/notify/get";
+export const USER_UPDATE_NOTIFY = BASE_API_USER_URL + "/notify/update";
 
 
 //manager url api

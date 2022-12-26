@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div id="header" class="d-flex flex-row justify-content-between">
     <div class="d-flex flex-row align-center">
@@ -12,6 +13,35 @@
         </v-list-item>
       </v-app>
     </div>
+    <div class="d-flex">
+      <div class="d-flex flex-row align-center">
+        <v-app class="item-container">
+          <v-list-item class="item-account" style="padding: 0px">
+            <md-menu md-size="medium" md-align-trigger>
+              <md-button md-menu-trigger class="user-name">
+                <v-badge :content="numberMessage" :value="numberMessage" color="red" overlap>
+                  <v-icon color="white">
+                    mdi-bell
+                  </v-icon>
+                </v-badge>
+              </md-button>
+              <md-menu-content style="max-width: 400px">
+                <md-menu-item @click="onClickNotify(item)" v-for="(item, index) in listNotify" :key="index" :style="item.is_readed ? '' : 'background-color: aliceblue'">
+                  <v-list-item style="padding: 0px">
+                    <v-list-item-avatar style="margin-right: 10px">
+                      <img color="white" :src="getAvt(item.avt)" style="width: 36px; height: 36px; border-radius: 50%"/>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title class="notify-description"><span style="font-weight: 500">{{item.full_name}}</span> {{item.notify_description}}</v-list-item-title>
+                      <v-list-item-subtitle>{{getStringFromNow(item.create_at, 'YYYY-MM-DD HH:MM')}}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </v-list-item>
+        </v-app>
+      </div>
     <div class="d-flex flex-row align-center">
       <v-app class="item-container">
         <v-list-item class="item-account">
@@ -225,6 +255,7 @@
           </v-card>
         </v-dialog>
       </v-app>
+    </div>
     </div>
   </div>
 </template>

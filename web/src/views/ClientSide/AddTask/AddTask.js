@@ -12,6 +12,7 @@ import AddCategoryTaskModal from "../../../components/AddCategoryTaskModal/AddCa
 import AddParentTaskModal from "../../../components/AddParentTaskModal/AddParentTaskModal.vue"
 
 import {USER_GET_IMAGE} from '../../../config/constant'
+import { TASK_CHANNEL } from '../../../config/channel';
 
 export default {
     components: {
@@ -234,6 +235,7 @@ export default {
                     dismissible: true,
                     position: "top-right",
                 })
+                this.$mySocket.emit(TASK_CHANNEL, 0);
                 window.location.reload();
             }
         },

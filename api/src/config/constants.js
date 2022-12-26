@@ -97,4 +97,8 @@ module.exports = {
         holidayIncrease: 3
     },
     PUBLIC_IP_URL: 'https://api.ipify.org/?format=json',
+    NOTIFY_TYPE: {
+        task: 0,
+        overtime: 1,
+    }
 }

@@ -451,6 +451,8 @@ async function getStart(req, res) {
             }
         }
 
+        response.today = new Date();
+
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response success`);
         res.status(200).send(response);
     } catch (error) {

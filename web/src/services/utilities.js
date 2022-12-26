@@ -12,6 +12,15 @@ export function getDateStringWithFormat(date, format) {
     return moment(date).format(format);
 }
 
+export function getStringFromNow(date) {
+    const dateMoment = moment(date);
+    if (moment().isSame(dateMoment, 'date')) {
+        return dateMoment.fromNow();
+    } else {
+        return `${getDateString(date, YYYY_MM_DD)} ${getTimeStringOther(date)}`
+    }
+}
+
 export function getDateStringWithTask(date) {
     return moment(date).format('MMM DD, YYYY');
 }
@@ -22,6 +31,13 @@ export function isPastDate(date) {
 
 export function getTimeString(time) {
     return moment(time).format(HH_MM_SS);
+}
+
+export function getTimeStringOther(time) {
+    let d = new Date(time),
+        h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+        m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    return h + ':' + m;
 }
 
 export function getAvatar(avt) {

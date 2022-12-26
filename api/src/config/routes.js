@@ -15,6 +15,7 @@ const leaveController = require('../controller/user/leave.controller');
 const dailyreportController = require('../controller/user/dailyreport.controller');
 const workFromHomeController = require('../controller/user/workfromhome.controller');
 const taskController = require('../controller/user/task.controller');
+const notifyController = require('../controller/user/notify.controller');
 
 // Import for admin controller
 const adminController = require('../controller/admin/admin.controller');
@@ -83,6 +84,9 @@ Router.get('/public/download/:dirname/:filename', (req, res) => {
     res.download(path.join(__basedir, './public/attachments/', req.params.dirname, '/', req.params.filename))
 });
 Router.get('/user/project/getlist', authen, projectController.getAllProjectByUser);
+// notify
+Router.get('/user/notify/get', authen, notifyController.getNotifyByUser)
+Router.post('/user/notify/update', authen, notifyController.makeReadNotify)
 
 // user - manager
 Router.post('/user/manager/update/leave', authen, leaveController.updateStatusLeaveTicket);
