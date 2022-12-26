@@ -37,7 +37,7 @@ const GET_USERS_OF_PROJECT = "SELECT DISTINCT e.employee_id, CONCAT(first_name, 
 
 const CHECK_EXIST_EMPLOYEE_ID = "SELECT employee_id FROM employee where employee_id = ?";
 const GET_NEWEST_PROJECT_ID = "SELECT project_id FROM `project` ORDER BY project_id DESC LIMIT 1";
-const INSERT_NEW_PROJECT = "INSERT INTO project (project_id, project_name, client_id, project_manager_id, project_manager_assigned_date) VALUES (?, ?, ?, ?, ?)";
+const INSERT_NEW_PROJECT = "INSERT INTO project (project_id, project_name, client_id, project_manager_id, project_manager_assigned_date, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 const INSERT_ASSIGNMENT = "INSERT INTO assignment (project_id, employee_id, assigned_date) VALUES (?, ?, ?) "
     + "                     ON DUPLICATE KEY UPDATE assigned_date=VALUES(assigned_date)";
 const DELETE_ASSIGNMENT = "DELETE FROM assignment WHERE project_id = ? and employee_id = ?";
@@ -128,6 +128,14 @@ async function createNewProject(req, res) {
             projectManagerStartDate: {
                 type: 'datetime',
                 required: true,
+            },
+            startDate: {
+                type: 'datetime',
+                required: false,
+            },
+            endDate: {
+                type: 'datetime',
+                required: false,
             }
         }
 
@@ -140,7 +148,7 @@ async function createNewProject(req, res) {
             return;
         }
 
-        const { projectName, client, projectManagerId, projectManagerStartDate } = req.body;
+        const { projectName, client, projectManagerId, projectManagerStartDate, startDate, endDate } = req.body;
 
         const managerList = await queryTransaction(connection, CHECK_EXIST_EMPLOYEE_ID, [projectManagerId]);
         if (!managerList.length) {
@@ -158,7 +166,7 @@ async function createNewProject(req, res) {
         }
         const newId = generateId(projectId, MAX_PROJECT_ID_LENGTH);
         // Insert project
-        await queryTransaction(connection, INSERT_NEW_PROJECT, [newId, projectName, client, projectManagerId, new Date(projectManagerStartDate)]);
+        await queryTransaction(connection, INSERT_NEW_PROJECT, [newId, projectName, client, projectManagerId, new Date(projectManagerStartDate), startDate, endDate]);
         // Insert assigment on duplicate update
         await queryTransaction(connection, INSERT_ASSIGNMENT, [newId, projectManagerId, projectManagerStartDate]);
 
@@ -198,6 +206,14 @@ async function editProject(req, res) {
             projectManagerStartDate: {
                 type: 'datetime',
                 required: false,
+            },
+            startDate: {
+                type: 'datetime',
+                required: false,
+            },
+            endDate: {
+                type: 'datetime',
+                required: false,
             }
         }
 
@@ -210,7 +226,7 @@ async function editProject(req, res) {
             return;
         }
 
-        const { projectId, projectName, client, projectManagerId, projectManagerStartDate } = req.body;
+        const { projectId, projectName, client, projectManagerId, projectManagerStartDate, startDate, endDate } = req.body;
 
         const setClauseArray = [];
 
@@ -229,6 +245,8 @@ async function editProject(req, res) {
         if (projectName) setClauseArray.push(` project_name = '${projectName}'`);
         if (client) setClauseArray.push(` client_id = '${client}'`);
         if (projectManagerStartDate) setClauseArray.push(` project_manager_assigned_date = '${projectManagerStartDate}'`);
+        if (startDate) setClauseArray.push(` start_date = '${startDate}'`);
+        if (endDate) setClauseArray.push(` end_date = '${endDate}'`);
 
         if (!setClauseArray.length) {
             await commitTransaction(connection);

@@ -3,10 +3,12 @@ import CookieUtls from '../../services/CookieUtls';
 
 import PasswordService from '@/services/API/UserManagementAPI/PasswordService';
 import UserManagementServices from '@/services/API/UserManagementAPI/UserManagementServices';
+import MyPageServices from '@/services/API/MyPageAPI/MyPageServices';
 import { ABSENT_HISTORY_SCREEN, ABSENT_TICKET_SCREEN, OT_HISTORY_SCREEN, OT_TICKET_SCREEN, REAL_TIME_TRACKING_SCREEN, REPORT_RECEIVER_SCREEN, TIME_TRACKING_SCREEN
         , MANAGER_WORK_FROM_HOME_TICKET_SCREEN } from '../../config/screenName';
-import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL, REAL_TIME_TRACKING_CHANNEL, WFH_CHANNEL } from '../../config/channel';
+import { LEAVE_CHANNEL, OVERTIME_CHANNEL, REPORT_CHANNEL, TIME_TRACKING_CHANNEL, REAL_TIME_TRACKING_CHANNEL, WFH_CHANNEL, TASK_CHANNEL } from '../../config/channel';
 import { USER_GET_IMAGE } from '../../config/constant'
+import { getStringFromNow } from '../../services/utilities'
 
 import moment from 'moment';
 
@@ -39,11 +41,14 @@ export default {
             {
                 text: 'Other',
                 value: 2,
-            }]
+            }],
+
+            numberMessage: 0,
+            listNotify: [],
         }
     },
     mounted() {
-
+        this.getNotify();
         this.$mySocket.on(OVERTIME_CHANNEL, (msg) => {
             switch (msg) {
                 case 0:
@@ -97,6 +102,9 @@ export default {
                     break;
             }
         });
+        this.$mySocket.on(TASK_CHANNEL, () => {
+            this.getNotify();
+        });
         this.profileModel = this.startDataUser
     },
     computed: {
@@ -112,6 +120,7 @@ export default {
         }
     },
     methods: {
+        getStringFromNow,
         allowedDates(date) {
             let now = moment().format('YYYY-MM-DD');
             return date <= now;
@@ -217,5 +226,29 @@ export default {
         toggleDrawerMini() {
             this.$store.commit("setDrawerMini");
         },
+
+        async getNotify() {
+            const result = await MyPageServices.getNotify();
+            if (!result && result == -1) {
+                return;
+            }
+            let number = 0;
+            if (result.data) {
+                result.data.forEach(item => {
+                    if (!item.is_readed) {
+                        number++;
+                    }
+                });
+                this.listNotify = result.data
+                this.numberMessage = number;
+            }
+        },
+
+        async onClickNotify(item) {
+            const newRoute = this.$router.resolve(item.notify_link)
+            window.open(newRoute.href, '_blank');
+            await MyPageServices.updateNotify({ notifyId : item.notify_id });
+            await this.getNotify();
+        }
     },
 }

@@ -18,6 +18,7 @@ import {USER_GET_IMAGE} from '../../../config/constant'
 import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentModal/ConfirmDeleteCommentModal.vue"
 
 import $ from 'jquery';
+import { TASK_CHANNEL } from '../../../config/channel';
 
 export default {
     components: {
@@ -292,9 +293,9 @@ export default {
                         dismissible: true,
                         position: "top-right",
                     })
-                    return
                     return;
                 }
+                this.$mySocket.emit(TASK_CHANNEL, 0);
                 this.$router.push(`/user/taskside/taskdetail/${this.currentProjectId}/${this.taskDetailData.task_id}`);      
             }
         },

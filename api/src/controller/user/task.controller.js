@@ -3,7 +3,7 @@ const dbaccess = require('../../common/dbaccess');
 const logger = require('../../common/logger');
 const moment = require('moment');
 const { validateRequest, getDateString, isNullOrUndefinded } = require('../../common/utils');
-const { TASK_STATUS, TASK_STATUS_TEXT, TASK_PRIORITY_TEXT } = require('../../config/constants');
+const { TASK_STATUS, TASK_STATUS_TEXT, TASK_PRIORITY_TEXT, NOTIFY_TYPE } = require('../../config/constants');
 
 const LOG_CATEGORY = "Task Controller"
 const INSERT_NEW_CATEGORY = "INSERT INTO category (category_name, category_color) VALUES (?, ?)";
@@ -55,6 +55,8 @@ const GET_NEWEST_TASK_NUMBER = "SELECT * FROM task WHERE project_id = ? ORDER BY
 const SEARCH_TASK = "SELECT task_number, task_title, `status`, task_id"
     + "                 FROM task"
     + "                 WHERE project_id = ? and (task_title LIKE ? or task_number = ?)"
+
+const INSERT_NOTIFY = "INSERT INTO notify (notify_type, notify_description, notify_link, notify_creator, employee_id) VALUES (?, ?, ?, ?, ?)"
 
 async function addNewCategory(req, res) {
     const connection = await dbaccess.getConnection();
@@ -206,8 +208,13 @@ async function addNewTask(req, res) {
             taskNumber = Number(newestTask[0].task_number) + 1;
         }
 
-        await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskNumber, projectId, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null, parentTaskId || null]);
+        const insertResult = await dbaccess.queryTransaction(connection, INSERT_NEW_TASK, [taskTitle, taskNumber, projectId, taskDescription, employeeId, assigneeId, TASK_STATUS.open, priority, categoryId, getDateString(startDate), getDateString(endDate), estimatedHours || 0, actualHours ?? null, parentTaskId || null]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] insert new task success`);
+
+        if (insertResult && insertResult.affectedRows) {
+            await dbaccess.queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.task, 'assigned a task to you!', `/user/taskside/taskdetail/${projectId}/${insertResult.insertId}`, employeeId,assigneeId]);
+        }
+
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
         res.status(200).send({ message: "Create success" });
@@ -375,7 +382,12 @@ async function updateTask(req, res) {
 
         const setClause = " SET " + setClauseArray.join(',');
         const query = "UPDATE `task` " + setClause + whereClause;
-        await dbaccess.queryTransaction(connection, query);
+        const insertResult = await dbaccess.queryTransaction(connection, query);
+
+        if (insertResult && insertResult.affectedRows) {
+            await dbaccess.queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.task, 'assigned a task to you!', `/user/taskside/taskdetail/${targetTask.project_id}/${insertResult.insertId}`, employeeId, assigneeId]);
+        }
+
         console.log(commentContent);
         await dbaccess.queryTransaction(connection, INSERT_NEW_COMMENT, [taskId, employeeId, commentContent, 0]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update task success`);

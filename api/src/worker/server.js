@@ -44,6 +44,7 @@ const REPORT_CHANNEL = 'report';
 const TIME_TRACKING_CHANNEL = 'timetracking';
 const REAL_TIME_TRACKING_CHANNEL = 'realtime';
 const WFH_CHANNEL = 'workfromhome';
+const TASK_CHANNEL = 'task';
 
 function run() {
     const server = http.createServer(app);
@@ -84,6 +85,14 @@ function run() {
 
         socket.on(WFH_CHANNEL, msg => {
             io.emit(WFH_CHANNEL, msg);
+        });
+
+        socket.on(WFH_CHANNEL, msg => {
+            io.emit(WFH_CHANNEL, msg);
+        });
+
+        socket.on(TASK_CHANNEL, msg => {
+            io.emit(TASK_CHANNEL, msg);
         });
 
         socket.on('disconnect', () => {

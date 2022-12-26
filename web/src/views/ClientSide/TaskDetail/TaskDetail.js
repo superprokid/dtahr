@@ -20,6 +20,7 @@ import ConfirmDeleteCommentModal from "../../../components/ConfirmDeleteCommentM
 import AddAttachmentModal from "../../../components/AddAttachmentModal/AddAttachmentModal.vue"
 
 import $ from 'jquery';
+import { TASK_CHANNEL } from '../../../config/channel';
 
 export default {
     components: {
@@ -319,6 +320,7 @@ export default {
                     })
                     return
                 }
+                this.$mySocket.emit(TASK_CHANNEL, 0);
             }
                     
             // update task detail frontend
