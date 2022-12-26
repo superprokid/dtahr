@@ -1,6 +1,6 @@
 <!-- eslint-disable -->
 <template>
-    <div>
+    <div class="pa-4 mt-3" style="height: 90vh; overflow-y: auto;">
         <!-- MOT CACH KHAC DE DESTROY DIALOG -->
         <!-- <v-btn @click="showDialog = true">Show Dialog</v-btn>
         <v-dialog v-if="showDialog" v-model="showDialog" max-width="800px">

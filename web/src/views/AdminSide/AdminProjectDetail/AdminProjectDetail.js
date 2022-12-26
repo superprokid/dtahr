@@ -147,6 +147,7 @@ export default {
         },
     },
 	methods: {
+        getDateString,
         setItemRowCLass(){
             return 'item-row'
         },
@@ -407,6 +408,27 @@ export default {
                 }
                 return true;
             });
+        },
+
+        onClickOpenStatusTask(){
+            this.isProjectTaskShowed = true
+            this.isProjectDetailShowed = false
+            this.selectedStatus = "0"
+        },
+        onClickInprogressStatusTask(){
+            this.isProjectTaskShowed = true
+            this.isProjectDetailShowed = false
+            this.selectedStatus = "1"
+        },
+        onClickResolvedStatusTask(){
+            this.isProjectTaskShowed = true
+            this.isProjectDetailShowed = false
+            this.selectedStatus = "2"
+        },
+        onClickClosedStatusTask(){
+            this.isProjectTaskShowed = true
+            this.isProjectDetailShowed = false
+            this.selectedStatus = "3"
         },
 
         onClickEmployeeRow(userSelected){

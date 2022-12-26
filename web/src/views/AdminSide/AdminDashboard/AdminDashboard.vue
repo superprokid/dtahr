@@ -117,9 +117,9 @@
                                             </v-col>
                                             <v-col cols="7">
                                                 <span class="subtitle-2 black--text">{{
-                                                        formatTime(workingTime.hour_start,
-                                                            workingTime.min_start)
-                                                }}</span>
+        formatTime(workingTime.hour_start,
+            workingTime.min_start)
+}}</span>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -129,12 +129,12 @@
                                             </v-col>
                                             <v-col cols="7">
                                                 <span class="subtitle-2 black--text">{{
-                                                        formatTime(workingTime.lunch_hour_start,
-                                                            workingTime.lunch_min_start)
-                                                }} -
+        formatTime(workingTime.lunch_hour_start,
+            workingTime.lunch_min_start)
+}} -
                                                     {{ formatTime(workingTime.lunch_hour_end,
-                                                            workingTime.lunch_min_end)
-                                                    }}</span>
+        workingTime.lunch_min_end)
+}}</span>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -144,8 +144,8 @@
                                             </v-col>
                                             <v-col cols="7">
                                                 <span class="subtitle-2 black--text">{{ formatTime(workingTime.hour_end,
-                                                        workingTime.min_end)
-                                                }}</span>
+        workingTime.min_end)
+}}</span>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
@@ -160,12 +160,12 @@
                                         <v-row v-for="(item, index) in holiday " :key="index">
                                             <v-col cols="5">
                                                 <span class="font-weight-bold blue--text text--lighten-1">{{
-                                                        item.description
-                                                }}:</span>
+        item.description
+}}:</span>
                                             </v-col>
                                             <v-col cols="7">
                                                 <span class="subtitle-2 black--text">{{ getDateString(item.date)
-                                                }}</span>
+}}</span>
                                             </v-col>
                                         </v-row>
 
@@ -177,8 +177,43 @@
                             <v-card>
                                 <v-card-text>
                                     <v-row no-gutters class="dashboard-title">
-                                        PROJECT STATUS
+                                        <v-col cols="12" md="6" class="d-flex align-items-center">
+                                            PROJECT STATUS
+                                        </v-col>
+                                        <v-col cols="12" md="6">
+                                            <v-row no-gutters>
+                                                <v-col cols="12" md="3">
+
+                                                    <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
+                                                        style="background-color: #ed8077; font-size: 13px;">
+                                                        Open
+                                                    </div>
+                                                </v-col>
+                                                <v-col cols="12" md="3">
+
+                                                    <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
+                                                        style="background-color: #4488c5; font-size: 13px;">
+                                                        In Progress
+                                                    </div>
+                                                </v-col>
+                                                <v-col cols="12" md="3">
+
+                                                    <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
+                                                        style="background-color: #5eb5a6; font-size: 13px;">
+                                                        Resolved
+                                                    </div>
+                                                </v-col>
+                                                <v-col cols="12" md="3">
+
+                                                    <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
+                                                        style="background-color: #a1af2f; font-size: 13px;">
+                                                        Closed
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                        </v-col>
                                     </v-row>
+
                                     <v-row>
                                         <v-list flat style="height: 350px; overflow: auto">
                                             <v-list-item-group color="primary">
@@ -227,8 +262,8 @@
                                                                 <v-col cols="12" md="12"
                                                                     class="d-flex justify-end text-subtitle-2">
                                                                     {{ isNaN(item.closedPercentage) ? 0 :
-                                                                            item.closedPercentage
-                                                                    }}% Closed
+        item.closedPercentage
+}}% Closed
 
                                                                 </v-col>
                                                             </v-row>

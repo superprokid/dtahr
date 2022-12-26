@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pa-4 mt-3" style="height: 90vh; overflow-y: auto;">
     <v-card flat>
       <v-card-text>
         <v-radio-group v-model="csvSelect" row>

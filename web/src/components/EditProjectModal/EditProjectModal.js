@@ -43,8 +43,13 @@ export default {
             ],
             isUpdating: false,
 
-            employeeList: []
+            employeeList: [],
 
+            startDateProjectPicker: false,
+            endDateProjectPicker: false,
+
+            startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
         };
     },
@@ -60,6 +65,8 @@ export default {
         this.projectName = this.editProjectInfo.project_name
         this.clientName = this.editProjectInfo.client_id
         this.projectCreationDate = this.editProjectInfo.project_manager_assigned_date
+        this.startDate = this.editProjectInfo.start_date
+        this.endDate = this.editProjectInfo.end_date
         // Initial Manager for autocomplete manager
         const tempUsers = await this.getListUser()
         for (let index = 0; index < tempUsers.length; index++) {
@@ -83,8 +90,11 @@ export default {
                 }
                 if(this.projectName != this.editProjectInfo.project_name) params.projectName = this.projectName
                 if(this.clientName != this.editProjectInfo.client_id) params.client = this.clientName
-                if(this.projectCreationDate != this.editProjectInfo.project_manager_assigned_date) params.projectManagerStartDate = this.projectCreationDate
+                if(this.startDate != this.editProjectInfo.project_manager_assigned_date) params.projectManagerStartDate = this.startDate
                 if(this.manager != this.editProjectInfo.project_manager_id) params.projectManagerId = this.manager
+                if(this.startDate != this.editProjectInfo.start_date) params.startDate = this.startDate
+                if(this.endDate != this.editProjectInfo.end_date) params.endDate = this.endDate
+                
 
                 this.$emit('on-edit-project', params);
             }
