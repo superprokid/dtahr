@@ -68,8 +68,42 @@
                             </v-row>
                         </v-col>
                         <v-col cols="12" md="6" class="d-flex justify-center">
-                            <v-date-picker v-model="projectCreationDate" no-title>
-                            </v-date-picker>
+                            <!-- <v-date-picker v-model="projectCreationDate" no-title>
+                            </v-date-picker> -->
+                            <v-row no-gutters>
+                                <v-col cols="12" >
+                                    <v-row class="d-flex justify-end mt-4">
+                                        <v-col cols="12"  md="10">
+                                            <v-menu v-model="startDateProjectPicker" :close-on-content-click="false"
+                                                :nudge-right="40" transition="scale-transition" offset-y
+                                                min-width="auto">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-text-field v-model="startDate" label="Start Date Project"
+                                                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="startDate" @input="onSelectStartDate">
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row no-gutters class="d-flex justify-end">
+                                        <v-col cols="12" md="10">
+                                            <v-menu v-model="endDateProjectPicker" :close-on-content-click="false"
+                                                :nudge-right="40" transition="scale-transition" offset-y
+                                                min-width="auto">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-text-field v-model="endDate" label="End Date Project"
+                                                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="endDate" @input="onSelectEndDate">
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
                         </v-col>
                     </v-row>
 

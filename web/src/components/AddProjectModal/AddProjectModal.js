@@ -40,7 +40,14 @@ export default {
             ],
             isUpdating: false,
 
-            employeeList: []
+            employeeList: [],
+
+            startDateProjectPicker: false,
+            endDateProjectPicker: false,
+
+            startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+            endDate: null,
+
 
 
         };
@@ -58,6 +65,14 @@ export default {
         this.$eventBus.$emit('show-spinner', false);
     },
     methods: {
+        onSelectStartDate(startDate){
+            this.startDate = startDate
+            this.startDatePicker = false
+        },
+        onSelectEndDate(endDate){
+            this.endDate = endDate
+            this.endDatePicker = false
+        },
         onClose() {
             this.$emit('on-close',1);
         },
@@ -67,7 +82,9 @@ export default {
                     projectName: this.projectName,
                     client: this.clientName,
                     projectManagerId: String(this.manager),
-                    projectManagerStartDate: this.projectCreationDate
+                    projectManagerStartDate: this.startDate,
+                    startDate: this.startDate,
+                    endDate: this.endDate
                 }
                 this.$emit('on-create-project', params);
             }

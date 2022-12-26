@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5">
+    <div class="pa-4 mt-3" style="height: 90vh; overflow-y: auto;">
         <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">

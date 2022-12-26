@@ -20,10 +20,10 @@
                                     </v-text-field>
                                 </v-col>
                                 <v-col cols="12" class="pt-0">
-                                    <v-autocomplete v-model="manager" :disabled="isUpdating" :items="employeeList" dense prepend-icon="mdi-account-plus-outline"
-                                        placeholder="Choose Manager"
-                                        filled color="blue-grey lighten-2" item-text="full_name"
-                                        item-value="employee_id" required :rules="managerRules">
+                                    <v-autocomplete v-model="manager" :disabled="isUpdating" :items="employeeList" dense
+                                        prepend-icon="mdi-account-plus-outline" placeholder="Choose Manager" filled
+                                        color="blue-grey lighten-2" item-text="full_name" item-value="employee_id"
+                                        required :rules="managerRules">
                                         <!-- Hiển thị sau khi chọn -->
                                         <template v-slot:selection="data">
                                             <div v-bind="data.attrs" :input-value="data.selected" close
@@ -57,7 +57,8 @@
                                     </v-autocomplete>
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-btn :disabled="!valid" color="success" class="mr-4" @click="onClickCreateProject">
+                                    <v-btn :disabled="!valid" color="success" class="mr-4"
+                                        @click="onClickCreateProject">
                                         Create Project
                                     </v-btn>
 
@@ -68,10 +69,45 @@
                             </v-row>
                         </v-col>
                         <v-col cols="12" md="6" class="d-flex justify-center">
-                            <v-date-picker v-model="projectCreationDate" no-title>
-                            </v-date-picker>
+                            <!-- <v-date-picker v-model="projectCreationDate" no-title>
+                            </v-date-picker> -->
+                            <v-row no-gutters>
+                                <v-col cols="12" >
+                                    <v-row class="d-flex justify-end mt-4">
+                                        <v-col cols="12"  md="10">
+                                            <v-menu v-model="startDateProjectPicker" :close-on-content-click="false"
+                                                :nudge-right="40" transition="scale-transition" offset-y
+                                                min-width="auto">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-text-field v-model="startDate" label="Start Date Project"
+                                                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="startDate" @input="onSelectStartDate">
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row no-gutters class="d-flex justify-end">
+                                        <v-col cols="12" md="10">
+                                            <v-menu v-model="endDateProjectPicker" :close-on-content-click="false"
+                                                :nudge-right="40" transition="scale-transition" offset-y
+                                                min-width="auto">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-text-field v-model="endDate" label="End Date Project"
+                                                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                    </v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="endDate" @input="onSelectEndDate">
+                                                </v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+
                         </v-col>
-                    </v-row>            
+                    </v-row>
                 </v-container>
 
             </v-form>

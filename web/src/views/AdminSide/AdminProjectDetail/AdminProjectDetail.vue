@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pa-4 mt-3" style="height: 90vh; overflow-y: auto;">
         <div class="ml-4 project-detail-title" v-if="isProjectDetailShowed">
             PROJECT DETAIL 
             <!-- {{ this.$route.params.projectId }} -->
@@ -228,17 +228,30 @@
                                                 </v-row>
                                                 <v-row no-gutters>
                                                     <v-col cols="12" md="12">
-                                                        <div>
+                                                        <!-- <div>
                                                             <span
                                                                 class="text-overline blue--text text--lighten-1 mr-2">Manager
                                                                 Assigned Date:</span>
                                                             <span class="subtitle-2">{{
                                                                     projectDetailInfo.project_manager_assigned_date
                                                             }}</span>
+                                                        </div> -->
+                                                        <div>
+                                                            <span
+                                                                class="text-overline blue--text text--lighten-1 mr-2">Project Start Date:</span>
+                                                            <span class="subtitle-2">{{projectDetailInfo?.start_date}}</span>
                                                         </div>
                                                     </v-col>
                                                 </v-row>
-
+                                                <v-row no-gutters>
+                                                    <v-col cols="12" md="12">
+                                                        <div>
+                                                            <span
+                                                                class="text-overline blue--text text--lighten-1 mr-2">Project End Date:</span>
+                                                            <span class="subtitle-2">{{projectDetailInfo?.end_date}}</span>
+                                                        </div>
+                                                    </v-col>
+                                                </v-row>
                                             </v-row>
 
                                         </v-card-text>
@@ -288,7 +301,7 @@
                                                         Open
                                                     </div>
                                                     <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
-                                                        style="background-color: #ed8077;">
+                                                        style="background-color: #ed8077; cursor: pointer;" @click="onClickOpenStatusTask">
                                                         {{ projectStatusInfo.open }}
                                                     </div>
                                                 </v-col>
@@ -297,7 +310,7 @@
                                                         In Progress
                                                     </div>
                                                     <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
-                                                        style="background-color: #4488c5;">
+                                                        style="background-color: #4488c5; cursor: pointer;" @click="onClickInprogressStatusTask">
                                                         {{ projectStatusInfo.inprogress }}
                                                     </div>
                                                 </v-col>
@@ -306,7 +319,7 @@
                                                         Resolved
                                                     </div>
                                                     <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
-                                                        style="background-color: #5eb5a6;">
+                                                        style="background-color: #5eb5a6; cursor: pointer;" @click="onClickResolvedStatusTask">
                                                         {{ projectStatusInfo.resolved }}
                                                     </div>
                                                 </v-col>
@@ -315,7 +328,7 @@
                                                         Closed
                                                     </div>
                                                     <div class="pa-1 text-center  text-no-wrap rounded-xl white--text mr-4"
-                                                        style="background-color: #a1af2f;">
+                                                        style="background-color: #a1af2f; cursor: pointer;" @click="onClickClosedStatusTask">
                                                         {{ projectStatusInfo.closed }}
                                                     </div>
                                                 </v-col>
