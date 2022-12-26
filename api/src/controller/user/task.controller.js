@@ -385,7 +385,7 @@ async function updateTask(req, res) {
         const insertResult = await dbaccess.queryTransaction(connection, query);
 
         if (insertResult && insertResult.affectedRows) {
-            await dbaccess.queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.task, 'assigned a task to you!', `/user/taskside/taskdetail/${targetTask.project_id}/${insertResult.insertId}`, employeeId, assigneeId]);
+            await dbaccess.queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.task, 'assigned a task to you!', `/user/taskside/taskdetail/${targetTask.project_id}/${taskId}`, employeeId, assigneeId]);
         }
 
         console.log(commentContent);
