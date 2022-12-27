@@ -47,6 +47,7 @@ export default {
       labelInputBreakTime: 'Total BreakTime:',
       errorLabelInputBreakTime: 'Total Break Time required!',
       startDataUser: {},
+      dateServer: new Date(),
     };
   },
 
@@ -61,11 +62,13 @@ export default {
         this.$router.push('/user/login');
       } else {
         this.startDataUser = response.data;
+        console.log("this.startDataUser", response.data);
+        this.dateServer = response.data?.today
         this.checkClockIn();
       }
     },
     checkClockIn() {
-      const today = new Date();
+      const today = new Date(this.dateServer);
       if (
         this.startDataUser.workTime?.isHoliday ||
         today.getDay() === 0 ||
@@ -106,7 +109,7 @@ export default {
 
     async onClickClockInBtn() {
       this.mode = CLOCKIN;
-      this.clockIn = moment(new Date());
+      this.clockIn = moment(new Date(this.dateServer));
       this.registerTime = this.clockIn;
       this.isTimeConfirmModalShowed = true;
       this.notiTitle = this.$t('general.notifications.clockInConfirm.title');
@@ -117,7 +120,7 @@ export default {
     },
     async onClickClockOutBtn() {
       this.mode = CLOCKOUT;
-      this.clockOut = moment(new Date());
+      this.clockOut = moment(new Date(this.dateServer));
       this.registerTime = this.clockOut;
       this.isTimeConfirmModalShowed = true;
       this.isClockOutModalShowed = true;
@@ -134,7 +137,7 @@ export default {
       this.isTimeConfirmModalShowed = false;
       if (this.mode == CLOCKIN) {
         this.$eventBus.$emit('show-spinner', true);
-        let curr = new Date();
+        let curr = new Date(this.dateServer);
         if (
           compareTwoTimeGreaterOrEqual(curr.getHours(), curr.getMinutes(), this.startDataUser.workTime.hour_end, this.startDataUser.workTime.min_end) ||
           this.startDataUser.workTime.isHoliday == true
