@@ -8,6 +8,7 @@ const exportWorklog = require('../../model/export/worklog.export');
 const exportInformation = require('../../model/export/information.export');
 const exportGroup = require('../../model/export/group.export');
 const exportProject = require('../../model/export/project.export');
+const exportOverview = require('../../model/export/overview.export');
 const { exeQuery } = require('../../common/dbaccess');
 
 const LOG_CATEGORY = "[EXPORT EXCEL]";
@@ -15,6 +16,7 @@ const OVERTIME_TEMPLATE_PATH = './src/template/overtime_template.xlsx';
 const LEAVE_TEMPLATE_PATH = './src/template/leave_template.xlsx';
 const SALARY_TEMPLATE_PATH = './src/template/salary_template.xlsx';
 const INFORMATION_TEMPLATE_PATH = './src/template/information_template.xlsx';
+const OVERVIEW_TEMPLATE_PATH = './src/template/overview_template.xlsx';
 
 const GET_NUMBER_OVERTIME_TICKER = "SELECT COUNT(*) as number FROM `overtime` WHERE `status` = 1 and start_date BETWEEN ? and ?";
 const GET_NUMBER_LEAVE_TICKER = "SELECT COUNT(*) as number FROM `leave` WHERE `status` = 1 and start_date BETWEEN ? and ?";
@@ -238,6 +240,31 @@ async function exportProjectByList(req, res) {
     }
 }
 
+async function exportOverviewExcel(req, res) {
+    try {
+        const { month, year } = req.query;
+        if (!year || !month) {
+            logger.warn(`[${LOG_CATEGORY} - ${arguments.callee.name}]: year and month is required`);
+            res.status(400).send({ message: "Something went wrong, please contact administrator to solve this problem!" });
+            return;
+        }
+
+        const excel = new Excel(OVERVIEW_TEMPLATE_PATH);
+        const dateString = `${year}-${month}-01`;
+        const startDate = getDateStartOfMonth(dateString);
+        const endDate = getDateEndOfMonth(dateString);
+        await exportOverview.run(excel, startDate, endDate, month, year);
+        const buffer = await excel.getFile();
+        const filename = `Overview-${month}-${year}.xlsx`
+        res.set('Content-disposition', 'attachment; filename=' + filename);
+        res.set('Content-Type', 'text/plain');
+        res.status(200).send(buffer);
+    } catch (error) {
+        logger.error(`[${LOG_CATEGORY} - ${arguments.callee.name}] - error` + error.stack);
+        res.status(500).send({ message: "SERVER ERROR" });
+    }
+}
+
 module.exports = {
     exportOverTime,
     exportLeaveTicket,
@@ -246,4 +273,5 @@ module.exports = {
     exportInformationByListEmp,
     exportGroupByList,
     exportProjectByList,
+    exportOverviewExcel,
 }
