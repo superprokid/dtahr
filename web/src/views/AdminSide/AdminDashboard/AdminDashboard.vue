@@ -116,10 +116,7 @@
                                                     Working:</span>
                                             </v-col>
                                             <v-col cols="7">
-                                                <span class="subtitle-2 black--text">{{
-        formatTime(workingTime.hour_start,
-            workingTime.min_start)
-}}</span>
+                                                <span class="subtitle-2 black--text">{{formatTime(workingTime.hour_start,workingTime.min_start)}}</span>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -128,13 +125,7 @@
                                                     Time:</span>
                                             </v-col>
                                             <v-col cols="7">
-                                                <span class="subtitle-2 black--text">{{
-        formatTime(workingTime.lunch_hour_start,
-            workingTime.lunch_min_start)
-}} -
-                                                    {{ formatTime(workingTime.lunch_hour_end,
-        workingTime.lunch_min_end)
-}}</span>
+                                                <span class="subtitle-2 black--text">{{formatTime(workingTime.lunch_hour_start,workingTime.lunch_min_start)}} - {{ formatTime(workingTime.lunch_hour_end,workingTime.lunch_min_end) }}</span>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -143,9 +134,7 @@
                                                     Working:</span>
                                             </v-col>
                                             <v-col cols="7">
-                                                <span class="subtitle-2 black--text">{{ formatTime(workingTime.hour_end,
-        workingTime.min_end)
-}}</span>
+                                                <span class="subtitle-2 black--text">{{ formatTime(workingTime.hour_end,workingTime.min_end)}}</span>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
@@ -159,13 +148,10 @@
                                         </v-row>
                                         <v-row v-for="(item, index) in holiday " :key="index">
                                             <v-col cols="5">
-                                                <span class="font-weight-bold blue--text text--lighten-1">{{
-        item.description
-}}:</span>
+                                                <span class="font-weight-bold blue--text text--lighten-1">{{item.description}}:</span>
                                             </v-col>
                                             <v-col cols="7">
-                                                <span class="subtitle-2 black--text">{{ getDateString(item.date)
-}}</span>
+                                                <span class="subtitle-2 black--text">{{ getDateString(item.date)}}</span>
                                             </v-col>
                                         </v-row>
 
@@ -262,8 +248,8 @@
                                                                 <v-col cols="12" md="12"
                                                                     class="d-flex justify-end text-subtitle-2">
                                                                     {{ isNaN(item.closedPercentage) ? 0 :
-        item.closedPercentage
-}}% Closed
+                                                                            item.closedPercentage
+                                                                    }}% Closed
 
                                                                 </v-col>
                                                             </v-row>

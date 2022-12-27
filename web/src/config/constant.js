@@ -152,6 +152,7 @@ export const ADMIN_ACTIVE_ACCOUNT = BASE_API_ADMIN_URL + "/active/employee"
 export const ADMIN_GET_SALARY_BY_MONTH = BASE_API_ADMIN_URL + "/salary/get"
 
 export const ADMIN_CHANGE_SALARY = BASE_API_ADMIN_URL + "/salary/update"
+export const ADMIN_EXPORT_OVERVIEW_CSV = BASE_API_ADMIN_URL + "/export/overview"
 
 // constant
 export const TAB_TYPE = {

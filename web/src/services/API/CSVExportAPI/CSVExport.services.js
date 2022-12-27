@@ -5,11 +5,25 @@ import {
   ADMIN_EXPORT_PROJECT_CSV,
   ADMIN_EXPORT_GROUP_CSV,
   ADMIN_EXPORT_EMPLOYEE_CSV,
-  ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV
+  ADMIN_EXPORT_wORKLOG_EMPLOYEE_CSV,
+  ADMIN_EXPORT_OVERVIEW_CSV
 } from '@/config/constant';
 import axiosAdmin, { callAdminAPI } from '../AdminAPI';
 
 const AdminCSVServices = {
+    exportOverviewCSV: async (params) => {
+		try {
+		const response = await callAdminAPI(() => {
+			return axiosAdmin.get(ADMIN_EXPORT_OVERVIEW_CSV, {
+			params,
+			responseType: 'blob',
+			});
+		});
+		return response;
+		} catch (error) {
+		return error;
+		}
+	},
 	exportSalaryCSV: async (params) => {
 		try {
 		const response = await callAdminAPI(() => {
