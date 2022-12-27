@@ -2,7 +2,7 @@ const logger = require('../../common/logger');
 const moment = require('moment');
 const { validateRequest, getStartOfDate, minDiff } = require('../../common/utils');
 const { exeQuery, queryTransaction, getConnection, beginTransaction, commitTransaction, releaseConnection, rollback } = require('../../common/dbaccess');
-const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE } = require('../../config/constants');
+const { OT_PAYMENT_DEFAULT, OT_TICKET_STATUS, VALID_HOUR, ROLE, NOTIFY_TYPE } = require('../../config/constants');
 
 const LOG_CATEGORY = "OverTimeController"
 const GET_OT_PAYMENT = "SELECT * FROM overtimepayment ORDER BY update_at DESC";
@@ -19,7 +19,9 @@ const GET_LIST_OVERTIME_TICKET_OF_GROUP = "  SELECT ot.*, CONCAT(e.first_name, '
     + "                                         INNER JOIN employee e on e.employee_id = ot.employee_id"
     + "                                     WHERE group_id = ? and e.is_deleted <> 1";
 const UPDATE_OVERTIME_STATUS = " UPDATE overtime SET status = ? where overtime_id = ?";
-const DELETE_OT_TICKET = "DELETE FROM overtime WHERE overtime_id = ? "
+const DELETE_OT_TICKET = "DELETE FROM overtime WHERE overtime_id = ? ";
+const GET_OT_BY_ID = "SELECT * FROM overtime WHERE overtime_id = ?";
+const INSERT_NOTIFY = "INSERT INTO notify (notify_type, notify_description, notify_link, notify_creator, employee_id) VALUES (?, ?, ?, ?, ?)";
 
 const OT_PAYMENT_DAILY_DATE_KEY = 'ot_payment_daily_day';
 const OT_PAYMENT_DAILY_NIGHT_KEY = 'ot_payment_daily_night';
@@ -211,8 +213,29 @@ async function updateStatusOvertimeTicket(req, res) {
             return;
         }
         const { overtimeId, status } = req.body;
-        await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [status, overtimeId]);
+        const insertResult = await queryTransaction(connection, UPDATE_OVERTIME_STATUS, [status, overtimeId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update overtime ticket status success`);
+
+        if (insertResult && insertResult.affectedRows) {
+            let statusText = '';
+            switch (status) {
+                case OT_TICKET_STATUS.approve:
+                    statusText = 'approve your OT ticket!'
+                    break;
+                case OT_TICKET_STATUS.reject:
+                    statusText = 'reject your OT ticket!'
+                    break;
+                default:
+                    break;
+            }
+
+            const currentOTTicketList = await queryTransaction(connection, GET_OT_BY_ID, [overtimeId]);
+            const currentOT = currentOTTicketList.length ? currentOTTicketList[0] : null;
+            if (statusText && currentOT) {
+                await queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.overtime, statusText, `/user/absentticket`, empId, currentOT.employee_id]);
+            }
+        }
+
         await commitTransaction(connection);
         releaseConnection(connection);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);
