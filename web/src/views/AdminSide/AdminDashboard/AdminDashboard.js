@@ -74,6 +74,10 @@ export default {
 				{
 					name: 'Absent',
 					value: 2,
+				},
+				{
+					name: "Overview",
+					value: 3,
 				}
 			],
 			loading: false,
@@ -265,13 +269,29 @@ export default {
 					return
 				}
 			}
-			else {
+			else if(TouchList.csvSelect == 2){
 				response = await AdminCSVServices.exportLeaveCSV({
 					date: this.monthSelect + '-01',
 				});
 				if (response == -1) {
 					this.$toast.open({
 						message: 'No absent this month',
+						type: 'error',
+						duration: 2000,
+						dismissible: true,
+						position: 'top-right',
+					});
+					this.loading = false;
+					return
+				}
+			}else if (this.csvSelect == 3 && this.allowedMonths(this.monthSelect)) {
+				response = await AdminCSVServices.exportOverviewCSV({
+					month: this.monthSelect.split('-')[1],
+					year: this.monthSelect.split('-')[0],
+				});
+				if (response == -1) {
+					this.$toast.open({
+						message: 'No Overview in this month',
 						type: 'error',
 						duration: 2000,
 						dismissible: true,
