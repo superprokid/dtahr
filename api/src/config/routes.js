@@ -167,6 +167,7 @@ Router.post('/admin/export/worklog', adminAuthen, adminExportController.exportWo
 Router.post('/admin/export/information', adminAuthen, adminExportController.exportInformationByListEmp);
 Router.post('/admin/export/group', adminAuthen, adminExportController.exportGroupByList);
 Router.post('/admin/export/project', adminAuthen, adminExportController.exportProjectByList);
+Router.get('/admin/export/overview', adminAuthen, adminExportController.exportOverviewExcel);
 // Admin import
 Router.post('/admin/import/employee', uploadCSV.any(), adminEmpController.importEmployee);
 Router.get('/admin/template/download/:filename', (req, res) => {
