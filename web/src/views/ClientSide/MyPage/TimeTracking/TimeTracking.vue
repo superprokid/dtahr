@@ -1,7 +1,7 @@
 <template>
   <div class="time-tracking-body">
     <span />
-    <TimeDuration :timeIn="timeIn" :timeOut="timeOut" />
+    <TimeDuration :timeIn="timeIn" :timeOut="timeOut" :dateServer="dateServer"/>
     <div class="button-clock d-flex justify-content-center">
       <Button
         :buttonClass="'md-raised md-primary button-layout'"
