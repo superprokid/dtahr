@@ -1,7 +1,7 @@
 const dbaccess = require('../../common/dbaccess');
 const logger = require('../../common/logger');
 const { validateRequest } = require('../../common/utils');
-const { LEAVE_TICKET_STATUS, ROLE } = require('../../config/constants');
+const { LEAVE_TICKET_STATUS, ROLE, NOTIFY_TYPE } = require('../../config/constants');
 
 const LOG_CATEGORY = "LeaveController";
 const INSERT_LEAVE = "INSERT INTO `leave` (employee_id, type, start_date, end_date, reason, status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -11,7 +11,9 @@ const GET_ALL_LEAVE_OF_GROUP = "SELECT l.*, CONCAT(e.first_name, ' ', e.last_nam
     + "                         FROM `leave` l INNER JOIN employee e ON l.employee_id = e.employee_id "
     + "                         WHERE e.group_id = ? and e.is_deleted <> 1";
 const UPDATE_LEAVE_STATUS = "UPDATE `leave` SET status = ? WHERE leave_id = ?";
-const DELETE_LEAVE_TICKET = "DELETE FROM `leave` WHERE leave_id = ? "
+const DELETE_LEAVE_TICKET = "DELETE FROM `leave` WHERE leave_id = ? ";
+const GET_LEAVE_BY_ID = "SELECT * FROM `leave` WHERE leave_id = ?";
+const INSERT_NOTIFY = "INSERT INTO notify (notify_type, notify_description, notify_link, notify_creator, employee_id) VALUES (?, ?, ?, ?, ?)";
 
 async function registerLeaveTicket(req, res) {
     const connection = await dbaccess.getConnection();
@@ -154,8 +156,29 @@ async function updateStatusLeaveTicket(req, res) {
             return;
         }
         const { leaveId, status } = req.body;
-        await dbaccess.queryTransaction(connection, UPDATE_LEAVE_STATUS, [status, leaveId]);
+        const insertResult = await dbaccess.queryTransaction(connection, UPDATE_LEAVE_STATUS, [status, leaveId]);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] update leave ticket status success`);
+
+        if (insertResult && insertResult.affectedRows) {
+            let statusText = '';
+            switch (status) {
+                case LEAVE_TICKET_STATUS.approve:
+                    statusText = 'approve your Leave ticket!'
+                    break;
+                case LEAVE_TICKET_STATUS.reject:
+                    statusText = 'reject your Leave ticket!'
+                    break;
+                default:
+                    break;
+            }
+
+            const currentLeaveList = await dbaccess.queryTransaction(connection, GET_LEAVE_BY_ID, [leaveId]);
+            const currentLeave = currentLeaveList.length ? currentLeaveList[0] : null;
+            if (statusText && currentLeave) {
+                await dbaccess.queryTransaction(connection, INSERT_NOTIFY, [NOTIFY_TYPE.task, statusText, `/user/myovertime`, empId, currentLeave.employee_id]);
+            }
+        }
+
         await dbaccess.commitTransaction(connection);
         dbaccess.releaseConnection(connection);
         logger.info(`[${LOG_CATEGORY} - ${arguments.callee.name}] response`);

@@ -100,5 +100,6 @@ module.exports = {
     NOTIFY_TYPE: {
         task: 0,
         overtime: 1,
+        leave: 2,
     }
 }

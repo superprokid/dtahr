@@ -5,7 +5,7 @@ import SessionUtls from "@/services/SessionUtls"
 import Button from '@/components/Button/Button.vue';
 import { OT_TICKET_SCREEN } from '../../../../config/screenName';
 import CookieUtls from '../../../../services/CookieUtls';
-import { OVERTIME_CHANNEL } from '../../../../config/channel';
+import { OVERTIME_CHANNEL, TASK_CHANNEL } from '../../../../config/channel';
 
 export default {
     name: 'OVertimeTicket',
@@ -95,6 +95,7 @@ export default {
                 this.$router.push('/user/login');
                 return;
             }
+            this.$mySocket.emit(TASK_CHANNEL, 0);
             this.$mySocket.emit(OVERTIME_CHANNEL, 0);
         },
    
